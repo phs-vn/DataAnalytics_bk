@@ -1,0 +1,24 @@
+<changelist name="Uncommitted_changes_before_Checkout_at_11_09_2021_10_20_PM_[Default_Changelist]" date="1631373648278" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_11_09_2021_10_20_PM_[Default_Changelist]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 11/09/2021 10:20 PM [Default Changelist]" />
+  <binary>
+    <option name="BEFORE_PATH" value="covered_warrant/backtest_result/CHDB2002.xlsx" />
+    <option name="AFTER_PATH" value="covered_warrant/backtest_result/CHDB2002.xlsx" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_11_09_2021_10_20_PM_[Default_Changelist]/CHDB2002.xlsx" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="covered_warrant/backtest_result/CFPT2009.xlsx" />
+    <option name="AFTER_PATH" value="covered_warrant/backtest_result/CFPT2009.xlsx" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_11_09_2021_10_20_PM_[Default_Changelist]/CFPT2009.xlsx" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="covered_warrant/backtest_result/CFPT2009.png" />
+    <option name="AFTER_PATH" value="covered_warrant/backtest_result/CFPT2009.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_11_09_2021_10_20_PM_[Default_Changelist]/CFPT2009.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="covered_warrant/backtest_result/CHDB2002.png" />
+    <option name="AFTER_PATH" value="covered_warrant/backtest_result/CHDB2002.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_11_09_2021_10_20_PM_[Default_Changelist]/CHDB2002.png" />
+  </binary>
+</changelist>
