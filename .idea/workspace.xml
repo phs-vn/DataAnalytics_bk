@@ -46,7 +46,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -62,20 +62,17 @@
       <recent name="C:\Users\hiepdang\PycharmProjects\datadriven-project\reporting_tool\trading_service\data_validation" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.__init__">
-    <configuration name="BaoCaoPhiChuyenKhoan" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.BaoCaoGiaoDichCKNY">
+    <configuration name="BaoCaoGiaoDichCKNY" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoPhiChuyenKhoan.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoGiaoDichCKNY.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -169,19 +166,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.BaoCaoPhiChuyenKhoan" />
+      <item itemvalue="Python.BaoCaoGiaoDichCKNY" />
       <item itemvalue="Python.BaoCaoPhiTamTinhGiaoDich" />
+      <item itemvalue="Python.data_validation" />
       <item itemvalue="Python.BaoCaoPhiTamTinhPhiLuuKy" />
       <item itemvalue="Python.__init__" />
-      <item itemvalue="Python.data_validation" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.BaoCaoGiaoDichCKNY" />
         <item itemvalue="Python.__init__" />
         <item itemvalue="Python.data_validation" />
         <item itemvalue="Python.BaoCaoPhiTamTinhPhiLuuKy" />
         <item itemvalue="Python.BaoCaoPhiTamTinhGiaoDich" />
-        <item itemvalue="Python.BaoCaoPhiChuyenKhoan" />
       </list>
     </recent_temporary>
   </component>
