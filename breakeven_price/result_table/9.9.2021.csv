@@ -1,4 +1,4 @@
-Ticker,Group,Breakeven Price,Proposed Price
+Ticker,Group,Breakeven Price,1% at Risk,3% at Risk,5% at Risk,Proposed Price
 ACB,C,14050,20400.82,22029.88,23023.0,20400
 BAB,C,9110,13986.08,15407.06,16196.1,14000
 BID,A,18650,25676.84,27527.13,28471.55,28450

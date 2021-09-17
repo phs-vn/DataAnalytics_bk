@@ -224,9 +224,6 @@ def run(
     worksheet.write_row('C15',result.loc[('fund_certificate','dealing')]/div, value_format)
     writer.close()
 
-    # Write to word
-
-
     if __name__ == '__main__':
         print(f"{__file__.split('/')[-1].replace('.py','')}::: Finished")
     else:

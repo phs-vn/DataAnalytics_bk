@@ -18,6 +18,8 @@ from typing import Union, Callable
 import itertools
 import pyodbc
 import xlwings as xw
+import xlsxwriter
+import docx
 import openpyxl
 import unidecode
 import shutil

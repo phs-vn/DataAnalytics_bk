@@ -1,7 +1,359 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="Hiep Dang" />
+    <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="Hiep Dang">
+      <change afterPath="$PROJECT_DIR$/database/50BB5600" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/map.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/breakeven_price/result_table/10.9.2021.csv" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_table/10.9.2021.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/breakeven_price/result_table/9.9.2021.csv" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_table/9.9.2021.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/credit_rating/pca_kmeans_lipl(bank).py" beforeDir="false" afterPath="$PROJECT_DIR$/credit_rating/pca_kmeans_lipl(bank).py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/credit_rating/pca_kmeans_lipl(gen).py" beforeDir="false" afterPath="$PROJECT_DIR$/credit_rating/pca_kmeans_lipl(gen).py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/credit_rating/pca_kmeans_lipl(ins).py" beforeDir="false" afterPath="$PROJECT_DIR$/credit_rating/pca_kmeans_lipl(ins).py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/credit_rating/pca_kmeans_lipl(sec).py" beforeDir="false" afterPath="$PROJECT_DIR$/credit_rating/pca_kmeans_lipl(sec).py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/credit_rating/result/component_table_bank.csv" beforeDir="false" afterPath="$PROJECT_DIR$/credit_rating/result/component_table_bank.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/credit_rating/result/component_table_ins.csv" beforeDir="false" afterPath="$PROJECT_DIR$/credit_rating/result/component_table_ins.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/credit_rating/result/component_table_sec.csv" beforeDir="false" afterPath="$PROJECT_DIR$/credit_rating/result/component_table_sec.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/credit_rating/result/component_talbe_gen.csv" beforeDir="false" afterPath="$PROJECT_DIR$/credit_rating/result/component_talbe_gen.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/credit_rating/result/result_table_bank.csv" beforeDir="false" afterPath="$PROJECT_DIR$/credit_rating/result/result_table_bank.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/credit_rating/result/result_table_gen.csv" beforeDir="false" afterPath="$PROJECT_DIR$/credit_rating/result/result_table_gen.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/credit_rating/result/result_table_ins.csv" beforeDir="false" afterPath="$PROJECT_DIR$/credit_rating/result/result_table_ins.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/credit_rating/result/result_table_sec.csv" beforeDir="false" afterPath="$PROJECT_DIR$/credit_rating/result/result_table_sec.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/bs_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/bs_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/bs_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/bs_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/bs_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/bs_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/bs_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/bs_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/bs_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/bs_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/bs_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/bs_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/bs_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/bs_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/bs_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/bs_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/bs_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/bs_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/bs_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/bs_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/bs_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/bs_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/bs_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/bs_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/bs_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/bs_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/bs_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/bs_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfd_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfd_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfd_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfd_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfd_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfd_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfd_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfd_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfd_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfd_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfd_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfd_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfd_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfd_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfd_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfd_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfd_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfd_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfd_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfd_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfd_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfd_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfd_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfd_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfd_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfd_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfd_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfd_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfi_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfi_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfi_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfi_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfi_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfi_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfi_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfi_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfi_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfi_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfi_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfi_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfi_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfi_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfi_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfi_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfi_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfi_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfi_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfi_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfi_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfi_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfi_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfi_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfi_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfi_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/cfi_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/cfi_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/fn_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/fn_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/fn_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/fn_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/fn_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/fn_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/fn_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/fn_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/fn_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/fn_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/fn_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/fn_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/fn_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/fn_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/fn_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/fn_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/fn_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/fn_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/fn_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/fn_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/fn_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/fn_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/fn_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/fn_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/fn_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/fn_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/fn_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/fn_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/is_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/is_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/is_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/is_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/is_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/is_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/is_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/is_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/is_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/is_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/is_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/is_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/is_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/is_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/is_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/is_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/is_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/is_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/is_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/is_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/is_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/is_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/is_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/is_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/is_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/is_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_bank/is_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_bank/is_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/bs_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/bs_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/bs_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/bs_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/bs_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/bs_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/bs_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/bs_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/bs_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/bs_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/bs_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/bs_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/bs_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/bs_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/bs_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/bs_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/bs_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/bs_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/bs_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/bs_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/bs_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/bs_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/bs_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/bs_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/bs_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/bs_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/bs_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/bs_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfd_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfd_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfd_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfd_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfd_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfd_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfd_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfd_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfd_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfd_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfd_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfd_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfd_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfd_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfd_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfd_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfd_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfd_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfd_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfd_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfd_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfd_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfd_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfd_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfd_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfd_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfd_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfd_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfi_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfi_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfi_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfi_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfi_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfi_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfi_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfi_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfi_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfi_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfi_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfi_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfi_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfi_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfi_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfi_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfi_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfi_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfi_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfi_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfi_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfi_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfi_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfi_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfi_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfi_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/cfi_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/cfi_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/fn_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/fn_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/fn_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/fn_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/fn_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/fn_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/fn_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/fn_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/fn_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/fn_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/fn_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/fn_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/fn_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/fn_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/fn_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/fn_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/fn_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/fn_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/fn_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/fn_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/fn_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/fn_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/fn_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/fn_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/fn_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/fn_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/fn_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/fn_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/is_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/is_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/is_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/is_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/is_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/is_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/is_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/is_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/is_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/is_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/is_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/is_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/is_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/is_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/is_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/is_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/is_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/is_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/is_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/is_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/is_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/is_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/is_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/is_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/is_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/is_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_gen/is_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_gen/is_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/bs_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/bs_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/bs_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/bs_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/bs_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/bs_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/bs_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/bs_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/bs_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/bs_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/bs_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/bs_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/bs_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/bs_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/bs_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/bs_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/bs_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/bs_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/bs_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/bs_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/bs_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/bs_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/bs_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/bs_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/bs_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/bs_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/bs_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/bs_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfd_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfd_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfd_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfd_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfd_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfd_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfd_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfd_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfd_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfd_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfd_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfd_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfd_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfd_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfd_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfd_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfd_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfd_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfd_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfd_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfd_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfd_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfd_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfd_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfd_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfd_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfd_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfd_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfi_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfi_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfi_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfi_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfi_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfi_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfi_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfi_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfi_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfi_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfi_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfi_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfi_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfi_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfi_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfi_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfi_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfi_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfi_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfi_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfi_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfi_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfi_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfi_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfi_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfi_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/cfi_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/cfi_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn1_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn1_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn1_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn1_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn1_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn1_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn1_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn1_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn1_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn1_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn1_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn1_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn1_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn1_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn1_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn1_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn1_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn1_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn1_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn1_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn1_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn1_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn1_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn1_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn1_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn1_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn1_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn1_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn2_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn2_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn2_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn2_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn2_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn2_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn2_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn2_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn2_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn2_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn2_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn2_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn2_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn2_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn2_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn2_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn2_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn2_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn2_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn2_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn2_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn2_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn2_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn2_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn2_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn2_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/fn2_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/fn2_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/is_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/is_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/is_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/is_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/is_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/is_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/is_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/is_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/is_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/is_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/is_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/is_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/is_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/is_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/is_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/is_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/is_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/is_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/is_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/is_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/is_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/is_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/is_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/is_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/is_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/is_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_ins/is_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_ins/is_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/bs_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/bs_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/bs_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/bs_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/bs_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/bs_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/bs_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/bs_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/bs_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/bs_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/bs_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/bs_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/bs_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/bs_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/bs_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/bs_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/bs_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/bs_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/bs_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/bs_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/bs_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/bs_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/bs_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/bs_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/bs_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/bs_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/bs_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/bs_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfd_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfd_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfd_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfd_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfd_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfd_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfd_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfd_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfd_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfd_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfd_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfd_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfd_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfd_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfd_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfd_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfd_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfd_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfd_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfd_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfd_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfd_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfd_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfd_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfd_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfd_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfd_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfd_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfi_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfi_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfi_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfi_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfi_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfi_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfi_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfi_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfi_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfi_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfi_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfi_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfi_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfi_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfi_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfi_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfi_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfi_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfi_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfi_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfi_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfi_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfi_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfi_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfi_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfi_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/cfi_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/cfi_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn1_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn1_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn1_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn1_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn1_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn1_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn1_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn1_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn1_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn1_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn1_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn1_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn1_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn1_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn1_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn1_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn1_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn1_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn1_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn1_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn1_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn1_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn1_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn1_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn1_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn1_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn1_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn1_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn2_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn2_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn2_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn2_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn2_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn2_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn2_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn2_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn2_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn2_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn2_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn2_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn2_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn2_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn2_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn2_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn2_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn2_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn2_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn2_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn2_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn2_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn2_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn2_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn2_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn2_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn2_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn2_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn3_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn3_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn3_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn3_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn3_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn3_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn3_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn3_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn3_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn3_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn3_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn3_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn3_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn3_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn3_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn3_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn3_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn3_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn3_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn3_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn3_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn3_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn3_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn3_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn3_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn3_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/fn3_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/fn3_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/is_2018q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/is_2018q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/is_2018q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/is_2018q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/is_2018q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/is_2018q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/is_2018q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/is_2018q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/is_2019q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/is_2019q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/is_2019q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/is_2019q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/is_2019q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/is_2019q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/is_2019q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/is_2019q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/is_2020q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/is_2020q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/is_2020q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/is_2020q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/is_2020q3.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/is_2020q3.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/is_2020q4.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/is_2020q4.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/is_2021q1.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/is_2021q1.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/fs_sec/is_2021q2.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/fs_sec/is_2021q2.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/industry/bics.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/database/industry/bics.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/industry/gics.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/database/industry/gics.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/industry/icb.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/database/industry/icb.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/internal/marginlist_20210208.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/database/internal/marginlist_20210208.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/marketcap/marketcap_20201221.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/marketcap/marketcap_20201221.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/ownership/own_20201218.xlsm" beforeDir="false" afterPath="$PROJECT_DIR$/database/ownership/own_20201218.xlsm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/guideline/Map.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phs/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/phs/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/post_phs/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/post_phs/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoGiaoDichCKNY.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoGiaoDichCKNY.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/guidance_trading_depository.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/guidance_trading_depository.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request_phs/stock.py" beforeDir="false" afterPath="$PROJECT_DIR$/request_phs/stock.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -42,16 +394,16 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.CommitDialog" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
       <console-settings module-name="datadriven-project" sdk-home="C:\Users\hiepdang\PycharmProjects\datadriven-project\venv\Scripts\python.exe">
-        <option name="useSoftWraps" value="true" />
         <option name="mySdkHome" value="C:\Users\hiepdang\PycharmProjects\datadriven-project\venv\Scripts\python.exe" />
         <option name="myModuleName" value="datadriven-project" />
       </console-settings>
@@ -59,20 +411,21 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\hiepdang\PycharmProjects\DataAnalytics\database" />
       <recent name="C:\Users\hiepdang\PycharmProjects\datadriven-project\reporting_tool\trading_service\data_validation" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.BaoCaoGiaoDichCKNY">
-    <configuration name="BaoCaoGiaoDichCKNY" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.stock">
+    <configuration name="pca_kmeans_lipl(bank)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/credit_rating" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoGiaoDichCKNY.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/credit_rating/pca_kmeans_lipl(bank).py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -81,19 +434,16 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="BaoCaoPhiTamTinhGiaoDich" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="pca_kmeans_lipl(gen)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/credit_rating" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoPhiTamTinhGiaoDich.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/credit_rating/pca_kmeans_lipl(gen).py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -102,19 +452,16 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="BaoCaoPhiTamTinhPhiLuuKy" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="pca_kmeans_lipl(ins)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/credit_rating" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoPhiTamTinhPhiLuuKy.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/credit_rating/pca_kmeans_lipl(ins).py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -123,19 +470,16 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="__init__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="pca_kmeans_lipl(sec)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/credit_rating" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/__init__.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/credit_rating/pca_kmeans_lipl(sec).py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -144,19 +488,16 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="data_validation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="stock" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/data_validation" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/request_phs" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/data_validation/data_validation.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/request_phs/stock.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -166,23 +507,26 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.BaoCaoGiaoDichCKNY" />
-      <item itemvalue="Python.BaoCaoPhiTamTinhGiaoDich" />
-      <item itemvalue="Python.data_validation" />
-      <item itemvalue="Python.BaoCaoPhiTamTinhPhiLuuKy" />
-      <item itemvalue="Python.__init__" />
+      <item itemvalue="Python.pca_kmeans_lipl(bank)" />
+      <item itemvalue="Python.stock" />
+      <item itemvalue="Python.pca_kmeans_lipl(gen)" />
+      <item itemvalue="Python.pca_kmeans_lipl(ins)" />
+      <item itemvalue="Python.pca_kmeans_lipl(sec)" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.BaoCaoGiaoDichCKNY" />
-        <item itemvalue="Python.__init__" />
-        <item itemvalue="Python.data_validation" />
-        <item itemvalue="Python.BaoCaoPhiTamTinhPhiLuuKy" />
-        <item itemvalue="Python.BaoCaoPhiTamTinhGiaoDich" />
+        <item itemvalue="Python.stock" />
+        <item itemvalue="Python.stock" />
+        <item itemvalue="Python.stock" />
+        <item itemvalue="Python.stock" />
+        <item itemvalue="Python.pca_kmeans_lipl(sec)" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\hiepdang\AppData\Roaming\Subversion</configuration>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="" />
@@ -286,6 +630,7 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>

@@ -69,14 +69,14 @@ class post:
         now = datetime.now()
         github_file_name = f'{now.day}.{now.month}.{now.year}.csv'
         github_table_path = join(destination_dir_github,github_file_name)
-        table = pd.DataFrame(columns=['Ticker','Group','Breakeven Price','Proposed Price'])
+        table = pd.DataFrame(columns=['Ticker','Group','Breakeven Price','1% at Risk','3% at Risk','5% at Risk','Proposed Price'])
         table.set_index(keys=['Ticker'],inplace=True)
         table.to_csv(github_table_path)
 
         rmd_file_name = f'{now.day}.{now.month}.{now.year}.csv'
         rmd_table_path = join(destination_dir_rmd,rmd_file_name)
         table = pd.DataFrame(
-            columns=['Ticker','Group','Breakeven Price','1% at Risk','3% at Risk','5% at Risk','Proposed Price']
+            columns=['Ticker','Group','Breakeven Price','Proposed Price']
         )
         table.set_index(keys=['Ticker'], inplace=True)
         table.to_csv(rmd_table_path)

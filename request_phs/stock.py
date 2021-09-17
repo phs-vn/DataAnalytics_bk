@@ -2,11 +2,6 @@ from function_phs import *
 
 ###############################################################################
 
-database_path \
-    = join(dirname(dirname(realpath(__file__))), 'database')
-
-###############################################################################
-
 class internal:
 
     rmd_shared_disk = r'\\192.168.10.101\phs-storge-2018' \
@@ -48,7 +43,7 @@ class internal:
         """
 
         if exchanges == 'all':
-            exchanges = ['HOSE', 'HNX', 'UPCOM']
+            exchanges = ['HOSE','HNX','UPCOM']
         table = self.margin.loc[self.margin['exchange'].isin(exchanges)]
         tickers = table.index.to_list()
 
@@ -66,7 +61,7 @@ class internal:
         :return: deposit rate
         """
 
-        rate = self.margin.loc[ticker, 'mrate']
+        rate = self.margin.loc[ticker,'mrate']
 
         return rate
 
@@ -127,86 +122,144 @@ internal = internal()
 
 class fa:
 
-    database_path = globals()['database_path']
-    financials = ['bank', 'sec', 'ins']
+    database_path = join(dirname(dirname(realpath(__file__))),'database')
+    financials = ['bank','sec','ins']
 
     # Constructor:
-    def __init__(self):
-
-        folders = [f for f in listdir(self.database_path)
-                   if f.startswith('fs_')]
-
-        self.segments = [x.split('_')[1] for x in folders]
+    def __init__(
+            self
+    ):
+        self.folders = [f for f in listdir(self.database_path) if f.startswith('fs_')]
+        self.segments = [x.split('_')[1] for x in self.folders]
         self.segments.sort() # Returns all valid segments
-
-        fs_types = []
-        for folder in folders:
-            fs_types += [name.split('_')[0]
-                         for name in listdir(join(self.database_path, folder))
-                         if isfile(join(self.database_path, folder, name))]
-        fs_types = list(set(fs_types))
-        self.fs_types = [x for x in fs_types if not x.startswith('~$')]
-        for num in [str(i) for i in range(1,4)]:
-            for element in self.fs_types:
-                if num in element: self.fs_types.remove(element)
+        self.fs_types = [
+            name.split('_')[0]
+            for folder in self.folders for name in listdir(join(self.database_path,folder))
+            if isfile(join(self.database_path,folder,name))
+               and not name.startswith('~$')
+               and not name.split('_')[0][-1].isdigit()
+        ]
+        self.fs_types = list(set(self.fs_types))
         self.fs_types.sort() # Returns all valid financial statements
 
-        periods = []
-        for folder in folders:
-            periods \
-                += [name[-11:-5] for name in listdir(join(self.database_path,
-                                                       folder))
-                 if isfile(join(self.database_path, folder, name))]
-
-        periods = list(set(periods))
-        periods.sort()
-        self.periods = periods # Returns all periods
-        self.latest_period = periods[-1]
-
-        standards \
-            = list(dict.fromkeys(
-            [name[:-5] for name in listdir(join(self.database_path,'industry'))
-             if isfile(join(self.database_path, 'industry', name))]))
-        self.standards = standards # Returns all industry classification standards
+        self.periods = [
+            name[-11:-5]
+            for folder in self.folders
+            for name in listdir(join(self.database_path,folder))
+            if isfile(join(self.database_path, folder, name))
+        ]
+        self.periods = list(set(self.periods))
+        self.periods.sort() # Returns all periods
+        self.latest_period = self.periods[-1]
+        self.standards \
+            = [name[:-5] for name in listdir(join(self.database_path,'industry'))
+               if isfile(join(self.database_path,'industry',name))] # Returns all industry classification standards
 
 
-    def reload(self) -> None:
+    def check_columns(
+            self,
+            segments:list='all',
+    )\
+            -> None:
 
         """
-        This method handles cached data in newly-added files
-
-        :param: None
+        This function check consistency of columns in FiinPro data files and map.xlsx.
+        Consistency is required for numbering collumns
+        Limitation: Cannot check for fn1, fn2, fn3,...
 
         :return: None
         """
 
-        folder_names = [folder
-                        for folder in listdir(self.database_path)
-                        if isdir(join(self.database_path, folder))]
-
-        for folder in folder_names:
-            file_names = [file
-                          for file in listdir(join(self.database_path, folder))
-                          if isfile(join(self.database_path, folder, file))]
-
-            for file in file_names:
-                if file.startswith('~'):
-                    pass
+        # Check the template consistency
+        if segments == 'all':
+            segments = self.segments
+        map_excel = pd.ExcelFile(join(self.database_path,'map.xlsx'))
+        for segment in segments:
+            # map table
+            map_table = map_excel.parse(
+                sheet_name=segment,
+                header=None,
+                names=['fs_type','item','name'],
+                dtype={'item': str}
+            )
+            map_table['fs_type'].fillna(method='ffill',inplace=True)
+            map_table.set_index(['fs_type','item'],inplace=True)
+            map_table = map_table.squeeze()
+            map_table = map_table.str.replace(' ','')
+            # data table
+            folder = f'fs_{segment}'
+            files = [
+                f for f in listdir(join(self.database_path,folder))
+                if not f.startswith('~') and f.endswith(f'.xlsm')
+            ]
+            files.sort()
+            for file in files:
+                raw_fiinpro = openpyxl.load_workbook(os.path.join(self.database_path,folder,file)).active
+                raw_fiinpro.delete_rows(idx=raw_fiinpro.max_row-21,amount=1000)
+                raw_fiinpro.delete_rows(idx=0,amount=7)
+                raw_fiinpro.delete_rows(idx=2,amount=1)
+                frame = pd.DataFrame(raw_fiinpro.values)
+                headers = frame.iloc[0,4:]
+                headers = headers.str.split('Year').str.get(0)
+                headers = headers.str.replace(' ','')
+                headers.name = 'name'
+                fs_type = file.split('_')[0]
+                if fs_type in ['fn1','fn2','fn3']:
+                    continue
+                assign_num = lambda x: [f'{i}.' for i in np.arange(x)+1]
+                headers.index = pd.MultiIndex.from_product([[fs_type],assign_num(headers.shape[0])])
+                result = map_table.reindex(headers.index).compare(headers)
+                if not result.empty:
+                    print(
+                        fr'Not matching columns, please check {folder}\\{file}.\n'
+                        'Check this error otherwise it might cause wrong data extraction.\n'
+                    )
+                    print(result)
+                    conclude = input("Is everything OK? (y/n)")
+                    if conclude.lower() == 'y':
+                        continue
+                    elif conclude.lower() == 'n':
+                        return
                 else:
-                    excel = Dispatch("Excel.Application")
-                    excel.Visible = True
-                    excel.Workbooks.Open(os.path.join(self.database_path,
-                                                      folder, file))
-                    time.sleep(3)  # suspend 3 secs for excel to catch up python
-                    excel.Range("A1:XFD1048576").Select()
-                    excel.Selection.Copy()
-                    excel.Selection.PasteSpecial(Paste=-4163)
-                    excel.ActiveWorkbook.Save()
-                    excel.ActiveWorkbook.Close()
+                    print(fr'Checking ::: {folder}\\{file} ::: Result: Passed')
 
 
-    def fin_tickers(self, sector_break:bool=False) \
-            -> Union[list, dict]:
+    def reload(
+            self
+    ) \
+            -> None:
+
+        """
+        This method handles cached data in newly-added files
+
+        :return: None
+        """
+
+        for folder in self.folders:
+            file_names = [
+                file for file in listdir(join(self.database_path,folder))
+                if isfile(join(self.database_path,folder,file))
+                   and not file.startswith('~')
+            ]
+            for file in file_names:
+                excel = Dispatch("Excel.Application")
+                excel.Visible = True
+                excel.Workbooks.Open(
+                    os.path.join(self.database_path,folder,file)
+                )
+                time.sleep(3)  # suspend 3 secs for excel to catch up python
+                excel.Range("A1:XFD1048576").Select()
+                excel.Selection.Copy()
+                excel.Selection.PasteSpecial(Paste=-4163)
+                excel.ActiveWorkbook.Save()
+                excel.ActiveWorkbook.Close()
+
+
+    def fin_tickers(
+            self,
+            sector_break:bool=False
+    ) \
+            -> Union[list,dict]:
 
         """
         This method returns all tickers of financial segments
@@ -221,32 +274,36 @@ class fa:
         tickers_ = dict()
         for segment in self.financials:
             folder = f'fs_{segment}'
-            file = f'is_{self.latest_period[:4]}q{self.latest_period[-1]}.xlsm'
-            raw_fiinpro \
-                = openpyxl.load_workbook(
-                os.path.join(self.database_path, folder, file)).active
+            file = f'is_{self.latest_period}.xlsm'
+            raw_fiinpro = openpyxl.load_workbook(join(self.database_path,folder,file)).active
             # delete StoxPlux Sign
-            raw_fiinpro.delete_rows(idx=raw_fiinpro.max_row - 21,
-                                    amount=1000)
+            raw_fiinpro.delete_rows(idx=raw_fiinpro.max_row-21,amount=1000)
             # delete headers
-            raw_fiinpro.delete_rows(idx=0, amount=7)
-            raw_fiinpro.delete_rows(idx=2, amount=1)
+            raw_fiinpro.delete_rows(idx=0,amount=7)
+            raw_fiinpro.delete_rows(idx=2,amount=1)
             # import
             clean_data = pd.DataFrame(raw_fiinpro.values)
-            clean_data.drop(index=[0], inplace=True)
+            clean_data.drop(index=[0],inplace=True)
             # remove OTC
-            a = clean_data.loc[:, 3] != 'OTC'
+            case = clean_data[3]!='OTC'
             if sector_break is False:
-                tickers += clean_data.loc[:,1][a].tolist()
+                tickers += clean_data.loc[case,1].tolist()
             else:
-                tickers_[segment] = clean_data.loc[:,1][a].tolist()
+                tickers_[segment] = clean_data.loc[case,1].tolist()
                 tickers = tickers_
 
         return tickers
 
 
-    def core(self, year:int, quarter:int,
-             fs_type:str, segment:str, exchange:str='all') -> pd.DataFrame:
+    def core(
+            self,
+            year:int,
+            quarter:int,
+            fs_type:str,
+            segment:str,
+            exchange:str='all'
+    ) \
+            -> pd.DataFrame:
 
         """
         This method extracts data from Github server, clean up
@@ -257,592 +314,69 @@ class fa:
         :param fs_type: allow values in self.fs_types
         :param segment: allow values in self.segments
         :param exchange: allow values in ['HOSE', 'HNX', 'UPCOM'] or 'all'
-        :type year: int
-        :type quarter: int
-        :type fs_type: str
-        :type segment: str
-        :type exchange: str
 
         :return: pandas.DataFrame
-        :raise ValueError: this function yet supported cashflow for
-        securities companies
+        :raise ValueError: this function yet supported cashflow for securities companies
         """
 
         if segment not in self.segments:
             raise ValueError(f'sector must be in {self.segments}')
-
         if fs_type not in self.fs_types:
             raise ValueError(f'fs_type must be in {self.fs_types}')
 
         folder = f'fs_{segment}'
-
-        files = [f for f in listdir(join(database_path, folder))
-                 if f.startswith(f'{fs_type}')
-                 and f.endswith(f'_{year}q{quarter}.xlsm')]
-
-        clean_data = dict()
-        for i in range(len(files)):
-
+        files = [
+            f for f in listdir(join(self.database_path,folder))
+            if f.startswith(f'{fs_type}') and f.endswith(f'_{year}q{quarter}.xlsm')
+        ]
+        files.sort() # to ensure correct order of concatination
+        frames = []
+        for file in files:
             # create Workbook object, select active Worksheet
-            raw_fiinpro \
-                = openpyxl.load_workbook(
-                os.path.join(self.database_path, folder, files[i])).active
-
+            raw_fiinpro = openpyxl.load_workbook(os.path.join(self.database_path,folder,file)).active
             # delete StoxPlux Sign
-            raw_fiinpro.delete_rows(idx=raw_fiinpro.max_row-21,
-                                    amount=1000)
-
+            raw_fiinpro.delete_rows(idx=raw_fiinpro.max_row-21,amount=1000)
             # delete header rows
-            raw_fiinpro.delete_rows(idx=0, amount=7)
-            raw_fiinpro.delete_rows(idx=2, amount=1)
-
+            raw_fiinpro.delete_rows(idx=0,amount=7)
+            raw_fiinpro.delete_rows(idx=2,amount=1)
             # import to DataFrame, no column labels, no index
-            clean_data[i] = pd.DataFrame(raw_fiinpro.values)
-
+            frame = pd.DataFrame(raw_fiinpro.values)
             # assign column labels and index
-            clean_data[i].columns = clean_data[i].iloc[0,:]
-            clean_data[i].drop(index=[0], inplace=True)
-            clean_data[i].index \
-                = pd.MultiIndex.from_arrays([[year] * len(clean_data[i]),
-                                             [quarter] * len(clean_data[i]),
-                                             clean_data[i]['Ticker'].tolist()])
-            clean_data[i].index.set_names(['year','quarter','ticker'],
-                                          inplace=True)
-
-            # rename 2 columns
-            clean_data[i].rename(columns=
-                              {'Name': 'full_name', 'Exchange': 'exchange'},
-                              inplace=True)
-
-            # drop unwanted columns and index
-            clean_data[i].drop(columns=['No', 'Ticker'], inplace=True)
-
-            # fill na with 0s
-            clean_data[i].fillna(0, inplace=True)
-
+            frame.columns = frame.iloc[0]
+            frame.drop(index=0,inplace=True)
+            frame.index = pd.MultiIndex.from_arrays(
+                [[year]*frame.shape[0],[quarter]*frame.shape[0],frame['Ticker']]
+            )
+            frame.index.set_names(['year','quarter','ticker'],inplace=True)
+            frame.drop(columns=['No','Ticker'],inplace=True)
+            frame.fillna(0,inplace=True)
             # remove OTC
-            clean_data[i] = clean_data[i].loc[clean_data[i]['exchange']
-                                              != 'OTC']
-
-        clean_data = pd.concat([clean_data[i] for i in range(len(clean_data))],
-                               axis=1)
-
-        if segment == 'bank':
-            if fs_type == 'bs':
-                header = list()
-                for col in range(2, len(clean_data.columns)):
-                    if clean_data.columns[col] \
-                            .startswith(
-                        ('A.','B.','C.','D.','E.','F.','G.')):
-                        clean_data.rename(
-                            columns={clean_data.columns[col]
-                                     : clean_data.columns[col].split()[0]},
-                            inplace=True)
-                        header.append(clean_data.columns[col])
-                    else:
-                        clean_data.rename(
-                            columns={clean_data.columns[col]
-                                     : header[-1]
-                                       + clean_data.columns[col].split()[0]},
-                            inplace=True)
-
-                duplicated = clean_data.columns.duplicated()
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    if duplicated[i]:
-                        col_list[i] += '_'
-                clean_data.columns = col_list
-
-                subheader = list('I')
-                for col in range(2, len(clean_data.columns)):
-                    l = clean_data.columns[col].split('.')
-                    a = l[1]
-                    if a in ['I','II','III','IV','V','VI','VII']:
-                        subheader.append(a)
-                    else:
-                        name_new = l
-                        name_new.insert(1, subheader[-1])
-                        name_new = '.'.join(name_new)
-                        clean_data.rename(
-                            columns={clean_data.columns[col]: name_new},
-                            inplace=True)
-
-                clean_data.rename(axis=1, mapper=
-                lambda x: x.rstrip('_'), inplace=True)
-
-            elif fs_type == 'is':
-                for col in range(2, len(clean_data.columns)):
-                    clean_data.rename(
-                        columns={clean_data.columns[col]
-                                 : clean_data.columns[col].split()[0]},
-                        inplace=True)
-
-            elif fs_type == 'cfi':
-                header = list()
-                for col in range(len(clean_data.columns) - 1, 1, -1):
-                    if clean_data.columns[col] \
-                            .startswith(
-                        ('I','II','III','IV','V','VI','VII')):
-                        clean_data.rename(
-                            columns={clean_data.columns[col]
-                                     : clean_data.columns[col].split()[0]},
-                            inplace=True)
-                        header.append(clean_data.columns[col])
-                    else:
-                        try:
-                            clean_data.rename(
-                                columns={clean_data.columns[col]
-                                         : header[-1]
-                                           + clean_data.columns[col].split()[
-                                               0]},
-                                inplace=True)
-                        except IndexError:
-                            clean_data.rename(
-                                columns={clean_data.columns[col]
-                                         : clean_data.columns[col].split()[0]},
-                                inplace=True)
-
-            elif fs_type == 'cfd':
-                header = list()
-                for col in range(2, len(clean_data.columns)):
-                    if clean_data.columns[col] \
-                            .startswith(
-                        ('I','II','III','IV','V','VI','VII')):
-                        clean_data.rename(
-                            columns={clean_data.columns[col]
-                                     : clean_data.columns[col].split()[0]},
-                            inplace=True)
-                        header.append(clean_data.columns[col])
-                    else:
-                        clean_data.rename(
-                            columns={clean_data.columns[col]
-                                     : header[-1]
-                                       + clean_data.columns[col].split()[0]},
-                            inplace=True)
-                col_list = clean_data.columns.tolist()
-                duplicated = clean_data.columns.duplicated()
-                for i in range(2, len(clean_data.columns)):
-                    if duplicated[i]:
-                        col_list[i] += 'b.'
-                clean_data.columns = col_list
-
-            elif fs_type == 'fn':
-                for col in range(2, len(clean_data.columns)):
-                    clean_data.rename(
-                        columns={clean_data.columns[col]
-                                 : clean_data.columns[col].split()[0]},
-                        inplace=True)
-
-
-        elif segment == 'gen':
-            # remove financial
-            fin = set(self.fin_tickers()) \
-                  & set(clean_data.index.get_level_values(2))
-            clean_data.drop(index=fin, level=2, inplace=True)
-            if fs_type == 'bs':
-                header = list()
-                for col in range(len(clean_data.columns)-1,1,-1):
-                    if clean_data.columns[col] \
-                            .startswith(
-                        ('A.','B.','C.','D.','E.','F.','G.')):
-                        clean_data.rename(
-                            columns={clean_data.columns[col]
-                                     : clean_data.columns[col].split()[0]},
-                            inplace=True)
-                        header.append(clean_data.columns[col])
-                    else:
-                        clean_data.rename(
-                            columns={clean_data.columns[col]
-                                     : header[-1]
-                                       + clean_data.columns[col].split()[0]},
-                            inplace=True)
-
-                duplicated = clean_data.columns.duplicated()
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    if duplicated[i]:
-                        col_list[i] += '_'
-                clean_data.columns = col_list
-
-                subheader = list('I')
-                for col in range(2, len(clean_data.columns)):
-                    l = clean_data.columns[col].split('.')
-                    a = l[1]
-                    if a in ['I','II','III','IV','V','VI','VII']:
-                        subheader.append(a)
-                    else:
-                        name_new = l
-                        name_new.insert(1, subheader[-1])
-                        name_new = '.'.join(name_new)
-                        clean_data.rename(
-                            columns={clean_data.columns[col]: name_new},
-                            inplace=True)
-
-                clean_data.rename(axis=1, mapper=
-                lambda x: x.rstrip('_'), inplace=True)
-
-                duplicated = clean_data.columns.duplicated()
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    if duplicated[i] and col_list[i].split('.',1)[1] \
-                            not in ['I.','II.','III.','IV','V.','VI.','VII.']:
-                        col_list[i] += 'b.'
-                clean_data.columns = col_list
-
-                duplicated = clean_data.columns.duplicated()
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    l = col_list[i].split('.')
-                    if duplicated[i] and l[1] \
-                            in ['I','II','III','IV','V','VI','VII']:
-                        col_list[i] = l[0] + '.'
-                clean_data.columns = col_list
-
-            elif fs_type == 'is':
-                for col in range(2, len(clean_data.columns)):
-                    clean_data.rename(
-                        columns={clean_data.columns[col]
-                                 : clean_data.columns[col].split()[0]},
-                        inplace=True)
-
-            elif fs_type == 'cfi':
-                header = list()
-                for col in range(2, len(clean_data.columns)):
-                    if clean_data.columns[col] \
-                            .startswith(('I','II','III','IV','V','VI','VII')):
-                        clean_data.rename(
-                            columns={clean_data.columns[col]
-                                     : clean_data.columns[col].split()[0]},
-                            inplace=True)
-                        header.append(clean_data.columns[col])
-                    else:
-                        try:
-                            clean_data.rename(
-                                columns={clean_data.columns[col]
-                                         : header[-1]
-                                           + clean_data.columns[col].split()[
-                                               0]},
-                                inplace=True)
-                        except IndexError:
-                            clean_data.rename(
-                                columns={clean_data.columns[col]
-                                         : clean_data.columns[col].split()[0]},
-                                inplace=True)
-
-            elif fs_type == 'cfd':
-                header = list()
-                for col in range(2, len(clean_data.columns)):
-                    if clean_data.columns[col] \
-                            .startswith(
-                        ('I','II','III','IV','V','VI','VII')):
-                        clean_data.rename(
-                            columns={clean_data.columns[col]
-                                     : clean_data.columns[col].split()[0]},
-                            inplace=True)
-                        header.append(clean_data.columns[col])
-                    else:
-                        try:
-                            clean_data.rename(
-                                columns={clean_data.columns[col]
-                                         : header[-1]
-                                           + clean_data.columns[col].split()[
-                                               0]},
-                                inplace=True)
-                        except IndexError:
-                            clean_data.rename(
-                                columns={clean_data.columns[col]
-                                         : clean_data.columns[col].split()[0]},
-                                inplace=True)
-
-            elif fs_type == 'fn':
-                for col in range(2, len(clean_data.columns)):
-                    clean_data.rename(
-                        columns={clean_data.columns[col]
-                                 : clean_data.columns[col].split()[0]},
-                        inplace=True)
-
-
-        elif segment == 'ins':
-            if fs_type == 'bs':
-                header = list()
-                for col in range(len(clean_data.columns) - 1, 1, -1):
-                    if clean_data.columns[col] \
-                            .startswith(
-                        ('A.', 'B.', 'C.', 'D.', 'E.', 'F.', 'G.')):
-                        clean_data.rename(
-                            columns={clean_data.columns[col]
-                                     : clean_data.columns[col].split()[0]},
-                            inplace=True)
-                        header.append(clean_data.columns[col])
-                    else:
-                        try:
-                            clean_data.rename(
-                                columns={clean_data.columns[col]
-                                         : header[-1]
-                                           + clean_data.columns[col].split()[
-                                               0]},
-                                inplace=True)
-                        except IndexError:
-                            clean_data.rename(
-                                columns={clean_data.columns[col]
-                                         : clean_data.columns[col].split()[0]},
-                                inplace=True)
-
-                duplicated = clean_data.columns.duplicated()
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    if duplicated[i]:
-                        col_list[i] += '_'
-                clean_data.columns = col_list
-
-                duplicated = clean_data.columns.duplicated()
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    if duplicated[i]:
-                        col_list[i] += '_'
-                clean_data.columns = col_list
-
-                subheader = list('I')
-                for col in range(2, len(clean_data.columns)):
-                    l = clean_data.columns[col].split('.')
-                    a = l[1]
-                    if a in ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']:
-                        subheader.append(a)
-                    else:
-                        name_new = l
-                        name_new.insert(1, subheader[-1])
-                        name_new = '.'.join(name_new)
-                        clean_data.rename(
-                            columns={clean_data.columns[col]: name_new},
-                            inplace=True)
-
-                clean_data.rename(axis=1, mapper=
-                lambda x: x.rstrip('__').rstrip('_'), inplace=True)
-
-                duplicated = clean_data.columns.duplicated()
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    l = col_list[i].split('.')
-                    if duplicated[i] and l[2] != '':
-                        col_list[i] += 'b.'
-                clean_data.columns = col_list
-
-                duplicated = clean_data.columns.duplicated()
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    l = col_list[i].split('.')
-                    if duplicated[i] and l[1] \
-                            in ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']:
-                        col_list[i] = l[0] + '.'
-                clean_data.columns = col_list
-
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    a = col_list[i].split('.')[1]
-                    if col_list[i].startswith(('1', '2', '3', '4', '5')):
-                        col_list[i] = col_list[i].replace(a + '.', '')
-                clean_data.columns = col_list
-
-            elif fs_type == 'is':
-                for col in range(2, len(clean_data.columns)):
-                    clean_data.rename(
-                        columns={clean_data.columns[col]
-                                 : clean_data.columns[col].split()[0]},
-                        inplace=True)
-                duplicated = clean_data.columns.duplicated()
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    if duplicated[i]:
-                        col_list[i] += 'b.'
-                    elif col_list[i] == '2201.':
-                        col_list[i] = '20.1.'
-                clean_data.columns = col_list
-
-            elif fs_type == 'cfi':
-                header = list()
-                for col in range(2, len(clean_data.columns)):
-                    if clean_data.columns[col] \
-                            .startswith(
-                        ('I', 'II', 'III', 'IV', 'V', 'VI', 'VII')):
-                        clean_data.rename(
-                            columns={clean_data.columns[col]
-                                     : clean_data.columns[col].split()[0]},
-                            inplace=True)
-                        header.append(clean_data.columns[col])
-                    else:
-                        clean_data.rename(
-                            columns={clean_data.columns[col]
-                                     : header[-1]
-                                       + clean_data.columns[col].split()[0]},
-                            inplace=True)
-
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    a = col_list[i].split('.')
-                    if len(a[-1]) >= 5:
-                        col_list[i] = '.'.join(a[:2]) + '.'
-                clean_data.columns = col_list
-
-                duplicated = clean_data.columns.duplicated()
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    if duplicated[i]:
-                        col_list[i] += 'b.'
-                        break
-                clean_data.columns = col_list
-
-                duplicated = clean_data.columns.duplicated()
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    if duplicated[i]:
-                        col_list[i] += 'c.'
-                clean_data.columns = col_list
-
-            elif fs_type == 'cfd':
-                header = list()
-                for col in range(2, len(clean_data.columns)):
-                    if clean_data.columns[col] \
-                            .startswith(
-                        ('I', 'II', 'III', 'IV', 'V', 'VI', 'VII')):
-                        clean_data.rename(
-                            columns={clean_data.columns[col]
-                                     : clean_data.columns[col].split()[0]},
-                            inplace=True)
-                        header.append(clean_data.columns[col])
-                    else:
-                        try:
-                            clean_data.rename(
-                                columns={clean_data.columns[col]
-                                         : header[-1]
-                                           + clean_data.columns[col].split()[
-                                               0]},
-                                inplace=True)
-                        except IndexError:
-                            clean_data.rename(
-                                columns={clean_data.columns[col]
-                                         : clean_data.columns[col].split()[0]},
-                                inplace=True)
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    a = col_list[i].split('.')
-                    if len(a[-1]) >= 1:
-                        col_list[i] = '.'.join(a[:-1]) + '.'
-                clean_data.columns = col_list
-
-            elif fs_type == 'fn':
-                for col in range(2, len(clean_data.columns)):
-                    clean_data.rename(
-                        columns={clean_data.columns[col]
-                                 : clean_data.columns[col].split()[0]},
-                        inplace=True)
-
-
-        elif segment == 'sec':
-            if fs_type == 'bs':
-                header = list()
-                for col in range(len(clean_data.columns)-1,1,-1):
-                    if clean_data.columns[col] \
-                            .startswith(
-                        ('A.','B.','C.','D.','E.','F.','G.')):
-                        clean_data.rename(
-                            columns={clean_data.columns[col]
-                                     : clean_data.columns[col].split()[0]},
-                            inplace=True)
-                        header.append(clean_data.columns[col])
-                    else:
-                        try:
-                            clean_data.rename(
-                                columns={clean_data.columns[col]
-                                         : header[-1]
-                                           + clean_data.columns[col].split()[
-                                               0]},
-                                inplace=True)
-                        except IndexError:
-                            clean_data.rename(
-                                columns={clean_data.columns[col]
-                                         : clean_data.columns[col].split()[0]},
-                                inplace=True)
-
-                duplicated = clean_data.columns.duplicated()
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    if duplicated[i]:
-                        col_list[i] += '_'
-                clean_data.columns = col_list
-
-                subheader = list('I')
-                for col in range(2, len(clean_data.columns)):
-                    l = clean_data.columns[col].split('.')
-                    a = l[1]
-                    if a in ['I','II','III','IV','V','VI','VII']:
-                        subheader.append(a)
-                    else:
-                        name_new = l
-                        name_new.insert(1, subheader[-1])
-                        name_new = '.'.join(name_new)
-                        clean_data.rename(
-                            columns={clean_data.columns[col]: name_new},
-                            inplace=True)
-
-                clean_data.rename(axis=1, mapper=lambda x: x.rstrip('_'), inplace=True)
-
-                duplicated = clean_data.columns.duplicated()
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    l = col_list[i].split('.')
-                    if duplicated[i] and l[1] \
-                            in ['I','II','III','IV','V','VI','VII']:
-                        col_list[i] = l[0] + '.'
-                clean_data.columns = col_list
-
-                col_list = clean_data.columns.tolist()
-                for i in range(2, len(clean_data.columns)):
-                    l = col_list[i].split('.')
-                    if l[0] in ['1','2','3','4','5'] and l[1] \
-                            in ['I','II','III','IV','V','VI','VII']:
-                        col_list[i] = col_list[i].replace(f'.{l[1]}', '')
-                clean_data.columns = col_list
-
-            elif fs_type == 'is':
-                for col in range(2, len(clean_data.columns)):
-                    clean_data.rename(
-                        columns={clean_data.columns[col]: clean_data.columns[col].split()[0]},
-                        inplace=True)
-
-            elif fs_type == 'cfi':
-                pass
-
-            elif fs_type == 'cfd':
-                pass
-
-            elif fs_type == 'fn':
-                for col in range(2, len(clean_data.columns)):
-                    clean_data.rename(
-                        columns={clean_data.columns[col]
-                                 : clean_data.columns[col].split()[0]},
-                        inplace=True)
-
-                col_list = clean_data.columns.tolist()
-                duplicated = clean_data.columns.duplicated()
-                for i in range(2, len(clean_data.columns)):
-                    if duplicated[i]:
-                        col_list[i] += 'b.'
-                clean_data.columns = col_list
-
-
-        clean_data.columns \
-            = pd.MultiIndex.from_product([[fs_type],
-                                          clean_data.columns.tolist()],
-                                         names=['fs_type', 'item'])
+            frame = frame.loc[frame['Exchange']!='OTC']
+            frames += [frame]
+        clean_data = pd.concat(frames,axis=1)
+        name_exchange = clean_data[['Name','Exchange']].copy()
+        name_exchange = name_exchange.loc[:,~name_exchange.columns.duplicated()]
+        clean_data.drop(['Name','Exchange'],axis=1,inplace=True)
+        give_index = lambda x: [f'{num}.' for num in np.arange(x)+1]
+        clean_data.columns = give_index(clean_data.shape[1])
+        clean_data.insert(0,'full_name',name_exchange['Name'])
+        clean_data.insert(0,'exchange',name_exchange['Exchange'])
+        clean_data.columns = pd.MultiIndex.from_product(
+            [[fs_type],clean_data.columns],names=['fs_type','item']
+        )
         if exchange != 'all':
-            clean_data \
-                = clean_data.loc[clean_data[fs_type]['exchange'] == exchange]
+            mask = clean_data[(fs_type,'exchange')]==exchange
+            clean_data = clean_data.loc[mask]
 
-        print('Extracting...')
+        print('Data ::: Extracting...')
         return clean_data
 
 
-    def segment(self, ticker:str) -> str:
+    def segment(
+            self,
+            ticker:str
+    ) \
+            -> str:
 
         """
         This method returns the segment of a given ticker
@@ -857,17 +391,20 @@ class fa:
         if ticker not in self.fin_tickers():
             segment = 'gen'
         else:
-            for key in self.fin_tickers(True):
-                if ticker not in self.fin_tickers(True)[key]:
-                    pass
-                else:
+            fin_dict = self.fin_tickers(True)
+            for key in fin_dict:
+                if ticker in fin_dict[key]:
                     segment = key
                     break
 
         return segment
 
 
-    def fs(self, ticker:str) -> pd.DataFrame:
+    def fs(
+            self,
+            ticker:str
+    )\
+            -> pd.DataFrame:
 
         """
         This method returns all financial statements
@@ -881,42 +418,44 @@ class fa:
 
         segment = self.segment(ticker)
         folder = f'fs_{segment}'
-        file_names = listdir(join(self.database_path, folder))
+        file_names = listdir(join(self.database_path,folder))
         file_names = [f for f in file_names if not f.startswith('~$')]
         file_names.sort()
-
-        refs = [(int(name[-11:-7]), int(name[-6]), name[:2] \
-                if name[2] in '_1234' else name[:3])
-                for name in file_names]
-
-        inds = list()
-        dict_ind = dict()
+        refs = [
+            (int(name[-11:-7]),int(name[-6]),name[:2] if name[2] in '_1234' else name[:3]) for name in file_names
+        ]
+        dict_idx = dict()
         for fs_type in self.fs_types:
-            try:
-                inds += self.core(refs[-1][0],
-                                  refs[-1][1],
-                                  fs_type,
-                                  self.segment(ticker)) \
-                    .drop(['full_name', 'exchange'], level=1, axis=1) \
-                    .columns.tolist()
-            except KeyError:
-                continue
-            dict_ind[fs_type] = [x[1] for x in inds if x[0] == fs_type]
-
-        fs = pd.concat(
-            [self.core(ref[0], ref[1], ref[2], segment) \
-                 .xs(ticker, axis=0, level=2) \
-                 .drop(['full_name', 'exchange'], level=1, axis=1).T \
-                 .set_index(pd.MultiIndex.from_product(
-                 [[segment], [ref[2]], dict_ind[ref[2]]]))
-                for ref in refs])
-        fs = fs.groupby(fs.index, sort=False).sum()
+            year = refs[-1][0]
+            quarter = refs[-1][1]
+            table = self.core(
+                year,
+                quarter,
+                fs_type,
+                self.segment(ticker)
+            ).drop(['full_name','exchange'],level=1,axis=1)
+            dict_idx[fs_type] = table.columns.get_level_values(1).tolist()
+        fs = pd.concat([
+            self.core(
+                ref[0],ref[1],ref[2],segment
+            ).loc[pd.IndexSlice[:,:,ticker]].drop(
+                ['full_name','exchange'],level=1,axis=1
+            ).T.set_index(pd.MultiIndex.from_product(
+                [[segment],[ref[2]],dict_idx[ref[2]]]
+            )) for ref in refs
+        ], axis=1)
+        fs = fs.groupby(level=[0,1,2],axis=1,sort=False).sum(min_count=1)
 
         print('Finished!')
         return fs
 
 
-    def all(self, segment:str, exchange:str='all') -> pd.DataFrame:
+    def all(
+            self,
+            segment:str,
+            exchange:str='all'
+    ) \
+            -> pd.DataFrame:
 
         """
         This method returns all financial statements of all companies
@@ -929,30 +468,26 @@ class fa:
         :return: pandas.DataFrame
         """
 
-        frames = list()
+        frames = []
         for period in self.periods:
             for fs_type in self.fs_types:
-                try:
-                    frames.append(
-                        self.core(int(period[:4]),
-                                  int(period[-1]),
-                                  fs_type,
-                                  segment,
-                                  exchange))
-                except FileNotFoundError:
-                    continue
-
-        df = pd.concat(frames, axis=1, join='outer')
-        df = df.groupby(by=df.columns, axis=1,
-                        dropna=False, sort=False).sum(min_count=1)
-        df.columns = pd.MultiIndex.from_tuples(df.columns,
-                                               names=['fs_type', 'item'])
-        df.drop(columns=['exchange', 'full_name'], level=1, inplace=True)
+                year = int(period[:4])
+                quarter = int(period[-1])
+                frame = self.core(
+                    year,quarter,fs_type,segment,exchange
+                ).drop(labels=['full_name','exchange'],level=1,axis=1)
+                frames += [frame]
+        df = pd.concat(frames,axis=1,join='outer')
+        df = df.groupby(level=[0,1],axis=1,sort=False).sum(min_count=1)
+        df.columns.names = ['fs_type','item']
 
         return df
 
 
-    def exchanges(self) -> pd.DataFrame:
+    def exchanges(
+            self
+    ) \
+            -> pd.DataFrame:
 
         """
         This method returns stock exchanges of all tickers
@@ -962,19 +497,25 @@ class fa:
         :return: pandas.DataFrame
         """
 
-        table = pd.DataFrame(columns=['exchange'])
+        frames = []
         for segment in self.segments:
-            a = self.core(int(self.latest_period[:4]),
-                          int(self.latest_period[-1]), 'is', segment)
-            a = a.xs(key='exchange', axis=1, level=1)
-            a = a.droplevel(level=['year', 'quarter'], axis=0)
-            a.columns = ['exchange']
-            table = pd.concat([table, a])
+            year = int(self.latest_period[:4])
+            quarter = int(self.latest_period[-1])
+            frame = self.core(year,quarter,'is',segment)
+            frame = frame.loc[:,pd.IndexSlice[:,'exchange']]
+            frame = frame.droplevel(level=['year','quarter'])
+            frame.columns = ['exchange']
+            frames += [frame]
+        table = pd.concat(frames)
 
         return table
 
 
-    def exchange(self, ticker:str) -> str:
+    def exchange(
+            self,
+            ticker:str
+    ) \
+            -> str:
 
         """
         This method returns stock exchange of given stock
@@ -985,12 +526,17 @@ class fa:
         :return: str
         """
 
-        exchange = self.exchanges().loc[ticker].iloc[0]
+        exchange = self.exchanges().loc[ticker,'exchange']
 
         return exchange
 
 
-    def tickers(self, segment:str='all', exchange:str='all'):
+    def tickers(
+            self,
+            segment:str='all',
+            exchange:str='all'
+    ) \
+            -> list:
 
         """
         This method returns all tickers of given segment or exchange
@@ -1004,29 +550,39 @@ class fa:
         """
 
         ticker_list = []
+        year = int(self.latest_period[:4])
+        quarter = int(self.latest_period[-1])
         if segment in self.segments:
-            ticker_list \
-                = self.core(int(self.latest_period[:4]),
-                            int(self.latest_period[-1]),
-                            'is', segment, exchange) \
-                .index.get_level_values(level=2).tolist()
+            ticker_list = self.core(
+                year,
+                quarter,
+                'is',
+                segment,
+                exchange
+            ).index.get_level_values(level=2).tolist()
         elif segment == 'all':
             ticker_list = []
             for segment in self.segments:
-                ticker_list \
-                    += self.core(int(self.latest_period[:4]),
-                                 int(self.latest_period[-1]),
-                                 'is', segment, exchange) \
-                    .index.get_level_values(level=2).tolist()
+                ticker_list += self.core(
+                    year,
+                    quarter,
+                    'is',
+                    segment,
+                    exchange
+                ).index.get_level_values(level=2).tolist()
 
         return ticker_list
 
 
-    def items(self, segment:str, fs_type:str) -> list:
+    def items(
+            self,
+            segment:str,
+            fs_type:str
+    ) \
+            -> list:
 
         """
-        This method returns all financial items
-        of given financial statement of given segment
+        This method returns all financial items of given financial statement of given segment
 
         :param segment: allow values in self.segments()
         :param fs_type: allow valies in self.fs_types()
@@ -1036,25 +592,28 @@ class fa:
         :return: list
         """
 
-        items \
-            = self.core(int(self.latest_period[:4]),
-                        int(self.latest_period[-1]),
-                        fs_type, segment) \
-            .columns.get_level_values(level=1).tolist()
-        try:
-            items.remove('full_name')
-            items.remove('exchange')
-        except ValueError:
-            pass
+        year = int(self.latest_period[:4])
+        quarter = int(self.latest_period[-1])
+        items = self.core(
+            year,
+            quarter,
+            fs_type,
+            segment
+        ).columns.get_level_values(level=1).tolist()
+        items.remove('full_name')
+        items.remove('exchange')
 
         return items
 
 
-    def classification(self, standard:str) -> pd.DataFrame:
+    def classification(
+            self,
+            standard:str
+    ) \
+            -> pd.DataFrame:
 
         """
-        This method returns industry classification instructed by
-        a given standard of all stocks
+        This method returns industry classification instructed by a given standard of all stocks
 
         :param standard: allow values in fa.standards
         :type standard: str
@@ -1067,46 +626,47 @@ class fa:
 
         for st in self.standards:
             # create Workbook object, select active Worksheet
-            raw_bloomberg \
-                = openpyxl.load_workbook(
-                os.path.join(self.database_path, folder, st + '.xlsx')).active
+            raw_bloomberg = openpyxl.load_workbook(
+                os.path.join(self.database_path,folder,st+'.xlsx')
+            ).active
             # delete Bloomberg Sign
             raw_bloomberg.delete_rows(idx=raw_bloomberg.max_row)
             # delete headers
-            raw_bloomberg.delete_rows(idx=0, amount=2)
+            raw_bloomberg.delete_rows(idx=0,amount=2)
             clean_data = pd.DataFrame(raw_bloomberg.values)
             clean_data.iloc[1] = clean_data.iloc[0]
             clean_data.drop(index=0, inplace=True)
             # set index and columns
-            clean_data.index = clean_data.iloc[:, 0]
+            clean_data.index = clean_data.iloc[:,0]
             clean_data.index.rename('ticker')
-            clean_data.columns = clean_data.iloc[0, :]
+            clean_data.columns = clean_data.iloc[0,:]
             clean_data.columns.rename('level')
             # remore unwanted columns, rows
-            clean_data.drop(columns=['Ticker', 'Name'],
-                            index=['Ticker'], inplace=True)
+            clean_data.drop(columns=['Ticker','Name'],index=['Ticker'],inplace=True)
             # rename columns
-            clean_data.columns \
-                = pd.Index(
-                data=[clean_data.columns[i].split()[0].lower()
-                          .split(' ', maxsplit=1)[0] + '_l' + str(i + 1)
-                      for i in range(clean_data.shape[1])])
+            clean_data.columns = pd.Index(
+                data=[clean_data.columns[i].split()[0].lower().split(' ',maxsplit=1)[0]+'_l'+str(i+1)
+                      for i in range(clean_data.shape[1])]
+            )
             # rename index
-            clean_data.index \
-                = pd.Index(data=[clean_data.index[i].split()[0]
-                                 for i in range(clean_data.shape[0])])
+            clean_data.index = pd.Index(
+                data=[clean_data.index[i].split()[0] for i in range(clean_data.shape[0])]
+            )
             st_dict[st] = clean_data
 
         return st_dict[standard]
 
 
-    def levels(self, standard:str) -> list:
+    def levels(
+            self,
+            standard:str
+    ) \
+            -> list:
 
         """
         This method returns all levels of given industry classification standard
 
         :param standard: allow values in fa.standards
-        :type standard: str
 
         :return: list
         """
@@ -1115,32 +675,39 @@ class fa:
         return levels
 
 
-    def industries(self, standard:str, level:int) -> list:
+    def industries(
+            self,
+            standard:str,
+            level:int
+    ) \
+            -> list:
 
         """
-        This method returns all industry names of
-        given level of given classification standard
+        This method returns all industry names of given level of given classification standard
 
         :param standard: allow values in request_industry_standard()
         :param level: allow values in request_industry_level() (number only)
-        :type standard: str
-        :type level: str
 
         :return: list
         """
 
-        industries \
-            = self.classification(standard)[f'{standard}_l{str(level)}'] \
-            .drop_duplicates().tolist()
+        industries = self.classification(standard)
+        industries = industries[f'{standard}_l{str(level)}'].drop_duplicates().tolist()
+
         return industries
 
     @staticmethod
-    def peers(ticker:str, standard:str, level:int):
+    def peers(
+            ticker:str,
+            standard:str,
+            level:int
+    )\
+            -> list:
 
         df = fa.classification(standard)
         col = f'{standard}_l{level}'
-        industry = df.loc[ticker, col]
-        peers = df[col].loc[df[col]==industry].index.to_list()
+        industry = df.loc[ticker,col]
+        peers = df.loc[df[col]==industry].index.to_list()
 
         return peers
 
@@ -1156,46 +723,55 @@ class fa:
         """
 
         folder = 'ownership'
-        file = [f for f in listdir(join(self.database_path, folder))
-                if isfile(join(self.database_path, folder, f))][-1]
+        file = [f for f in listdir(join(self.database_path,folder))
+                if isfile(join(self.database_path,folder,f))][-1]
 
         excel = Dispatch("Excel.Application")
-        excel.Visible = True
+        excel.Visible = False
         for wb in [wb for wb in excel.Workbooks]:
             wb.Close(True)
 
         # create Workbook object, select active Worksheet
         raw_fiinpro = openpyxl.load_workbook(
-            os.path.join(self.database_path, folder, file)).active
+            os.path.join(self.database_path,folder,file)
+        ).active
         # delete StoxPlux Sign
-        raw_fiinpro.delete_rows(idx=raw_fiinpro.max_row-21, amount=1000)
-
+        raw_fiinpro.delete_rows(idx=raw_fiinpro.max_row-21,amount=1000)
         # delete header rows
-        raw_fiinpro.delete_rows(idx=0, amount=7)
-        raw_fiinpro.delete_rows(idx=2, amount=1)
-
+        raw_fiinpro.delete_rows(idx=0,amount=7)
+        raw_fiinpro.delete_rows(idx=2,amount=1)
         # import to DataFrame
         clean_data = pd.DataFrame(raw_fiinpro.values)
-
         # drop unwanted index and columns
-        clean_data.drop(columns=[0], inplace=True)
-        clean_data.drop(index=[0], inplace=True)
-
+        clean_data.drop(columns=[0],inplace=True)
+        clean_data.drop(index=[0],inplace=True)
         # set ticker as index
-        clean_data.index = clean_data.iloc[:, 0]
-        clean_data.drop(clean_data.columns[0], axis=1, inplace=True)
+        clean_data.index = clean_data.iloc[:,0]
+        clean_data.drop(clean_data.columns[0],axis=1,inplace=True)
 
         # rename columns
-        columns = ['full_name', 'exchange', 'state_share',
-                   'state_percent', 'frgn_share', 'frgn_percent',
-                   'other_share', 'other_percent', 'frgn_maxpercent',
-                   'frgn_maxshare', 'frgn_remainshare']
+        columns = [
+            'full_name',
+            'exchange',
+            'state_share',
+            'state_percent',
+            'frgn_share',
+            'frgn_percent',
+            'other_share',
+            'other_percent',
+            'frgn_maxpercent',
+            'frgn_maxshare',
+            'frgn_remainshare'
+        ]
         clean_data.columns = columns
 
         return clean_data
 
 
-    def marketcaps(self) -> pd.DataFrame:
+    def marketcaps(
+            self
+    ) \
+            -> pd.DataFrame:
 
         """
         This method returns market capitalization of all stocks
@@ -1213,29 +789,23 @@ class fa:
         excel.Visible = False
         for wb in [wb for wb in excel.Workbooks]:
            wb.Close(True)
-
         # create Workbook object, select active Worksheet
         raw_fiinpro = openpyxl.load_workbook(
-            os.path.join(self.database_path, folder, file)).active
+            os.path.join(self.database_path,folder,file)).active
         # delete StoxPlux Sign
-        raw_fiinpro.delete_rows(idx=raw_fiinpro.max_row-21, amount=1000)
-
+        raw_fiinpro.delete_rows(idx=raw_fiinpro.max_row-21,amount=1000)
         # delete header rows
-        raw_fiinpro.delete_rows(idx=0, amount=7)
-        raw_fiinpro.delete_rows(idx=2, amount=1)
-        raw_fiinpro.delete_cols(idx=6, amount=1000)
-
+        raw_fiinpro.delete_rows(idx=0,amount=7)
+        raw_fiinpro.delete_rows(idx=2,amount=1)
+        raw_fiinpro.delete_cols(idx=6,amount=1000)
         # import to DataFrame
         clean_data = pd.DataFrame(raw_fiinpro.values)
-
         # drop unwanted index and columns
-        clean_data.drop(columns=[0,2,3], inplace=True)
-        clean_data.drop(index=[0], inplace=True)
-
+        clean_data.drop(columns=[0,2,3],inplace=True)
+        clean_data.drop(index=[0],inplace=True)
         # set ticker as index
-        clean_data.index = clean_data.iloc[:, 0]
-        clean_data.drop(clean_data.columns[0], axis=1, inplace=True)
-
+        clean_data.index = clean_data.iloc[:,0]
+        clean_data.drop(clean_data.columns[0],axis=1,inplace=True)
         # rename columns
         clean_data.columns = ['marketcap']
 
@@ -1245,7 +815,11 @@ class fa:
         return clean_data
 
 
-    def marketcap(self, ticker:str) -> str:
+    def marketcap(
+            self,
+            ticker:str
+    ) \
+            -> str:
 
         """
         This method returns market capitalization of given stock
@@ -1257,7 +831,7 @@ class fa:
         """
 
         table = self.marketcaps()
-        marketcap = table.loc[ticker, 'marketcap']
+        marketcap = table.loc[ticker,'marketcap']
 
         return marketcap
 

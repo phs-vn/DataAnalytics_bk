@@ -8,15 +8,12 @@ min_tickers = 3
 nstd_bound = 2
 
 start_time = time.time()
-
-np.set_printoptions(linewidth=np.inf, precision=4, suppress=True,
-                    threshold=sys.maxsize)
-pd.set_option("display.max_rows", sys.maxsize,
-              "display.max_columns", sys.maxsize,
-              'display.expand_frame_repr', True)
 pd.options.mode.chained_assignment = None
 
 agg_data = fa.all('bank')  #################### expensive
+periods = fa.periods[-13:] # trailing 3 years
+converted_idx = (agg_data.index.get_level_values(0).map(str)+'q'+agg_data.index.get_level_values(1).map(str))
+agg_data = agg_data.loc[converted_idx.isin(periods)]
 
 quantities = ['balnce_sbv', 'balnce_inst', 'loans_customer', 'trading_sec',
               'invst_sec', 'net_int_income', 'int_income', 'int_expense',
@@ -30,7 +27,6 @@ quantities = ['balnce_sbv', 'balnce_inst', 'loans_customer', 'trading_sec',
               'gainlossinst', 'other_income', 'dividend_income', 'cur_deposit',
               'saving_deposit', 'deposit']
 
-periods = fa.periods
 tickers = fa.tickers('bank')
 
 years = list()
@@ -56,169 +52,87 @@ for year, quarter in period_tuple:
             continue
         for quantity in quantities:
             if quantity == 'balnce_sbv':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('bs', 'A.I.2.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','3.')]
             elif quantity == 'balnce_inst':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('bs', 'A.I.3.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','4.')]
             elif quantity == 'loans_customer':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('bs', 'A.I.6.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','12.')]
             elif quantity == 'trading_sec':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('bs', 'A.I.4.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','8.')]
             elif quantity == 'invst_sec':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('bs', 'A.I.8.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','18.')]
             elif quantity == 'net_int_income':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('is', '1.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is','1.')]
             elif quantity == 'int_income':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('is', '1.1.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is','2.')]
             elif quantity == 'int_expense':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = -agg_data.loc[(year, quarter, ticker),
-                                    ('is', '1.2.')]
+                df.loc[(year,quarter,ticker),quantity] = -agg_data.loc[(year,quarter,ticker),('is','3.')]
             elif quantity == 'net_feecomisn_income':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('is', '2.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is','4.')]
             elif quantity == 'ga_expense':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = -agg_data.loc[(year, quarter, ticker),
-                                    ('is', '9.')]
+                df.loc[(year,quarter,ticker),quantity] = -agg_data.loc[(year,quarter,ticker),('is','15.')]
             elif quantity == 'oper_income':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('is', '8.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is','14.')]
             elif quantity == 'operprofit_bprovisn':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('is', '10.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is','16.')]
             elif quantity == 'asset':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('bs', 'A.I.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','1.')]
             elif quantity == 'equity':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('bs', 'B.II.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','62.')]
             elif quantity == 'liability':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('bs', 'B.I.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','48.')]
             elif quantity == 'deposit_sbv':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('bs', 'B.I.1.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','49.')]
             elif quantity == 'deposit_inst':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('bs', 'B.I.2.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','50.')]
             elif quantity == 'deposit_customer':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('bs', 'B.I.3.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','53.')]
             elif quantity == 'gov_funding':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('bs', 'B.I.5.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','55.')]
             elif quantity == 'paper_issued':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('bs', 'B.I.6.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','56.')]
             elif quantity == 'substd':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('fn', '4.3.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('fn','68.')]
             elif quantity == 'doubtful':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('fn', '4.4.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('fn','69.')]
             elif quantity == 'baddebt':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('fn', '4.5.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('fn','70.')]
             elif quantity == 'loans':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('fn', '4.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('fn','65.')]
             elif quantity == 'provsn_inst':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = -agg_data.loc[(year, quarter, ticker),
-                                    ('bs', 'A.I.3.3.')]
+                df.loc[(year,quarter,ticker),quantity] = -agg_data.loc[(year,quarter,ticker),('bs','7.')]
             elif quantity == 'provsn_customer':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = -agg_data.loc[(year, quarter, ticker),
-                                    ('bs', 'A.I.6.2.')]
+                df.loc[(year,quarter,ticker),quantity] = -agg_data.loc[(year,quarter,ticker),('bs','14.')]
             elif quantity == 'provsn_charge':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = -agg_data.loc[(year, quarter, ticker),
-                                    ('is', '11.')]
+                df.loc[(year,quarter,ticker),quantity] = -agg_data.loc[(year,quarter,ticker),('is','17.')]
             elif quantity == 'net_income':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('is', '14.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is','22.')]
             elif quantity == 'cash':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('bs', 'A.I.1.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','2.')]
             elif quantity == 'avaisale_sec':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('bs', 'A.I.8.1.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','19.')]
             elif quantity == 'feecomisn_expense':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = -agg_data.loc[(year, quarter, ticker),
-                                    ('is', '2.2')]
+                df.loc[(year,quarter,ticker),quantity] = -agg_data.loc[(year,quarter,ticker),('is','6.')]
             elif quantity == 'other_expense':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = -agg_data.loc[(year, quarter, ticker),
-                                    ('is', '6.2.')]
+                df.loc[(year,quarter,ticker),quantity] = -agg_data.loc[(year,quarter,ticker),('is','12.')]
             elif quantity == 'feecomisn_income':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('is', '2.1')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is','5.')]
             elif quantity == 'gainlossfxgold':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('is', '3.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is','7.')]
             elif quantity == 'gainlosstrading':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('is', '4.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is','4.')]
             elif quantity == 'gainlossinst':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('is', '5.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is','9.')]
             elif quantity == 'other_income':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('is', '6.1.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is','11.')]
             elif quantity == 'dividend_income':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('is', '7.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is', '13.')]
             elif quantity == 'cur_deposit':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('fn', '10.1.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('fn','121.')]
             elif quantity == 'saving_deposit':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('fn', '10.3.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('fn','123.')]
             elif quantity == 'deposit':
-                df.loc[(year, quarter, ticker), quantity] \
-                    = agg_data.loc[(year, quarter, ticker),
-                                   ('fn', '10.')]
+                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('fn','120.')]
             else:
                 pass
 
@@ -323,25 +237,21 @@ for year, quarter in zip(years, quarters):
     for quantity in quantities_new:
         # remove outliers (Interquartile Range Method)
         ## (have to ensure symmetry)
-        df_xs_median = df_xs.loc[:, quantity].median()
-        df_xs_75q = df_xs.loc[:, quantity].quantile(q=0.75)
-        df_xs_25q = df_xs.loc[:, quantity].quantile(q=0.25)
+        df_xs_median = df_xs.loc[:,quantity].median()
+        df_xs_75q = df_xs.loc[:,quantity].quantile(q=0.75)
+        df_xs_25q = df_xs.loc[:,quantity].quantile(q=0.25)
         cut_off = (df_xs_75q - df_xs_25q) * 1.5
         for ticker in df_xs.index.get_level_values(2):
-            df_xs.loc[(year,quarter,ticker), quantity] \
-                = max(df_xs.loc[(year,quarter,ticker),
-                                quantity], df_xs_25q-cut_off)
-            df_xs.loc[(year,quarter,ticker), quantity] \
-                = min(df_xs.loc[(year,quarter,ticker),
-                                quantity], df_xs_75q+cut_off)
+            df_xs.loc[(year,quarter,ticker),quantity]\
+                = max(df_xs.loc[(year,quarter,ticker),quantity],df_xs_25q-cut_off)
+            df_xs.loc[(year,quarter,ticker),quantity] \
+                = min(df_xs.loc[(year,quarter,ticker),quantity],df_xs_75q+cut_off)
 
         # standardize to mean=0
-        df_xs_mean = df_xs.loc[:, quantity].mean()
+        df_xs_mean = df_xs.loc[:,quantity].mean()
         for ticker in df_xs.index.get_level_values(2):
-            df_xs.loc[(year,quarter,ticker), quantity] \
-                = (df_xs.loc[(year,quarter,ticker),
-                             quantity]
-                   - df_xs_mean)
+            df_xs.loc[(year,quarter,ticker),quantity] \
+                = df_xs.loc[(year,quarter,ticker),quantity] - df_xs_mean
 
         # standardize to range (-1,1)
         df_xs_min = df_xs.loc[:, quantity].min()
@@ -351,17 +261,12 @@ for year, quarter in zip(years, quarters):
         else:
             for ticker in df_xs.index.get_level_values(2):
                 df_xs.loc[(year,quarter,ticker), quantity] \
-                    = -1 \
-                      + (df_xs.loc[(year,quarter,ticker),
-                                   quantity]
-                      - df_xs_min) / (df_xs_max-df_xs_min) * 2
+                    = -1 + (df_xs.loc[(year,quarter,ticker),quantity]-df_xs_min)/(df_xs_max-df_xs_min)*2
 
     # PCA algorithm
     X = df_xs.values
-    benmrk_vector \
-        = np.array([-1 for n in range(df_xs.shape[1])])
-    benmrk_vector \
-        = benmrk_vector.reshape((1, benmrk_vector.shape[0]))
+    benmrk_vector = np.array([-1 for n in range(df_xs.shape[1])])
+    benmrk_vector = benmrk_vector.reshape((1, benmrk_vector.shape[0]))
     X = np.append(benmrk_vector, X, axis=0)
     PCs = PCA(n_components=0.9).fit_transform(X)
 
@@ -374,27 +279,20 @@ for year, quarter in zip(years, quarters):
     benmrks.loc['bank',f'{year}q{quarter}'] = PCs[0]
 
     # Kmeans algorithm
-    kmeans.loc['bank', f'{year}q{quarter}'] \
-        = KMeans(n_clusters=centroids,
-                 init='k-means++',
-                 n_init=10,
-                 max_iter=1000,
-                 tol=1e-6,
-                 random_state=1)\
-        .fit(df_xs.dropna(axis=0, how='any'))
+    kmeans.loc['bank',f'{year}q{quarter}'] \
+        = KMeans(
+        n_clusters=centroids,
+        init='k-means++',
+        n_init=10,
+        max_iter=1000,
+        tol=1e-6,
+        random_state=1
+    ).fit(df_xs.dropna(axis=0,how='any'))
 
-    kmeans_tickers.loc['bank', f'{year}q{quarter}'] \
-        = df_xs.index.get_level_values(2).tolist()
-
-    kmeans_coord.loc['bank', f'{year}q{quarter}'] \
-        = df_xs.values
-
-    labels.loc['bank', f'{year}q{quarter}'] \
-        = kmeans.loc['bank', f'{year}q{quarter}'].labels_.tolist()
-
-    centers.loc['bank', str(year) + 'q' + str(quarter)] \
-        = kmeans.loc['bank', f'{year}q{quarter}']\
-        .cluster_centers_.tolist()
+    kmeans_tickers.loc['bank',f'{year}q{quarter}'] = df_xs.index.get_level_values(2).tolist()
+    kmeans_coord.loc['bank', f'{year}q{quarter}'] = df_xs.values
+    labels.loc['bank',f'{year}q{quarter}'] = kmeans.loc['bank',f'{year}q{quarter}'].labels_.tolist()
+    centers.loc['bank',f'{year}q{quarter}'] = kmeans.loc['bank',f'{year}q{quarter}'].cluster_centers_.tolist()
 
 del df_xs # for memory saving
 
@@ -406,8 +304,8 @@ for col in range(centers.shape[1]):
         distance = np.zeros(centroids)
         for center in range(centroids):
             # origin at (-1,-1,-1,...) whose dimension varies by PCA
-            distance[center] = ((np.array(centers.iloc[0,col][center])
-                                 - np.array(benmrks.iloc[0,col]))**2).sum()**(1/2)
+            distance[center] \
+                = ((np.array(centers.iloc[0,col][center]) - np.array(benmrks.iloc[0,col]))**2).sum()**(1/2)
         radius_centers.iloc[0,col] = distance
 
 center_scores = pd.DataFrame(index=kmeans_index, columns=periods)
@@ -415,13 +313,10 @@ for col in range(centers.shape[1]):
     if radius_centers.iloc[0,col] is None:
         center_scores.iloc[0,col] = None
     else:
-        center_scores.iloc[0,col] \
-            = rankdata(radius_centers.iloc[0,col])
+        center_scores.iloc[0,col] = rankdata(radius_centers.iloc[0,col])
         for n in range(1, centroids+1):
             center_scores.iloc[0,col] = \
-                np.where(center_scores.iloc[0,col]==n,
-                         100/(centroids+1)*n,
-                         center_scores.iloc[0,col])
+                np.where(center_scores.iloc[0,col]==n,100/(centroids+1)*n,center_scores.iloc[0,col])
 
 radius_tickers = pd.DataFrame(index=kmeans_index, columns=periods)
 for col in range(labels.shape[1]):
@@ -432,8 +327,7 @@ for col in range(labels.shape[1]):
         for ticker in range(len(labels.iloc[0,col])):
             # origin at (-1,-1,-1,...) whose dimension varies by PCA
             distance[ticker] \
-                = (((np.array(kmeans_coord.iloc[0,col][ticker]))
-                    - np.array(benmrks.iloc[0,col]))**2).sum()**(1/2)
+                = (((np.array(kmeans_coord.iloc[0,col][ticker])) - np.array(benmrks.iloc[0,col]))**2).sum()**(1/2)
         radius_tickers.iloc[0,col] = distance
 
 ticker_raw_scores = pd.DataFrame(index=kmeans_index, columns=periods)#not used
@@ -454,25 +348,28 @@ for col in range(radius_tickers.shape[1]):
         min_ = min(radius_centers.iloc[0, col])
         max_ = max(radius_centers.iloc[0, col])
         range_ = max_ - min_
-        f = interp1d(np.sort(np.append(radius_centers.iloc[0,col],
-                                       [min_-range_/(centroids-1),
-                                        max_+range_/(centroids-1)])),
-                     np.sort(np.append(center_scores.iloc[0,col],
-                                       [0,100])),
-                     kind='linear', bounds_error=False, fill_value=(0,100))
+        f = interp1d(
+            np.sort(np.append(
+                radius_centers.iloc[0,col],
+                [min_-range_/(centroids-1),
+                 max_+range_/(centroids-1)])
+            ),
+            np.sort(np.append(
+                center_scores.iloc[0,col],[0,100])
+            ),
+            kind='linear', bounds_error=False, fill_value=(0,100)
+        )
         ticker_scores.iloc[0,col] = f(radius_tickers.iloc[0,col])
         for n in range(len(ticker_scores.iloc[0,col])):
-            ticker_scores.iloc[0,col][n] \
-                = int(ticker_scores.iloc[0,col][n])
+            ticker_scores.iloc[0,col][n] = int(ticker_scores.iloc[0,col][n])
 
 
 result_table = pd.DataFrame(index=pd.Index(tickers, name='ticker'))
 for period in periods:
     try:
         for n in range(len(kmeans_tickers.loc['bank',period])):
-            result_table.loc[
-                 kmeans_tickers.loc['bank', period][n], period] \
-                = ticker_scores.loc['bank', period][n]
+            result_table.loc[kmeans_tickers.loc['bank',period][n],period] \
+                = ticker_scores.loc['bank',period][n]
     except TypeError:
         continue
 
