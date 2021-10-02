@@ -518,11 +518,6 @@ class post:
         mask_hnx_TCPH = hnx_TCPH['Thời gian'].map(check_dt)
         mask_hnx_tintuso = hnx_tintuso['Thời gian'].map(check_dt)
         mask_hose_tintonghop = hose_tintonghop['Thời gian'].map(check_dt)
-        print(mask_vsd_TCPH)
-        print(mask_vsd_TVBT)
-        print(mask_hnx_TCPH)
-        print(mask_hnx_tintuso)
-        print(mask_hose_tintonghop)
 
         writer = pd.ExcelWriter(file_path,engine='xlsxwriter')
         workbook = writer.book
