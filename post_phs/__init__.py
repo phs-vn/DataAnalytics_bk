@@ -509,9 +509,6 @@ class post:
                 hose_tintonghop = pd.DataFrame()
             break
 
-
-        time_point = dt.datetime(2021,9,30,0,0,0)
-
         check_dt = lambda dt_time: True if dt_time > time_point else False
         mask_vsd_TCPH = vsd_TCPH['Thời gian'].map(check_dt)
         mask_vsd_TVBT = vsd_TVBT['Thời gian'].map(check_dt)
