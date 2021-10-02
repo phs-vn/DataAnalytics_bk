@@ -40,7 +40,7 @@ end = date.today()
 bdates = pd.bdate_range(start,end,freq='BM')
 bdates = [d.strftime('%Y-%m-%d') for d in bdates]
 bdates = pd.Series([bdate(d,-4) for d in bdates])
-bdates = bdates.map(lambda x: datetime.strptime(x,'%Y-%m-%d'))
+bdates = bdates.map(lambda x: dt.datetime.strptime(x,'%Y-%m-%d'))
 
 nav_table = nav_table.loc[nav_table['TRADING_DATE'].isin(bdates)]
 nav_result = nav_table.groupby(['BRANCH','TRADING_DATE']).sum()
@@ -54,7 +54,7 @@ market_value.set_index(['TICKER','DATE'],inplace=True)
 market_value.sort_index(inplace=True)
 market_value = market_value.groupby('DATE').sum()
 market_value.drop(['VOL','CLOSE'],axis=1,inplace=True)
-market_value.index = pd.DatetimeIndex(market_value.index.map(lambda x: date(int(x[:4]),int(x[5:7]),int(x[-2:]))))
+market_value.index = pd.DatetimeIndex(market_value.index.map(lambda x: dt.date(int(x[:4]),int(x[5:7]),int(x[-2:]))))
 market_value = market_value.groupby(pd.Grouper(freq='M')).sum()
 market_value.columns = ['MARKET']
 market_value *= 1e9

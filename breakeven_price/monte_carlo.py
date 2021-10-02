@@ -1,6 +1,7 @@
 from request_phs.stock import *
 
 destination_dir = join(dirname(realpath(__file__)),'result_chart')
+backtest_dir = join(dirname(realpath(__file__)),'backtest_chart')
 
 q_upper = 0.95
 q_lower = 0
@@ -13,7 +14,8 @@ def monte_carlo(
         simulation=100000,
         savefigure:bool=True,
         fulloutput:bool=False,
-        seed=1
+        seed:int=1,
+        run_date:str='today',
 ):
 
     start_time = time.time()
@@ -54,12 +56,21 @@ def monte_carlo(
 
         ax[0].fill_between(pro_days, ubound.iloc[:,0], dbound.iloc[:,0], color='green', alpha=0.15)
         ax[0].axhline(breakeven_price, ls='--', lw=0.6, color='red')
-
         ax[0].annotate('Breakeven Price: ' + adjprice(breakeven_price),
-                       xy=(0.65,breakeven_price), xycoords=transforms
-                       .blended_transform_factory(ax[0].transAxes,ax[0].transData),
-                       xytext=(0,2), textcoords='offset pixels',
-                       ha='left', va='bottom', fontsize=8, color='red')
+               xy=(0.65,breakeven_price), xycoords=transforms
+               .blended_transform_factory(ax[0].transAxes,ax[0].transData),
+               xytext=(0,2), textcoords='offset pixels',
+               ha='left', va='bottom', fontsize=8, color='red')
+
+        print(run_date)
+        if run_date != 'today':
+            today_price = ta.last(ticker) * 1000
+            ax[0].axhline(today_price, ls='--', lw=0.6, color='red')
+            ax[0].annotate(f'Last Close Price: ' + adjprice(today_price),
+               xy=(0.65,today_price), xycoords=transforms
+               .blended_transform_factory(ax[0].transAxes,ax[0].transData),
+               xytext=(0,2), textcoords='offset pixels',
+               ha='left', va='bottom', fontsize=8, color='red')
 
         ax[0].yaxis.set_major_formatter(FuncFormatter(priceKformat))
         ax[0].annotate('Worst Case over \n'
@@ -121,17 +132,28 @@ def monte_carlo(
 
         ax[1].grid(axis='both', alpha=0.1)
 
-        if savefigure is True:
+        if savefigure is True and run_date == 'today':
             plt.savefig(join(destination_dir,f'{ticker}.png'),bbox_inches='tight')
+        if savefigure is True and run_date != 'today':
+            plt.savefig(join(backtest_dir,f'{ticker}_{run_date}.png'),bbox_inches='tight')
 
         return
 
-    now = datetime.now()
-    today = now.strftime("%Y-%m-%d")
-    if now.weekday() in holidays.WEEKEND or now in holidays.VN():
-        today = bdate(today,-1)
+    if run_date == 'today':
+        now = dt.datetime.now()
+        model_date = now.strftime("%Y-%m-%d")
+        if now.weekday() in holidays.WEEKEND or now in holidays.VN():
+            model_date = bdate(model_date,-1)
+    else:
+        model_date = run_date
+        year = int(run_date[:4])
+        month = int(run_date[5:7])
+        day = int(run_date[-2:])
+        run_datetime = dt.datetime(year,month,day)
+        if run_datetime.weekday() in holidays.WEEKEND or run_datetime in holidays.VN():
+            model_date = bdate(run_date,-1)
 
-    df = ta.hist(ticker, bdate(today,-hdays), today)
+    df = ta.hist(ticker, bdate(model_date,-hdays), model_date)
     df = df.loc[df['close']!=0]
 
     # cleaning data

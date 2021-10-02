@@ -6,29 +6,42 @@ class internal:
 
     rmd_shared_disk = r'\\192.168.10.101\phs-storge-2018' \
                       r'\RiskManagementDept\RMD_Data\Luu tru van ban' \
-                      r'\Information Public\Intranet\Intranet'
+                      r'\RMC Meeting 2018\00. Meeting minutes'
 
     # Constructor:
     def __init__(self):
-        all_files = pd.Series(listdir(self.rmd_shared_disk))
+        all_files = pd.Series(listdir(join(self.rmd_shared_disk,'Margin List')))
         file_times = all_files.str.split('_').str.get(1).str[:10]
         file_times = pd.to_datetime(file_times, format='%d.%m.%Y')
         self.latest = file_times.max().strftime(format='%d.%m.%Y')
-        mask = all_files.str.find(self.latest)\
-            .apply(lambda x: True if x != -1 else False)
+        mask = all_files.str.find(self.latest).apply(lambda x: True if x != -1 else False)
         self.file = all_files[mask].iloc[0]
-        self.margin = pd.read_excel(join(self.rmd_shared_disk,self.file),
-                                    index_col=[1], engine='openpyxl')
+        self.margin = pd.read_excel(
+            join(self.rmd_shared_disk,'Margin List',self.file),
+            index_col=[1],
+            engine='openpyxl'
+        )
         special_characters = [' ', '(', ')', '%', '/','VND']
         for c in special_characters:
             self.margin.columns = self.margin.columns.map(lambda x: x.replace(c,''))
         self.margin.columns = self.margin.columns.map(lambda x: x.lower())
         self.margin.columns = self.margin.columns.map(lambda x: unidecode.unidecode(x))
-        self.margin = self.margin[['tylevaykq','tylevaytc','giavaygiatsdbtoida','roomchung','sangiaodich']]
-        self.margin.dropna(axis=0, how='all', inplace=True)
-        self.margin.dropna(axis=1, how='all', inplace=True)
-        col_names = ['mrate', 'drate', 'max_price', 'general_room', 'exchange']
+        self.margin = self.margin[[
+            'tylevaykq',
+            'tylevaytc',
+            'giavaygiatsdbtoida',
+            'roomchung',
+            'specialroom',
+            'totalroom',
+            'sangiaodich',
+        ]]
+        self.margin.dropna(axis=0,how='all',inplace=True)
+        self.margin.dropna(axis=1,how='all',inplace=True)
+        col_names = ['mrate','drate','max_price','general_room','special_room','total_room','exchange']
         self.margin.columns = col_names
+
+        self.fixedmp_series = pd.read_excel(join(self.rmd_shared_disk,'Data','Fixed Max Price.xlsx'),usecols=['Stock'],squeeze=True)
+        self.fixedmp_list = self.fixedmp_series.tolist()
 
 
     def mlist(self, exchanges:list='all') -> list:
@@ -354,6 +367,10 @@ class fa:
             frame = frame.loc[frame['Exchange']!='OTC']
             frames += [frame]
         clean_data = pd.concat(frames,axis=1)
+        # drop finnacial tickers if segment = 'gen'
+        if segment == 'gen':
+            fin = set(self.fin_tickers()) & set(clean_data.index.get_level_values(2))
+            clean_data.drop(index=list(fin),level=2,inplace=True)
         name_exchange = clean_data[['Name','Exchange']].copy()
         name_exchange = name_exchange.loc[:,~name_exchange.columns.duplicated()]
         clean_data.drop(['Name','Exchange'],axis=1,inplace=True)
@@ -854,7 +871,12 @@ class ta:
         pass
 
 
-    def hist(self, ticker:str, fromdate=None, todate=None) \
+    def hist(
+            self,
+            ticker:str,
+            fromdate=None,
+            todate=None
+    ) \
             -> pd.DataFrame:
 
         """
@@ -867,81 +889,64 @@ class ta:
         :return: pandas.DataFrame
         """
 
-        pd.options.mode.chained_assignment = None
-        if fromdate is not None and todate is not None:
-            if datetime.strptime(fromdate, '%Y-%m-%d') < datetime(year=2015, month=1, day=1):
+        if fromdate is None:
+            start = '2015-01-01'
+        else:
+            if dt.datime.strptime(fromdate,'%Y-%m-%d') < dt.datime(year=2015,month=1,day=1):
                 raise Exception('Only data since 2015-01-01 is reliable')
             else:
-                try:
-                    r = requests.post(self.address_hist,
-                                      data=json.dumps(
-                                          {'symbol': ticker,
-                                           'fromdate': fromdate,
-                                           'todate': todate}),
-                                      headers={
-                                          'content-type': 'application/json'})
-                    history = pd.DataFrame(json.loads(r.json()['d']))
-                    if history.empty: raise ValueError('no price data')
-                except KeyError:
-                    raise Exception('Date Format Required: yyyy-mm-dd, yyyy/mm/dd')
-        else:
-            try:
-                r = requests.post(self.address_hist,
-                                  data=json.dumps(
-                                      {'symbol': ticker,
-                                       'fromdate': datetime(year=2015,
-                                                            month=1,
-                                                            day=1) \
-                                           .strftime("%Y-%m-%d"),
-                                       'todate': datetime.now()
-                                           .strftime("%Y-%m-%d")}),
-                                  headers={'content-type': 'application/json'})
-                history = pd.DataFrame(json.loads(r.json()['d']))
-                if history.empty: raise ValueError('no price data')
-            except KeyError:
-                try:
-                    r = requests.post(self.address_hist,
-                                      data=json.dumps(
-                                          {'symbol': ticker,
-                                           'fromdate': (datetime.now()
-                                                        - timedelta(days=1000))\
-                                               .strftime("%Y-%m-%d"),
-                                           'todate': datetime.now()
-                                               .strftime("%Y-%m-%d")}),
-                                      headers={
-                                          'content-type': 'application/json'})
-                    history = pd.DataFrame(json.loads(r.json()['d']))
-                    if history.empty: raise ValueError('no price data')
-                except KeyError:
-                    raise Exception('Date Format Required: yyyy-mm-dd, yyyy/mm/dd')
+                start = fromdate
 
-        history.rename(columns={'symbol': 'ticker',
-                                'open_price': 'open',
-                                'prior_price': 'ref',
-                                'close_price': 'close'}, inplace=True)
+        if todate is None or todate=='now':
+            end = dt.datime.now().strftime('%Y-%m-%d')
+        else:
+            end = todate
+
+        r = requests.post(
+            self.address_hist,
+            data=json.dumps({
+                'symbol': ticker,
+                'fromdate': start,
+                'todate': end,
+            }),
+            headers={'content-type': 'application/json'}
+        )
+        history = pd.DataFrame(json.loads(r.json()['d']))
+        history.rename(
+            columns={
+                'symbol': 'ticker',
+                'open_price': 'open',
+                'prior_price': 'ref',
+                'close_price': 'close'},
+            inplace=True)
 
         def addzero(int_:str):
             if len(int_) == 1:
                 int_ = '0' + int_
             return int_
 
-        for i in range(history.shape[0]):
-            history['trading_date'].iloc[i] \
-                = history['trading_date'].iloc[i][:-12].split('/')[2] + "-" \
-                  + addzero(history['trading_date'].iloc[i][:-12] \
-                            .split('/')[0]) + "-" \
-                  + addzero(history['trading_date'].iloc[i][:-12] \
-                            .split('/')[1])
+        def converter(date_str:str):
+            month,day,year = date_str.split('/')
+            day = addzero(day)
+            month = addzero(month)
+            return f'{year}-{month}-{day}'
 
-        history['open'].loc[history['open']==0] = history['ref']
-        history['close'].loc[history['close']==0] = history['ref']
-        history['high'].loc[history['high']==0] = history['ref']
-        history['low'].loc[history['low']==0] = history['ref']
+        history['trading_date'] = history['trading_date'].str.split().str.get(0).map(converter)
+
+        history.loc[history['open']==0,'open'] = history['ref']
+        history.loc[history['close']==0,'close'] = history['ref']
+        history.loc[history['high']==0,'high'] = history['ref']
+        history.loc[history['low']==0,'low'] = history['ref']
 
         return history
 
 
-    def intra(self, ticker=str, fromdate=None, todate=None) \
+    def intra(
+            self,
+            ticker=str,
+            fromdate=None,
+            todate=None
+    ) \
             -> pd.DataFrame:
 
         """
@@ -957,8 +962,8 @@ class ta:
 
         pd.options.mode.chained_assignment = None
         if fromdate is not None and todate is not None:
-            if datetime.strptime(todate, '%Y-%m-%d') \
-                    - datetime.strptime(fromdate, '%Y-%m-%d') > timedelta(days=60):
+            if dt.datime.strptime(todate, '%Y-%m-%d') \
+                    - dt.datime.strptime(fromdate, '%Y-%m-%d') > timedelta(days=60):
                 raise Exception('Can\'t extract more than 60 days')
             else:
                 try:
@@ -978,8 +983,8 @@ class ta:
                         'Date Format Required: yyyy-mm-dd, yyyy/mm/dd')
         else:
             try:
-                fromdate = (datetime.now() - timedelta(days=60)).strftime("%Y-%m-%d")
-                todate = (datetime.now() - timedelta(days=0)).strftime("%Y-%m-%d")
+                fromdate = (dt.datime.now() - timedelta(days=60)).strftime("%Y-%m-%d")
+                todate = (dt.datime.now() - timedelta(days=0)).strftime("%Y-%m-%d")
                 r = requests.post(self.address_intra,
                                   data=json.dumps(
                                       {'symbol': ticker,
@@ -1051,7 +1056,7 @@ class ta:
                 continue
 
         def Bday(date=str):
-            date_ = datetime(year=int(date.split('-')[0]),
+            date_ = dt.datime(year=int(date.split('-')[0]),
                              month=int(date.split('-')[1]),
                              day=int(date.split('-')[2]))
             one_day = timedelta(days=1)
@@ -1119,7 +1124,7 @@ class ta:
                 continue
 
         def Bday(date=str):
-            date_ = datetime(year=int(date.split('-')[0]),
+            date_ = dt.datime(year=int(date.split('-')[0]),
                              month=int(date.split('-')[1]),
                              day=int(date.split('-')[2]))
             one_day = timedelta(days=1)
@@ -1281,7 +1286,7 @@ class ta:
         :return: float
         """
 
-        today = datetime.now().strftime("%Y-%m-%d")
+        today = dt.datime.now().strftime("%Y-%m-%d")
         before = bdate(today,-1)
         now = self.intra(ticker, before, today)['price'].iloc[-1]
 

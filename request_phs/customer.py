@@ -35,7 +35,7 @@ class core(object):
 
     TableNames = pd.read_sql('SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES',__connect)
 
-    __dateconverter = lambda x: x.date() if isinstance(x,datetime) else None
+    __dateconverter = lambda x: x.date() if isinstance(x,dt.datetime) else None
     Info = pd.read_sql('SELECT * FROM ONE_TIME_DATA',__connect)
     Info['DATE_OF_BIRTH'] = Info['DATE_OF_BIRTH'].map(__dateconverter)
     Info['OPENING_DATE'] = Info['OPENING_DATE'].map(__dateconverter)
@@ -327,7 +327,7 @@ class core(object):
             year = trading_date[:4]
             month = trading_date[5:7]
             day = trading_date[-2:]
-            section = section.loc[[date(int(year),int(month),int(day))]]
+            section = section.loc[[dt.date(int(year),int(month),int(day))]]
 
         hist_nav = section.sort_index()
 
@@ -386,7 +386,7 @@ class core(object):
             year = trading_date[:4]
             month = trading_date[5:7]
             day = trading_date[-2:]
-            table = table.loc[[pd.IndexSlice[date(int(year),int(month),int(day)),:]]]
+            table = table.loc[[pd.IndexSlice[dt.date(int(year),int(month),int(day)),:]]]
 
         table = table.sort_index()
 
@@ -480,7 +480,7 @@ class core(object):
             year = trading_date[:4]
             month = trading_date[5:7]
             day = trading_date[-2:]
-            table = table.loc[[pd.IndexSlice[date(int(year),int(month),int(day)),:]]]
+            table = table.loc[[pd.IndexSlice[dt.date(int(year),int(month),int(day)),:]]]
 
         table = table.sort_index()
 
@@ -569,7 +569,7 @@ class core(object):
             year = trading_date[:4]
             month = trading_date[5:7]
             day = trading_date[-2:]
-            section = section.loc[[date(int(year),int(month),int(day))]]
+            section = section.loc[[dt.date(int(year),int(month),int(day))]]
 
         hist_margin = section.sort_index()
 
@@ -628,7 +628,7 @@ class core(object):
             year = trading_date[:4]
             month = trading_date[5:7]
             day = trading_date[-2:]
-            section = section.loc[[date(int(year),int(month),int(day))]]
+            section = section.loc[[dt.date(int(year),int(month),int(day))]]
 
         hist_interest = section.sort_index()
         return hist_interest
@@ -688,8 +688,8 @@ class core(object):
             year = trading_date[:4]
             month = trading_date[5:7]
             day = trading_date[-2:]
-            buy_fee = buy_fee.loc[[date(int(year),int(month),int(day))]]
-            sell_fee = sell_fee.loc[[date(int(year),int(month),int(day))]]
+            buy_fee = buy_fee.loc[[dt.date(int(year),int(month),int(day))]]
+            sell_fee = sell_fee.loc[[dt.date(int(year),int(month),int(day))]]
 
         f = lambda anylist: np.sum([int(elem) for elem in anylist], dtype='int64')
         buy_fee = buy_fee['TRADING_FEES'].str.split(',').map(f)
@@ -756,8 +756,8 @@ class core(object):
             year = trading_date[:4]
             month = trading_date[5:7]
             day = trading_date[-2:]
-            buy_value = buy_value.loc[[date(int(year),int(month),int(day))]]
-            sell_value = sell_value.loc[[date(int(year),int(month),int(day))]]
+            buy_value = buy_value.loc[[dt.date(int(year),int(month),int(day))]]
+            sell_value = sell_value.loc[[dt.date(int(year),int(month),int(day))]]
 
         def convert(x):
             int_list = [int(elem) for elem in x]
@@ -824,12 +824,12 @@ class rolling(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000,1,1)
+            fromdate = dt.date(2000,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         n = trailing_days
 
@@ -878,12 +878,12 @@ class rolling(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000,1,1)
+            fromdate = dt.date(2000,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         n = trailing_days
 
@@ -936,12 +936,12 @@ class rolling(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000, 1, 1)
+            fromdate = dt.date(2000, 1, 1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         n = trailing_days
 
@@ -993,12 +993,12 @@ class rolling(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000, 1, 1)
+            fromdate = dt.date(2000, 1, 1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         n = trailing_days
 
@@ -1087,12 +1087,12 @@ class rolling(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000,1,1)
+            fromdate = dt.date(2000,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         n = trailing_days
 
@@ -1161,12 +1161,12 @@ class rolling(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000, 1, 1)
+            fromdate = dt.date(2000, 1, 1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         n = trailing_days
 
@@ -1276,12 +1276,12 @@ class rolling(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000, 1, 1)
+            fromdate = dt.date(2000, 1, 1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         n = trailing_days
 
@@ -1386,12 +1386,12 @@ class aggregation(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000,1,1)
+            fromdate = dt.date(2000,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         idx = pd.IndexSlice
 
@@ -1436,12 +1436,12 @@ class aggregation(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000,1,1)
+            fromdate = dt.date(2000,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         fee_table = self.fee(trading_codes,'all',subtype,**demography)
 
@@ -1489,12 +1489,12 @@ class aggregation(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000,1,1)
+            fromdate = dt.date(2000,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         interest_table = self.interest(trading_codes,'all',subtype,**demography)
 
@@ -1542,12 +1542,12 @@ class aggregation(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000,1,1)
+            fromdate = dt.date(2000,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         nav_table = self.nav(trading_codes,'all',subtype,**demography)
 
@@ -1592,12 +1592,12 @@ class aggregation(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000,1,1)
+            fromdate = dt.date(2000,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         value_table = self.value(trading_codes,'all',subtype,**demography)
 
@@ -1640,12 +1640,12 @@ class aggregation(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000,1,1)
+            fromdate = dt.date(2000,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         idx = pd.IndexSlice
 
@@ -1694,12 +1694,12 @@ class aggregation(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000,1,1)
+            fromdate = dt.date(2000,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         idx = pd.IndexSlice
 
@@ -1745,12 +1745,12 @@ class aggregation(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000,1,1)
+            fromdate = dt.date(2000,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         age_series = self.info(trading_codes,subtype)['AGE'].dropna()
         gender_series = self.info(trading_codes,subtype)['GENDER'].dropna()
@@ -1799,12 +1799,12 @@ class aggregation(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000,1,1)
+            fromdate = dt.date(2000,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         age_series = self.info(trading_codes,subtype)['AGE'].dropna()
         gender_series = self.info(trading_codes,subtype)['GENDER'].dropna()
@@ -1853,12 +1853,12 @@ class aggregation(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000,1,1)
+            fromdate = dt.date(2000,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         age_series = self.info(trading_codes,subtype)['AGE'].dropna()
         gender_series = self.info(trading_codes,subtype)['GENDER'].dropna()
@@ -1907,12 +1907,12 @@ class aggregation(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000,1,1)
+            fromdate = dt.date(2000,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         age_series = self.info(trading_codes,subtype)['AGE'].dropna()
         gender_series = self.info(trading_codes,subtype)['GENDER'].dropna()
@@ -1961,12 +1961,12 @@ class aggregation(core):
         if todate is None:
             todate = self.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000,1,1)
+            fromdate = dt.date(2000,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         age_series = self.info(trading_codes,subtype)['AGE'].dropna()
         gender_series = self.info(trading_codes,subtype)['GENDER'].dropna()

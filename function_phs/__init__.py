@@ -86,16 +86,16 @@ def bdate(date:str, bdays:int=0) -> str:
 
     step = int(np.sign(bdays))
 
-    given_date = datetime(year,month,day)
+    given_date = dt.datetime(year,month,day)
     result_date = given_date
 
     d = 0
     while abs(d) < abs(bdays):
         d += step
-        result_date += timedelta(days=step)
+        result_date += dt.timedelta(days=step)
         while result_date.weekday() in holidays.WEEKEND \
                 or result_date in holidays.VN():
-            result_date += timedelta(days=step)
+            result_date += dt.timedelta(days=step)
 
     result_date = result_date.strftime('%Y-%m-%d')
 
@@ -124,16 +124,16 @@ def btime(time:str, bhours:int=0) -> str:
 
     step = int(np.sign(bhours))
 
-    given_time = datetime(year,month,day,hour,minute,second)
+    given_time = dt.datetime(year,month,day,hour,minute,second)
     result_time = given_time
 
     d = 0
     while abs(d) < abs(bhours):
         d += step
-        result_time += timedelta(hours=step)
+        result_time += dt.timedelta(hours=step)
         while result_time.weekday() in holidays.WEEKEND \
                 or result_time in holidays.VN():
-            result_time += timedelta(days=step)
+            result_time += dt.timedelta(days=step)
 
     result_time = result_time.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -155,20 +155,18 @@ def seopdate(period:str) -> tuple:
     quarter = int(period[-1])
 
     # start of the period
-    sop_date = datetime(year=year, month=3*quarter-2, day=1)
+    sop_date = dt.datetime(year=year, month=3*quarter-2, day=1)
     while sop_date.weekday() in holidays.WEEKEND \
             or sop_date in holidays.VN():
-        sop_date += timedelta(days=1)
+        sop_date += dt.timedelta(days=1)
     sop_date = sop_date.strftime('%Y-%m-%d')
 
     # end of the period
     fq = lambda quarter: 1 if quarter == 4 else 3*quarter + 1
     fy = lambda year: year + 1 if quarter == 4 else year
-    eop_date = datetime(year=fy(year), month=fq(quarter), day=1) \
-               + timedelta(days=-1)
-    while eop_date.weekday() in holidays.WEEKEND \
-            or eop_date in holidays.VN():
-        eop_date -= timedelta(days=1)
+    eop_date = dt.datetime(year=fy(year), month=fq(quarter), day=1) + dt.timedelta(days=-1)
+    while eop_date.weekday() in holidays.WEEKEND or eop_date in holidays.VN():
+        eop_date -= dt.timedelta(days=1)
     eop_date = eop_date.strftime('%Y-%m-%d')
 
     return sop_date, eop_date

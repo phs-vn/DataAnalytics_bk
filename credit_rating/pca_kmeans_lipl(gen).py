@@ -433,12 +433,12 @@ def graph_tickers(tickers: list, standard: str, level: int):
         columns=periods
     )
     for ticker in tickers:
-        if ticker not in result_table.index.get_level_values(3):
+        available_tickers = result_table.loc[pd.IndexSlice[standard,f'{standard}_l{level}',:,:]].index.get_level_values(3)
+        if ticker not in available_tickers:
             continue
         for period in periods:
             table.loc['credit_score', period] \
                 = result_table.loc[pd.IndexSlice[standard,f'{standard}_l{level}',:,ticker],period].iloc[0]
-
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(8,6))
         ax.set_title(ticker + '\n' + standard.upper()
                      + ' Level {} Classification'.format(level),
@@ -514,7 +514,7 @@ def graph_crash(benchmark:float,
     compare_rs(crash[period], standard, level)
 
 
-def compare_industry(tickers:list, standard:str, level:int, nperiods:int=12):
+def compare_industry(tickers:list, standard:str, level:int):
 
     components = {
         'cash&ppe': 'Cash Plus PPE',
@@ -604,21 +604,17 @@ def compare_industry(tickers:list, standard:str, level:int, nperiods:int=12):
                 if variables[row, col] is None:
                     ax[row,col].axis('off')
                 else:
-                    y_quantities = pd.Series([np.nan]*len(periods), index=periods)
-                    y_quantities.iloc[-nperiods:] = quantities.iloc[-nperiods:, row*chartsperrow+col]
                     ax[row,col].bar(
                         l - w/2,
-                        y_quantities,
+                        quantities.iloc[:,row*chartsperrow+col],
                         width=w,
                         label=ticker,
                         color='tab:orange',
                         edgecolor='black'
                     )
-                    y_median = pd.Series([np.nan]*len(periods), index=periods)
-                    y_median.iloc[-nperiods:] = median.iloc[-nperiods:, row * chartsperrow + col]
                     ax[row,col].bar(
                         l + w/2,
-                        y_median,
+                        median.iloc[:,row*chartsperrow+col],
                         width=w,
                         label='Industry\'s Average',
                         color='tab:blue',
@@ -789,6 +785,9 @@ def mlist_group(standard:str, level:int, year:int, quarter:int) -> dict:
         d[group] = tickers
 
     return d
+
+graph_tickers(fa.tickers('gen'),'bics',1)
+compare_industry(fa.tickers('gen'),'bics',1)
 
 
 execution_time = time.time() - start_time

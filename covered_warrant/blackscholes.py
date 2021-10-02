@@ -40,7 +40,7 @@ class issuance:
         if t == 'now':
             t = date.today().strftime('%Y-%m-%d')
 
-        if datetime.strptime(t,'%Y-%m-%d') > datetime.strptime(T,'%Y-%m-%d'):
+        if dt.datetime.strptime(t,'%Y-%m-%d') > dt.datetime.strptime(T,'%Y-%m-%d'):
             raise InvalidDate('t must be before T')
 
         if self.isbacktest is False:
@@ -151,7 +151,7 @@ class preprocessing:
         self.test_data.sort_values(['CW','Date'], inplace=True)
         self.test_data.set_index('CW',inplace=True)
         self.test_data['Date'] = self.test_data['Date'].map(lambda x: f'{x}')
-        self.test_data['Date'] = self.test_data['Date'].map(lambda x: date(int(x[:4]),int(x[4:6]),int(x[-2:])))
+        self.test_data['Date'] = self.test_data['Date'].map(lambda x: dt.date(int(x[:4]),int(x[4:6]),int(x[-2:])))
         self.test_dates = self.test_data['Date'].drop_duplicates()
         self.test_cases = self.test_data.index.unique().to_list()
 
@@ -162,7 +162,7 @@ class preprocessing:
 
         self.dividend_date = pd.read_excel(join(dirname(realpath(__file__)),'backtest_data','ExDividendDate.xlsx'),
                                            index_col='Ticker',usecols=['Ticker','ExDividendDate'],squeeze=True)
-        self.dividend_date = self.dividend_date.map(lambda x: date(int(x[-4:]),int(x[3:5]),int(x[0:2])))
+        self.dividend_date = self.dividend_date.map(lambda x: dt.date(int(x[-4:]),int(x[3:5]),int(x[0:2])))
         self.dividend_date = self.dividend_date.loc[self.dividend_date.index.isin([ticker])].values # allow empty Series
 
 
@@ -196,7 +196,7 @@ class backtest(preprocessing):
             t:str
     ):
 
-        t = date(int(t[:4]),int(t[5:7]),int(t[-2:]))
+        t = dt.date(int(t[:4]),int(t[5:7]),int(t[-2:]))
         market_cws = [cw for cw in self.test_cases if cw != self.case]
         time_table = self.test_data.loc[self.test_data['Date']>=t,'Date']
         list_cws = time_table.loc[time_table==t].index
@@ -303,7 +303,7 @@ class backtest(preprocessing):
         # p_stock column
         price_stock = pd.read_csv(join(dirname(realpath(__file__)),'backtest_data','StockPrice.csv'))
         price_stock = price_stock.loc[price_stock['ticker']==self.ticker,['trading_date','close']].set_index('trading_date').squeeze()
-        price_stock.index = price_stock.index.map(lambda x: date(int(x[:4]),int(x[5:7]),int(x[-2:])))
+        price_stock.index = price_stock.index.map(lambda x: dt.date(int(x[:4]),int(x[5:7]),int(x[-2:])))
         self.backtest_table['p_stock'] = self.backtest_table['date'].map(price_stock)
         self.backtest_table['p_stock'].fillna(method='ffill',inplace=True) # in case of missing data
 
@@ -441,11 +441,11 @@ class multiple_backtest:
     ):
         data_date = pd.read_csv(join(dirname(realpath(__file__)),'backtest_data','PriceTable.csv'),usecols=['<Date>']).squeeze()
         last_date_str = str(data_date.max())
-        converter = lambda x: date(int(x[:4]),int(x[4:6]),int(x[6:8]))
+        converter = lambda x: dt.date(int(x[:4]),int(x[4:6]),int(x[6:8]))
         last_date = converter(last_date_str)
 
         cw_list = pd.read_csv(join(dirname(realpath(__file__)),'backtest_data','InfoTable.csv'),usecols=['cw','T'])
-        cw_list = cw_list.loc[cw_list['T'].map(lambda x: date(int(x[-4:]),int(x[3:5]),int(x[:2]))).lt(last_date)]
+        cw_list = cw_list.loc[cw_list['T'].map(lambda x: dt.date(int(x[-4:]),int(x[3:5]),int(x[:2]))).lt(last_date)]
         cw_list = cw_list.drop('T',axis=1).squeeze()
         cw_list = cw_list.sort_values().reset_index(drop=True)
 

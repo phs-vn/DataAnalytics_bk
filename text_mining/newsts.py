@@ -33,7 +33,7 @@ class vsd:
 
         start_time = time.time()
 
-        now = datetime.now()
+        now = dt.datime.now()
         fromtime = now
 
         url = 'https://vsd.vn/vi/alo/-f-_bsBS4BBXga52z2eexg'
@@ -47,7 +47,7 @@ class vsd:
         output_table = pd.DataFrame()
 
         bmk_time = btime(now.strftime('%Y-%m-%d %H:%M:%S'), -num_hours)
-        while fromtime >= datetime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
+        while fromtime >= dt.datime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
 
             news_time = []
             news_headlines = []
@@ -60,20 +60,20 @@ class vsd:
             time.sleep(1)
 
             tags = WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions)\
-                .until(expected_conditions.presence_of_all_elements_located(
+                .until(EC.presence_of_all_elements_located(
                 (By.XPATH,'//*[@id="d_list_news"]/ul/li')
             ))
 
             for tag_ in tags:
                 tags \
                     = WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions) \
-                    .until(expected_conditions.presence_of_all_elements_located(
+                    .until(EC.presence_of_all_elements_located(
                         (By.XPATH, '//*[@id="d_list_news"]/ul/li')
                 ))
                 try:
                     h3_tag \
                         = WebDriverWait(tag_,5,ignored_exceptions=self.ignored_exceptions)\
-                        .until(expected_conditions.presence_of_element_located(
+                        .until(EC.presence_of_element_located(
                             (By.TAG_NAME, 'h3')
                     ))
                 except self.ignored_exceptions:
@@ -91,7 +91,7 @@ class vsd:
                             = WebDriverWait(h3_tag, 5,
                                   ignored_exceptions=self.ignored_exceptions)\
                             .until(
-                            expected_conditions.presence_of_element_located(
+                            EC.presence_of_element_located(
                                 (By.TAG_NAME, 'a'))).get_attribute('href')
 
                     except self.ignored_exceptions:
@@ -102,7 +102,7 @@ class vsd:
 
                     news_time_ = tag_.find_element_by_tag_name('div').text
                     news_time_ \
-                        = datetime.strptime(news_time_[-21:],
+                        = dt.datime.strptime(news_time_[-21:],
                                             '%d/%m/%Y - %H:%M:%S')
                     news_time += [news_time_]
 
@@ -115,7 +115,7 @@ class vsd:
                             = WebDriverWait(sub_driver, 5,
                                             ignored_exceptions=self.ignored_exceptions) \
                             .until(
-                            expected_conditions.presence_of_all_elements_located(
+                            EC.presence_of_all_elements_located(
                                 (By.XPATH,
                                  "//div[substring(@class,string-length(@class)"
                                  "-string-length('item-info')+1)='item-info']")))
@@ -135,7 +135,7 @@ class vsd:
                             = WebDriverWait(sub_driver, 5,
                                   ignored_exceptions=self.ignored_exceptions)\
                             .until(
-                            expected_conditions.presence_of_all_elements_located(
+                            EC.presence_of_all_elements_located(
                                 (By.XPATH,
                                  "//div[substring(@class,string-length(@class)"
                                  "-string-length('item-info-main')+1)='item-info-main']")))
@@ -150,7 +150,7 @@ class vsd:
                             = WebDriverWait(sub_driver,5,
                                             ignored_exceptions=self.ignored_exceptions) \
                             .until(
-                            expected_conditions.presence_of_element_located(
+                            EC.presence_of_element_located(
                                 (By.XPATH,"//div[@style='text-align: justify;']")))
                     except self.ignored_exceptions:
                         # một vài tin đăng có cấu trúc thay đổi
@@ -222,7 +222,7 @@ class vsd:
             nextpage_button \
                 = WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions)\
                 .until(
-                expected_conditions.presence_of_all_elements_located(
+                EC.presence_of_all_elements_located(
                     (By.XPATH,
                      "//button[substring(@onclick,1,string-length('changePage'))"
                      "='changePage']")))[-2]
@@ -233,12 +233,12 @@ class vsd:
             last_tag \
                 = WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions) \
                 .until(
-                expected_conditions.presence_of_all_elements_located(
+                EC.presence_of_all_elements_located(
                     (By.XPATH,
                      '//*[@id="d_list_news"]/ul/li')))[-1]
 
             fromtime = last_tag.find_element_by_tag_name('div').text
-            fromtime = datetime.strptime(fromtime[-21:],
+            fromtime = dt.datime.strptime(fromtime[-21:],
                                          '%d/%m/%Y - %H:%M:%S')
 
         driver.quit()
@@ -292,7 +292,7 @@ class vsd:
 
         start_time = time.time()
 
-        now = datetime.now()
+        now = dt.datime.now()
         fromtime = now
 
         url = 'https://www.vsd.vn/vi/alc/4'
@@ -309,7 +309,7 @@ class vsd:
 
         output_table = pd.DataFrame()
         bmk_time = btime(now.strftime('%Y-%m-%d %H:%M:%S'), -num_hours)
-        while fromtime >= datetime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
+        while fromtime >= dt.datime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
 
             news_time = []
             news_headlines = []
@@ -321,7 +321,7 @@ class vsd:
             tags \
                 = WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions) \
                 .until(
-                expected_conditions.presence_of_all_elements_located(
+                EC.presence_of_all_elements_located(
                     (By.XPATH, "//*[@id='d_list_news']/ul/li")))
 
             for tag_ in tags:
@@ -330,7 +330,7 @@ class vsd:
                     = WebDriverWait(driver,5,
                                     ignored_exceptions=self.ignored_exceptions) \
                     .until(
-                    expected_conditions.presence_of_all_elements_located(
+                    EC.presence_of_all_elements_located(
                         (By.XPATH, "//*[@id='d_list_news']/ul/li")))
 
                 try:
@@ -338,7 +338,7 @@ class vsd:
                         = WebDriverWait(tag_,5,
                                         ignored_exceptions=self.ignored_exceptions)\
                         .until(
-                        expected_conditions.presence_of_element_located(
+                        EC.presence_of_element_located(
                             (By.TAG_NAME, 'h3')))
                 except self.ignored_exceptions:
                     h3_tag = tag_.find_element_by_tag_name('h3')
@@ -357,7 +357,7 @@ class vsd:
 
                     news_time_ = tag_.find_element_by_tag_name('div').text
                     news_time_ \
-                        = datetime.strptime(news_time_[-21:],
+                        = dt.datime.strptime(news_time_[-21:],
                                             '%d/%m/%Y - %H:%M:%S')
                     news_time += [news_time_]
 
@@ -417,7 +417,7 @@ class vsd:
                 = WebDriverWait(driver, 5,
                                 ignored_exceptions=self.ignored_exceptions) \
                 .until(
-                expected_conditions.presence_of_all_elements_located(
+                EC.presence_of_all_elements_located(
                     (By.XPATH,
                      "//*[@id='d_number_of_page']/button")))[-2]
 
@@ -428,12 +428,12 @@ class vsd:
                 = WebDriverWait(driver, 5,
                                 ignored_exceptions=self.ignored_exceptions) \
                 .until(
-                expected_conditions.presence_of_all_elements_located(
+                EC.presence_of_all_elements_located(
                     (By.XPATH,
                      '//*[@id="d_list_news"]/ul/li')))[-1]
 
             fromtime = last_tag.find_element_by_tag_name('div').text
-            fromtime = datetime.strptime(fromtime[-21:],
+            fromtime = dt.datime.strptime(fromtime[-21:],
                                          '%d/%m/%Y - %H:%M:%S')
 
         driver.quit()
@@ -488,7 +488,7 @@ class hnx:
 
         start_time = time.time()
 
-        now = datetime.now()
+        now = dt.datime.now()
         from_time = now
 
         driver = webdriver.Chrome(executable_path=self.PATH)
@@ -518,19 +518,19 @@ class hnx:
         tickers = []
 
         bmk_time = btime(now.strftime('%Y-%m-%d %H:%M:%S'), -num_hours)
-        while from_time >= datetime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
+        while from_time >= dt.datime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
 
             def f():
                 # wait for the element to appear, avoid stale element reference
                 ticker_elems \
                     = WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions) \
                     .until(
-                    expected_conditions.presence_of_all_elements_located(
+                    EC.presence_of_all_elements_located(
                         (By.XPATH, "//*[@id='_tableDatas']/tbody/*/td[3]/a")))
                 title_elems \
                     = WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions) \
                     .until(
-                    expected_conditions.presence_of_all_elements_located(
+                    EC.presence_of_all_elements_located(
                         (By.XPATH, "//*[@id='_tableDatas']/tbody/*/td[4]/a")))
                 return ticker_elems, title_elems
 
@@ -575,7 +575,7 @@ class hnx:
                 # evaluate popup content
                 popup_content = WebDriverWait(driver,5,
                                               ignored_exceptions=self.ignored_exceptions) \
-                    .until(expected_conditions.presence_of_element_located(
+                    .until(EC.presence_of_element_located(
                     (By.XPATH,"//div[@class='Box-Noidung']")))
 
                 content = popup_content.text
@@ -587,7 +587,7 @@ class hnx:
                 # close popup windows
                 WebDriverWait(driver, 5,
                               ignored_exceptions=self.ignored_exceptions) \
-                    .until(expected_conditions.element_to_be_clickable(
+                    .until(EC.element_to_be_clickable(
                     (By.XPATH, '//*[@id="divViewDetailArticles"]/*/input'))).click()
 
                 time.sleep(1)
@@ -595,11 +595,11 @@ class hnx:
                 # check time
                 from_time = driver.find_element_by_xpath(
                     "//*[@id='_tableDatas']/tbody/tr[10]/td[2]").text
-                from_time = datetime.strptime(from_time, '%d/%m/%Y %H:%M')
+                from_time = dt.datime.strptime(from_time, '%d/%m/%Y %H:%M')
 
 
             WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions)\
-                .until(expected_conditions.element_to_be_clickable(
+                .until(EC.element_to_be_clickable(
                 (By.XPATH, "//*[@id='next']"))).click()
 
             time.sleep(1)
@@ -613,19 +613,19 @@ class hnx:
         fromtime = now
 
         bmk_time = btime(now.strftime('%Y-%m-%d %H:%M:%S'), -num_hours)
-        while fromtime >= datetime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
+        while fromtime >= dt.datime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
 
             def f():
                 # wait for the element to appear, avoid stale element reference
                 ticker_elems \
                     = WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions) \
                     .until(
-                    expected_conditions.presence_of_all_elements_located(
+                    EC.presence_of_all_elements_located(
                         (By.XPATH,"//*[@id='_tableDatas']/tbody/*/td[3]/a")))
                 title_elems \
                     = WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions) \
                     .until(
-                    expected_conditions.presence_of_all_elements_located(
+                    EC.presence_of_all_elements_located(
                         (By.XPATH,
                          "//*[@id='_tableDatas']/tbody/*/td[4]/a")))
                 return ticker_elems, title_elems
@@ -668,7 +668,7 @@ class hnx:
                 popup_content \
                     = WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions) \
                     .until(
-                    expected_conditions.presence_of_element_located(
+                    EC.presence_of_element_located(
                         (By.XPATH, "//div[@class='Box-Noidung']")))
 
                 content = popup_content.text
@@ -683,7 +683,7 @@ class hnx:
 
                 WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions) \
                     .until(
-                    expected_conditions.element_to_be_clickable(
+                    EC.element_to_be_clickable(
                         (By.XPATH,"//*[@id='divViewDetailArticles']/*/input"))).click()
 
                 time.sleep(1)
@@ -691,11 +691,11 @@ class hnx:
                 # check time
                 fromtime = driver.find_element_by_xpath(
                     "//*[@id='_tableDatas']/tbody/tr[10]/td[2]").text
-                fromtime = datetime.strptime(fromtime,'%d/%m/%Y %H:%M')
+                fromtime = dt.datime.strptime(fromtime,'%d/%m/%Y %H:%M')
 
 
             WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions) \
-                .until(expected_conditions.element_to_be_clickable(
+                .until(EC.element_to_be_clickable(
                 (By.XPATH, "//*[@id='next']"))).click()
 
             time.sleep(1)
@@ -716,7 +716,7 @@ class hnx:
             minute = int(x.split(':')[1][:2])
             second = 0
 
-            return datetime(year,month,day,hour,minute,second)
+            return dt.datime(year,month,day,hour,minute,second)
 
         df['Thời gian'] = df['Thời gian'].map(f)
         df.sort_values('Thời gian', ascending=False, inplace=True)
@@ -781,7 +781,7 @@ class hose:
 
         driver.maximize_window()
 
-        now = datetime.now()
+        now = dt.datime.now()
         from_time = now
 
         keywords = ['niêm yết và ngày giao dịch đầu tiên',
@@ -792,7 +792,7 @@ class hose:
 
         output_table = pd.DataFrame()
         bmk_time = btime(now.strftime('%Y-%m-%d %H:%M:%S'), -num_hours)
-        while from_time >= datetime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
+        while from_time >= dt.datime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
 
             time.sleep(5)
 
@@ -800,7 +800,7 @@ class hose:
                 = WebDriverWait(driver, 5,
                                 ignored_exceptions=self.ignored_exceptions) \
                 .until(
-                expected_conditions.presence_of_all_elements_located(
+                EC.presence_of_all_elements_located(
                     (By.XPATH, '*//td[3]//*')))[1:]
 
             headline_text = [t.text for t in headline_tags]
@@ -809,7 +809,7 @@ class hose:
                 = WebDriverWait(driver, 5,
                                 ignored_exceptions=self.ignored_exceptions) \
                 .until(
-                expected_conditions.presence_of_all_elements_located(
+                EC.presence_of_all_elements_located(
                     (By.XPATH, '*//td[2]')))[2:]
 
             time_text = [t.text for t in time_tags]
@@ -817,10 +817,10 @@ class hose:
             def f(s):
                 if s.endswith('SA'):
                     s = s.rstrip(' SA')
-                    return datetime.strptime(s,'%d/%m/%Y %H:%M:%S')
+                    return dt.datime.strptime(s,'%d/%m/%Y %H:%M:%S')
                 if s.endswith('CH'):
                     s = s.rstrip(' CH')
-                    return datetime.strptime(s,'%d/%m/%Y %H:%M:%S') + timedelta(hours=12)
+                    return dt.datime.strptime(s,'%d/%m/%Y %H:%M:%S') + timedelta(hours=12)
 
             time_text = [f(t) for t in time_text]
 
@@ -850,7 +850,7 @@ class hose:
                                                 ignored_exceptions
                                                 =self.ignored_exceptions) \
                             .until(
-                            expected_conditions.visibility_of_element_located(
+                            EC.visibility_of_element_located(
                                 (By.XPATH, '/html/body/div[7]/div/div/div/div/div/div[2]/div[2]'))).text
                     sub_content = [content]
 
@@ -865,7 +865,7 @@ class hose:
                                                      ignored_exceptions
                                                      =self.ignored_exceptions) \
                             .until(
-                            expected_conditions.presence_of_all_elements_located(
+                            EC.presence_of_all_elements_located(
                                 (By.PARTIAL_LINK_TEXT, year_text)))
 
                     pdf_files = [t.get_attribute('href') for t in pdf_elements]
@@ -909,7 +909,7 @@ class hose:
                 WebDriverWait(driver, 20,
                               ignored_exceptions=self.ignored_exceptions) \
                     .until(
-                    expected_conditions.presence_of_all_elements_located(
+                    EC.presence_of_all_elements_located(
                         (By.XPATH, '//*[@id="DbGridPager_2"]/a')))[-2].click()
 
         driver.quit()
@@ -941,7 +941,7 @@ class hose:
 
         start_time = time.time()
 
-        now = datetime.now()
+        now = dt.datime.now()
         from_time = now
 
         url = 'https://www.hsx.vn/Modules/Cms/Web/NewsByCat/95cd3266-e6d1-42a3-beb5-20ed010aea4a?fid=f91940eef3384bcdbe96ee9aa3eefa04'
@@ -955,7 +955,7 @@ class hose:
 
         output_table = pd.DataFrame()
         bmk_time = btime(now.strftime('%Y-%m-%d %H:%M:%S'), -num_hours)
-        while from_time >= datetime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
+        while from_time >= dt.datime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
 
             time.sleep(5)
 
@@ -966,7 +966,7 @@ class hose:
                     = WebDriverWait(driver, 5,
                                     ignored_exceptions=self.ignored_exceptions) \
                           .until(
-                    expected_conditions.presence_of_all_elements_located(
+                    EC.presence_of_all_elements_located(
                         (By.XPATH, '*//td[3]/*')))[1:]
 
             headline_text = []
@@ -982,7 +982,7 @@ class hose:
                     = WebDriverWait(driver, 5,
                                     ignored_exceptions=self.ignored_exceptions) \
                           .until(
-                    expected_conditions.presence_of_all_elements_located(
+                    EC.presence_of_all_elements_located(
                         (By.XPATH, '*//td[2]')))[2:]
 
             time_text = [t.text for t in time_tags]
@@ -990,10 +990,10 @@ class hose:
             def f(s):
                 if s.endswith('SA'):
                     s = s.rstrip(' SA')
-                    return datetime.strptime(s, '%d/%m/%Y %H:%M:%S')
+                    return dt.datime.strptime(s, '%d/%m/%Y %H:%M:%S')
                 if s.endswith('CH'):
                     s = s.rstrip(' CH')
-                    return datetime.strptime(s, '%d/%m/%Y %H:%M:%S') \
+                    return dt.datime.strptime(s, '%d/%m/%Y %H:%M:%S') \
                            + timedelta(hours=12)
 
             time_text = [f(t) for t in time_text]
@@ -1023,7 +1023,7 @@ class hose:
                                                 ignored_exceptions
                                                 =self.ignored_exceptions) \
                             .until(
-                            expected_conditions.presence_of_element_located(
+                            EC.presence_of_element_located(
                                 (By.XPATH, '//*[@id="body"]//*//div[2]/p'))).text
 
                     time.sleep(1)
@@ -1035,7 +1035,7 @@ class hose:
                                                      ignored_exceptions
                                                      =self.ignored_exceptions) \
                             .until(
-                            expected_conditions.presence_of_all_elements_located(
+                            EC.presence_of_all_elements_located(
                                 (By.XPATH, '*//td[2]/a')))
 
                     pdf_files = [t.get_attribute('href') for t in pdf_elements]
@@ -1071,7 +1071,7 @@ class hose:
 
             # Next Page:
             WebDriverWait(driver, 5, ignored_exceptions=self.ignored_exceptions)\
-                .until(expected_conditions.visibility_of_all_elements_located(
+                .until(EC.visibility_of_all_elements_located(
                 (By.XPATH,'//*[@id="DbGridPager_2"]/a')))[-2].click()
 
         driver.quit()

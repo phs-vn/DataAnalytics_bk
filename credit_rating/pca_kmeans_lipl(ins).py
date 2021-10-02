@@ -687,11 +687,8 @@ def mlist_group(year:int, quarter:int) -> dict:
 
     return d
 
-
-# Output results
-#graph_all('gics', 1)
-#graph_crash(-0.5, 'gics', 1, '2020q3', 'gen', 'HOSE')
-#breakdown_all('gen')
+graph_tickers(fa.tickers('ins'))
+compare_industry(fa.tickers('ins'))
 
 
 execution_time = time.time() - start_time

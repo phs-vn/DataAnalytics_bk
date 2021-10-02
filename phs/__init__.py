@@ -1,3 +1,17 @@
+# COMPANY INFORMATION
+CompanyName = 'CÔNG TY CP CHỨNG KHOÁN PHÚ HƯNG'
+CompanyAddress = 'Tầng 21, Phú Mỹ Hưng Tower, 08 Hoàng Văn Thái, phường Tân Phú, quận 7, Thành phố Hồ Chí Minh'
+CompanyPhoneNumber = 'Điện thoại : (+84 28)  5413 5479  |  Fax: (+84 28) 5413 5472'
+
+# DATA WAREHOUSE
+driver = '{SQL Server}'
+server = 'SRV-RPT'
+database = 'RiskDb'
+user_id = 'hiep'
+user_password = '5B7Cv6huj2FcGEM4'
+
+# IMPORT PACKAGES
+
 import numpy as np
 import pandas as pd
 import bottleneck as bn
@@ -10,7 +24,7 @@ from os.path import isfile, isdir, join, realpath, dirname
 import win32com as win32
 from win32com.client import Dispatch
 import time
-from datetime import datetime, timedelta, date
+import datetime as dt
 import requests
 import json
 import holidays
@@ -63,7 +77,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import ElementNotInteractableException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support import expected_conditions as EC
 
 from bs4 import BeautifulSoup
 from urllib.request import urlopen

@@ -66,10 +66,10 @@ class post:
         table.set_index(keys=['ticker'], inplace=True)
         table.to_csv(network_table_path)
 
-        now = datetime.now()
+        now = dt.datetime.now()
         github_file_name = f'{now.day}.{now.month}.{now.year}.csv'
         github_table_path = join(destination_dir_github,github_file_name)
-        table = pd.DataFrame(columns=['Ticker','Group','Breakeven Price','1% at Risk','3% at Risk','5% at Risk','Proposed Price'])
+        table = pd.DataFrame(columns=['Ticker','Group','BreakFeven Price','1% at Risk','3% at Risk','5% at Risk','Proposed Price'])
         table.set_index(keys=['Ticker'],inplace=True)
         table.to_csv(github_table_path)
 
@@ -176,7 +176,6 @@ class post:
         tickers = rating_tickers & component_tickers
         k_rating = 1.4
         for ticker in tickers:
-
             rating_image = Image.open(join(chart_path,'rating',f'{ticker}_result.png'))
             rating_image = rating_image.resize(
                 (int(rating_image.width*k_rating),int(rating_image.height*k_rating))
@@ -196,8 +195,11 @@ class post:
 
 
     @staticmethod  # This function need to be generalized through any period of time and through multiple exchanges
-    def fc_consecutive(fc_type:str, mlist:bool=True, consecutive_days:int=1,
-                       exchange:str='HOSE', segment:str='all') \
+    def risk_alert(
+            mlist:bool=True,
+            exchange:str='HOSE',
+            segment:str='all'
+    ) \
             -> pd.DataFrame:
 
         """
@@ -205,9 +207,7 @@ class post:
         or down floor (fc_type='floor') in a given exchange of a given segment
         in n consecutive trading days
 
-        :param fc_type: allow either 'ceil' (for ceil price) or 'floor' (for floor price)
         :param mlist: report margin list only (True) or not (False)
-        :param consecutive_days: minimum number of ceil/floor days.
         :param exchange: allow values in fa.exchanges. Do not allow 'all'
         :param segment: allow values in fa.segments or 'all'.
         For mlist=False only, if mlist=True left as default
@@ -216,59 +216,84 @@ class post:
         """
 
         start_time = time.time()
+        now = dt.datetime.now().strftime('%Y-%m-%d')
+        # xét 6 tha phiên gần nhất
+        since = bdate(now,-22*3)
+        three_month_ago = since
+
+        total_room_table = internal.margin['total_room']
 
         if mlist is True:
-            full_tickers = internal.mlist([exchange])
+            full_tickers = internal.mlist(exchanges=[exchange])
         else:
-            full_tickers = fa.tickers(segment, exchange)
+            full_tickers = fa.tickers(segment,exchange)
 
-        result_table = pd.DataFrame(columns=['Ticker','Exchange','Consecutive Days'])
+        records = []
         for ticker in full_tickers:
-            try:
-                # xét 10 phiên gần nhất
-                df = ta.hist(ticker)[['trading_date','ref','close']].tail(10)
-                df.set_index('trading_date', drop=True, inplace=True)
-                df = np.round(df*1000,0)
-                df['floor'] = df['ref'].apply(
-                    fc_price,
-                    price_type=fc_type,
-                    exchange=exchange
-                )
-                df['close'] = df['close'].map(lambda x: int(np.round(x)))
-                print(ticker)
-                print(df)
-                n = 0
-                for i in range(df.shape[0]):
-                    condition1 = (df['floor'][-i-1:] == df['close'][-i-1:]).all()
-                    print(condition1)
-                    condition2 = (df['floor'][-i-1:] != df['ref'][-i-1:]).all()
-                    # the second condition is to ignore trash tickers whose price
-                    # less than 1000 VND (a single price step equivalent to
-                    # more than 7%(HOSE), 10%(HNX), 15%(UPCOM))
-                    if condition1 and condition2:
-                        n += 1
-                    else:
-                        break
-
-                if n > 0:
-                    record = {'Ticker':ticker,
-                              'Exchange':exchange,
-                              'Consecutive Days':n}
-                    result_table = result_table.append(record,ignore_index=True)
-                    print(result_table)
-                    result_table = result_table[
-                        result_table['Consecutive Days'] >= consecutive_days]
-                    print(ticker, '::: Failed')
-                    print('Result:', result_table)
+            df = ta.hist(ticker,fromdate=since,todate=now)[['trading_date','ref','close','total_volume']]
+            df.set_index('trading_date',drop=True,inplace=True)
+            df[['ref','close']] = (df[['ref','close']]*1000).round(0).astype(np.int64)
+            df['total_volume'] = df['total_volume'].astype(np.int64)
+            df['floor'] = df['ref'].apply(
+                fc_price,
+                price_type='floor',
+                exchange=exchange
+            )
+            # giam san lien tiep
+            n_floor = 0
+            for i in range(df.shape[0]):
+                condition1 = (df.loc[df.index[-i-1:],'floor']==df.loc[df.index[-i-1:],'close']).all()
+                condition2 = (df.loc[df.index[-i-1:],'floor']!=df.loc[df.index[-i-1:],'ref']).all()
+                # the second condition is to ignore trash tickers whose price
+                # less than 1000 VND (a single price step equivalent to
+                # more than 7%(HOSE), 10%(HNX), 15%(UPCOM))
+                if condition1 and condition2:
+                    n_floor += 1
                 else:
-                    print(ticker, '::: Passed')
+                    break
+            # mat thanh khoan lien tiep
+            n_illiquidity = 0
+            for i in range(df.shape[0]):
+                volume = df.loc[df.index[-i-1],'total_volume']
+                avg_vol_1m = df.loc[df.index[-i-22]:,'total_volume'].mean()
+                condition = volume/avg_vol_1m - 1 <= -0.3
+                if condition:
+                    n_illiquidity += 1
+                else:
+                    break
 
-            except ValueError:
-                print(f'{ticker} is not listed in specified exchange')
+            volume = df.loc[df.index[-1],'total_volume']
+            avg_vol_1m = df.loc[df.index[-22]:,'total_volume'].mean()
+            volume_drop = volume/avg_vol_1m - 1
+
+            total_room = total_room_table.loc[ticker]
+            avg_vol_3m = df.loc[three_month_ago:,'total_volume'].mean()
+            dos_3m = total_room/avg_vol_3m
+
+            n_floor_bmk = 1
+            n_illiquidity_bmk = 1
+
+            condition1 = n_floor >= n_floor_bmk
+            condition2 =  n_illiquidity >= n_illiquidity_bmk
+
+            if condition1 or condition2:
+                print(ticker, '::: Failed')
+                record = pd.DataFrame({
+                    'Exchange': exchange,
+                    'Consecutive Floor Days': n_floor,
+                    'Consecutive Illiquidity Days': n_illiquidity,
+                    'Volume Change': volume_drop,
+                    'Days of Sale (3M Avg)': dos_3m
+                },
+                index=pd.Index([ticker],name='Ticker'))
+                records.append(record)
+            else:
+                print(ticker, '::: Passed')
 
             print('-------------------------')
 
-        result_table.set_index('Ticker', drop=True, inplace=True)
+        result_table = pd.concat(records)
+        result_table.sort_values('Consecutive Floor Days',ascending=False,inplace=True)
 
         print('Finished!')
         print("Total execution time is: %s seconds" % (time.time() - start_time))
@@ -398,7 +423,7 @@ class post:
 
 
     @staticmethod
-    def news_rmd(num_hours:int=48, fixed_mp:bool=True):
+    def news_rmd():
 
         """
         This method runs all functions in module text_mining.newsrmd (try till success)
@@ -406,16 +431,16 @@ class post:
         for daily usage of RMD. This function is called in a higher-level module and
         automatically run on a daily basis
 
-        :param num_hours: number of hours in the past that's in our concern
-        :param fixed_mp: care only about stock in "fixed max price" (True)
-         or not (False)
-
         :return: None
         """
-
-
-        now = datetime.now()
+        now = dt.datetime.now()
         time_string = now.strftime('%Y%m%d_@%H%M')
+        if dt.time(hour=0,minute=0,second=0) <= now.time() <= dt.time(hour=11,minute=59,second=59):
+            previous_bdate = bdate(now.strftime('%Y-%m-%d'),-1)
+            time_point = dt.datetime.strptime(previous_bdate,'%Y-%m-%d')
+            time_point = time_point.replace(hour=18,minute=0,second=0,microsecond=0)
+        if dt.time(hour=12,minute=0,second=0) <= now.time() <= dt.time(hour=23,minute=59,second=59):
+            time_point = now.replace(hour=10,minute=0,second=0,microsecond=0)
 
         path = r'\\192.168.10.101\phs-storge-2018' \
                r'\RiskManagementDept\RMD_Data' \
@@ -427,9 +452,9 @@ class post:
         while True:
             try:
                 try:
-                    vsd_TCPH = newsrmd.vsd.tinTCPH(num_hours,fixed_mp)
+                    vsd_TCPH = newsrmd.vsd.tinTCPH()
                     break
-                except newsrmd.vsd.ignored_exceptions:
+                except newsrmd.ignored_exceptions:
                     vsd_TCPH = pd.DataFrame()
                     continue
             except newsrmd.NoNewsFound:
@@ -439,9 +464,9 @@ class post:
         while True:
             try:
                 try:
-                    vsd_TVBT = newsrmd.vsd.tinTVBT(num_hours)
+                    vsd_TVBT = newsrmd.vsd.tinTVBT()
                     break
-                except newsrmd.vsd.ignored_exceptions:
+                except newsrmd.ignored_exceptions:
                     vsd_TVBT = pd.DataFrame()
                     continue
             except newsrmd.NoNewsFound:
@@ -451,9 +476,9 @@ class post:
         while True:
             try:
                 try:
-                    hnx_TCPH = newsrmd.hnx.tinTCPH(num_hours,fixed_mp)
+                    hnx_TCPH = newsrmd.hnx.tinTCPH()
                     break
-                except newsrmd.hnx.ignored_exceptions:
+                except newsrmd.ignored_exceptions:
                     hnx_TCPH = pd.DataFrame()
                     continue
             except newsrmd.NoNewsFound:
@@ -463,9 +488,9 @@ class post:
         while True:
             try:
                 try:
-                    hnx_tintuso = newsrmd.hnx.tintuso(num_hours)
+                    hnx_tintuso = newsrmd.hnx.tintuso()
                     break
-                except newsrmd.hnx.ignored_exceptions:
+                except newsrmd.ignored_exceptions:
                     hnx_tintuso = pd.DataFrame()
                     continue
             except newsrmd.NoNewsFound:
@@ -475,74 +500,166 @@ class post:
         while True:
             try:
                 try:
-                    hose_tintonghop = newsrmd.hose.tintonghop(num_hours,fixed_mp)
+                    hose_tintonghop = newsrmd.hose.tintonghop()
                     break
-                except newsrmd.hose.ignored_exceptions:
+                except newsrmd.ignored_exceptions:
                     hose_tintonghop = pd.DataFrame()
                     continue
             except newsrmd.NoNewsFound:
                 hose_tintonghop = pd.DataFrame()
-                break
+            break
 
-        with pd.ExcelWriter(file_path) as writer:
-            vsd_TCPH.to_excel(
-                writer,
-                sheet_name='vsd_tinTCPH',
-                index=False
-            )
-            vsd_TVBT.to_excel(
-                writer,
-                sheet_name='vsd_tinTVBT',
-                index=False
-            )
-            hnx_TCPH.to_excel(
-                writer,
-                sheet_name='hnx_tinTCPH',
-                index=False
-            )
-            hnx_tintuso.to_excel(
-                writer,
-                sheet_name='hnx_tintuso',
-                index=False
-            )
-            hose_tintonghop.to_excel(
-                writer,
-                sheet_name='hose_tintonghop',
-                index=False
-            )
 
-        wb = xw.Book(file_path)
+        time_point = dt.datetime(2021,9,30,0,0,0)
 
-        wb.sheets['vsd_tinTCPH'].autofit()
-        wb.sheets['vsd_tinTCPH'].range("D:E").column_width = 50
-        wb.sheets['vsd_tinTCPH'].range("F:G").column_width = 17
-        wb.sheets['vsd_tinTCPH'].range("H:H").column_width = 35
-        wb.sheets['vsd_tinTCPH'].range("K:K").column_width = 5
-        wb.sheets['vsd_tinTCPH'].range("A:XFD").api.WrapText = True
-        wb.sheets['vsd_tinTCPH'].range("A:XFD").api.Cells.VerticalAlignment = 2
+        check_dt = lambda dt_time: True if dt_time > time_point else False
+        mask_vsd_TCPH = vsd_TCPH['Thời gian'].map(check_dt)
+        mask_vsd_TVBT = vsd_TVBT['Thời gian'].map(check_dt)
+        mask_hnx_TCPH = hnx_TCPH['Thời gian'].map(check_dt)
+        mask_hnx_tintuso = hnx_tintuso['Thời gian'].map(check_dt)
+        mask_hose_tintonghop = hose_tintonghop['Thời gian'].map(check_dt)
+        print(mask_vsd_TCPH)
+        print(mask_vsd_TVBT)
+        print(mask_hnx_TCPH)
+        print(mask_hnx_tintuso)
+        print(mask_hose_tintonghop)
 
-        wb.sheets['vsd_tinTVBT'].autofit()
-        wb.sheets['vsd_tinTVBT'].range("C:C").column_width = 20
-        wb.sheets['vsd_tinTVBT'].range("A:XFD").api.WrapText = True
-        wb.sheets['vsd_tinTVBT'].range("A:XFD").api.Cells.VerticalAlignment = 2
+        writer = pd.ExcelWriter(file_path,engine='xlsxwriter')
+        workbook = writer.book
+        vsd_TCPH_sheet = workbook.add_worksheet('vsd_TCPH')
+        vsd_TVBT_sheet = workbook.add_worksheet('vsd_TVBT')
+        hnx_TCPH_sheet = workbook.add_worksheet('hnx_TCPH')
+        hnx_tintuso_sheet = workbook.add_worksheet('hnx_tintuso')
+        hose_tintonghop_sheet = workbook.add_worksheet('hose_tintonghop')
 
-        wb.sheets['hnx_tinTCPH'].autofit()
-        wb.sheets['hnx_tinTCPH'].range("E:E").column_width = 80
-        wb.sheets['hnx_tinTCPH'].range("A:XFD").api.WrapText = True
-        wb.sheets['hnx_tinTCPH'].range("A:XFD").api.Cells.VerticalAlignment = 2
+        header_fmt = workbook.add_format(
+            {
+                'align': 'center',
+                'valign': 'vcenter',
+                'bold': True,
+                'border': 1,
+                'text_wrap': True,
+            }
+        )
+        regular_fmt = workbook.add_format(
+            {
+                'valign': 'vcenter',
+                'border': 1,
+                'text_wrap': True,
+            }
+        )
+        highlight_regular_fmt = workbook.add_format(
+            {
+                'valign': 'vcenter',
+                'border': 1,
+                'bg_color': '#FFF024',
+                'text_wrap': True,
+            }
+        )
+        time_fmt = workbook.add_format(
+            {
+                'num_format': 'dd/mm/yyyy hh:mm:ss',
+                'valign': 'vcenter',
+                'border': 1,
+                'text_wrap': True,
+            }
+        )
+        highlight_time_fmt = workbook.add_format(
+            {
+                'num_format': 'dd/mm/yyyy hh:mm:ss',
+                'valign': 'vcenter',
+                'border': 1,
+                'bg_color': '#FFF024',
+                'text_wrap': True,
+            }
+        )
+        vsd_TCPH_sheet.hide_gridlines(option=2)
+        vsd_TVBT_sheet.hide_gridlines(option=2)
+        hnx_TCPH_sheet.hide_gridlines(option=2)
+        hnx_tintuso_sheet.hide_gridlines(option=2)
+        hose_tintonghop_sheet.hide_gridlines(option=2)
 
-        wb.sheets['hnx_tintuso'].autofit()
-        wb.sheets['hnx_tintuso'].range("D:D").column_width = 80
-        wb.sheets['hnx_tintuso'].range("A:XFD").api.WrapText = True
-        wb.sheets['hnx_tintuso'].range("A:XFD").api.Cells.VerticalAlignment = 2
+        vsd_TCPH_sheet.set_column('A:A',18)
+        vsd_TCPH_sheet.set_column('B:D',7)
+        vsd_TCPH_sheet.set_column('E:E',50)
+        vsd_TCPH_sheet.set_column('F:F',7)
+        vsd_TCPH_sheet.write_row('A1',vsd_TCPH.columns,header_fmt)
+        for col in range(vsd_TCPH.shape[1]):
+            for row in range(vsd_TCPH.shape[0]):
+                if col == 0 and mask_vsd_TCPH.loc[row] == True:
+                    vsd_TCPH_sheet.write(row+1,col,vsd_TCPH.iloc[row,col],highlight_time_fmt)
+                elif col != 0 and mask_vsd_TCPH.loc[row] == True:
+                    vsd_TCPH_sheet.write(row+1,col,vsd_TCPH.iloc[row,col],highlight_regular_fmt)
+                elif col == 0 and mask_vsd_TCPH.loc[row] == False:
+                    vsd_TCPH_sheet.write(row+1,col,vsd_TCPH.iloc[row,col],time_fmt)
+                else:
+                    vsd_TCPH_sheet.write(row+1,col,vsd_TCPH.iloc[row,col],regular_fmt)
 
-        wb.sheets['hose_tintonghop'].autofit()
-        wb.sheets['hose_tintonghop'].range("D:E").column_width = 90
-        wb.sheets['hose_tintonghop'].range("A:XFD").api.WrapText = True
-        wb.sheets['hose_tintonghop'].range("A:XFD").api.Cells.VerticalAlignment = 2
+        vsd_TVBT_sheet.set_column('A:A',18)
+        vsd_TVBT_sheet.set_column('B:B',90)
+        vsd_TVBT_sheet.set_column('C:C',7)
+        vsd_TVBT_sheet.write_row('A1',vsd_TVBT.columns,header_fmt)
+        for col in range(vsd_TVBT.shape[1]):
+            for row in range(vsd_TVBT.shape[0]):
+                if col == 0 and mask_vsd_TVBT.loc[row] == True:
+                    vsd_TVBT_sheet.write(row+1,col,vsd_TVBT.iloc[row,col],highlight_time_fmt)
+                elif col != 0 and mask_vsd_TVBT.loc[row] == True:
+                    vsd_TVBT_sheet.write(row+1,col,vsd_TVBT.iloc[row,col],highlight_regular_fmt)
+                elif col == 0 and mask_vsd_TVBT.loc[row] == False:
+                    vsd_TVBT_sheet.write(row+1,col,vsd_TVBT.iloc[row,col],time_fmt)
+                else:
+                    vsd_TVBT_sheet.write(row+1,col,vsd_TVBT.iloc[row,col],regular_fmt)
 
-        wb.save()
-        wb.close()
+        hnx_TCPH_sheet.set_column('A:A',18)
+        hnx_TCPH_sheet.set_column('B:D',7)
+        hnx_TCPH_sheet.set_column('E:E',50)
+        hnx_TCPH_sheet.set_column('F:F',100)
+        hnx_TCPH_sheet.set_column('G:G',7)
+        hnx_TCPH_sheet.write_row('A1',hnx_TCPH.columns,header_fmt)
+        for col in range(hnx_TCPH.shape[1]):
+            for row in range(hnx_TCPH.shape[0]):
+                if col == 0 and mask_hnx_TCPH.loc[row] == True:
+                    hnx_TCPH_sheet.write(row+1,col,hnx_TCPH.iloc[row,col],highlight_time_fmt)
+                elif col != 0 and mask_hnx_TCPH.loc[row] == True:
+                    hnx_TCPH_sheet.write(row+1,col,hnx_TCPH.iloc[row,col],highlight_regular_fmt)
+                elif col == 0 and mask_hnx_TCPH.loc[row] == False:
+                    hnx_TCPH_sheet.write(row+1,col,hnx_TCPH.iloc[row,col],time_fmt)
+                else:
+                    hnx_TCPH_sheet.write(row+1,col,hnx_TCPH.iloc[row,col],regular_fmt)
+
+        hnx_tintuso_sheet.set_column('A:A',18)
+        hnx_tintuso_sheet.set_column('B:D',7)
+        hnx_tintuso_sheet.set_column('E:E',70)
+        hnx_tintuso_sheet.set_column('F:F',7)
+        hnx_tintuso_sheet.write_row('A1',hnx_tintuso,header_fmt)
+        for col in range(hnx_tintuso.shape[1]):
+            for row in range(hnx_tintuso.shape[0]):
+                if col == 0 and mask_hnx_tintuso.loc[row] == True:
+                    hnx_tintuso_sheet.write(row+1,col,hnx_tintuso.iloc[row,col],highlight_time_fmt)
+                elif col != 0 and mask_hnx_tintuso.loc[row] == True:
+                    hnx_tintuso_sheet.write(row+1,col,hnx_tintuso.iloc[row,col],highlight_regular_fmt)
+                elif col == 0 and mask_hnx_tintuso.loc[row] == False:
+                    hnx_tintuso_sheet.write(row+1,col,hnx_tintuso.iloc[row,col],time_fmt)
+                else:
+                    hnx_tintuso_sheet.write(row+1,col,hnx_tintuso.iloc[row,col],regular_fmt)
+
+        hose_tintonghop_sheet.set_column('A:A',18)
+        hose_tintonghop_sheet.set_column('B:D',7)
+        hose_tintonghop_sheet.set_column('E:E',70)
+        hose_tintonghop_sheet.set_column('F:F',80)
+        hose_tintonghop_sheet.write_row('A1',hose_tintonghop,header_fmt)
+        for col in range(hose_tintonghop.shape[1]):
+            for row in range(hnx_tintuso.shape[0]):
+                if col == 0 and mask_hose_tintonghop.loc[row] == True:
+                    hose_tintonghop_sheet.write(row+1,col,hose_tintonghop.iloc[row,col],highlight_time_fmt)
+                elif col != 0 and mask_hose_tintonghop.loc[row] == True:
+                    hose_tintonghop_sheet.write(row+1,col,hose_tintonghop.iloc[row,col],highlight_regular_fmt)
+                elif col == 0 and mask_hose_tintonghop.loc[row] == False:
+                    hose_tintonghop_sheet.write(row+1,col,hose_tintonghop.iloc[row,col],time_fmt)
+                else:
+                    hose_tintonghop_sheet.write(row+1,col,hose_tintonghop.iloc[row,col],regular_fmt)
+
+        writer.save()
 
 
 post = post()

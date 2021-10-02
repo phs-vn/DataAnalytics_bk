@@ -644,6 +644,9 @@ def mlist_group(year:int, quarter:int) -> dict:
 
     return d
 
+graph_tickers(fa.tickers('sec'))
+compare_industry(fa.tickers('sec'))
+
 
 execution_time = time.time() - start_time
 print(f"The execution time is: {int(execution_time)}s seconds")

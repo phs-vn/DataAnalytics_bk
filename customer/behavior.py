@@ -559,12 +559,12 @@ def graph_turnover_by_location(
         if todate is None:
             todate = core.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2018,1,1)
+            fromdate = dt.date(2018,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         location_series = core.info('all',subtype)['LOCATION'].dropna()
         location_series = location_series.loc[~(location_series=='Unknown')]
@@ -647,12 +647,12 @@ def graph_margin_usage_by_location(
         if todate is None:
             todate = core.time
         else:
-            todate = date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
+            todate = dt.date(int(todate[:4]),int(todate[5:7]),int(todate[-2:]))
 
         if fromdate is None:
-            fromdate = date(2000,1,1)
+            fromdate = dt.date(2000,1,1)
         else:
-            fromdate = date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
+            fromdate = dt.date(int(fromdate[:4]),int(fromdate[5:7]),int(fromdate[-2:]))
 
         location_series = core.info('all',subtype)['LOCATION'].dropna()
         location_series = location_series.loc[~(location_series=='Unknown')]

@@ -332,7 +332,7 @@ def new_sub_account():
     end_date = f'{end_date[-4:]}/{end_date[3:5]}/{end_date[:2]}'
     FLEX_new_sub_account.set_index(['sub_account','sub_account_type'],inplace=True)
     FLEX_new_sub_account['open_date'] = FLEX_new_sub_account['open_date'].map(
-        lambda x: datetime.strptime(x,'%d/%m/%Y')
+        lambda x: dt.datetime.strptime(x,'%d/%m/%Y')
     )
     DWH_new_sub_account = pd.read_sql(
         "SELECT * FROM new_sub_account "
@@ -380,9 +380,9 @@ def cashflow_bidv():
     FLEX_RRM0068.drop([0,1],inplace=True)
     FLEX_RRM0068.reset_index(drop=True,inplace=True)
     start_text_date_RRM0068 = date_cell.split()[3]
-    start_date_RRM0068 = datetime.strptime(start_text_date_RRM0068,'%d/%m/%Y')
+    start_date_RRM0068 = dt.datetime.strptime(start_text_date_RRM0068,'%d/%m/%Y')
     end_text_date_RRM0068 = date_cell.split()[-1]
-    end_date_RRM0068 = datetime.strptime(end_text_date_RRM0068,'%d/%m/%Y')
+    end_date_RRM0068 = dt.datetime.strptime(end_text_date_RRM0068,'%d/%m/%Y')
 
     FLEX_excel_RRM0069 = pd.ExcelFile(
         join(realpath(dirname(__file__)),'flex_data','RRM0068.xls')
@@ -412,9 +412,9 @@ def cashflow_bidv():
         dtype={'inflow_amount':np.float64,'outflow_amount':np.float64}
     )
     start_text_date_RRM0069 = date_cell.split()[3]
-    start_date_RRM0069 = datetime.strptime(start_text_date_RRM0069,'%d/%m/%Y')
+    start_date_RRM0069 = dt.datetime.strptime(start_text_date_RRM0069,'%d/%m/%Y')
     end_text_date_RRM0069 = date_cell.split()[-1]
-    end_date_RRM0069 = datetime.strptime(end_text_date_RRM0069,'%d/%m/%Y')
+    end_date_RRM0069 = dt.datetime.strptime(end_text_date_RRM0069,'%d/%m/%Y')
 
     start_date = max([start_date_RRM0068,start_date_RRM0069]).strftime('%Y/%m/%d')
     end_date = min([end_date_RRM0068,end_date_RRM0069]).strftime('%Y/%m/%d')

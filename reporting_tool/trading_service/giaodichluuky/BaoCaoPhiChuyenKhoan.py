@@ -56,7 +56,7 @@ def run(
     ).squeeze()
 
     # calculate transfer fee on TTBT
-    case = transfer_fee_CTCK['date'] > datetime(2020,3,19)
+    case = transfer_fee_CTCK['date'] > dt.datetime(2020,3,19)
     transfer_fee_CTCK.loc[case,'fee'] = transfer_fee_CTCK['volume'] *  0.3
     transfer_fee_CTCK.loc[~case,'fee'] = transfer_fee_CTCK['volume'] * 0.5
     transfer_fee_CTCK['fee'] = transfer_fee_CTCK['fee'].apply(min,args=(300000,))
@@ -72,7 +72,7 @@ def run(
     case = transfer_fee_TTBT['volume'] > 1000000
     transfer_fee_TTBT.loc[case,'charged_volume'] = transfer_fee_TTBT['vol_percent'] * 1000000
     transfer_fee_TTBT.loc[~case,'charged_volume'] = transfer_fee_TTBT['volume']
-    case = transfer_fee_TTBT['date'] > datetime(2020,3,16)
+    case = transfer_fee_TTBT['date'] > dt.datetime(2020,3,16)
     transfer_fee_TTBT.loc[case,'fee'] = transfer_fee_TTBT['charged_volume']*0.3
     transfer_fee_TTBT.loc[~case,'fee'] = transfer_fee_TTBT['charged_volume']*0.5
     transfer_fee_TTBT = transfer_fee_TTBT[['sub_account','volume','fee']]
