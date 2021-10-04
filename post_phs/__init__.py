@@ -217,11 +217,16 @@ class post:
 
         start_time = time.time()
         now = dt.datetime.now().strftime('%Y-%m-%d')
-        # xét 6 tha phiên gần nhất
+        # xét 3 tháng gần nhất, nếu sửa ở đây thì phải sửa dòng ngay dưới
         since = bdate(now,-22*3)
         three_month_ago = since
 
-        total_room_table = internal.margin['total_room']
+        mrate_series = internal.margin['mrate']
+        drate_series = internal.margin['drate']
+        maxprice_series = internal.margin['max_price']
+        general_room_seires = internal.margin['general_room']
+        special_room_series = internal.margin['special_room']
+        total_room_series = internal.margin['total_room']
 
         if mlist is True:
             full_tickers = internal.mlist(exchanges=[exchange])
@@ -251,48 +256,56 @@ class post:
                     n_floor += 1
                 else:
                     break
-            # mat thanh khoan lien tiep
-            n_illiquidity = 0
-            for i in range(df.shape[0]):
-                volume = df.loc[df.index[-i-1],'total_volume']
-                avg_vol_1m = df.loc[df.index[-i-22]:,'total_volume'].mean()
-                condition = volume/avg_vol_1m - 1 <= -0.3
-                if condition:
-                    n_illiquidity += 1
-                else:
-                    break
-
-            volume = df.loc[df.index[-1],'total_volume']
+            # mat thanh khoan trong 1 thang
             avg_vol_1m = df.loc[df.index[-22]:,'total_volume'].mean()
-            volume_drop = volume/avg_vol_1m - 1
+            n_illiquidity = (df.loc[df.index[-22]:,'total_volume']<avg_vol_1m).sum()
+            # thanh khoan ngay gan nhat so voi thanh khoan trung binh 1 thang
+            volume = df.loc[df.index[-1],'total_volume']
+            volume_change_1m = volume/avg_vol_1m - 1
 
-            total_room = total_room_table.loc[ticker]
-            avg_vol_3m = df.loc[three_month_ago:,'total_volume'].mean()
-            dos_3m = total_room/avg_vol_3m
-
-            n_floor_bmk = 1
             n_illiquidity_bmk = 1
+            n_floor_bmk = 1
 
             condition1 = n_floor >= n_floor_bmk
             condition2 =  n_illiquidity >= n_illiquidity_bmk
 
             if condition1 or condition2:
                 print(ticker, '::: Failed')
+                mrate = mrate_series.loc[ticker]
+                drate = drate_series.loc[ticker]
+                avg_vol_1w = df.loc[df.index[-5]:,'total_volume'].mean()
+                avg_vol_1m = df.loc[df.index[-22]:,'total_volume'].mean()
+                avg_vol_3m = df.loc[three_month_ago:,'total_volume'].mean() # để tránh out-of-bound error
+                max_price = maxprice_series.loc[ticker]
+                general_room = general_room_seires.loc[ticker]
+                special_room = special_room_series.loc[ticker]
+                total_room = total_room_series.loc[ticker]
+                room_on_avg_vol_3m = total_room/avg_vol_3m
                 record = pd.DataFrame({
-                    'Exchange': exchange,
-                    'Consecutive Floor Days': n_floor,
-                    'Consecutive Illiquidity Days': n_illiquidity,
-                    'Volume Change': volume_drop,
-                    'Days of Sale (3M Avg)': dos_3m
-                },
-                index=pd.Index([ticker],name='Ticker'))
+                    'Stock': [ticker],
+                    'Exchange': [exchange],
+                    'Tỷ lệ vay KQ (%)': [mrate],
+                    'Tỷ lệ vay TC (%)': [drate],
+                    'Giá vay / Giá TSĐB tối đa (VND)': [max_price],
+                    'General Room': [general_room],
+                    'Special Room': [special_room],
+                    'Total Room': [total_room],
+                    'Consecutive Floor Days': [n_floor],
+                    'Last day Volume': [volume],
+                    '% Last day volume / 1M Avg.': [volume_change_1m],
+                    '1W Avg. Volume': [avg_vol_1w],
+                    '1M Avg. Volume': [avg_vol_1m],
+                    '3M Avg. Volume': [avg_vol_3m],
+                    'Approved Room / Avg. Liquidity 3 months': [room_on_avg_vol_3m],
+                    '1M Illiquidity Days': [n_illiquidity],
+                })
                 records.append(record)
             else:
                 print(ticker, '::: Passed')
 
             print('-------------------------')
 
-        result_table = pd.concat(records)
+        result_table = pd.concat(records,ignore_index=True)
         result_table.sort_values('Consecutive Floor Days',ascending=False,inplace=True)
 
         print('Finished!')
@@ -315,7 +328,7 @@ class post:
         :return: None
         """
 
-        now = date.today()
+        now = dt.date.today()
         date_string = now.strftime('%Y%m%d')
 
         path = r'C:\Users\hiepdang\News Report\Trading Service'
@@ -604,8 +617,8 @@ class post:
 
         hnx_TCPH_sheet.set_column('A:A',18)
         hnx_TCPH_sheet.set_column('B:D',7)
-        hnx_TCPH_sheet.set_column('E:E',50)
-        hnx_TCPH_sheet.set_column('F:F',100)
+        hnx_TCPH_sheet.set_column('E:E',30)
+        hnx_TCPH_sheet.set_column('F:F',120)
         hnx_TCPH_sheet.set_column('G:G',7)
         hnx_TCPH_sheet.write_row('A1',hnx_TCPH.columns,header_fmt)
         for col in range(hnx_TCPH.shape[1]):

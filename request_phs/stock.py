@@ -892,13 +892,13 @@ class ta:
         if fromdate is None:
             start = '2015-01-01'
         else:
-            if dt.datime.strptime(fromdate,'%Y-%m-%d') < dt.datime(year=2015,month=1,day=1):
+            if dt.datetime.strptime(fromdate,'%Y-%m-%d') < dt.datetime(year=2015,month=1,day=1):
                 raise Exception('Only data since 2015-01-01 is reliable')
             else:
                 start = fromdate
 
         if todate is None or todate=='now':
-            end = dt.datime.now().strftime('%Y-%m-%d')
+            end = dt.datetime.now().strftime('%Y-%m-%d')
         else:
             end = todate
 
@@ -962,8 +962,8 @@ class ta:
 
         pd.options.mode.chained_assignment = None
         if fromdate is not None and todate is not None:
-            if dt.datime.strptime(todate, '%Y-%m-%d') \
-                    - dt.datime.strptime(fromdate, '%Y-%m-%d') > timedelta(days=60):
+            if dt.datetime.strptime(todate, '%Y-%m-%d') \
+                    - dt.datetime.strptime(fromdate, '%Y-%m-%d') > timedelta(days=60):
                 raise Exception('Can\'t extract more than 60 days')
             else:
                 try:
@@ -983,8 +983,8 @@ class ta:
                         'Date Format Required: yyyy-mm-dd, yyyy/mm/dd')
         else:
             try:
-                fromdate = (dt.datime.now() - timedelta(days=60)).strftime("%Y-%m-%d")
-                todate = (dt.datime.now() - timedelta(days=0)).strftime("%Y-%m-%d")
+                fromdate = (dt.datetime.now() - timedelta(days=60)).strftime("%Y-%m-%d")
+                todate = (dt.datetime.now() - timedelta(days=0)).strftime("%Y-%m-%d")
                 r = requests.post(self.address_intra,
                                   data=json.dumps(
                                       {'symbol': ticker,
@@ -1056,7 +1056,7 @@ class ta:
                 continue
 
         def Bday(date=str):
-            date_ = dt.datime(year=int(date.split('-')[0]),
+            date_ = dt.datetime(year=int(date.split('-')[0]),
                              month=int(date.split('-')[1]),
                              day=int(date.split('-')[2]))
             one_day = timedelta(days=1)
@@ -1124,7 +1124,7 @@ class ta:
                 continue
 
         def Bday(date=str):
-            date_ = dt.datime(year=int(date.split('-')[0]),
+            date_ = dt.datetime(year=int(date.split('-')[0]),
                              month=int(date.split('-')[1]),
                              day=int(date.split('-')[2]))
             one_day = timedelta(days=1)
@@ -1286,7 +1286,7 @@ class ta:
         :return: float
         """
 
-        today = dt.datime.now().strftime("%Y-%m-%d")
+        today = dt.datetime.now().strftime("%Y-%m-%d")
         before = bdate(today,-1)
         now = self.intra(ticker, before, today)['price'].iloc[-1]
 

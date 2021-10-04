@@ -744,3 +744,17 @@ def process_address(raw_address):
     result = classify_province(result)
 
     return result
+
+
+def convertNaTtoSpaceString(d):
+
+    """
+    Due to Pandas's limitation that make it unable to work well with NaT,
+    this function serves to replace Nat with ' ' (space string)
+
+    :param d: datetime object
+    """
+
+    if pd.isnull(d):
+        d = ' '
+    return d

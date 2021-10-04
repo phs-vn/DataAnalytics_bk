@@ -1,14 +1,6 @@
-# COMPANY INFORMATION
 CompanyName = 'CÔNG TY CP CHỨNG KHOÁN PHÚ HƯNG'
 CompanyAddress = 'Tầng 21, Phú Mỹ Hưng Tower, 08 Hoàng Văn Thái, phường Tân Phú, quận 7, Thành phố Hồ Chí Minh'
 CompanyPhoneNumber = 'Điện thoại : (+84 28)  5413 5479  |  Fax: (+84 28) 5413 5472'
-
-# DATA WAREHOUSE
-driver = '{SQL Server}'
-server = 'SRV-RPT'
-database = 'RiskDb'
-user_id = 'hiep'
-user_password = '5B7Cv6huj2FcGEM4'
 
 # IMPORT PACKAGES
 

@@ -33,7 +33,7 @@ class vsd:
 
         start_time = time.time()
 
-        now = dt.datime.now()
+        now = dt.datetime.now()
         fromtime = now
 
         url = 'https://vsd.vn/vi/alo/-f-_bsBS4BBXga52z2eexg'
@@ -47,7 +47,7 @@ class vsd:
         output_table = pd.DataFrame()
 
         bmk_time = btime(now.strftime('%Y-%m-%d %H:%M:%S'), -num_hours)
-        while fromtime >= dt.datime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
+        while fromtime >= dt.datetime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
 
             news_time = []
             news_headlines = []
@@ -102,7 +102,7 @@ class vsd:
 
                     news_time_ = tag_.find_element_by_tag_name('div').text
                     news_time_ \
-                        = dt.datime.strptime(news_time_[-21:],
+                        = dt.datetime.strptime(news_time_[-21:],
                                             '%d/%m/%Y - %H:%M:%S')
                     news_time += [news_time_]
 
@@ -238,7 +238,7 @@ class vsd:
                      '//*[@id="d_list_news"]/ul/li')))[-1]
 
             fromtime = last_tag.find_element_by_tag_name('div').text
-            fromtime = dt.datime.strptime(fromtime[-21:],
+            fromtime = dt.datetime.strptime(fromtime[-21:],
                                          '%d/%m/%Y - %H:%M:%S')
 
         driver.quit()
@@ -292,7 +292,7 @@ class vsd:
 
         start_time = time.time()
 
-        now = dt.datime.now()
+        now = dt.datetime.now()
         fromtime = now
 
         url = 'https://www.vsd.vn/vi/alc/4'
@@ -309,7 +309,7 @@ class vsd:
 
         output_table = pd.DataFrame()
         bmk_time = btime(now.strftime('%Y-%m-%d %H:%M:%S'), -num_hours)
-        while fromtime >= dt.datime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
+        while fromtime >= dt.datetime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
 
             news_time = []
             news_headlines = []
@@ -357,7 +357,7 @@ class vsd:
 
                     news_time_ = tag_.find_element_by_tag_name('div').text
                     news_time_ \
-                        = dt.datime.strptime(news_time_[-21:],
+                        = dt.datetime.strptime(news_time_[-21:],
                                             '%d/%m/%Y - %H:%M:%S')
                     news_time += [news_time_]
 
@@ -433,7 +433,7 @@ class vsd:
                      '//*[@id="d_list_news"]/ul/li')))[-1]
 
             fromtime = last_tag.find_element_by_tag_name('div').text
-            fromtime = dt.datime.strptime(fromtime[-21:],
+            fromtime = dt.datetime.strptime(fromtime[-21:],
                                          '%d/%m/%Y - %H:%M:%S')
 
         driver.quit()
@@ -488,7 +488,7 @@ class hnx:
 
         start_time = time.time()
 
-        now = dt.datime.now()
+        now = dt.datetime.now()
         from_time = now
 
         driver = webdriver.Chrome(executable_path=self.PATH)
@@ -518,7 +518,7 @@ class hnx:
         tickers = []
 
         bmk_time = btime(now.strftime('%Y-%m-%d %H:%M:%S'), -num_hours)
-        while from_time >= dt.datime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
+        while from_time >= dt.datetime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
 
             def f():
                 # wait for the element to appear, avoid stale element reference
@@ -595,7 +595,7 @@ class hnx:
                 # check time
                 from_time = driver.find_element_by_xpath(
                     "//*[@id='_tableDatas']/tbody/tr[10]/td[2]").text
-                from_time = dt.datime.strptime(from_time, '%d/%m/%Y %H:%M')
+                from_time = dt.datetime.strptime(from_time, '%d/%m/%Y %H:%M')
 
 
             WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions)\
@@ -613,7 +613,7 @@ class hnx:
         fromtime = now
 
         bmk_time = btime(now.strftime('%Y-%m-%d %H:%M:%S'), -num_hours)
-        while fromtime >= dt.datime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
+        while fromtime >= dt.datetime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
 
             def f():
                 # wait for the element to appear, avoid stale element reference
@@ -691,7 +691,7 @@ class hnx:
                 # check time
                 fromtime = driver.find_element_by_xpath(
                     "//*[@id='_tableDatas']/tbody/tr[10]/td[2]").text
-                fromtime = dt.datime.strptime(fromtime,'%d/%m/%Y %H:%M')
+                fromtime = dt.datetime.strptime(fromtime,'%d/%m/%Y %H:%M')
 
 
             WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions) \
@@ -716,7 +716,7 @@ class hnx:
             minute = int(x.split(':')[1][:2])
             second = 0
 
-            return dt.datime(year,month,day,hour,minute,second)
+            return dt.datetime(year,month,day,hour,minute,second)
 
         df['Thời gian'] = df['Thời gian'].map(f)
         df.sort_values('Thời gian', ascending=False, inplace=True)
@@ -781,7 +781,7 @@ class hose:
 
         driver.maximize_window()
 
-        now = dt.datime.now()
+        now = dt.datetime.now()
         from_time = now
 
         keywords = ['niêm yết và ngày giao dịch đầu tiên',
@@ -792,7 +792,7 @@ class hose:
 
         output_table = pd.DataFrame()
         bmk_time = btime(now.strftime('%Y-%m-%d %H:%M:%S'), -num_hours)
-        while from_time >= dt.datime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
+        while from_time >= dt.datetime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
 
             time.sleep(5)
 
@@ -817,10 +817,10 @@ class hose:
             def f(s):
                 if s.endswith('SA'):
                     s = s.rstrip(' SA')
-                    return dt.datime.strptime(s,'%d/%m/%Y %H:%M:%S')
+                    return dt.datetime.strptime(s,'%d/%m/%Y %H:%M:%S')
                 if s.endswith('CH'):
                     s = s.rstrip(' CH')
-                    return dt.datime.strptime(s,'%d/%m/%Y %H:%M:%S') + timedelta(hours=12)
+                    return dt.datetime.strptime(s,'%d/%m/%Y %H:%M:%S') + dt.timedelta(hours=12)
 
             time_text = [f(t) for t in time_text]
 
@@ -941,7 +941,7 @@ class hose:
 
         start_time = time.time()
 
-        now = dt.datime.now()
+        now = dt.datetime.now()
         from_time = now
 
         url = 'https://www.hsx.vn/Modules/Cms/Web/NewsByCat/95cd3266-e6d1-42a3-beb5-20ed010aea4a?fid=f91940eef3384bcdbe96ee9aa3eefa04'
@@ -955,7 +955,7 @@ class hose:
 
         output_table = pd.DataFrame()
         bmk_time = btime(now.strftime('%Y-%m-%d %H:%M:%S'), -num_hours)
-        while from_time >= dt.datime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
+        while from_time >= dt.datetime.strptime(bmk_time, '%Y-%m-%d %H:%M:%S'):
 
             time.sleep(5)
 
@@ -990,11 +990,11 @@ class hose:
             def f(s):
                 if s.endswith('SA'):
                     s = s.rstrip(' SA')
-                    return dt.datime.strptime(s, '%d/%m/%Y %H:%M:%S')
+                    return dt.datetime.strptime(s, '%d/%m/%Y %H:%M:%S')
                 if s.endswith('CH'):
                     s = s.rstrip(' CH')
-                    return dt.datime.strptime(s, '%d/%m/%Y %H:%M:%S') \
-                           + timedelta(hours=12)
+                    return dt.datetime.strptime(s, '%d/%m/%Y %H:%M:%S') \
+                           + dt.timedelta(hours=12)
 
             time_text = [f(t) for t in time_text]
 
