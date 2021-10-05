@@ -34,15 +34,6 @@ def run(
         connect_DWH_CoSo,
         index_col='account_code',
     )
-    count_account = pd.read_sql(
-        "SELECT "
-        "COUNT('account_type') AS count, "
-        "account_type "
-        "FROM account "
-        "GROUP BY account_type",
-        connect_DWH_CoSo,
-        index_col='account_type',
-    )
     contract_type = pd.read_sql(
         "SELECT "
         "customer_information.sub_account, "
@@ -96,35 +87,11 @@ def run(
     margin_account = contract_type.loc[contract_type['contract_type']=='Ký Quỹ','account_code']
     period_account.loc[period_account.index.isin(margin_account),'remark'] = 'TKKQ'
     period_account['remark'].fillna('',inplace=True)
+    period_account.dropna(subset=['account_type'],inplace=True) # bỏ tài khoản quỹ
     period_account.loc[period_account['account_type'].str.startswith('Cá nhân'),'entity_type'] = 'CN'
     period_account.loc[period_account['account_type'].str.startswith('Tổ chức'),'entity_type'] = 'TC'
     account_open = period_account.loc[period_account['date_of_close'].isnull()]
     account_close = period_account.loc[period_account['date_of_close'].notnull()]
-
-    # Cuoi ky
-    closing_ind_domestic = count_account.loc['Cá nhân trong nước','count']
-    closing_ins_domestic = count_account.loc['Tổ chức trong nước','count']
-    closing_ind_foreign = count_account.loc['Cá nhân nước ngoài','count']
-    closing_ins_foreign = count_account.loc['Tổ chức nước ngoài','count']
-    closing_totaL_domestic = closing_ind_domestic + closing_ins_domestic
-    closing_totaL_foreign = closing_ind_foreign + closing_ins_foreign
-    closing_total = closing_totaL_domestic + closing_totaL_foreign
-
-    # Tinh bien dong TK
-    open_ind_domestic = (account_open['account_type']=='Cá nhân trong nước').sum()
-    open_ins_domestic = (account_open['account_type']== 'Tổ chức trong nước').sum()
-    open_ind_foreign = (account_open['account_type']=='Cá nhân nước ngoài').sum()
-    open_ins_foreign = (account_open['account_type']=='Tổ chức nước ngoài').sum()
-    close_ind_domestic =  (account_close['account_type']=='Cá nhân trong nước').sum()
-    close_ins_domestic = (account_close['account_type']=='Tổ chức trong nước').sum()
-    close_ind_foreign = (account_close['account_type']=='Cá nhân nước ngoài').sum()
-    close_ins_foreign = (account_close['account_type']=='Tổ chức nước ngoài').sum()
-    open_total_domestic = open_ind_domestic + open_ins_domestic
-    open_total_foreign = open_ind_foreign + open_ins_foreign
-    close_total_domestic = close_ind_domestic + close_ins_domestic
-    close_total_foreign = close_ind_foreign + close_ins_foreign
-    open_total = open_total_domestic + open_total_foreign
-    close_total = close_total_domestic + close_total_foreign
 
     ###########################################################################
     ###########################################################################
@@ -153,7 +120,7 @@ def run(
             'text_wrap': True,
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
-            'font_size': 12
+            'font_size': 9
         }
     )
     sup_title_format = workbook.add_format(
@@ -162,7 +129,7 @@ def run(
             'align': 'center',
             'valign': 'top',
             'font_name': 'Times New Roman',
-            'font_size': 12
+            'font_size': 11
         }
     )
     header_format = workbook.add_format(
@@ -201,28 +168,33 @@ def run(
         {
             'border': 1,
             'text_wrap': True,
+            'align': 'center',
+            'valign': 'vcenter',
             'num_format': 'dd\/mm\/yyyy',
             'font_name': 'Times New Roman',
             'font_size': 10
         }
     )
     sheet_motaikhoan = workbook.add_worksheet('Mở TK')
+    sheet_motaikhoan.hide_gridlines(option=2)
     # set column width
     sheet_motaikhoan.set_column('A:A',4)
     sheet_motaikhoan.set_column('B:B',30)
     sheet_motaikhoan.set_column('C:D',15)
     sheet_motaikhoan.set_column('E:E',60)
     sheet_motaikhoan.set_column('F:F',13)
-    sheet_motaikhoan.set_column('G:G',21)
+    sheet_motaikhoan.set_column('G:G',30)
     sheet_motaikhoan.set_column('H:H',6)
     sheet_motaikhoan.set_column('I:I',13)
     sheet_motaikhoan.set_column('J:J',12)
     sheet_motaikhoan.set_column('K:K',5)
-    sheet_motaikhoan.set_row(0,18)
-    sheet_motaikhoan.set_row(1,18)
-    sheet_motaikhoan.set_row(2,18)
-    sheet_motaikhoan.set_row(3,21)
-    sheet_motaikhoan.set_row(4,30)
+    sheet_motaikhoan.set_default_row(27) # set all row height = 27
+    sheet_motaikhoan.set_row(0,15)
+    sheet_motaikhoan.set_row(1,15)
+    sheet_motaikhoan.set_row(2,15)
+    sheet_motaikhoan.set_row(3,15)
+    sheet_motaikhoan.set_row(4,22)
+    sheet_motaikhoan.set_row(5,30)
     sheet_motaikhoan.merge_range('A1:K1',CompanyName,headline_format)
     sheet_motaikhoan.merge_range('A2:K2',CompanyAddress,headline_format)
     sheet_motaikhoan.merge_range('A3:K3',CompanyPhoneNumber,headline_format)
@@ -244,31 +216,31 @@ def run(
         'GHI CHÚ',
     ]
     sheet_motaikhoan.write_row('A6',headers,header_format)
-    stt_column = [i for i in np.arange(0,account_open.shape[0])+1]
-    sheet_motaikhoan.write_column('A4',stt_column,text_left_format)
-    sheet_motaikhoan.write_column('B4',account_open['customer_name'],text_left_format)
-    sheet_motaikhoan.write_column('C4',account_open.index,text_center_format)
-    sheet_motaikhoan.write_column('D4',account_open['customer_id_number'],text_center_format)
-    sheet_motaikhoan.write_column('E4',account_open['address'],text_left_format)
-    sheet_motaikhoan.write_column('F4',account_open['date_of_issue'],date_format)
-    sheet_motaikhoan.write_column('G4',account_open['place_of_issue'],text_center_format)
-    sheet_motaikhoan.write_column('H4',account_open['loai_hinh'],text_center_format)
-    sheet_motaikhoan.write_column('I4',account_open['date_of_open'],date_format)
-    sheet_motaikhoan.write_column('J4',account_open['nationality'],text_center_format)
-    sheet_motaikhoan.write_column('K4',account_open['remark'],text_center_format)
+    stt_column = np.arange(0,account_open.shape[0])+1
+    sheet_motaikhoan.write_column('A7',stt_column,text_center_format)
+    sheet_motaikhoan.write_column('B7',account_open['customer_name'],text_left_format)
+    sheet_motaikhoan.write_column('C7',account_open.index,text_center_format)
+    sheet_motaikhoan.write_column('D7',account_open['customer_id_number'],text_center_format)
+    sheet_motaikhoan.write_column('E7',account_open['address'],text_left_format)
+    sheet_motaikhoan.write_column('F7',account_open['date_of_issue'].map(convertNaTtoSpaceString),date_format)
+    sheet_motaikhoan.write_column('G7',account_open['place_of_issue'],text_center_format)
+    sheet_motaikhoan.write_column('H7',account_open['entity_type'],text_center_format)
+    sheet_motaikhoan.write_column('I7',account_open['date_of_open'].map(convertNaTtoSpaceString),date_format)
+    sheet_motaikhoan.write_column('J7',account_open['nationality'],text_center_format)
+    sheet_motaikhoan.write_column('K7',account_open['remark'],text_center_format)
 
     ###########################################################################
     ###########################################################################
     ###########################################################################
-
     # Write sheet DONG TAi KHOAN
+
     headline_format = workbook.add_format(
         {
             'bold': True,
             'text_wrap': True,
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
-            'font_size': 12
+            'font_size': 9
         }
     )
     sup_title_format = workbook.add_format(
@@ -277,7 +249,7 @@ def run(
             'align': 'center',
             'valign': 'top',
             'font_name': 'Times New Roman',
-            'font_size': 12
+            'font_size': 11
         }
     )
     header_format = workbook.add_format(
@@ -316,12 +288,16 @@ def run(
         {
             'border': 1,
             'text_wrap': True,
+            'align': 'center',
+            'valign': 'vcenter',
             'num_format': 'dd\/mm\/yyyy',
             'font_name': 'Times New Roman',
             'font_size': 10
         }
     )
     sheet_dongtaikhoan = workbook.add_worksheet('Đóng TK')
+    sheet_dongtaikhoan.hide_gridlines(option=2)
+
     sheet_dongtaikhoan.set_column('A:A',4)
     sheet_dongtaikhoan.set_column('B:B',30)
     sheet_dongtaikhoan.set_column('C:D',15)
@@ -330,134 +306,50 @@ def run(
     sheet_dongtaikhoan.set_column('G:G',21)
     sheet_dongtaikhoan.set_column('H:H',6)
     sheet_dongtaikhoan.set_column('I:I',13)
-    sheet_dongtaikhoan.set_column('J:J',12)
-    sheet_dongtaikhoan.set_column('K:K',5)
-    sheet_dongtaikhoan.set_row(0,18)
-    sheet_dongtaikhoan.set_row(1,18)
-    sheet_dongtaikhoan.set_row(2,18)
-    sheet_dongtaikhoan.set_row(3,21)
-    sheet_dongtaikhoan.set_row(4,30)
-    sheet_motaikhoan.merge_range('A1:L1',CompanyName,headline_format)
-    sheet_motaikhoan.merge_range('A2:L2',CompanyAddress,headline_format)
-    sheet_motaikhoan.merge_range('A3:L3',CompanyPhoneNumber,headline_format)
+    sheet_dongtaikhoan.set_column('J:K',12)
+    sheet_dongtaikhoan.set_column('L:L',5)
+    sheet_dongtaikhoan.set_default_row(27) # set all row height = 27
+    sheet_dongtaikhoan.set_row(0,15)
+    sheet_dongtaikhoan.set_row(1,15)
+    sheet_dongtaikhoan.set_row(2,15)
+    sheet_dongtaikhoan.set_row(3,15)
+    sheet_dongtaikhoan.set_row(4,22)
+    sheet_dongtaikhoan.set_row(5,30)
+    sheet_dongtaikhoan.merge_range('A1:L1',CompanyName,headline_format)
+    sheet_dongtaikhoan.merge_range('A2:L2',CompanyAddress,headline_format)
+    sheet_dongtaikhoan.merge_range('A3:L3',CompanyPhoneNumber,headline_format)
     month = end_date[5:7]
     year = end_date[:4]
     sheet_dongtaikhoan.merge_range('A4:L4',f'DANH SÁCH KHÁCH HÀNG ĐÓNG TÀI KHOẢN THÁNG {month}.{year}',sup_title_format)
     sheet_dongtaikhoan.merge_range('A5:L5',f'Kính gửi : SỞ GIAO DỊCH CHỨNG KHOÁN TP.HCM',sup_title_format)
-
-    ###########################################################################
-    ###########################################################################
-    ###########################################################################
-
-    # Write sheet THAY DOI THONG TIN
-
-    sheet_thaydoithongtin.merge_range('A2:A3','STT',header_format)
-    sheet_thaydoithongtin.merge_range('B2:B3','Tên khách hàng',header_format)
-    sheet_thaydoithongtin.merge_range('C2:C3','Mã TK cũ',header_format)
-    sheet_thaydoithongtin.merge_range('D2:D3','Ngày thay đổi thông tin',header_format)
-    sheet_thaydoithongtin.merge_range('E2:J2','Thay đổi thông tin về CMND/ Hộ chiếu/ Giấy ĐKKD',header_format)
-    sheet_thaydoithongtin.merge_range('K2:L2','Thay đổi thông tin về địa chỉ',header_format)
-    sheet_thaydoithongtin.merge_range('M2:N2','Thay đổi TT về Q.tịch',header_format)
-    sheet_thaydoithongtin.merge_range('O2:P2','Thay đổi thông tin về Ghi chú',header_format)
-    sub_header = [
-        'Số CMND/ Hộ chiếu/ Giấy ĐKKD cũ',
-        'Ngày cấp',
-        'Nơi cấp',
-        'Số CMND/ Hộ chiếu/ Giấy ĐKKD mới',
-        'Ngày cấp',
-        'Nơi cấp',
-        'Địa chỉ cũ',
-        'Địa chỉ mới',
-        'Quốc tịch cũ',
-        'Quốc tịch mới',
-        'Ghi chú cũ',
-        'Ghi chú mới',
+    headers = [
+        'STT',
+        'HỌ TÊN',
+        'MÃ TÀI KHOẢN',
+        'CMND/HỘ CHIẾU/GP ĐKKD',
+        'ĐỊA CHỈ',
+        'NGÀY CẤP',
+        'NƠI CẤP',
+        'LOẠI HÌNH',
+        'NGÀY MỞ',
+        'NGÀY ĐÓNG',
+        'QUỐC TỊCH',
+        'GHI CHÚ',
     ]
-    sheet_thaydoithongtin.write_row('E3',sub_header,header_format)
-    sheet_thaydoithongtin.write_row(
-        [f'({i})' for i in np.arange(1,customer_information_change.shape[1])+1],
-        header_format,
-    )
-    sheet_thaydoithongtin.write_column(
-        'A5',
-        [f'({i})' for i in np.arange(1,customer_information_change.shape[0])+1],
-        text_center_format,
-    )
-    sheet_thaydoithongtin.write_column(
-        'B5',
-        customer_information_change['old_customer_name'],
-        text_left_format,
-    )
-    sheet_thaydoithongtin.write_column(
-        'C5',
-        customer_information_change['old_id_number'],
-        text_center_format,
-    )
-    sheet_thaydoithongtin.write_column(
-        'D5',
-        customer_information_change['change_date'],
-        date_format,
-    )
-    sheet_thaydoithongtin.write_column(
-        'E5',
-        customer_information_change['old_id_number'],
-        text_center_format,
-    )
-    sheet_thaydoithongtin.write_column(
-        'F5',
-        customer_information_change['old_date_of_issue'],
-        date_format,
-    )
-    sheet_thaydoithongtin.write_column(
-        'G5',
-        customer_information_change['old_place_of_issue'],
-        text_center_format,
-    )
-    sheet_thaydoithongtin.write_column(
-        'H5',
-        customer_information_change['new_id_number'],
-        text_center_format,
-    )
-    sheet_thaydoithongtin.write_column(
-        'I5',
-        customer_information_change['new_date_of_issue'],
-        date_format,
-    )
-    sheet_thaydoithongtin.write_column(
-        'J5',
-        customer_information_change['new_place_of_issue'],
-        text_center_format,
-    )
-    sheet_thaydoithongtin.write_column(
-        'K5',
-        customer_information_change['old_address'],
-        text_left_format,
-    )
-    sheet_thaydoithongtin.write_column(
-        'L5',
-        customer_information_change['new_address'],
-        text_left_format,
-    )
-    sheet_thaydoithongtin.write_column(
-        'M5',
-        customer_information_change['old_nationality'],
-        text_center_format,
-    )
-    sheet_thaydoithongtin.write_column(
-        'N5',
-        customer_information_change['new_nationality'],
-        text_center_format,
-    )
-    sheet_thaydoithongtin.write_column(
-        'O5',
-        ['']*customer_information_change.shape[0],
-        text_left_format,
-    )
-    sheet_thaydoithongtin.write_column(
-        'P5',
-        ['']*customer_information_change.shape[0],
-        text_left_format,
-    )
+    sheet_dongtaikhoan.write_row('A6',headers,header_format)
+    stt_column = np.arange(0,account_close.shape[0])+1
+    sheet_dongtaikhoan.write_column('A7',stt_column,text_center_format)
+    sheet_dongtaikhoan.write_column('B7',account_close['customer_name'],text_left_format)
+    sheet_dongtaikhoan.write_column('C7',account_close.index,text_center_format)
+    sheet_dongtaikhoan.write_column('D7',account_close['customer_id_number'],text_center_format)
+    sheet_dongtaikhoan.write_column('E7',account_close['address'],text_left_format)
+    sheet_dongtaikhoan.write_column('F7',account_close['date_of_issue'].map(convertNaTtoSpaceString),date_format)
+    sheet_dongtaikhoan.write_column('G7',account_close['place_of_issue'],text_center_format)
+    sheet_dongtaikhoan.write_column('H7',account_close['entity_type'],text_center_format)
+    sheet_dongtaikhoan.write_column('I7',account_close['date_of_open'].map(convertNaTtoSpaceString),date_format)
+    sheet_dongtaikhoan.write_column('J7',account_close['date_of_close'].map(convertNaTtoSpaceString),date_format)
+    sheet_dongtaikhoan.write_column('K7',account_close['nationality'],text_center_format)
+    sheet_dongtaikhoan.write_column('L7',account_close['remark'],text_center_format)
 
     ###########################################################################
     ###########################################################################
@@ -470,7 +362,7 @@ def run(
             'text_wrap': True,
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
-            'font_size': 12
+            'font_size': 9
         }
     )
     sup_title_format = workbook.add_format(
@@ -479,14 +371,14 @@ def run(
             'align': 'center',
             'valign': 'top',
             'font_name': 'Times New Roman',
-            'font_size': 12
+            'font_size': 11
         }
     )
     header_format = workbook.add_format(
         {
             'border': 1,
             'bold': True,
-            'bg_color': '#99CCFF',
+            'bg_color': '#C0C0C0',
             'align': 'center',
             'valign': 'vcenter',
             'text_wrap': True,
@@ -517,36 +409,44 @@ def run(
     date_format = workbook.add_format(
         {
             'border': 1,
-            'text_wrap': True,
+            'align': 'center',
+            'valign': 'vcenter',
             'num_format': 'dd\/mm\/yyyy',
             'font_name': 'Times New Roman',
             'font_size': 10
         }
     )
-    sheet_dongtaikhoan = workbook.add_worksheet('Thay đổi Thông tin')
-    sheet_dongtaikhoan.set_column('A:A',4)
-    sheet_dongtaikhoan.set_column('B:B',30)
-    sheet_dongtaikhoan.set_column('C:D',13)
-    sheet_dongtaikhoan.set_column('E:E',13)
-    sheet_dongtaikhoan.set_column('F:G',11)
-    sheet_dongtaikhoan.set_column('H:H',13)
-    sheet_dongtaikhoan.set_column('I:J',11)
-    sheet_dongtaikhoan.set_column('J:J',12)
-    sheet_dongtaikhoan.set_column('K:L',35)
-    sheet_dongtaikhoan.set_column('M:P',10)
-    sheet_dongtaikhoan.set_row(0,18)
-    sheet_dongtaikhoan.set_row(1,18)
-    sheet_dongtaikhoan.set_row(2,18)
-    sheet_dongtaikhoan.set_row(3,21)
-    sheet_dongtaikhoan.set_row(4,30)
-    sheet_motaikhoan.merge_range('A1:P1',CompanyName,headline_format)
-    sheet_motaikhoan.merge_range('A2:P2',CompanyAddress,headline_format)
-    sheet_motaikhoan.merge_range('A3:P3',CompanyPhoneNumber,headline_format)
+    sheet_thaydoithongtin = workbook.add_worksheet('Thay đổi thông tin')
+    sheet_thaydoithongtin.hide_gridlines(option=2)
+    sheet_thaydoithongtin.set_column('A:A',4)
+    sheet_thaydoithongtin.set_column('B:B',25)
+    sheet_thaydoithongtin.set_column('C:F',13)
+    sheet_thaydoithongtin.set_column('G:G',24)
+    sheet_thaydoithongtin.set_column('H:I',13)
+    sheet_thaydoithongtin.set_column('J:J',24)
+    sheet_thaydoithongtin.set_column('K:L',26)
+    sheet_thaydoithongtin.set_column('M:P',8)
+    sheet_thaydoithongtin.set_row(0,15)
+    sheet_thaydoithongtin.set_row(1,15)
+    sheet_thaydoithongtin.set_row(2,15)
+    sheet_thaydoithongtin.set_row(3,15)
+    sheet_thaydoithongtin.set_row(4,22)
+    sheet_thaydoithongtin.set_row(5,30)
+    sheet_thaydoithongtin.merge_range('A1:P1',CompanyName,headline_format)
+    sheet_thaydoithongtin.merge_range('A2:P2',CompanyAddress,headline_format)
+    sheet_thaydoithongtin.merge_range('A3:P3',CompanyPhoneNumber,headline_format)
     month = end_date[5:7]
     year = end_date[:4]
-    sheet_dongtaikhoan.merge_range('A4:P4',f'DANH SÁCH KHÁCH HÀNG THAY ĐỔI THÔNG TIN THÁNG {month}.{year}',sup_title_format)
-    sheet_dongtaikhoan.merge_range('A5:P5',f'Kính gửi : SỞ GIAO DỊCH CHỨNG KHOÁN TP.HCM',sup_title_format)
-
+    sheet_thaydoithongtin.merge_range('A4:P4',f'DANH SÁCH KHÁCH HÀNG THAY ĐỖI THÔNG TIN THÁNG {month}.{year}',sup_title_format)
+    sheet_thaydoithongtin.merge_range('A5:P5',f'Kính gửi : SỞ GIAO DỊCH CHỨNG KHOÁN TP.HCM',sup_title_format)
+    sheet_thaydoithongtin.merge_range('A6:A7','STT',header_format)
+    sheet_thaydoithongtin.merge_range('B6:B7','Tên khách hàng',header_format)
+    sheet_thaydoithongtin.merge_range('C6:C7','Mã TK cũ',header_format)
+    sheet_thaydoithongtin.merge_range('D6:D7','Ngày thay đổi thông tin',header_format)
+    sheet_thaydoithongtin.merge_range('E6:J6','Thay đổi thông tin về CMND/ Hộ chiếu/ Giấy ĐKKD',header_format)
+    sheet_thaydoithongtin.merge_range('K6:L6','Thay đổi thông tin về địa chỉ',header_format)
+    sheet_thaydoithongtin.merge_range('M6:N6','Thay đổi TT về Q.tịch',header_format)
+    sheet_thaydoithongtin.merge_range('O6:P6','Thay đổi thông tin về Ghi chú',header_format)
     sub_header = [
         'Số CMND/ Hộ chiếu/ Giấy ĐKKD cũ',
         'Ngày cấp',
@@ -561,92 +461,87 @@ def run(
         'Ghi chú cũ',
         'Ghi chú mới',
     ]
-    sheet_thaydoithongtin.write_row('E3',sub_header,header_format)
-    sheet_thaydoithongtin.write_row(
-        [f'({i})' for i in np.arange(1,customer_information_change.shape[1])+1],
-        header_format,
-    )
+    sheet_thaydoithongtin.write_row('E7',sub_header,header_format)
     sheet_thaydoithongtin.write_column(
-        'A5',
-        [f'({i})' for i in np.arange(1,customer_information_change.shape[0])+1],
+        'A8',
+        [f'({i})' for i in np.arange(customer_information_change.shape[0])+1],
         text_center_format,
     )
     sheet_thaydoithongtin.write_column(
-        'B5',
+        'B8',
         customer_information_change['old_customer_name'],
         text_left_format,
     )
     sheet_thaydoithongtin.write_column(
-        'C5',
+        'C8',
         customer_information_change['old_id_number'],
         text_center_format,
     )
     sheet_thaydoithongtin.write_column(
-        'D5',
-        customer_information_change['change_date'],
+        'D8',
+        customer_information_change['change_date'].map(convertNaTtoSpaceString),
         date_format,
     )
     sheet_thaydoithongtin.write_column(
-        'E5',
-        customer_information_change['old_id_number'],
+        'E8',
+        customer_information_change['old_id_number'].map(convertNaTtoSpaceString),
         text_center_format,
     )
     sheet_thaydoithongtin.write_column(
-        'F5',
-        customer_information_change['old_date_of_issue'],
+        'F8',
+        customer_information_change['old_date_of_issue'].map(convertNaTtoSpaceString),
         date_format,
     )
     sheet_thaydoithongtin.write_column(
-        'G5',
+        'G8',
         customer_information_change['old_place_of_issue'],
         text_center_format,
     )
     sheet_thaydoithongtin.write_column(
-        'H5',
+        'H8',
         customer_information_change['new_id_number'],
         text_center_format,
     )
     sheet_thaydoithongtin.write_column(
-        'I5',
-        customer_information_change['new_date_of_issue'],
+        'I8',
+        customer_information_change['new_date_of_issue'].map(convertNaTtoSpaceString),
         date_format,
     )
     sheet_thaydoithongtin.write_column(
-        'J5',
+        'J8',
         customer_information_change['new_place_of_issue'],
         text_center_format,
     )
     sheet_thaydoithongtin.write_column(
-        'K5',
+        'K8',
         customer_information_change['old_address'],
         text_left_format,
     )
     sheet_thaydoithongtin.write_column(
-        'L5',
+        'L8',
         customer_information_change['new_address'],
         text_left_format,
     )
     sheet_thaydoithongtin.write_column(
-        'M5',
+        'M8',
         customer_information_change['old_nationality'],
         text_center_format,
     )
     sheet_thaydoithongtin.write_column(
-        'N5',
+        'N8',
         customer_information_change['new_nationality'],
         text_center_format,
     )
     sheet_thaydoithongtin.write_column(
-        'O5',
+        'O8',
         ['']*customer_information_change.shape[0],
         text_left_format,
     )
     sheet_thaydoithongtin.write_column(
-        'P5',
+        'P8',
         ['']*customer_information_change.shape[0],
         text_left_format,
     )
-
     ###########################################################################
     ###########################################################################
     ###########################################################################
@@ -658,7 +553,7 @@ def run(
             'text_wrap': True,
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
-            'font_size': 12
+            'font_size': 9
         }
     )
     sup_title_format = workbook.add_format(
@@ -667,7 +562,7 @@ def run(
             'align': 'center',
             'valign': 'top',
             'font_name': 'Times New Roman',
-            'font_size': 12
+            'font_size': 11
         }
     )
     header_format = workbook.add_format(
@@ -706,12 +601,16 @@ def run(
         {
             'border': 1,
             'text_wrap': True,
+            'align': 'center',
+            'valign': 'vcenter',
             'num_format': 'dd\/mm\/yyyy',
             'font_name': 'Times New Roman',
             'font_size': 10
         }
     )
     sheet_uyquyen = workbook.add_worksheet('Ủy Quyền')
+    sheet_uyquyen.hide_gridlines(option=2)
+
     # set column width
     sheet_uyquyen.set_column('A:A',4)
     sheet_uyquyen.set_column('B:B',21)
@@ -722,18 +621,20 @@ def run(
     sheet_uyquyen.set_column('H:H',14)
     sheet_uyquyen.set_column('I:I',28)
     sheet_uyquyen.set_column('J:J',14)
-    sheet_uyquyen.set_row(0,18)
-    sheet_uyquyen.set_row(1,18)
-    sheet_uyquyen.set_row(2,18)
-    sheet_uyquyen.set_row(3,21)
-    sheet_uyquyen.set_row(4,30)
-    sheet_uyquyen.merge_range('A1:K1',CompanyName,headline_format)
-    sheet_uyquyen.merge_range('A2:K2',CompanyAddress,headline_format)
-    sheet_uyquyen.merge_range('A3:K3',CompanyPhoneNumber,headline_format)
+    sheet_uyquyen.set_default_row(39) # set all row height = 39
+    sheet_uyquyen.set_row(0,15)
+    sheet_uyquyen.set_row(1,15)
+    sheet_uyquyen.set_row(2,15)
+    sheet_uyquyen.set_row(3,15)
+    sheet_uyquyen.set_row(4,22)
+    sheet_uyquyen.set_row(5,30)
+    sheet_uyquyen.merge_range('A1:J1',CompanyName,headline_format)
+    sheet_uyquyen.merge_range('A2:J2',CompanyAddress,headline_format)
+    sheet_uyquyen.merge_range('A3:J3',CompanyPhoneNumber,headline_format)
     month = end_date[5:7]
     year = end_date[:4]
-    sheet_uyquyen.merge_range('A4:K4',f'DANH SÁCH KHÁCH HÀNG ỦY QUYỀN THÁNG {month}.{year}',sup_title_format)
-    sheet_uyquyen.merge_range('A5:K5',f'Kính gửi : SỞ GIAO DỊCH CHỨNG KHOÁN TP.HCM',sup_title_format)
+    sheet_uyquyen.merge_range('A4:J4',f'DANH SÁCH KHÁCH HÀNG ỦY QUYỀN THÁNG {month}.{year}',sup_title_format)
+    sheet_uyquyen.merge_range('A5:J5',f'Kính gửi : SỞ GIAO DỊCH CHỨNG KHOÁN TP.HCM',sup_title_format)
     headers = [
         'STT',
         'TÊN NGƯỜI ỦY QUYỀN ',
@@ -749,18 +650,19 @@ def run(
     sheet_uyquyen.write_row('A6',headers,header_format)
     sheet_uyquyen.write_column('A7',np.arange(authorization.shape[0])+1,text_center_format)
     sheet_uyquyen.write_column('B7',authorization['authorizing_person_name'],text_left_format)
-    sheet_uyquyen.write_column('C7',authorization.index,text_center_format,text_center_format)
+    sheet_uyquyen.write_column('C7',authorization.index,text_center_format)
     sheet_uyquyen.write_column('D7',authorization['authorizing_person_id'],text_center_format)
     sheet_uyquyen.write_column('E7',authorization['authorizing_person_address'],text_left_format)
-    sheet_uyquyen.write_column('F7',authorization['date_of_authorization'],date_format)
+    sheet_uyquyen.write_column('F7',authorization['date_of_authorization'].map(convertNaTtoSpaceString),date_format)
     sheet_uyquyen.write_column('G7',authorization['authorized_person_name'],text_center_format)
     sheet_uyquyen.write_column('H7',authorization['authorized_person_id'],text_center_format)
-    sheet_uyquyen.write_column('I7',authorization['authorized_person_address',text_left_format])
-    sheet_uyquyen.write_column('J7', authorization['scope_of_authorization',text_center_format])
+    sheet_uyquyen.write_column('I7',authorization['authorized_person_address'],text_left_format)
+    sheet_uyquyen.write_column('J7', authorization['scope_of_authorization'],text_center_format)
 
     ###########################################################################
     ###########################################################################
     ###########################################################################
+    # Write to sheet Thay Doi Uy Quyen
 
     headline_format = workbook.add_format(
         {
@@ -768,7 +670,7 @@ def run(
             'text_wrap': True,
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
-            'font_size': 12
+            'font_size': 9
         }
     )
     sup_title_format = workbook.add_format(
@@ -777,7 +679,7 @@ def run(
             'align': 'center',
             'valign': 'top',
             'font_name': 'Times New Roman',
-            'font_size': 12
+            'font_size': 11
         }
     )
     header_format = workbook.add_format(
@@ -790,6 +692,14 @@ def run(
             'text_wrap': True,
             'font_name': 'Times New Roman',
             'font_size': 10
+        }
+    )
+    signature_format = workbook.add_format(
+        {
+            'align': 'center',
+            'valign': 'vcenter',
+            'font_name': 'Times New Roman',
+            'font_size': 12
         }
     )
     text_left_format = workbook.add_format(
@@ -816,13 +726,16 @@ def run(
         {
             'border': 1,
             'text_wrap': True,
+            'align': 'center',
+            'valign': 'vcenter',
             'num_format': 'dd\/mm\/yyyy',
             'font_name': 'Times New Roman',
             'font_size': 10
         }
     )
     sheet_thaydoiuyquyen = workbook.add_worksheet('Thay Đổi Ủy Quyền')
-    # set column width
+    sheet_thaydoiuyquyen.hide_gridlines(option=2)
+
     sheet_thaydoiuyquyen.set_column('A:A',4)
     sheet_thaydoiuyquyen.set_column('B:B',20)
     sheet_thaydoiuyquyen.set_column('C:D',12)
@@ -832,18 +745,20 @@ def run(
     sheet_thaydoiuyquyen.set_column('I:J',12)
     sheet_thaydoiuyquyen.set_column('K:L',20)
     sheet_thaydoiuyquyen.set_column('O:P',11)
-    sheet_thaydoiuyquyen.set_row(0,18)
-    sheet_thaydoiuyquyen.set_row(1,18)
-    sheet_thaydoiuyquyen.set_row(2,18)
-    sheet_thaydoiuyquyen.set_row(3,21)
-    sheet_thaydoiuyquyen.set_row(4,30)
+    sheet_thaydoiuyquyen.set_row(0,15)
+    sheet_thaydoiuyquyen.set_row(1,15)
+    sheet_thaydoiuyquyen.set_row(2,15)
+    sheet_thaydoiuyquyen.set_row(3,15)
+    sheet_thaydoiuyquyen.set_row(4,22)
+    sheet_thaydoiuyquyen.set_row(5,30)
+    sheet_thaydoiuyquyen.set_row(6,33)
     sheet_thaydoiuyquyen.merge_range('A1:P1',CompanyName,headline_format)
     sheet_thaydoiuyquyen.merge_range('A2:P2',CompanyAddress,headline_format)
     sheet_thaydoiuyquyen.merge_range('A3:P3',CompanyPhoneNumber,headline_format)
     month = end_date[5:7]
     year = end_date[:4]
-    sheet_thaydoiuyquyen.merge_range('A4:K4',f'DANH SÁCH KHÁCH HÀNG THAY ĐÔI ỦY QUYỀN GIAO DỊCH THÁNG {month}.{year}',sup_title_format)
-    sheet_thaydoiuyquyen.merge_range('A5:K5',f'Kính gửi : SỞ GIAO DỊCH CHỨNG KHOÁN TP.HCM',sup_title_format)
+    sheet_thaydoiuyquyen.merge_range('A4:P4',f'DANH SÁCH KHÁCH HÀNG THAY ĐÔI ỦY QUYỀN GIAO DỊCH THÁNG {month}.{year}',sup_title_format)
+    sheet_thaydoiuyquyen.merge_range('A5:P5',f'Kính gửi : SỞ GIAO DỊCH CHỨNG KHOÁN TP.HCM',sup_title_format)
     sheet_thaydoiuyquyen.merge_range('A6:A7','STT',header_format)
     sheet_thaydoiuyquyen.merge_range('B6:B7','Tên khách hàng uỷ quyền',header_format)
     sheet_thaydoiuyquyen.merge_range('C6:C7','Mã TK',header_format)
@@ -867,23 +782,23 @@ def run(
         'Thời hạn mới',
     ]
     sheet_thaydoiuyquyen.write_row('I7',sub_header,header_format)
-    sheet_thaydoiuyquyen.write_row('A8',[f'({i})' for i in np.arange(16)+1],header_format)
+    sheet_thaydoiuyquyen.write_row('A8',[f'({i})' for i in np.arange(16)+1],text_center_format)
     sheet_thaydoiuyquyen.write_column('A9',np.arange(authorization_change.shape[0])+1,text_center_format)
     sheet_thaydoiuyquyen.write_column('B9',authorization_change['authorizing_person_name'],text_left_format)
     sheet_thaydoiuyquyen.write_column('C9',authorization_change.index,text_center_format)
     sheet_thaydoiuyquyen.write_column('D9',authorization_change['authorizing_person_id'],text_left_format)
-    sheet_thaydoiuyquyen.write_column('E9',authorization_change['date_of_authorization'],date_format)
+    sheet_thaydoiuyquyen.write_column('E9',authorization_change['date_of_authorization'].map(convertNaTtoSpaceString),date_format)
     sheet_thaydoiuyquyen.write_column('F9',authorization_change['authorized_person_name'],text_center_format)
-    sheet_thaydoiuyquyen.write_column('G9',authorization_change['date_of_termination'],text_center_format)
-    sheet_thaydoiuyquyen.write_column('H9',authorization_change['date_of_change'],text_center_format)
+    sheet_thaydoiuyquyen.write_column('G9',authorization_change['date_of_termination'].map(convertNaTtoSpaceString),text_center_format)
+    sheet_thaydoiuyquyen.write_column('H9',authorization_change['date_of_change'].map(convertNaTtoSpaceString),text_center_format)
     sheet_thaydoiuyquyen.write_column('I9',authorization_change['old_authorized_person_id'],text_center_format)
     sheet_thaydoiuyquyen.write_column('J9',authorization_change['new_authorized_person_id'],text_center_format)
     sheet_thaydoiuyquyen.write_column('K9',authorization_change['old_authorized_person_address'],text_center_format)
     sheet_thaydoiuyquyen.write_column('L9',authorization_change['new_authorized_person_address'],text_center_format)
     sheet_thaydoiuyquyen.write_column('M9',authorization_change['old_scope_of_authorization'],text_center_format)
     sheet_thaydoiuyquyen.write_column('N9',authorization_change['new_scope_of_authorization'],text_center_format)
-    sheet_thaydoiuyquyen.write_column('O9',authorization_change['old_end_date'],text_center_format)
-    sheet_thaydoiuyquyen.write_column('P9',authorization_change['new_end_date'],text_center_format)
+    sheet_thaydoiuyquyen.write_column('O9',authorization_change['old_end_date'].map(convertNaTtoSpaceString),text_center_format)
+    sheet_thaydoiuyquyen.write_column('P9',authorization_change['new_end_date'].map(convertNaTtoSpaceString),text_center_format)
 
     row_of_signature = 7 + authorization_change.shape[0] + 2
     run_day = convert_int(run_time.day)
@@ -897,7 +812,6 @@ def run(
     ###########################################################################
     ###########################################################################
     ###########################################################################
-
 
     writer.close()
     if __name__ == '__main__':

@@ -383,6 +383,7 @@ def run(
         }
     )
     sheet_motaikhoan = workbook.add_worksheet('Mở TK')
+    sheet_motaikhoan.hide_gridlines(option=2)
     # set column width
     sheet_motaikhoan.set_column('A:A',4)
     sheet_motaikhoan.set_column('B:B',25)
@@ -475,6 +476,7 @@ def run(
         }
     )
     sheet_dongtaikhoan = workbook.add_worksheet('Đóng TK')
+    sheet_dongtaikhoan.hide_gridlines(option=2)
     # set column width
     sheet_dongtaikhoan.set_column('A:A',4)
     sheet_dongtaikhoan.set_column('B:B',25)
@@ -483,7 +485,13 @@ def run(
     sheet_dongtaikhoan.set_column('F:F',12)
     sheet_dongtaikhoan.set_column('G:G',30)
     sheet_dongtaikhoan.set_column('H:K',12)
-    sheet_dongtaikhoan.set_row(0,30)
+    sheet_dongtaikhoan.set_default_row(27) # set all row height = 27
+    sheet_dongtaikhoan.set_row(0,15)
+    sheet_dongtaikhoan.set_row(1,15)
+    sheet_dongtaikhoan.set_row(2,15)
+    sheet_dongtaikhoan.set_row(3,15)
+    sheet_dongtaikhoan.set_row(4,22)
+    sheet_dongtaikhoan.set_row(5,30)
     sheet_dongtaikhoan.merge_range('A1:K1','II. Danh sách khách hàng đóng tài khoản',sup_title_format)
     headers = [
         'STT',
@@ -570,6 +578,7 @@ def run(
     )
     sheet_thaydoithongtin = workbook.add_worksheet('Thay đổi thông tin')
     sheet_thaydoithongtin.hide_gridlines(option=2)
+
     sheet_thaydoithongtin.set_column('A:A',4)
     sheet_thaydoithongtin.set_column('B:B',25)
     sheet_thaydoithongtin.set_column('C:F',13)

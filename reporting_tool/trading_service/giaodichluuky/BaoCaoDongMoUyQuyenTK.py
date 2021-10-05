@@ -1114,21 +1114,14 @@ def run(
     year = end_date[:4]
     sheet_dongtaikhoan.merge_range('A4:L4',f'DANH SÁCH KHÁCH HÀNG ĐÓNG TÀI KHOẢN THÁNG {month}.{year}',sup_title_format)
     sheet_dongtaikhoan.merge_range('A5:L5',f'Kính gửi : SỞ GIAO DỊCH CHỨNG KHOÁN TP.HCM',sup_title_format)
-
-    ###########################################################################
-    ###########################################################################
-    ###########################################################################
-
-    # Write sheet THAY DOI THONG TIN
-
-    sheet_thaydoithongtin.merge_range('A2:A3','STT',header_format)
-    sheet_thaydoithongtin.merge_range('B2:B3','Tên khách hàng',header_format)
-    sheet_thaydoithongtin.merge_range('C2:C3','Mã TK cũ',header_format)
-    sheet_thaydoithongtin.merge_range('D2:D3','Ngày thay đổi thông tin',header_format)
-    sheet_thaydoithongtin.merge_range('E2:J2','Thay đổi thông tin về CMND/ Hộ chiếu/ Giấy ĐKKD',header_format)
-    sheet_thaydoithongtin.merge_range('K2:L2','Thay đổi thông tin về địa chỉ',header_format)
-    sheet_thaydoithongtin.merge_range('M2:N2','Thay đổi TT về Q.tịch',header_format)
-    sheet_thaydoithongtin.merge_range('O2:P2','Thay đổi thông tin về Ghi chú',header_format)
+    sheet_dongtaikhoan.merge_range('A6:A7','STT',header_format)
+    sheet_dongtaikhoan.merge_range('B6:B7','Tên khách hàng',header_format)
+    sheet_dongtaikhoan.merge_range('C6:C7','Mã TK cũ',header_format)
+    sheet_dongtaikhoan.merge_range('D6:D7','Ngày thay đổi thông tin',header_format)
+    sheet_dongtaikhoan.merge_range('E6:J7','Thay đổi thông tin về CMND/ Hộ chiếu/ Giấy ĐKKD',header_format)
+    sheet_dongtaikhoan.merge_range('K6:L7','Thay đổi thông tin về địa chỉ',header_format)
+    sheet_dongtaikhoan.merge_range('M6:N7','Thay đổi TT về Q.tịch',header_format)
+    sheet_dongtaikhoan.merge_range('O6:P7','Thay đổi thông tin về Ghi chú',header_format)
     sub_header = [
         'Số CMND/ Hộ chiếu/ Giấy ĐKKD cũ',
         'Ngày cấp',
@@ -1143,87 +1136,87 @@ def run(
         'Ghi chú cũ',
         'Ghi chú mới',
     ]
-    sheet_thaydoithongtin.write_row('E3',sub_header,header_format)
-    sheet_thaydoithongtin.write_row(
+    sheet_dongtaikhoan.write_row('E3',sub_header,header_format)
+    sheet_dongtaikhoan.write_row(
         [f'({i})' for i in np.arange(1,customer_information_change.shape[1])+1],
         header_format,
     )
-    sheet_thaydoithongtin.write_column(
+    sheet_dongtaikhoan.write_column(
         'A5',
         [f'({i})' for i in np.arange(1,customer_information_change.shape[0])+1],
         text_center_format,
     )
-    sheet_thaydoithongtin.write_column(
+    sheet_dongtaikhoan.write_column(
         'B5',
         customer_information_change['old_customer_name'],
         text_left_format,
     )
-    sheet_thaydoithongtin.write_column(
+    sheet_dongtaikhoan.write_column(
         'C5',
         customer_information_change['old_id_number'],
         text_center_format,
     )
-    sheet_thaydoithongtin.write_column(
+    sheet_dongtaikhoan.write_column(
         'D5',
         customer_information_change['change_date'],
         date_format,
     )
-    sheet_thaydoithongtin.write_column(
+    sheet_dongtaikhoan.write_column(
         'E5',
         customer_information_change['old_id_number'],
         text_center_format,
     )
-    sheet_thaydoithongtin.write_column(
+    sheet_dongtaikhoan.write_column(
         'F5',
         customer_information_change['old_date_of_issue'],
         date_format,
     )
-    sheet_thaydoithongtin.write_column(
+    sheet_dongtaikhoan.write_column(
         'G5',
         customer_information_change['old_place_of_issue'],
         text_center_format,
     )
-    sheet_thaydoithongtin.write_column(
+    sheet_dongtaikhoan.write_column(
         'H5',
         customer_information_change['new_id_number'],
         text_center_format,
     )
-    sheet_thaydoithongtin.write_column(
+    sheet_dongtaikhoan.write_column(
         'I5',
         customer_information_change['new_date_of_issue'],
         date_format,
     )
-    sheet_thaydoithongtin.write_column(
+    sheet_dongtaikhoan.write_column(
         'J5',
         customer_information_change['new_place_of_issue'],
         text_center_format,
     )
-    sheet_thaydoithongtin.write_column(
+    sheet_dongtaikhoan.write_column(
         'K5',
         customer_information_change['old_address'],
         text_left_format,
     )
-    sheet_thaydoithongtin.write_column(
+    sheet_dongtaikhoan.write_column(
         'L5',
         customer_information_change['new_address'],
         text_left_format,
     )
-    sheet_thaydoithongtin.write_column(
+    sheet_dongtaikhoan.write_column(
         'M5',
         customer_information_change['old_nationality'],
         text_center_format,
     )
-    sheet_thaydoithongtin.write_column(
+    sheet_dongtaikhoan.write_column(
         'N5',
         customer_information_change['new_nationality'],
         text_center_format,
     )
-    sheet_thaydoithongtin.write_column(
+    sheet_dongtaikhoan.write_column(
         'O5',
         ['']*customer_information_change.shape[0],
         text_left_format,
     )
-    sheet_thaydoithongtin.write_column(
+    sheet_dongtaikhoan.write_column(
         'P5',
         ['']*customer_information_change.shape[0],
         text_left_format,
