@@ -5,14 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoQuy/Q2.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (old) Q2.2021.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoQuy/Q3.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (old) Q3.2021.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/06.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (old) 06.2021.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (old) 09.2021.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/country_code.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (new) 09.2021.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phs/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/phs/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HNX.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HNX.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HOSEold.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HOSEold.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HOSEnew.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HOSEnew.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/HNX - Danh sách KH đóng mở ủy quyền tài khoản PHS 09.2021.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/HNX - Danh sách KH đóng mở ủy quyền tài khoản PHS 09.2021.xlsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +76,7 @@
       <recent name="C:\Users\hiepdang\PycharmProjects\datadriven-project\reporting_tool\trading_service\data_validation" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.BaoCaoDongMoUyQuyenTK_HOSEold">
+  <component name="RunManager" selected="Python.BaoCaoDongMoUyQuyenTK_HNX">
     <configuration name="BaoCaoDongMoUyQuyenTK_HNX" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -96,6 +95,24 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="BaoCaoDongMoUyQuyenTK_HOSEnew" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DataAnalytics" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HOSEnew.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="BaoCaoDongMoUyQuyenTK_HOSEold" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -106,24 +123,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HOSEold.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="newsts" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="DataAnalytics" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/text_mining" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/text_mining/newsts.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -169,19 +168,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.newsts" />
       <item itemvalue="Python.run_news_ts" />
       <item itemvalue="Python.run_warning_rmd" />
       <item itemvalue="Python.BaoCaoDongMoUyQuyenTK_HNX" />
       <item itemvalue="Python.BaoCaoDongMoUyQuyenTK_HOSEold" />
+      <item itemvalue="Python.BaoCaoDongMoUyQuyenTK_HOSEnew" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.BaoCaoDongMoUyQuyenTK_HOSEold" />
-        <item itemvalue="Python.BaoCaoDongMoUyQuyenTK_HOSEold" />
-        <item itemvalue="Python.BaoCaoDongMoUyQuyenTK_HOSEold" />
         <item itemvalue="Python.BaoCaoDongMoUyQuyenTK_HNX" />
         <item itemvalue="Python.BaoCaoDongMoUyQuyenTK_HNX" />
+        <item itemvalue="Python.BaoCaoDongMoUyQuyenTK_HOSEnew" />
+        <item itemvalue="Python.BaoCaoDongMoUyQuyenTK_HOSEold" />
+        <item itemvalue="Python.BaoCaoDongMoUyQuyenTK_HOSEold" />
       </list>
     </recent_temporary>
   </component>
@@ -274,7 +273,14 @@
       <option name="project" value="LOCAL" />
       <updated>1633351678921</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Hiep Dang 04/10/2021">
+      <created>1633408359122</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1633408359122</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

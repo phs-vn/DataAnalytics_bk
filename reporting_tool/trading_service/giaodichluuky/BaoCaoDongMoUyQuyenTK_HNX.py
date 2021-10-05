@@ -257,7 +257,7 @@ def run(
     sheet_tonghop = workbook.add_worksheet('Tông hợp')
     sheet_tonghop.hide_gridlines(option=2)
 
-    sheet_tonghop.set_column('A:A',11)
+    sheet_tonghop.set_column('A:A',8)
     sheet_tonghop.set_column('B:B',26)
     sheet_tonghop.set_column('C:F',22)
     sheet_tonghop.set_row(1,34)
@@ -271,9 +271,9 @@ def run(
     sheet_tonghop.merge_range('A2:F2',note_title,sup_note_format)
     sheet_tonghop.merge_range('A4:F4','Kính gửi: Sở Giao dịch Chứng khoán Hà Nội',kinhgui_format)
     sheet_tonghop.merge_range('A6:B6','Tên thành viên:',str_bold)
-    sheet_tonghop.merge_range('C6:D6','Công ty Cổ phần chứng khoán Phú Hưng',str_bold)
+    sheet_tonghop.merge_range('C6:D6',CompanyName,str_bold)
     sheet_tonghop.merge_range('A7:B7','Mã thành viên:',str_bold)
-    sheet_tonghop.write('C7','022',str_bold)
+    sheet_tonghop.write('C7',CompanyCode,str_bold)
     sheet_tonghop.write('E7','Kỳ báo cáo:',str_bold_center)
     sheet_tonghop.write('F7',f'Tháng {end_date[5:7]} Năm {end_date[:4]}',str_bold)
     sheet_tonghop.merge_range('A9:B9','I. Tổng hợp',str_bold)
@@ -484,7 +484,7 @@ def run(
     sheet_dongtaikhoan.set_column('E:E',70)
     sheet_dongtaikhoan.set_column('F:F',12)
     sheet_dongtaikhoan.set_column('G:G',30)
-    sheet_dongtaikhoan.set_column('H:K',12)
+    sheet_dongtaikhoan.set_column('H:L',12)
     sheet_dongtaikhoan.set_default_row(27) # set all row height = 27
     sheet_dongtaikhoan.set_row(0,15)
     sheet_dongtaikhoan.set_row(1,15)
@@ -492,7 +492,7 @@ def run(
     sheet_dongtaikhoan.set_row(3,15)
     sheet_dongtaikhoan.set_row(4,22)
     sheet_dongtaikhoan.set_row(5,30)
-    sheet_dongtaikhoan.merge_range('A1:K1','II. Danh sách khách hàng đóng tài khoản',sup_title_format)
+    sheet_dongtaikhoan.merge_range('A1:L1','II. Danh sách khách hàng đóng tài khoản',sup_title_format)
     headers = [
         'STT',
         'Tên khách hàng',
@@ -503,6 +503,7 @@ def run(
         'Nơi cấp',
         'Loại hình',
         'Ngày mở',
+        'Ngày đóng',
         'Quốc tịch',
         'Ghi chú',
     ]
@@ -519,8 +520,9 @@ def run(
     sheet_dongtaikhoan.write_column('G4',account_close['place_of_issue'],text_center_format)
     sheet_dongtaikhoan.write_column('H4',account_close['entity_type'],text_center_format)
     sheet_dongtaikhoan.write_column('I4',account_close['date_of_open'].map(convertNaTtoSpaceString),date_format)
-    sheet_dongtaikhoan.write_column('J4',account_close['nationality'],text_center_format)
-    sheet_dongtaikhoan.write_column('K4',account_close['remark'],text_center_format)
+    sheet_dongtaikhoan.write_column('J4',account_close['date_of_close'].map(convertNaTtoSpaceString),date_format)
+    sheet_dongtaikhoan.write_column('K4',account_close['nationality'],text_center_format)
+    sheet_dongtaikhoan.write_column('L4',account_close['remark'],text_center_format)
 
     ###########################################################################
     ###########################################################################
@@ -588,7 +590,8 @@ def run(
     sheet_thaydoithongtin.set_column('K:L',26)
     sheet_thaydoithongtin.set_column('M:P',8)
     sheet_thaydoithongtin.set_row(0,30)
-    sheet_thaydoithongtin.set_row(1,34)
+    sheet_thaydoithongtin.set_row(1,28)
+    sheet_thaydoithongtin.set_row(2,39)
 
     sheet_thaydoithongtin.merge_range('A1:P1','IV. Danh sách khách hàng thay đổi thông tin',sup_title_format)
     sheet_thaydoithongtin.merge_range('A2:A3','STT',header_format)
@@ -871,7 +874,7 @@ def run(
     sheet_thaydoiuyquyen.set_column('K:L',17)
     sheet_thaydoiuyquyen.set_column('M:P',12)
     sheet_thaydoiuyquyen.set_row(0,30)
-    sheet_thaydoiuyquyen.set_row(1,36)
+    sheet_thaydoiuyquyen.set_row(1,30)
     sheet_thaydoiuyquyen.set_row(2,36)
 
     sheet_thaydoiuyquyen.merge_range(
