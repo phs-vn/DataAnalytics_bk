@@ -654,17 +654,17 @@ class post:
         hose_tintonghop_sheet.set_column('F:F',80)
         hose_tintonghop_sheet.write_row('A1',hose_tintonghop,header_fmt)
         for col in range(hose_tintonghop.shape[1]):
-            for row in range(hnx_tintuso.shape[0]):
-                if col == 0 and mask_hose_tintonghop.loc[row] == True:
+            for row in range(hose_tintonghop.shape[0]):
+                if col == 0 and mask_hose_tintonghop.iloc[row] == True:
                     hose_tintonghop_sheet.write(row+1,col,hose_tintonghop.iloc[row,col],highlight_time_fmt)
-                elif col != 0 and mask_hose_tintonghop.loc[row] == True:
+                elif col != 0 and mask_hose_tintonghop.iloc[row] == True:
                     hose_tintonghop_sheet.write(row+1,col,hose_tintonghop.iloc[row,col],highlight_regular_fmt)
-                elif col == 0 and mask_hose_tintonghop.loc[row] == False:
+                elif col == 0 and mask_hose_tintonghop.iloc[row] == False:
                     hose_tintonghop_sheet.write(row+1,col,hose_tintonghop.iloc[row,col],time_fmt)
                 else:
                     hose_tintonghop_sheet.write(row+1,col,hose_tintonghop.iloc[row,col],regular_fmt)
 
-        writer.save()
+        writer.close()
 
 
 post = post()

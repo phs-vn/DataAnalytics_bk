@@ -1,11 +1,23 @@
 from function_phs import *
 
 # Risk Database Information
-driver_rmd = '{SQL Server}'
-server_rmd = 'SRV-RPT'
-db_rmd = 'RiskDb'
-id_rmd = 'hiep'
-password_rmd = '5B7Cv6huj2FcGEM4'
+driver_RMD = '{SQL Server}'
+server_RMD = 'SRV-RPT'
+db_RMD = 'RiskDb'
+id_RMD = 'hiep'
+password_RMD = '5B7Cv6huj2FcGEM4'
+
+connect_RMD = pyodbc.connect(
+    f'Driver={driver_RMD};'
+    f'Server={server_RMD};'
+    f'Database={db_RMD};'
+    f'uid={id_RMD};'
+    f'pwd={password_RMD}'
+)
+TableNames_DWH_CoSo = pd.read_sql(
+    'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES',
+    connect_RMD,
+)
 
 # DWH-CoSo Database Information
 driver_DWH_CoSo = '{SQL Server}'
@@ -21,7 +33,7 @@ connect_DWH_CoSo = pyodbc.connect(
     f'uid={id_DWH_CoSo};'
     f'pwd={password_DWH_CoSo}'
 )
-TableNames_DWH_CoSo = pd.read_sql(
+TableNames_RMD = pd.read_sql(
     'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES',
     connect_DWH_CoSo
 )

@@ -1,4 +1,5 @@
 from request_phs.stock import *
+from request_phs import *
 
 rf = 0.045
 
@@ -59,7 +60,7 @@ class issuance:
         year_days = 0
         start = f'{t[:4]}-01-01'
         end = f'{t[:4]}-12-31'
-        while datetime.strptime(start, '%Y-%m-%d') < datetime.strptime(end,'%Y-%m-%d'):
+        while dt.datetime.strptime(start,'%Y-%m-%d') < dt.datetime.strptime(end,'%Y-%m-%d'):
             year_days += 1
             start = bdate(start, 1)
 
@@ -68,7 +69,7 @@ class issuance:
 
         remaining_days = 0
         start = t
-        while datetime.strptime(start, '%Y-%m-%d') < datetime.strptime(T,'%Y-%m-%d'):
+        while dt.datetime.strptime(start, '%Y-%m-%d') < dt.datetime.strptime(T,'%Y-%m-%d'):
             remaining_days += 1
             start = bdate(start, 1)
 
@@ -140,12 +141,18 @@ class preprocessing:
         if not ticker_filter.any():
             raise NoBacktestData(f'{ticker} has no backtest data')
 
-        self.test_data = pd.read_csv(join(dirname(realpath(__file__)),'backtest_data','PriceTable.csv'),
-                                     usecols=['<Ticker>','<Close>','<Date>'])
-        self.test_data.rename({'<Ticker>':'CW',
-                               '<Date>':'Date',
-                               '<Close>':'Price'},
-                              axis=1, inplace=True)
+        self.test_data = pd.read_csv(
+            join(dirname(realpath(__file__)),'backtest_data','PriceTable.csv'),
+            usecols=['<Ticker>','<Close>','<Date>']
+        )
+        self.test_data.rename(
+            {
+                '<Ticker>':'CW',
+                '<Date>':'Date',
+                '<Close>':'Price'
+            },
+            axis=1, inplace=True
+        )
         ticker_filter = self.test_data['CW'].map(lambda x: x[1:4]).isin([ticker])
         self.test_data = self.test_data.loc[ticker_filter]
         self.test_data.sort_values(['CW','Date'], inplace=True)
@@ -521,6 +528,132 @@ class multiple_backtest:
         report_table.to_excel(join(dirname(folder),'FinalReport.xlsx'))
 
         return report_table
+
+
+class forwardtest:
+
+    all_stock = [
+        'ACB',
+        'FPT',
+        'HDB',
+        'HPG',
+        'KDH',
+        'MBB',
+        'MSN',
+        'MWG',
+        'NVL',
+        'PDR',
+        'PNJ',
+        'SSI',
+        'STB',
+        'TCB',
+        'TPB',
+        'VHM',
+        'VIC',
+        'VJC',
+        'VNM',
+        'VPB',
+        'VRE',
+    ]
+
+    def filter_stock(
+            self,
+            c:int,
+            score_ratio:str,
+    ) \
+            -> pd.DataFrame:
+
+        """
+        :param c: Total capital for CW issuance
+        :param score_ratio: weights of liquidity score and competition score.
+        Ex: '50:50', '40:60'
+        """
+
+        last_working_date = bdate(filter_date,-1)
+        stock_data = pd.read_sql(
+            f"EXEC [dbo].[spStockIntraday] " \
+            f"@FROM_DATE = N'{last_working_date}', " \
+            f"@TO_DATE = N'{last_working_date}'",
+            connect_RMD,
+            index_col='SYMBOL',
+        )
+        cw_data_hose = pd.read_sql(
+            f"EXEC [dbo].[spCoveredWarrantIntraday] " \
+            f"@FROM_DATE = N'{last_working_date}', " \
+            f"@TO_DATE = N'{last_working_date}'",
+            connect_RMD,
+            index_col='SYMBOL',
+        )
+        cw_data_vstock = pd.read_excel(
+            'date_price_of_issuance.xlsx',
+            names=['SYMBOL','ISSUANCE_DATE','ISSUANCE_PRICE','FIRST_TRADING_DATE','STATUS'],
+            index_col='SYMBOL')
+        cw_data = pd.concat([cw_data_hose,cw_data_vstock],axis=1)
+        cw_data = cw_data[[
+            'UNDERLYING_SYMBOL',
+            'ISSUER_NAME',
+            'LISTED_SHARE',
+            'TRADING_DATE',
+            'ISSUANCE_DATE',
+            'MATURITY_DATE',
+            'EXERCISE_RATIO',
+            'ISSUANCE_PRICE',
+            'EXERCISE_PRICE',
+        ]]
+        cw_data.dropna(how='any',inplace=True)
+        cw_data['TRADING_DATE'] = cw_data['TRADING_DATE'].str.split().str.get(0)
+        cw_data[['ISSUANCE_DATE','MATURITY_DATE']] = cw_data[['ISSUANCE_DATE','MATURITY_DATE']].applymap(
+            lambda x: f"{x.split('/')[2]}-{x.split('/')[1]}-{x.split('/')[0]}"
+        )
+        cw_data['EXERCISE_RATIO'] = cw_data['EXERCISE_RATIO'].str.split(':').str.get(0).astype(np.float64)
+        cw_data['EXERCISE_PRICE'] *= 0.1
+        cw_data['CW_VALUATION'] = np.nan
+        for row in range(cw_data.shape[0]):
+            stock = cw_data.iloc[row,cw_data.columns.get_loc('UNDERLYING_SYMBOL')]
+            K = cw_data.iloc[row,cw_data.columns.get_loc('EXERCISE_PRICE')]
+            T = cw_data.iloc[row,cw_data.columns.get_loc('MATURITY_DATE')]
+            t = cw_data.iloc[row,cw_data.columns.get_loc('ISSUANCE_DATE')]
+            k = cw_data.iloc[row,cw_data.columns.get_loc('EXERCISE_RATIO')]
+            n = 1
+            r = rf
+            val = issuance(stock,K,T,t,k,n,r).valuation()
+            cw_data.iloc[row,cw_data.columns.get_loc('CW_VALUATION')] = val
+
+        cw_data['DISCOUNT_RATE'] = cw_data['ISSUANCE_PRICE'] / cw_data['CW_VALUATION'] - 1
+        discount_rate = cw_data.groupby('UNDERLYING_SYMBOL')['DISCOUNT_RATE'].mean()
+
+        result = pd.DataFrame(index=self.all_stock)
+        result['n_stock'] = c / (result.index.map(ta.last) * 1000)
+        result['foreign_room'] = stock_data['ROOM']
+        # Foreign Room Condition
+        result.loc[result['n_stock']<result['foreign_room'],'room_condition'] = 'Passed'
+        result.loc[result['n_stock']>=result['foreign_room'],'room_condition'] = 'Failed'
+        # 3M Average Volume
+        f = lambda x: ta.hist(x).tail(66)['total_volume'].mean()
+        result['3m_avg_volume'] = result.index.map(f)
+        # Liquidity Percentage
+        result.loc[result['room_condition']=='Passed','liquidity_pct'] = result['n_stock'] / result['3m_avg_volume']
+        # Discount Rate
+        result.loc[result['room_condition']=='Passed','discount_rate'] = discount_rate
+        result['discount_rate'].fillna('No Issuer',inplace=True)
+        # Liquidity Score
+        result['liquidity_score'] = result.loc[result['liquidity_pct']!='Failed','liquidity_pct'].astype(np.float64).rank(ascending=False)
+        # Competition Score
+        result['competition_score'] = discount_rate.loc[result['room_condition']=='Passed'].rank()
+        result['competition_score'].fillna(result['competition_score'].max()+1,inplace=True)
+        # Score Ratio
+        result.loc[result['room_condition']=='Passed','score_ratio'] = score_ratio
+        # Final Score
+        liquidity_weight = int(score_ratio.split(':')[0]) / 100
+        competition_weight = int(score_ratio.split(':')[1]) / 100
+        liquidity_component = result.loc[result['room_condition']=='Passed','liquidity_score'] * liquidity_weight
+        competition_component = result.loc[result['room_condition']=='Passed','competition_score'] * competition_weight
+        result['final_score'] =  liquidity_component + competition_component
+
+        result.sort_values('final_score',ascending=False,inplace=True)
+        result.fillna('Failed',inplace=True)
+
+        return result
 
 
 def computeMIRR(CF_Series):
