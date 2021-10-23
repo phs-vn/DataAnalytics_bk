@@ -1,6 +1,6 @@
 from request_phs.stock import *
-from breakeven_price.monte_carlo import monte_carlo
-from text_mining import newsts as newsts
+from breakeven_price import monte_carlo
+from text_mining import newsts
 from text_mining import newsrmd
 
 class post:
@@ -12,10 +12,9 @@ class post:
     def breakeven(
             tickers:list=None,
             exchanges:list=None,
-            alpha:float=0.05,
-            standard:str='bics',
-            level:int=1,
-    ) -> pd.DataFrame:
+            alpha:float=0.05
+    ) \
+            -> pd.DataFrame:
 
         """
         This method post Monte Carlo model's results in breakeven_price
@@ -24,8 +23,6 @@ class post:
         :param tickers: list of tickers, if 'all': run all tickers
         :param exchanges: list of exchanges, if 'all': run all tickers
         :param alpha: significant level of statistical tests
-        :param standard: Industry Classification Standard for Credit Rating
-        :param level: level of classification
         :return: pandas.DataFrame
         """
 
@@ -47,20 +44,6 @@ class post:
         elif tickers is not None and tickers != 'all':
             pass
 
-        # CREDIT RATING
-        rating_path = join(realpath(dirname(dirname(__file__))),'credit_rating','result')
-        # adjust result_table_gen
-        gen_table = pd.read_csv(join(rating_path,'result_table_gen.csv'),index_col=['ticker'])
-        gen_table = gen_table.loc[gen_table['level']==f'{standard}_l{level}']
-        gen_table.drop(['standard','level','industry'],axis=1,inplace=True)
-        # merge to ready-to-use result table
-        bank_table = pd.read_csv(join(rating_path,'result_table_bank.csv'),index_col=['ticker'])
-        ins_table = pd.read_csv(join(rating_path,'result_table_ins.csv'),index_col=['ticker'])
-        sec_table = pd.read_csv(join(rating_path,'result_table_sec.csv'),index_col=['ticker'])
-        rating_table = pd.concat([gen_table,bank_table,ins_table,sec_table])
-        rating_table.drop(['BM_'],inplace=True)
-        rating_table.fillna('Not enough data',inplace=True)
-
         network_table_path = join(destination_dir_network,'tables','result.csv')
         table = pd.DataFrame(columns=['ticker','Breakeven Price'])
         table.set_index(keys=['ticker'], inplace=True)
@@ -69,14 +52,14 @@ class post:
         now = dt.datetime.now()
         github_file_name = f'{now.day}.{now.month}.{now.year}.csv'
         github_table_path = join(destination_dir_github,github_file_name)
-        table = pd.DataFrame(columns=['Ticker','Group','BreakFeven Price','1% at Risk','3% at Risk','5% at Risk','Proposed Price'])
+        table = pd.DataFrame(columns=['Ticker','0% at Risk','1% at Risk','3% at Risk','5% at Risk','Groupp','Breakeven Price'])
         table.set_index(keys=['Ticker'],inplace=True)
         table.to_csv(github_table_path)
 
         rmd_file_name = f'{now.day}.{now.month}.{now.year}.csv'
         rmd_table_path = join(destination_dir_rmd,rmd_file_name)
         table = pd.DataFrame(
-            columns=['Ticker','Group','Breakeven Price','Proposed Price']
+            columns=['Ticker','Group','Breakeven Price']
         )
         table.set_index(keys=['Ticker'], inplace=True)
         table.to_csv(rmd_table_path)
@@ -87,36 +70,18 @@ class post:
             alpha_range = np.insert(alpha_range,0,alpha)
             for chosen_alpha in alpha_range:
                 try:
-                    rating = rating_table.loc[ticker,rating_table.columns[-1]]
-                    breakeven_price,lv1_price,lv2_price,lv3_price = monte_carlo(ticker=ticker,alpha=chosen_alpha)
-                    f = lambda x: int(adjprice(x).replace(',',''))
-                    breakeven_price = f(breakeven_price)
-                    if rating == 'Not enough data':
-                        group = 'Not enough data'
-                        proposed_price = 'Not enough data'
-                    elif rating >= 75:
-                        group = 'A'
-                        proposed_price = f(lv3_price)
-                    elif rating >= 50:
-                        group = 'B'
-                        proposed_price = f(lv2_price)
-                    elif rating >= 25:
-                        group = 'C'
-                        proposed_price = f(lv1_price)
-                    else:
-                        group = 'D'
-                        proposed_price = breakeven_price
+                    lv0_price,lv1_price,lv2_price,lv3_price,breakeven_price,group = monte_carlo.run(ticker=ticker,alpha=chosen_alpha)
                     with open(github_table_path,mode='a',newline='') as github_file:
                         github_writer = csv.writer(github_file,delimiter=',')
                         github_writer.writerow(
-                            [ticker,group,breakeven_price,lv1_price,lv2_price,lv3_price,proposed_price]
+                            [ticker,lv0_price,lv1_price,lv2_price,lv3_price,group,breakeven_price]
                         )
                     with open(network_table_path,mode='a',newline='') as network_file:
                         network_writer = csv.writer(network_file,delimiter=',')
                         network_writer.writerow([ticker,breakeven_price])
                     with open(rmd_table_path,mode='a',newline='') as rmd_file:
                         rmd_writer = csv.writer(rmd_file,delimiter=',')
-                        rmd_writer.writerow([ticker,group,breakeven_price,proposed_price])
+                        rmd_writer.writerow([ticker,group,breakeven_price])
                     break
                 except (ValueError, KeyError, IndexError):
                     print(f'{ticker} cannot be simulated with given significance level, running with higher alpha instead')
@@ -139,34 +104,34 @@ class post:
     ):
 
         destination_path = r'\\192.168.10.28\images\creditrating'
-        chart_path = os.path.join(destination_path, 'charts')
-        table_path = os.path.join(destination_path, 'tables')
+        chart_path = os.path.join(destination_path,'charts')
+        table_path = os.path.join(destination_path,'tables')
 
         # POST CREDIT RATING
-        rating_path = join(realpath(dirname(dirname(__file__))), 'credit_rating', 'result')
+        rating_path = join(realpath(dirname(dirname(__file__))),'credit_rating','result')
         rating_files = [file for file in listdir(rating_path) if file.startswith('result') and 'gen' not in file]
         for file in rating_files:
-            shutil.copy(join(rating_path, file), join(table_path, 'rating'))
+            shutil.copy(join(rating_path,file),join(table_path,'rating'))
         # adjust result_table_gen
-        gen_table = pd.read_csv(join(rating_path, 'result_table_gen.csv'), index_col=['ticker'])
+        gen_table = pd.read_csv(join(rating_path,'result_table_gen.csv'), index_col=['ticker'])
         gen_table = gen_table.loc[gen_table['level']==f'{standard}_l{level}']
-        gen_table.drop(['standard','level','industry'], axis=1, inplace=True)
-        gen_table.to_csv(join(table_path, 'rating', 'result_table_gen.csv'))
+        gen_table.drop(['standard','level','industry'],axis=1,inplace=True)
+        gen_table.to_csv(join(table_path,'rating','result_table_gen.csv'))
         # merge to ready-to-use result table
-        bank_table = pd.read_csv(join(rating_path, 'result_table_bank.csv'), index_col=['ticker'])
-        ins_table = pd.read_csv(join(rating_path, 'result_table_ins.csv'), index_col=['ticker'])
-        sec_table = pd.read_csv(join(rating_path, 'result_table_sec.csv'), index_col=['ticker'])
-        result_table = pd.concat([gen_table, bank_table, ins_table, sec_table])
+        bank_table = pd.read_csv(join(rating_path,'result_table_bank.csv'),index_col=['ticker'])
+        ins_table = pd.read_csv(join(rating_path,'result_table_ins.csv'),index_col=['ticker'])
+        sec_table = pd.read_csv(join(rating_path,'result_table_sec.csv'),index_col=['ticker'])
+        result_table = pd.concat([gen_table,bank_table,ins_table,sec_table])
         result_table.drop(['BM_'], inplace=True)
-        result_table.to_csv(join(table_path, 'rating', 'result_summary.csv'))
+        result_table.to_csv(join(table_path,'rating','result_summary.csv'))
 
-        component_files = [file for file in listdir(join(rating_path, 'Compare with Industry'))]
+        component_files = [file for file in listdir(join(rating_path,'Compare with Industry'))]
         for file in component_files:
-            shutil.copy(join(rating_path, 'Compare with Industry', file), join(chart_path, 'component'))
+            shutil.copy(join(rating_path,'Compare with Industry',file),join(chart_path,'component'))
 
-        result_files = [file for file in listdir(join(rating_path, 'Result'))]
+        result_files = [file for file in listdir(join(rating_path,'Result'))]
         for file in result_files:
-            shutil.copy(join(rating_path, 'Result', file), join(chart_path, 'rating'))
+            shutil.copy(join(rating_path,'Result',file),join(chart_path,'rating'))
 
         # CREATE IMAGE
         rating_tickers = {name[:3] for name in result_files}

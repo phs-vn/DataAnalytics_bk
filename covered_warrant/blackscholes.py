@@ -1,5 +1,7 @@
 from request_phs.stock import *
 from request_phs import *
+import scrape_cw_stock
+import scrape_missing_info
 
 rf = 0.045
 
@@ -532,29 +534,8 @@ class multiple_backtest:
 
 class forwardtest:
 
-    all_stock = [
-        'ACB',
-        'FPT',
-        'HDB',
-        'HPG',
-        'KDH',
-        'MBB',
-        'MSN',
-        'MWG',
-        'NVL',
-        'PDR',
-        'PNJ',
-        'SSI',
-        'STB',
-        'TCB',
-        'TPB',
-        'VHM',
-        'VIC',
-        'VJC',
-        'VNM',
-        'VPB',
-        'VRE',
-    ]
+    def __init__(self):
+        self.all_stock = scrape_cw_stock.run(True)
 
     def filter_stock(
             self,
@@ -568,7 +549,7 @@ class forwardtest:
         :param score_ratio: weights of liquidity score and competition score.
         Ex: '50:50', '40:60'
         """
-
+        filter_date = dt.datetime.now().strftime('%Y-%m-%d')
         last_working_date = bdate(filter_date,-1)
         stock_data = pd.read_sql(
             f"EXEC [dbo].[spStockIntraday] " \
@@ -584,10 +565,7 @@ class forwardtest:
             connect_RMD,
             index_col='SYMBOL',
         )
-        cw_data_vstock = pd.read_excel(
-            'date_price_of_issuance.xlsx',
-            names=['SYMBOL','ISSUANCE_DATE','ISSUANCE_PRICE','FIRST_TRADING_DATE','STATUS'],
-            index_col='SYMBOL')
+        cw_data_vstock = scrape_missing_info.run()
         cw_data = pd.concat([cw_data_hose,cw_data_vstock],axis=1)
         cw_data = cw_data[[
             'UNDERLYING_SYMBOL',
@@ -639,6 +617,7 @@ class forwardtest:
         # Liquidity Score
         result['liquidity_score'] = result.loc[result['liquidity_pct']!='Failed','liquidity_pct'].astype(np.float64).rank(ascending=False)
         # Competition Score
+        discount_rate = discount_rate.reindex(result.index)
         result['competition_score'] = discount_rate.loc[result['room_condition']=='Passed'].rank()
         result['competition_score'].fillna(result['competition_score'].max()+1,inplace=True)
         # Score Ratio
@@ -652,6 +631,9 @@ class forwardtest:
 
         result.sort_values('final_score',ascending=False,inplace=True)
         result.fillna('Failed',inplace=True)
+
+        now = dt.datetime.now()
+        result.to_excel(f'stock_cw_ranking_{np.round(c/1e9,2)}B_{now.year}{now.month}{now.day}.xlsx')
 
         return result
 

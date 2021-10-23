@@ -1,6 +1,6 @@
 from request_phs.stock import *
 
-PATH = join(dirname(dirname(realpath(__file__))), 'phs','chromedriver')
+PATH = join(dirname(dirname(realpath(__file__))),'phs','chromedriver')
 ignored_exceptions = (
     ValueError,
     IndexError,
@@ -126,12 +126,12 @@ def run(
 
     output_table = pd.DataFrame(
         {
-            'Ngày phát hành': cw_dates_of_issuance,
-            'Giá phát hành': cw_prices_of_issuance,
-            'Ngày GDĐT': first_trading_dates,
-            'Trạng thái': status_list,
+            'ISSUANCE_DATE': cw_dates_of_issuance,
+            'ISSUANCE_PRICE': cw_prices_of_issuance,
+            'FIRST_TRADING_DATE': first_trading_dates,
+            'STATUS': status_list,
         },
-        index=pd.Index(cw_names,name='Chứng quyền')
+        index=pd.Index(cw_names,name='CW')
     )
     output_table.drop_duplicates(inplace=True)
     output_table.to_excel("date_price_of_issuance.xlsx")

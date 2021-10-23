@@ -2,6 +2,10 @@ from request_phs.stock import *
 
 destination_dir = join(dirname(realpath(__file__)), 'result')
 
+# Pre-classification by industry
+standard = 'bics'
+level = 'bics_l1'
+
 # Parameters:
 centroids = 3
 min_tickers = 3
@@ -15,15 +19,37 @@ periods = fa.periods[-13:] # trailing 3 years
 converted_idx = (agg_data.index.get_level_values(0).map(str)+'q'+agg_data.index.get_level_values(1).map(str))
 agg_data = agg_data.loc[converted_idx.isin(periods)]
 
-quantities = ['revenue', 'cogs', 'gross_profit', 'interest', 'pbt',
-              'net_income', 'cur_asset', 'cash', 'ar', 'lt_receivable', 'inv',
-              'ppe', 'asset', 'liability', 'cur_liability', 'lt_debt',
-              'equity', 'retn_earnings', 'period_retn_earnings', 'lt_invst',
-              'depre_tgbl', 'depre_gw', 's_exp', 'ga_exp', 'oprtng_income',
-              'cfo', 'st_debt']
+quantities = [
+    'revenue',
+    'cogs',
+    'gross_profit',
+    'interest',
+    'pbt',
+    'net_income',
+    'cur_asset',
+    'cash',
+    'ar',
+    'lt_receivable',
+    'inv',
+    'ppe',
+    'asset',
+    'liability',
+    'cur_liability',
+    'lt_debt',
+    'equity',
+    'retn_earnings',
+    'period_retn_earnings',
+    'lt_invst',
+    'depre_tgbl',
+    'depre_gw',
+    's_exp',
+    'ga_exp',
+    'oprtng_income',
+    'cfo',
+    'st_debt'
+]
 
 tickers = fa.tickers('gen')
-standards = fa.standards
 
 years = list()
 quarters = list()
@@ -37,72 +63,37 @@ inds = [x for x in itertools.product(period_tuple, tickers)]
 for i in range(len(inds)):
     inds[i] = inds[i][0] + tuple([inds[i][1]])
 
-index = pd.MultiIndex.from_tuples(inds, names=['year', 'quarter', 'ticker'])
-col = pd.Index(quantities, name='quantity')
+index = pd.MultiIndex.from_tuples(inds, names=['year','quarter','ticker'])
+col = pd.Index(quantities,name='quantity')
 
 df = pd.DataFrame(columns=col, index=index)
-for year, quarter in period_tuple:
-    for ticker in tickers:
-        if ticker not in agg_data.loc[pd.IndexSlice[year,quarter,:],:].index.get_level_values(2):
-            continue
-        for quantity in quantities:
-            if quantity == 'revenue':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is','3.')]
-            elif quantity == 'cogs':
-                df.loc[(year,quarter,ticker),quantity] = -agg_data.loc[(year,quarter,ticker),('is','4.')]
-            elif quantity == 'gross_profit':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is','5.')]
-            elif quantity == 'interest':
-                df.loc[(year,quarter,ticker),quantity] = -agg_data.loc[(year,quarter,ticker),('is','8.')]
-            elif quantity == 'pbt':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is','17.')]
-            elif quantity == 'net_income':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is','21.')]
-            elif quantity == 'cur_asset':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','1.')]
-            elif quantity == 'cash':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','2.')]
-            elif quantity == 'ar':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','9.')]
-            elif quantity == 'lt_receivable':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','28.')]
-            elif quantity == 'inv':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','18.')]
-            elif quantity == 'ppe':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','36.')]
-            elif quantity == 'asset':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','66.')]
-            elif quantity == 'liability':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','67.')]
-            elif quantity == 'cur_liability':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','68.')]
-            elif quantity == 'lt_debt':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','91.')]
-            elif quantity == 'equity':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','98.')]
-            elif quantity == 'retn_earnings':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','113.')]
-            elif quantity == 'period_retn_earnings':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','115.')]
-            elif quantity == 'lt_invst':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','53.')]
-            elif quantity == 'depre_tgbl':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('cfi','3.')] # tai sao mot so thang <0?
-            elif quantity == 'depre_gw':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('cfi','4.')]
-            elif quantity == 's_exp':
-                df.loc[(year,quarter,ticker),quantity] = -agg_data.loc[(year,quarter,ticker),('is','10.')]
-            elif quantity == 'ga_exp':
-                df.loc[(year,quarter,ticker),quantity] = -agg_data.loc[(year,quarter,ticker),('is','11.')]
-            elif quantity == 'oprtng_income':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('is','12.')]
-            elif quantity == 'cfo':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('cfi','1.')]
-            elif quantity == 'st_debt':
-                df.loc[(year,quarter,ticker),quantity] = agg_data.loc[(year,quarter,ticker),('bs','78.')]
-            else:
-                pass
-
+df['revenue'] = agg_data[('is','3.')]
+df['cogs'] = -agg_data['is','4.']
+df['gross_profit'] = agg_data[('is','5.')]
+df['interest'] = -agg_data[('is','8.')]
+df['pbt'] = agg_data[('is','17.')]
+df['net_income'] = agg_data[('is','21.')]
+df['cur_asset'] = agg_data[('bs','1.')]
+df['cash'] = agg_data[('bs','2.')]
+df['ar'] = agg_data[('bs','9.')]
+df['lt_receivable'] = agg_data[('bs','28.')]
+df['inv'] = agg_data[('bs','18.')]
+df['ppe'] = agg_data[('bs','36.')]
+df['asset'] = agg_data[('bs','66.')]
+df['liability'] = agg_data[('bs','67.')]
+df['cur_liability'] = agg_data[('bs','68.')]
+df['lt_debt'] = agg_data[('bs','91.')]
+df['equity'] = agg_data[('bs','98.')]
+df['retn_earnings'] = agg_data[('bs','113.')]
+df['period_retn_earnings'] = agg_data[('bs','115.')]
+df['lt_invst'] = agg_data[('bs','53.')]
+df['depre_tgbl'] = agg_data[('cfi','3.')] # tai sao mot so thang <0?
+df['depre_gw'] = agg_data[('cfi','4.')]
+df['s_exp'] = -agg_data[('is','10.')]
+df['ga_exp'] = -agg_data[('is','11.')]
+df['oprtng_income'] = agg_data[('is','12.')]
+df['cfo'] = agg_data[('cfi','1.')]
+df['st_debt'] = agg_data[('bs','78.')]
 
 del agg_data # for memory savings
 
@@ -169,141 +160,95 @@ quantities_new = df.columns.to_list()
 
 df.dropna(inplace=True, how='all')
 
-ind_standards = list()
-ind_levels = list()
-ind_names = list()
-for standard in standards:
-    for level in fa.levels(standard):
-        for industry in fa.industries(standard, int(level[-1])):
-            ind_standards.append(standard)
-            ind_levels.append(level)
-            ind_names.append(industry)
-kmeans_index = pd.MultiIndex.from_arrays(
-    [ind_standards,ind_levels,ind_names],
-    names=['standard','level', 'industry']
-)
+ind_names = fa.industries(standard,int(level[-1]))
+kmeans_index = pd.Index(ind_names,name='industry')
 
-benmrks = pd.DataFrame(index = kmeans_index, columns = periods)
-kmeans = pd.DataFrame(index = kmeans_index, columns = periods)
-labels = pd.DataFrame(index = kmeans_index, columns = periods)
-centers = pd.DataFrame(index = kmeans_index, columns = periods)
-kmeans_tickers = pd.DataFrame(index = kmeans_index, columns = periods)
-kmeans_coord = pd.DataFrame(index = kmeans_index, columns = periods)
+benmrks = pd.DataFrame(index=kmeans_index,columns=periods)
+kmeans = pd.DataFrame(index=kmeans_index,columns=periods)
+labels = pd.DataFrame(index=kmeans_index,columns=periods)
+centers = pd.DataFrame(index=kmeans_index,columns=periods)
+kmeans_tickers = pd.DataFrame(index=kmeans_index,columns=periods)
+kmeans_coord = pd.DataFrame(index=kmeans_index,columns=periods)
 
-sector_table = dict()
-industry_list = dict()
 ticker_list = dict()
+industry_classifation = fa.classification('bics')[level].squeeze()
+industry_list = list(industry_classifation.unique())
 
-# sector_table['standard_name'] -> return: DataFrame (Full table)
-# industry_list[('standard_name', level)] -> return: list (all classification)
-# ticker_list[('standard_name', level, 'industry')]
-# -> return: list (all companies in a particular industry)
-
-for standard in standards:
-    sector_table[standard] = fa.classification(standard)
-    sector_table[standard].columns \
-        = pd.RangeIndex(start=1, stop=sector_table[standard].shape[1]+1)
-
-    for level in sector_table[standard].columns:
-        industry_list[(standard, level)] \
-            = sector_table[standard][level].drop_duplicates().to_list()
-
-        for industry in industry_list[standard, level]:
-            ticker_list[(standard, level, industry)] \
-                = sector_table[standard][level]\
-                .loc[sector_table[standard][level]==industry]\
-                .index.to_list()
-
-            for year, quarter in zip(years, quarters):
-                # cross section
-                tickers = ticker_list[(standard, level, industry)]
-                try:
-                    df_xs = df.loc[(year, quarter, tickers), :]
-                except KeyError:
-                    continue
-                df_xs.dropna(axis=0, how='any', inplace=True)
-                if df_xs.shape[0] < min_tickers:
-                    kmeans.loc[
-                    (standard,f'{standard}_l{level}',industry),:] = None
-                    labels.loc[
-                    (standard,f'{standard}_l{level}',industry),:] = None
-                    centers.loc[
-                    (standard,f'{standard}_l{level}',industry),:] = None
+for industry in industry_list:
+    ticker_list[industry] = industry_classifation.loc[industry_classifation==industry].index.to_list()
+    for year, quarter in zip(years, quarters):
+        # cross section
+        tickers = ticker_list[industry]
+        try:
+            df_xs = df.loc[(year,quarter,tickers)]
+        except KeyError:
+            continue
+        df_xs.dropna(axis=0,how='any',inplace=True)
+        if df_xs.shape[0] < min_tickers:
+            kmeans.loc[industry] = None
+            labels.loc[industry] = None
+            centers.loc[industry] = None
+        else:
+            for quantity in quantities_new:
+                # remove outliers (Interquartile Range Method)
+                ## (have to ensure symmetry)
+                df_xs_median = df_xs[quantity].median()
+                df_xs_75q = df_xs[quantity].quantile(q=0.75)
+                df_xs_25q = df_xs[quantity].quantile(q=0.25)
+                # deal with rare cases in which most tickers = 0, few != 0
+                if df_xs_75q == df_xs_25q == 0:
+                    pass
                 else:
-                    for quantity in quantities_new:
+                    cut_off = (df_xs_75q - df_xs_25q) * 1.5
+                    df_xs[quantity].clip(df_xs_25q-cut_off,df_xs_75q+cut_off,inplace=True)
 
-                        # remove outliers (Interquartile Range Method)
-                        ## (have to ensure symmetry)
-                        df_xs_median = df_xs.loc[:, quantity].median()
-                        df_xs_75q = df_xs.loc[:, quantity].quantile(q=0.75)
-                        df_xs_25q = df_xs.loc[:, quantity].quantile(q=0.25)
-                        # deal with rare cases in which most tickers = 0, few != 0
-                        if df_xs_75q == df_xs_25q == 0:
-                            pass
-                        else:
-                            cut_off = (df_xs_75q - df_xs_25q) * 1.5
-                            for ticker in df_xs.index.get_level_values(2):
-                                df_xs.loc[(year,quarter,ticker), quantity] \
-                                    = max(df_xs.loc[(year,quarter,ticker),quantity],df_xs_25q-cut_off)
-                                df_xs.loc[(year,quarter,ticker), quantity] \
-                                    = min(df_xs.loc[(year,quarter,ticker),quantity],df_xs_75q+cut_off)
+                # standardize to mean=0
+                df_xs_mean = df_xs[quantity].mean()
+                df_xs[quantity] = df_xs[quantity] - df_xs_mean
 
-                        # standardize to mean=0
-                        df_xs_mean = df_xs.loc[:,quantity].mean()
-                        for ticker in df_xs.index.get_level_values(2):
-                            df_xs.loc[(year,quarter,ticker),quantity] \
-                                = (df_xs.loc[(year,quarter,ticker),quantity] - df_xs_mean)
+                # standardize to range (-1,1)
+                df_xs_min = df_xs[quantity].min()
+                df_xs_max = df_xs[quantity].max()
+                if df_xs_max == df_xs_min:
+                    df_xs.drop(columns=quantity, inplace=True)
+                else:
+                    df_xs[quantity] = -1 + (df_xs[quantity] - df_xs_min)/(df_xs_max-df_xs_min)*2
 
-                        # standardize to range (-1,1)
-                        df_xs_min = df_xs.loc[:, quantity].min()
-                        df_xs_max = df_xs.loc[:, quantity].max()
-                        if df_xs_max == df_xs_min:
-                            df_xs.drop(columns=quantity, inplace=True)
-                        else:
-                            for ticker in df_xs.index.get_level_values(2):
-                                df_xs.loc[(year,quarter,ticker), quantity] \
-                                    = -1 + (df_xs.loc[(year,quarter,ticker),quantity]
-                                            - df_xs_min)/(df_xs_max-df_xs_min)*2
+            # PCA algorithm
+            X = df_xs.values
+            benmrk_vector = np.array([-1 for n in range(df_xs.shape[1])])
+            benmrk_vector = benmrk_vector.reshape((1,benmrk_vector.shape[0]))
+            X = np.append(benmrk_vector,X,axis=0)
+            PCs = PCA(n_components=0.9).fit_transform(X)
 
-                    # PCA algorithm
-                    X = df_xs.values
-                    benmrk_vector = np.array([-1 for n in range(df_xs.shape[1])])
-                    benmrk_vector = benmrk_vector.reshape((1, benmrk_vector.shape[0]))
-                    X = np.append(benmrk_vector, X, axis=0)
-                    PCs = PCA(n_components=0.9).fit_transform(X)
+            idx = df_xs.index.to_list()
+            idx.insert(0,(year,quarter,'BM_'))
+            idx = pd.MultiIndex.from_tuples(idx)
+            cols = ['PC_'+str(i+1) for i in range(PCs.shape[1])]
+            df_xs = pd.DataFrame(PCs,index=idx,columns=cols)
 
-                    idx = df_xs.index.to_list()
-                    idx.insert(0, (year, quarter, 'BM_'))
-                    idx = pd.MultiIndex.from_tuples(idx)
-                    cols = ['PC_'+str(i+1) for i in range(PCs.shape[1])]
-                    df_xs = pd.DataFrame(PCs, index=idx, columns=cols)
+            benmrks.loc[industry,f'{year}q{quarter}'] = PCs[0]
 
-                    benmrks.loc[(standard, f'{standard}_l{level}', industry),
-                                f'{year}q{quarter}'] = PCs[0]
+            # Kmeans algorithm
+            kmeans.loc[industry,f'{year}q{quarter}'] = KMeans(
+                n_clusters=centroids,
+                init='k-means++',
+                n_init=10,
+                max_iter=1000,
+                tol=1e-6,
+                random_state=1
+            ).fit(df_xs.dropna(axis=0, how='any'))
 
-                    # Kmeans algorithm
-                    kmeans.loc[(standard,f'{standard}_l{level}',industry),f'{year}q{quarter}'] = KMeans(
-                        n_clusters=centroids,
-                        init='k-means++',
-                        n_init=10,
-                        max_iter=1000,
-                        tol=1e-6,
-                        random_state=1
-                    ).fit(df_xs.dropna(axis=0, how='any'))
+            kmeans_tickers.loc[industry,f'{year}q{quarter}'] = df_xs.index.get_level_values(2).to_list()
+            kmeans_coord.loc[industry,f'{year}q{quarter}'] = df_xs.values
+            labels.loc[industry,f'{year}q{quarter}'] = kmeans.loc[industry,f'{year}q{quarter}'].labels_.tolist()
 
-                    kmeans_tickers.loc[(standard,f'{standard}_l{level}',industry),f'{year}q{quarter}'] \
-                        = df_xs.index.get_level_values(2).to_list()
-                    kmeans_coord.loc[(standard,f'{standard}_l{level}',industry),f'{year}q{quarter}'] = df_xs.values
-                    labels.loc[(standard,f'{standard}_l{level}',industry),f'{year}q{quarter}'] \
-                        = kmeans.loc[(standard, f'{standard}_l{level}',industry),f'{year}q{quarter}'].labels_.tolist()
-
-                    centers.loc[(standard,f'{standard}_l{level}',industry),f'{year}q{quarter}'] \
-                        = kmeans.loc[(standard, f'{standard}_l{level}',industry),f'{year}q{quarter}'].cluster_centers_.tolist()
-                    print(f'Passed:: Standard: {standard.upper()} - Level: {level} -- {industry} -- Year: {year}, Quarter: {quarter}')
+            centers.loc[industry,f'{year}q{quarter}'] = kmeans.loc[industry,f'{year}q{quarter}'].cluster_centers_.tolist()
+            print(f'Passed:: {industry} -- Year: {year}, Quarter: {quarter}')
 
 del df_xs # for memory saving
 
-radius_centers = pd.DataFrame(index=kmeans_index, columns=periods)
+radius_centers = pd.DataFrame(index=kmeans_index,columns=periods)
 for row in range(centers.shape[0]):
     for col in range(centers.shape[1]):
         if centers.iloc[row,col] is None:
@@ -312,9 +257,7 @@ for row in range(centers.shape[0]):
             distance = np.zeros(centroids)
             for center in range(centroids):
                 # origin at (-1,-1,-1,...) whose dimension varies by PCA
-                distance[center] = ((np.array(centers.iloc[row,col][center])
-                                     - np.array(benmrks.iloc[row,col]))
-                                    **2).sum()**(1/2)
+                distance[center] = ((np.array(centers.iloc[row,col][center])-np.array(benmrks.iloc[row,col]))**2).sum()**(1/2)
             radius_centers.iloc[row,col] = distance
 
 center_scores = pd.DataFrame(index=kmeans_index, columns=periods)
@@ -358,90 +301,64 @@ for row in range(radius_tickers.shape[0]):
             for n in range(len(ticker_scores.iloc[row,col])):
                 ticker_scores.iloc[row, col][n] = int(ticker_scores.iloc[row, col][n])
 
-ind_standards = list()
-ind_levels = list()
 ind_names = list()
 ind_tickers = list()
 ind_periods = list()
-for standard in standards:
-    for level in fa.levels(standard):
-        for industry in fa.industries(standard, int(level[-1])):
-            for period in periods:
-                try:
-                    if isinstance(kmeans_tickers.loc[(standard,level,industry),period],str) is True:
-                        ind_standards.append(standard)
-                        ind_levels.append(level)
-                        ind_names.append(industry)
-                        ind_tickers.append(kmeans_tickers.loc[(standard,level,industry),period])
-                        ind_periods.append(period)
-                    else:
-                        for ticker in kmeans_tickers.loc[
-                            (standard,level,industry),period]:
-                            ind_standards.append(standard)
-                            ind_levels.append(level)
-                            ind_names.append(industry)
-                            ind_tickers.append(ticker)
-                            ind_periods.append(period)
-
-                except TypeError:
-                    continue
+for industry in fa.industries('bics',int(level[-1])):
+    for period in periods:
+        try:
+            if isinstance(kmeans_tickers.loc[industry,period],str):
+                ind_names.append(industry)
+                ind_tickers.append(kmeans_tickers.loc[industry,period])
+                ind_periods.append(period)
+            else:
+                for ticker in kmeans_tickers.loc[industry,period]:
+                    ind_names.append(industry)
+                    ind_tickers.append(ticker)
+                    ind_periods.append(period)
+        except TypeError:
+            continue
 
 result_index = pd.MultiIndex.from_arrays(
-    [ind_standards,ind_levels,ind_names,ind_tickers,ind_periods],
-    names=['standard','level','industry','ticker','period']
+    [ind_names,ind_tickers,ind_periods],names=['industry','ticker','period']
 )
 
 result_table = pd.DataFrame(index=result_index,columns=['credit_score'])
-for standard in standards:
-    for level in fa.levels(standard):
-        for industry in fa.industries(standard, int(level[-1])):
-            for period in periods:
-                try:
-                    for n in range(len(kmeans_tickers.loc[(standard,level,industry),period])):
-                        result_table.loc[(
-                            standard,level,industry,kmeans_tickers.loc[(standard,level,industry),period][n],period)] \
-                            = ticker_scores.loc[(standard,level,industry),period][n]
-                except TypeError:
-                    continue
+for industry in fa.industries('bics',int(level[-1])):
+    for period in periods:
+        try:
+            for n in range(len(kmeans_tickers.loc[industry,period])):
+                result_table.loc[(
+                    industry,kmeans_tickers.loc[industry,period][n],period)] \
+                    = ticker_scores.loc[industry,period][n]
+        except TypeError:
+            continue
 
-result_table = result_table.unstack(level=4)
+result_table = result_table.unstack(level=2)
 result_table.columns = result_table.columns.droplevel(0)
+result_table.index = result_table.index.droplevel(0)
+result_table.drop('BM_',axis=0,inplace=True)
 
 
 component_filename = 'component_talbe_gen'
-def export_component_table():
-    df.to_csv(join(destination_dir, component_filename+'.csv'))
-export_component_table()
+df.to_csv(join(destination_dir,component_filename+'.csv'))
 
-df = pd.read_csv(
-    join(destination_dir, component_filename+'.csv'),
-    index_col=['year','quarter','ticker']
-)
 result_filename = 'result_table_gen'
-def export_result_table():
-    result_table.to_csv(join(destination_dir,result_filename+'.csv'))
-export_result_table()
+result_table.to_csv(join(destination_dir,result_filename+'.csv'))
 
-result_table = pd.read_csv(
-    join(destination_dir, result_filename+'.csv'),
-    index_col=['standard','level','industry','ticker']
-)
-
-def graph_tickers(tickers: list, standard: str, level: int):
+def graph_tickers(tickers:list):
     table = pd.DataFrame(
         index=['credit_score'],
         columns=periods
     )
     for ticker in tickers:
-        available_tickers = result_table.loc[pd.IndexSlice[standard,f'{standard}_l{level}',:,:]].index.get_level_values(3)
+        available_tickers = result_table.index
         if ticker not in available_tickers:
             continue
         for period in periods:
-            table.loc['credit_score', period] \
-                = result_table.loc[pd.IndexSlice[standard,f'{standard}_l{level}',:,ticker],period].iloc[0]
+            table.loc['credit_score',period] = result_table.loc[ticker,period]
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(8,6))
-        ax.set_title(ticker + '\n' + standard.upper()
-                     + ' Level {} Classification'.format(level),
+        ax.set_title(ticker,
                      fontsize=15, fontweight='bold', color='darkslategrey',
                      fontfamily='Times New Roman')
 
@@ -505,16 +422,7 @@ def graph_tickers(tickers: list, standard: str, level: int):
         plt.savefig(join(destination_dir, 'Result', f'{ticker}_result.png'))
 
 
-def graph_crash(benchmark:float,
-                standard,
-                level,
-                period:str,
-                exchange:str='all'):
-    crash = ta.crash(benchmark, 'gen', exchange)
-    compare_rs(crash[period], standard, level)
-
-
-def compare_industry(tickers:list, standard:str, level:int):
+def compare_industry(tickers:list):
 
     components = {
         'cash&ppe': 'Cash Plus PPE',
@@ -561,31 +469,29 @@ def compare_industry(tickers:list, standard:str, level:int):
         '(-)cur_lib/asset': 'Current Liabilities to Assets Ratio',
         '(-)liability/equity' : 'Total Liabilities to Equity Ratio',
         '(-)liability/asset': 'Total Liabilities to Assets Ratio',
-
     }
 
-    full_list = fa.classification(standard).iloc[:,level-1]
+    full_list = fa.classification('bics')[level]
     for ticker in tickers:
-        if ticker not in result_table.index.get_level_values(3):
+        if ticker not in result_table.index:
             continue
         # to avoid cases of missing data right at the first period, result in mis-shaped
         industry = full_list.loc[ticker]
-        peers = full_list.loc[full_list == industry].index.tolist()
+        peers = full_list.loc[full_list==industry].index.tolist()
 
         table = df.loc[df.index.get_level_values(2).isin(peers)]
-        table.dropna(axis=0, how='all', inplace=True)
+        table.dropna(axis=0,how='all',inplace=True)
 
-        median = table.groupby(axis=0, level=[0, 1]).median()
+        median = table.groupby(axis=0,level=[0,1]).median()
         quantities = pd.DataFrame(np.zeros_like(median),
                                   index=median.index,
                                   columns=median.columns)
 
-        ref_table = table.xs(ticker, axis=0, level=2)
-        quantities = pd.concat([quantities, ref_table], axis=0)
-        quantities = quantities.groupby(level=[0, 1], axis=0).sum()
+        ref_table = table.xs(ticker,axis=0,level=2)
+        quantities = pd.concat([quantities,ref_table],axis=0)
+        quantities = quantities.groupby(level=[0,1],axis=0).sum()
 
-        comparison = pd.concat([quantities, median], axis=1, join='outer',
-                               keys=[ticker, 'median'])
+        comparison = pd.concat([quantities,median],axis=1,join='outer',keys=[ticker,'median'])
 
         periods = [f'{q[0]}q{q[1]}' for q in comparison.index]
         variables = comparison.columns.get_level_values(1).drop_duplicates().to_numpy()
@@ -643,152 +549,8 @@ def compare_industry(tickers:list, standard:str, level:int):
         plt.close('all')
 
 
-def compare_rs(tickers: list, standard: str, level: int):
-
-    global result_filename
-    rs_file = join(dirname(realpath(__file__)), 'research_rating.xlsx')
-    rs_rating = pd.read_excel(rs_file, sheet_name='summary',
-                              index_col='ticker', engine='openpyxl')
-
-    def scoring(rating: str) -> int:
-        mapping = {'AAA': 95, 'AA': 85, 'A': 77.5,
-                   'BBB': 72.5, 'BB': 67.5, 'B': 62.5,
-                   'CCC': 57.5, 'CC': 52.5, 'C': 47.5,
-                   'DDD': 40, 'DD': 30, 'D': 20}
-        try:
-            return mapping[rating]
-        except KeyError:
-            return np.nan
-
-    rs_rating = rs_rating.applymap(scoring)
-    for i in range(rs_rating.shape[0]):
-        for j in range(1, rs_rating.shape[1] - 1):
-            before = rs_rating.iloc[i, j - 1]
-            after = np.nan
-            k = 0
-            if not np.isnan(before) and np.isnan(rs_rating.iloc[i, j]):
-                while np.isnan(after) and j+k<rs_rating.shape[1]-1:
-                    k += 1
-                    after = rs_rating.iloc[i, j + k]
-                rs_rating.iloc[i, j] = before + (after - before) / (k + 1)
-
-    model_file = join(dirname(realpath(__file__)),
-                      'result', result_filename+'.csv')
-    model_rating = pd.read_csv(model_file, index_col='ticker')
-    model_rating \
-        = model_rating.loc[model_rating['standard'] == standard]
-    model_rating \
-        = model_rating.loc[
-        model_rating['level'] == standard + '_l' + str(level)]
-    model_rating.drop(columns=['standard', 'level', 'industry'], inplace=True)
-
-    for ticker in tickers:
-        try:
-            fig, ax = plt.subplots(1, 1, figsize=(8, 6))
-            periods = [q for q in model_rating.columns]
-            w = 0.35
-            xloc = np.arange(len(periods))  # the label locations
-            ax.bar(xloc - w/2, model_rating.loc[ticker, :],
-                   width=w, label='K-Means',
-                   color='tab:blue', edgecolor='black')
-            ax.bar(xloc + w/2, rs_rating.loc[ticker, :],
-                   width=w, label='Research\'s Rating',
-                   color='tab:gray', edgecolor='black')
-            plt.setp(ax.xaxis.get_majorticklabels(), rotation=45)
-            ax.set_xticks(xloc)
-            ax.set_xticklabels(periods, fontsize=11)
-
-            ax.set_yticks(np.array([0, 25, 50, 75, 100]))
-            ax.tick_params(axis='y', labelcolor='black', labelsize=11)
-
-            Acolor = 'green'
-            Bcolor = 'olivedrab'
-            Ccolor = 'darkorange'
-            Dcolor = 'firebrick'
-
-            ax.axhline(100, ls='--', linewidth=0.5, color=Acolor)
-            ax.axhline(75, ls='--', linewidth=0.5, color=Bcolor)
-            ax.axhline(50, ls='--', linewidth=0.5, color=Ccolor)
-            ax.axhline(25, ls='--', linewidth=0.5, color=Dcolor)
-            ax.fill_between([-0.4, xloc[-1] + 0.4], 100, 75,
-                            color=Acolor, alpha=0.2)
-            ax.fill_between([-0.4, xloc[-1] + 0.4], 75, 50,
-                            color=Bcolor, alpha=0.25)
-            ax.fill_between([-0.4, xloc[-1] + 0.4], 50, 25,
-                            color=Ccolor, alpha=0.2)
-            ax.fill_between([-0.4, xloc[-1] + 0.4], 25, 0,
-                            color=Dcolor, alpha=0.2)
-
-            plt.xlim(-0.6, xloc[-1] + 0.6)
-
-            ax.set_ylim(top=110)
-            midpoints = np.array([87.5, 62.5, 37.5, 12.5]) / 110
-            labels = ['Group A', 'Group B', 'Group C', 'Group D']
-            colors = [Acolor, Bcolor, Ccolor, Dcolor]
-            for loc in zip(midpoints, labels, colors):
-                ax.annotate(loc[1],
-                            xy=(-0.1, loc[0]),
-                            xycoords='axes fraction',
-                            textcoords="offset points",
-                            xytext=(0, -5),
-                            ha='center', va='bottom',
-                            color=loc[2], fontweight='bold',
-                            fontsize='large')
-            ax.legend(loc='best', framealpha=0.5)
-            ax.margins(tight=True)
-            plt.subplots_adjust(left=0.15, bottom=0.1, right=0.95, top=0.9)
-            ax.set_title(ticker + '\n' + "Comparison with Research's Rating",
-                         fontsize=15, fontweight='bold', color='darkslategrey',
-                         fontfamily='Times New Roman')
-            plt.savefig(join(destination_dir, 'Compare with RS', f'{ticker}_compare_rs.png'))
-        except KeyError:
-            pass
-
-
-def mlist_group(standard:str, level:int, year:int, quarter:int) -> dict:
-
-    global result_filename
-    file = join(dirname(realpath(__file__)),
-                'result', result_filename+'.csv')
-    table = pd.read_csv(file, index_col='ticker')
-
-    table = table.loc[table['standard'] == standard]
-    table = table.loc[table['level'] == standard + '_l' + str(level)]
-    table.drop(columns=['standard', 'level', 'industry'], inplace=True)
-
-    series = table[str(year) + 'q' + str(quarter)]
-    mlist = internal.mlist('all')
-    fin_tickers = fa.fin_tickers(False)
-    ticker_list = [ticker for ticker in mlist if ticker not in fin_tickers]
-    # some tickers in margin list do not have enough data to run K-Means
-    model_tickers = table.index.to_list()
-    ticker_list = list(set(ticker_list).intersection(model_tickers))
-    series = series.loc[ticker_list]
-
-    def f(score):
-        if score <= 25:
-            return 'D'
-        elif score <= 50:
-            return 'C'
-        elif score <= 75:
-            return 'B'
-        elif score <= 100:
-            return 'A'
-        else:
-            return np.nan
-
-    series = series.map(f).dropna()
-    groups = series.drop_duplicates().to_numpy()
-    d = dict()
-    for group in groups:
-        tickers = series.loc[series==group].index.to_list()
-        d[group] = tickers
-
-    return d
-
-graph_tickers(fa.tickers('gen'),'bics',1)
-compare_industry(fa.tickers('gen'),'bics',1)
-
+graph_tickers(fa.tickers('gen'))
+compare_industry(fa.tickers('gen'))
 
 execution_time = time.time() - start_time
 print(f"The execution time is: {int(execution_time)}s seconds")

@@ -17,9 +17,10 @@ ignored_exceptions = (
     ElementNotInteractableException,
     PageFailToLoad,
 )
-n_max_try = 10
+n_max_try = 100
 max_wait_time = 10
-bmk_time = btime(dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),-120)
+num_hours = 120
+bmk_time = btime(dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),-num_hours)
 fixedmp_list = internal.fixedmp_list
 margin_list = internal.mlist()
 

@@ -6,14 +6,24 @@ backtest_dir = join(dirname(realpath(__file__)),'backtest_chart')
 q_upper = 0.95
 q_lower = 0
 
-def monte_carlo(
+# CREDIT RATING
+rating_path = join(realpath(dirname(dirname(__file__))),'credit_rating','result')
+# adjust result_table_gen
+gen_table = pd.read_csv(join(rating_path,'result_table_gen.csv'),index_col=['ticker'])
+bank_table = pd.read_csv(join(rating_path,'result_table_bank.csv'),index_col=['ticker'])
+ins_table = pd.read_csv(join(rating_path,'result_table_ins.csv'),index_col=['ticker'])
+sec_table = pd.read_csv(join(rating_path,'result_table_sec.csv'),index_col=['ticker'])
+rating_table = pd.concat([gen_table,bank_table,ins_table,sec_table])
+rating_table.drop(['BM_'],inplace=True)
+rating_table.fillna('Not enough data',inplace=True)
+
+def run(
         ticker:str,
         hdays=252,
         pdays=66,
         alpha=0.05,
         simulation=100000,
         savefigure:bool=True,
-        fulloutput:bool=False,
         seed:int=1,
         run_date:str='today',
 ):
@@ -62,7 +72,6 @@ def monte_carlo(
                xytext=(0,2), textcoords='offset pixels',
                ha='left', va='bottom', fontsize=8, color='red')
 
-        print(run_date)
         if run_date != 'today':
             today_price = ta.last(ticker) * 1000
             ax[0].axhline(today_price, ls='--', lw=0.6, color='red')
@@ -73,9 +82,8 @@ def monte_carlo(
                ha='left', va='bottom', fontsize=8, color='red')
 
         ax[0].yaxis.set_major_formatter(FuncFormatter(priceKformat))
-        ax[0].annotate('Worst Case over \n'
-                       + f'{int(simulation):,d}' + ' Simulations: '
-                       + f'{round((breakeven_price/price_t-1)*100, 2):,} % \n'
+        ax[0].annotate('Discount Rate: '
+                       + f'{round((breakeven_price/price_t-1)*100,2):,} % \n'
                        + f'Trading Days: {pdays} \n'
                        + 'Breakeven Price: ' + adjprice(breakeven_price),
                        xy=(0.615, 1.01), xycoords=ax[0].transAxes,
@@ -84,13 +92,13 @@ def monte_carlo(
         sns.histplot(y=last_price, ax=ax[1], bins=200, legend=False, color='tab:blue', stat='density')
         ax[1].set_xlabel('Density')
         ax[1].set_ylabel('Stock Price')
-        ax[1].axhline(breakeven_price, ls='--', linewidth=0.5, color='tab:red')
+        ax[1].axhline(lv0_price, ls='--', linewidth=0.5, color='tab:red')
         ax[1].axhline(lv1_price, ls='--', linewidth=0.5, color='tab:red')
         ax[1].axhline(lv2_price, ls='--', linewidth=0.5, color='tab:red')
         ax[1].axhline(lv3_price, ls='--', linewidth=0.5, color='tab:red')
 
-        ax[1].annotate('Breakeven Price: ' + adjprice(breakeven_price),
-                       xy=(0.5,breakeven_price),
+        ax[1].annotate(f'Lowest Price: ' + adjprice(lv0_price),
+                       xy=(0.5,lv0_price),
                        xycoords=transforms.blended_transform_factory
                        (ax[1].transAxes,ax[1].transData),
                        xytext=(0,2), textcoords='offset pixels',
@@ -115,7 +123,7 @@ def monte_carlo(
                        ha='left', va='bottom', fontsize=8, color='tab:red')
 
         f = lambda x: int(adjprice(x).replace(',',''))
-        ax[1].axhspan(ymin=f(breakeven_price),ymax=f(lv1_price),xmin=0,xmax=1,facecolor='tab:red',alpha=0.2)
+        ax[1].axhspan(ymin=f(lv0_price),ymax=f(lv1_price),xmin=0,xmax=1,facecolor='tab:red',alpha=0.2)
         ax[1].axhspan(ymin=f(lv1_price),ymax=f(lv2_price),xmin=0,xmax=1,facecolor='tab:red',alpha=0.1)
         ax[1].axhspan(ymin=f(lv2_price),ymax=f(lv3_price),xmin=0,xmax=1,facecolor='tab:red',alpha=0.05)
 
@@ -124,7 +132,7 @@ def monte_carlo(
                        f'- For Group A, we propose to take higher risk, at {adjprice(lv3_price)} dong\n'
                        f'- For Group B, we propose to take moderate risk, at {adjprice(lv2_price)} dong\n'
                        f'- For Group C, we propose to take minor risk, at {adjprice(lv1_price)} dong\n'
-                       f'- For Group D, we propose to take no risk, at {adjprice(breakeven_price)} dong',
+                       f'- For Group D, we propose to take no risk, at {adjprice(lv0_price)} dong',
                        xy=(-0.3,1.01), xycoords=ax[1].transAxes, ha='left', va='bottom', fontsize=9, linespacing=1.3)
 
         ax[1].tick_params(axis='x', bottom=False, labelbottom=False)
@@ -296,10 +304,32 @@ def monte_carlo(
     last_price = df_simulated_price.iloc[-1,:]
     ubound = pd.DataFrame(df_simulated_price.quantile(q=q_upper,axis=1,interpolation='linear'))
     dbound = pd.DataFrame(df_simulated_price.quantile(q=q_lower,axis=1,interpolation='linear'))
-    breakeven_price = dbound.min().iloc[0]
+    lv0_price = dbound.min().iloc[0]
     lv1_price = last_price.loc[last_price.lt(price_t)].quantile(0.01)
     lv2_price = last_price.loc[last_price.lt(price_t)].quantile(0.03)
     lv3_price = last_price.loc[last_price.lt(price_t)].quantile(0.05)
+
+    try:
+        rating = rating_table.loc[ticker,rating_table.columns[-1]]
+    except KeyError:
+        rating = 'Not in industry classification'
+
+    convert_to_valid_price = lambda x: int(adjprice(x).replace(',', ''))
+    if rating in ['Not enough data','Not in industry classification']:
+        group = 'Not enough data'
+        breakeven_price = convert_to_valid_price(lv0_price) # not enough fundamental data for credit rating means convertively making no markup
+    elif rating >= 75:
+        group = 'A'
+        breakeven_price = convert_to_valid_price(lv3_price)
+    elif rating >= 50:
+        group = 'B'
+        breakeven_price = convert_to_valid_price(lv2_price)
+    elif rating >= 25:
+        group = 'C'
+        breakeven_price = convert_to_valid_price(lv1_price)
+    else:
+        group = 'D'
+        breakeven_price = convert_to_valid_price(lv0_price)
 
     connect_date = pd.date_range(df['trading_date'].max(), pro_days[0])[[0,-1]]
     connect = pd.DataFrame({'price_u': [price_t,ubound.iloc[0,0]],
@@ -310,14 +340,4 @@ def monte_carlo(
     print(f'Breakeven price of {ticker} is ' + str(breakeven_price))
     print("The execution time is: %s seconds" %(int(time.time()-start_time)))
 
-    if fulloutput is False:
-        return breakeven_price, lv1_price, lv2_price, lv3_price
-    else:
-        input_ = dict()
-        input_['breakeven_price'] = breakeven_price   # float
-        input_['historical_price'] = pd.DataFrame(df_historical['close'].to_numpy(), index=df_historical['trading_date'].to_numpy())
-        input_['simulated_price'] = df_simulated_price.T
-        input_['last_price'] = last_price.to_numpy()
-        input_['ubound'] = ubound   # pd.DataFrame
-        input_['dbound'] = dbound   # pd.DataFrame
-        return input_
+    return lv0_price, lv1_price, lv2_price, lv3_price, breakeven_price, group

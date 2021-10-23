@@ -875,7 +875,7 @@ class ta:
             self,
             ticker:str,
             fromdate=None,
-            todate=None
+            todate=None,
     ) \
             -> pd.DataFrame:
 
