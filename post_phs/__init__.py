@@ -296,7 +296,7 @@ class post:
         now = dt.date.today()
         date_string = now.strftime('%Y%m%d')
 
-        path = r'C:\Users\hiepdang\News Report\Trading Service'
+        path = r'C:\Users\hiepdang\Shared Folder\Trading Service\News Update'
         file_name = f'{date_string}_news.xlsx'
         file_path = fr'{path}\{file_name}'
 

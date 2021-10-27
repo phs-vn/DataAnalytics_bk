@@ -61,7 +61,7 @@ def get_info(
     if periodicity.lower() == 'daily':
         start_date = run_time.strftime('%Y/%m/%d')
         end_date = start_date
-        period = f"{run_time.strftime('%Y/%m/%d')}"
+        period = f"{run_time.strftime('%Y.%m.%d')}"
     elif periodicity.lower() == 'weekly':
         start_date = sow.strftime('%Y/%m/%d')
         end_date = eow.strftime('%Y/%m/%d')

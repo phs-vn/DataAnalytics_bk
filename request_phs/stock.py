@@ -861,10 +861,8 @@ fa = fa()
 
 class ta:
 
-    address_hist \
-        = 'https://api.phs.vn/market/utilities.svc/GetShareIntraday'
-    address_intra \
-        = 'https://api.phs.vn/market/Utilities.svc/GetRealShareIntraday'
+    address_hist = 'https://api.phs.vn/market/utilities.svc/GetShareIntraday'
+    address_intra = 'https://api.phs.vn/market/Utilities.svc/GetRealShareIntraday'
 
 
     def __init__(self):
