@@ -18,27 +18,27 @@ def run(
     depository_fee = pd.read_sql(
         "SELECT sub_account, fee_amount FROM depository_fee "
         f"WHERE date BETWEEN '{start_date}' AND '{end_date}'",
-        connect,
+        connect_DWH_CoSo,
         index_col='sub_account',
     )
     account = pd.read_sql(
         "SELECT sub_account, account_code FROM sub_account;",
-        connect,
+        connect_DWH_CoSo,
         index_col='sub_account',
     ).squeeze()
     broker = pd.read_sql(
         "SELECT account_code, broker_id FROM account",
-        connect,
+        connect_DWH_CoSo,
         index_col='account_code',
     ).squeeze()
     branch_id = pd.read_sql(
         "SELECT broker_id, branch_id FROM broker",
-        connect,
+        connect_DWH_CoSo,
         index_col='broker_id',
     ).squeeze()
     branch_name = pd.read_sql(
         "SELECT branch_id, branch_name FROM branch;",
-        connect,
+        connect_DWH_CoSo,
         index_col='branch_id',
     ).squeeze()
     result = pd.DataFrame(

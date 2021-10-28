@@ -189,25 +189,6 @@ def run(
             'font_size': 12
         }
     )
-    str_bold = workbook.add_format(
-        {
-            'bold': True,
-            'valign': 'vcenter',
-            'text_wrap': True,
-            'font_name': 'Times New Roman',
-            'font_size': 12
-        }
-    )
-    str_bold_center = workbook.add_format(
-        {
-            'bold': True,
-            'align': 'center',
-            'valign': 'vcenter',
-            'text_wrap': True,
-            'font_name': 'Times New Roman',
-            'font_size': 12
-        }
-    )
     header_format = workbook.add_format(
         {
             'bold': True,

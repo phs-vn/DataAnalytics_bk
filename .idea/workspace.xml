@@ -5,20 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoCheckGia.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/machitieu.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoNgay/2021.10.18/Báo cáo check giá 2021.10.18.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoNgay/2021.10.25/Báo cáo check giá 2021.10.25.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoNgay/2021.10.27/Báo cáo check giá 2021.10.27.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoTuan/18-22.10.2021/Báo cáo tiền gửi và số lượng tài khoản 18-22.10.2021.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/text_mining/scrape_vietstock_trading_price.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/07.2021/Báo cáo phí tạm tính phí lưu ký 07.2021.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/08.2021/Báo cáo giá dịch vụ giao dịch 08.2021 - HNX &amp; UPCOM.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/08.2021/Báo cáo giá dịch vụ giao dịch 08.2021 - HOSE.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/08.2021/Báo cáo phí tạm tính phí lưu ký 08.2021.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/Báo cáo giá dịch vụ giao dịch 09.2021 - HNX &amp; UPCOM.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/Báo cáo giá dịch vụ giao dịch 09.2021 - HOSE.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/Báo cáo phí chuyển khoản tổng hợp 09.2021.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/Báo cáo phí tạm tính phí lưu ký 09.2021.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoTuan/04-08.10.2021/Báo cáo tiền gửi và số lượng tài khoản 04-08.10.2021.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoTuan/11-15.10.2021/Báo cáo tiền gửi và số lượng tài khoản 11-15.10.2021.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoTuan/20-24.09.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (new) 20-24.09.2021.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoTuan/27-01.10.2021/Báo cáo tiền gửi và số lượng tài khoản 27-01.10.2021.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phs/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/phs/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/post_phs/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/post_phs/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/AAA.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoTienGuiSSC.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoTienGuiSSC.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request_phs/stock.py" beforeDir="false" afterPath="$PROJECT_DIR$/request_phs/stock.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HOSEnew.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HOSEnew.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoGiaoDichCKNY.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoTinhHinhHDKD.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoPhiChuyenKhoan.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoPhiChuyenKhoan.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoPhiTamTinhGiaoDich.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoPhiTamTinhGiaoDich.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoPhiTamTinhPhiLuuKy.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoPhiTamTinhPhiLuuKy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/06.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (old) 06.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/08.2021/Báo cáo phí chuyển khoản 08.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/08.2021/Báo cáo phí chuyển khoản tổng hợp 08.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/08.2021/Báo cáo tình hình HĐKD (Biểu II.6) 08.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/Báo cáo hoạt động lưu ký nhà đầu tư nước ngoài 09.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/HNX - Danh sách KH đóng mở ủy quyền tài khoản PHS 09.2021.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/HNX - Danh sách KH đóng mở ủy quyền tài khoản PHS 09.2021.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (new) 09.2021.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (new) 09.2021.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (old) 09.2021.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (old) 09.2021.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoTuan/18-22.10.2021/Báo cáo tiền gửi và số lượng tài khoản 18-22.10.2021.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoTuan/18-22.10.2021/Báo cáo tiền gửi và số lượng tài khoản 18-22.10.2021.xlsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +97,7 @@
       <recent name="C:\Users\hiepdang\PycharmProjects\datadriven-project\reporting_tool\trading_service\data_validation" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.BaoCaoCheckGia">
+  <component name="RunManager" selected="Python.BaoCaoPhiChuyenKhoan">
     <configuration name="BaoCaoCheckGia" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -95,91 +109,79 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoCheckGia.py" />
       <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="BaoCaoTienGuiSSC" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="BaoCaoDongMoUyQuyenTK_HOSEold" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoTienGuiSSC.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HOSEold.py" />
       <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="run_warning_rmd" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="BaoCaoPhiChuyenKhoan" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/post_phs" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/post_phs/run_warning_rmd.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoPhiChuyenKhoan.py" />
       <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="scrape_ticker_by_exchange" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="BaoCaoPhiTamTinhGiaoDich" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/text_mining" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/text_mining/scrape_ticker_by_exchange.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoPhiTamTinhGiaoDich.py" />
       <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="scrape_vietstock_trading_price" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="BaoCaoPhiTamTinhPhiLuuKy" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/text_mining" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\hiepdang\PycharmProjects\DataAnalytics\text_mining\scrape_vietstock_trading_price.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoPhiTamTinhPhiLuuKy.py" />
       <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
@@ -187,19 +189,19 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.BaoCaoDongMoUyQuyenTK_HOSEold" />
+      <item itemvalue="Python.BaoCaoPhiTamTinhGiaoDich" />
+      <item itemvalue="Python.BaoCaoPhiTamTinhPhiLuuKy" />
       <item itemvalue="Python.BaoCaoCheckGia" />
-      <item itemvalue="Python.BaoCaoTienGuiSSC" />
-      <item itemvalue="Python.run_warning_rmd" />
-      <item itemvalue="Python.scrape_ticker_by_exchange" />
-      <item itemvalue="Python.scrape_vietstock_trading_price" />
+      <item itemvalue="Python.BaoCaoPhiChuyenKhoan" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.BaoCaoPhiChuyenKhoan" />
         <item itemvalue="Python.BaoCaoCheckGia" />
-        <item itemvalue="Python.BaoCaoCheckGia" />
-        <item itemvalue="Python.scrape_ticker_by_exchange" />
-        <item itemvalue="Python.BaoCaoCheckGia" />
-        <item itemvalue="Python.BaoCaoCheckGia" />
+        <item itemvalue="Python.BaoCaoPhiTamTinhPhiLuuKy" />
+        <item itemvalue="Python.BaoCaoPhiTamTinhGiaoDich" />
+        <item itemvalue="Python.BaoCaoDongMoUyQuyenTK_HOSEold" />
       </list>
     </recent_temporary>
   </component>
@@ -320,7 +322,14 @@
       <option name="project" value="LOCAL" />
       <updated>1634978822235</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Hiep Dang 08/10/2021">
+      <created>1635330944079</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1635330944079</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -382,21 +391,5 @@
     <MESSAGE value="Hiep Dang 04/10/2021" />
     <MESSAGE value="Hiep Dang 08/10/2021" />
     <option name="LAST_COMMIT_MESSAGE" value="Hiep Dang 08/10/2021" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK.py</url>
-          <line>1034</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK.py</url>
-          <line>1417</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
