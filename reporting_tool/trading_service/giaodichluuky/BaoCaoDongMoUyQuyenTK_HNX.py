@@ -1,5 +1,6 @@
 from reporting_tool.trading_service.giaodichluuky import *
 
+# báo cáo này chỉ có thể backtest được số đóng mở trong kỳ, số cuối kỳ và đầu kỳ ko backtest được (do thể hiện số hiện tại)
 def run(
         periodicity:str,
         run_time=None,
@@ -16,80 +17,101 @@ def run(
         os.mkdir(join(dept_folder,folder_name,period))
 
     period_account = pd.read_sql(
-        "SELECT "
-        "account_type,"
-        "account_code, "
-        "customer_name, "
-        "nationality, "
-        "address, "
-        "customer_id_number, "
-        "date_of_issue, "
-        "place_of_issue, "
-        "date_of_open, "
-        "date_of_close "
-        "FROM account "
-        f"WHERE (date_of_open BETWEEN '{start_date}' AND '{end_date}') "
-        f"OR (date_of_close BETWEEN '{start_date}' AND '{end_date}') ",
+        f"""
+        SELECT
+        account_type,
+        account_code,
+        customer_name,
+        nationality,
+        address,
+        customer_id_number,
+        date_of_issue,
+        place_of_issue,
+        date_of_open,
+        date_of_close
+        FROM account
+        WHERE (date_of_open BETWEEN '{start_date}' AND '{end_date}')
+        OR (date_of_close BETWEEN '{start_date}' AND '{end_date}')
+        """,
         connect_DWH_CoSo,
         index_col='account_code',
     )
-    count_account = pd.read_sql(
-        "SELECT "
-        "COUNT('account_type') AS count, "
-        "account_type "
-        "FROM account "
-        "GROUP BY account_type",
+    start_account = pd.read_sql(
+        f"""
+        SELECT account_code, account_type
+        FROM account
+        WHERE (date_of_open <= '{bdate(start_date,-1)}') AND (date_of_close IS NULL OR date_of_close > '{bdate(start_date,-1)}')
+        """,
         connect_DWH_CoSo,
-        index_col='account_type',
-    )
+        index_col='account_code',
+    ).squeeze()
+    end_account = pd.read_sql(
+        f"""
+        SELECT account_code, account_type
+        FROM account
+        WHERE (date_of_open <= '{end_date}') AND (date_of_close IS NULL OR date_of_close > '{end_date}')
+        """,
+        connect_DWH_CoSo,
+        index_col='account_code',
+    ).squeeze()
     contract_type = pd.read_sql(
-        "SELECT "
-        "customer_information.sub_account, "
-        "sub_account.account_code, "
-        "customer_information.contract_code, "
-        "customer_information.contract_type "
-        "FROM customer_information "
-        "LEFT JOIN sub_account ON customer_information.sub_account=sub_account.sub_account",
+        """
+        SELECT
+        customer_information.sub_account,
+        sub_account.account_code,
+        customer_information.contract_code,
+        customer_information.contract_type
+        FROM customer_information
+        LEFT JOIN sub_account ON customer_information.sub_account = sub_account.sub_account
+        """,
         connect_DWH_CoSo,
         index_col='sub_account',
     )
     customer_information_change = pd.read_sql(
-        "SELECT * "
-        "FROM customer_information_change "
-        f"WHERE change_date BETWEEN '{start_date}' AND '{end_date}'",
+        f"""
+        SELECT *
+        FROM customer_information_change
+        WHERE change_date BETWEEN '{start_date}' AND '{end_date}'
+        """,
         connect_DWH_CoSo,
         index_col='account_code',
     )
     authorization = pd.read_sql(
-        "SELECT * "
-        "FROM [authorization] "
-        f"WHERE date_of_authorization BETWEEN '{start_date}' AND '{end_date}' "
-        f"AND authorized_person_id = '155/GCNTVLK' "
-        f"AND scope_of_authorization IS NOT NULL "
-        f"AND scope_of_authorization <> 'I,IV,V' ",
+        f"""
+        SELECT * 
+        FROM [authorization] 
+        WHERE date_of_authorization BETWEEN '{start_date}' AND '{end_date}'
+        AND authorized_person_id = '155/GCNTVLK'
+        AND scope_of_authorization IS NOT NULL
+        AND scope_of_authorization <> 'I,IV,V'
+        """,
         connect_DWH_CoSo,
         index_col='account_code',
     )
     # Loai cac uy quyen duoc mo moi chi de dang ky uy quyen them (rule ben DVKH)
     drop_account = pd.read_sql(
-        "SELECT account_code "
-        "FROM authorization_change "
-        f"WHERE date_of_change BETWEEN '{start_date}' AND '{end_date}' "
-        "AND new_end_date IS NOT NULL",
+        f"""
+        SELECT account_code
+        FROM authorization_change
+        WHERE date_of_change BETWEEN '{start_date}' AND '{end_date}'
+        AND new_end_date IS NOT NULL
+        """,
         connect_DWH_CoSo,
         index_col='account_code'
     )
     authorization_change = pd.read_sql(
-        "SELECT * "
-        "FROM authorization_change "
-        f"WHERE date_of_change BETWEEN '{start_date}' AND '{end_date}'",
+        f"""
+        SELECT *
+        FROM authorization_change
+        WHERE date_of_change BETWEEN '{start_date}' AND '{end_date}'
+        """,
         connect_DWH_CoSo,
         index_col='account_code'
     )
 
     authorization = authorization.loc[~authorization.index.isin(drop_account.index)]
     authorization['scope_of_authorization'] = 'I,II,IV,V,VII,IX,X'
-
+    authorization.loc[authorization['authorized_person_name']=='CTY CP CHỨNG KHOÁN PHÚ HƯNG','authorized_person_address'] = CompanyAddress
     mapper = lambda x: 'Thường' if x.startswith('Thường') else 'Ký Quỹ'
     contract_type['contract_type'] = contract_type['contract_type'].map(mapper)
 
@@ -100,15 +122,6 @@ def run(
     period_account.loc[period_account['account_type'].str.startswith('Tổ chức'),'entity_type'] = 'TC'
     account_open = period_account.loc[period_account['date_of_close'].isnull()]
     account_close = period_account.loc[period_account['date_of_close'].notnull()]
-
-    # Cuoi ky
-    closing_ind_domestic = count_account.loc['Cá nhân trong nước','count']
-    closing_ins_domestic = count_account.loc['Tổ chức trong nước','count']
-    closing_ind_foreign = count_account.loc['Cá nhân nước ngoài','count']
-    closing_ins_foreign = count_account.loc['Tổ chức nước ngoài','count']
-    closing_totaL_domestic = closing_ind_domestic + closing_ins_domestic
-    closing_totaL_foreign = closing_ind_foreign + closing_ins_foreign
-    closing_total = closing_totaL_domestic + closing_totaL_foreign
 
     # Tinh bien dong TK
     open_ind_domestic = (account_open['account_type']=='Cá nhân trong nước').sum()
@@ -125,6 +138,28 @@ def run(
     close_total_foreign = close_ind_foreign + close_ins_foreign
     open_total = open_total_domestic + open_total_foreign
     close_total = close_total_domestic + close_total_foreign
+
+    # Dau ky
+    start_account_count = start_account.value_counts()
+    opening_ind_domestic = start_account_count.loc['Cá nhân trong nước']
+    opening_ins_domestic = start_account_count.loc['Tổ chức trong nước']
+    opening_ind_foreign = start_account_count.loc['Cá nhân nước ngoài']
+    opening_ins_foreign = start_account_count.loc['Tổ chức nước ngoài']
+
+    opening_total_domestic = opening_ind_domestic + opening_ins_domestic
+    opening_total_foreign = opening_ind_foreign + opening_ins_foreign
+    opening_total = opening_total_domestic + opening_total_foreign
+
+    # Cuoi ky
+    end_account_count = end_account.value_counts()
+    closing_ind_domestic = end_account_count.loc['Cá nhân trong nước']
+    closing_ins_domestic = end_account_count.loc['Tổ chức trong nước']
+    closing_ind_foreign = end_account_count.loc['Cá nhân nước ngoài']
+    closing_ins_foreign = end_account_count.loc['Tổ chức nước ngoài']
+
+    closing_totaL_domestic = closing_ind_domestic + closing_ins_domestic
+    closing_totaL_foreign = closing_ind_foreign + closing_ins_foreign
+    closing_total = closing_totaL_domestic + closing_totaL_foreign
 
     ###########################################################################
     ###########################################################################
@@ -153,7 +188,8 @@ def run(
             'align': 'center',
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
-            'font_size': 12
+            'font_size': 12,
+            'text_wrap': True,
         }
     )
     sup_note_format = workbook.add_format(
@@ -224,7 +260,8 @@ def run(
             'valign': 'vcenter',
             'border': 1,
             'font_name': 'Times New Roman',
-            'font_size': 12
+            'font_size': 12,
+            'text_wrap': True,
         }
     )
     normal_cell_format = workbook.add_format(
@@ -232,7 +269,8 @@ def run(
             'border': 1,
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
-            'font_size': 12
+            'font_size': 12,
+            'text_wrap': True,
         }
     )
     header_value = workbook.add_format(
@@ -242,7 +280,8 @@ def run(
             'num_format': '_(* #,##0_);_(* (#,##0);_(* "-"??_);_(@_)',
             'bold': True,
             'font_name': 'Times New Roman',
-            'font_size': 12
+            'font_size': 12,
+            'text_wrap': True,
         }
     )
     normal_value = workbook.add_format(
@@ -251,7 +290,8 @@ def run(
             'valign': 'vcenter',
             'num_format': '_(* #,##0_);_(* (#,##0);_(* "-"??_);_(@_)',
             'font_name': 'Times New Roman',
-            'font_size': 12
+            'font_size': 12,
+            'text_wrap': True,
         }
     )
     sheet_tonghop = workbook.add_worksheet('Tông hợp')
@@ -259,7 +299,9 @@ def run(
 
     sheet_tonghop.set_column('A:A',8)
     sheet_tonghop.set_column('B:B',26)
-    sheet_tonghop.set_column('C:F',22)
+    sheet_tonghop.set_column('C:C',22)
+    sheet_tonghop.set_column('D:E',20.5)
+    sheet_tonghop.set_column('F:F',22)
     sheet_tonghop.set_row(1,34)
 
     sup_title = r'BÁO CÁO TÌNH HÌNH ĐÓNG/MỞ TÀI KHOẢN VÀ KHÁCH HÀNG ỦY QUYỀN'
@@ -294,7 +336,7 @@ def run(
             closing_ins_domestic,
             closing_totaL_foreign,
             closing_ind_foreign,
-            close_ins_foreign,
+            closing_ins_foreign,
             closing_total,
         ]
     )
@@ -320,7 +362,17 @@ def run(
             open_total,
         ]
     )
-    opening_column = closing_column + close_column - open_column
+    opening_column = np.array(
+        [
+            opening_total_domestic,
+            opening_ind_domestic,
+            opening_ins_domestic,
+            opening_total_foreign,
+            opening_ind_foreign,
+            opening_ins_foreign,
+            opening_total,
+        ]
+    )
     value_array = np.array([opening_column,open_column,close_column,closing_column]).transpose()
     for col in range(4):
         for row in range(7):
@@ -340,7 +392,8 @@ def run(
             'bold': True,
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
-            'font_size': 14
+            'font_size': 14,
+            'text_wrap': True,
         }
     )
     header_format = workbook.add_format(
@@ -360,7 +413,8 @@ def run(
             'align': 'left',
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
-            'font_size': 10
+            'font_size': 10,
+            'text_wrap': True,
         }
     )
     text_center_format = workbook.add_format(
@@ -369,7 +423,8 @@ def run(
             'align': 'center',
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
-            'font_size': 10
+            'font_size': 10,
+            'text_wrap': True,
         }
     )
     date_format = workbook.add_format(
@@ -379,19 +434,25 @@ def run(
             'valign': 'vcenter',
             'num_format': 'dd\/mm\/yyyy',
             'font_name': 'Times New Roman',
-            'font_size': 10
+            'font_size': 10,
+            'text_wrap': True,
         }
     )
     sheet_motaikhoan = workbook.add_worksheet('Mở TK')
     sheet_motaikhoan.hide_gridlines(option=2)
     # set column width
-    sheet_motaikhoan.set_column('A:A',4)
-    sheet_motaikhoan.set_column('B:B',25)
-    sheet_motaikhoan.set_column('C:D',12)
-    sheet_motaikhoan.set_column('E:E',70)
-    sheet_motaikhoan.set_column('F:F',12)
-    sheet_motaikhoan.set_column('G:G',30)
-    sheet_motaikhoan.set_column('H:K',12)
+    sheet_motaikhoan.set_column('A:A',4.6)
+    sheet_motaikhoan.set_column('B:B',19.7)
+    sheet_motaikhoan.set_column('C:C',10.1)
+    sheet_motaikhoan.set_column('D:D',14.1)
+    sheet_motaikhoan.set_column('E:E',57.3)
+    sheet_motaikhoan.set_column('F:F',11.9)
+    sheet_motaikhoan.set_column('G:G',16.6)
+    sheet_motaikhoan.set_column('H:H',7.9)
+    sheet_motaikhoan.set_column('I:I',11.7)
+    sheet_motaikhoan.set_column('J:J',12.4)
+    sheet_motaikhoan.set_column('K:K',9.1)
+
     sheet_motaikhoan.set_row(0,30)
     sheet_motaikhoan.merge_range('A1:K1','II. Danh sách khách hàng mở tài khoản',sup_title_format)
     headers = [
@@ -433,7 +494,8 @@ def run(
             'bold': True,
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
-            'font_size': 14
+            'font_size': 14,
+            'text_wrap': True,
         }
     )
     header_format = workbook.add_format(
@@ -453,7 +515,8 @@ def run(
             'align': 'left',
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
-            'font_size': 10
+            'font_size': 10,
+            'text_wrap': True,
         }
     )
     text_center_format = workbook.add_format(
@@ -462,7 +525,8 @@ def run(
             'align': 'center',
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
-            'font_size': 10
+            'font_size': 10,
+            'text_wrap': True,
         }
     )
     date_format = workbook.add_format(
@@ -472,38 +536,39 @@ def run(
             'valign': 'vcenter',
             'num_format': 'dd\/mm\/yyyy',
             'font_name': 'Times New Roman',
-            'font_size': 10
+            'font_size': 10,
+            'text_wrap': True,
         }
     )
     sheet_dongtaikhoan = workbook.add_worksheet('Đóng TK')
     sheet_dongtaikhoan.hide_gridlines(option=2)
     # set column width
-    sheet_dongtaikhoan.set_column('A:A',4)
-    sheet_dongtaikhoan.set_column('B:B',25)
-    sheet_dongtaikhoan.set_column('C:D',12)
-    sheet_dongtaikhoan.set_column('E:E',70)
-    sheet_dongtaikhoan.set_column('F:F',12)
-    sheet_dongtaikhoan.set_column('G:G',30)
-    sheet_dongtaikhoan.set_column('H:L',12)
+    sheet_dongtaikhoan.set_column('A:A',4.4)
+    sheet_dongtaikhoan.set_column('B:B',26.3)
+    sheet_dongtaikhoan.set_column('C:C',13.1)
+    sheet_dongtaikhoan.set_column('D:D',11.9)
+    sheet_dongtaikhoan.set_column('E:E',36.2)
+    sheet_dongtaikhoan.set_column('F:F',13.7)
+    sheet_dongtaikhoan.set_column('G:G',12.6)
+    sheet_dongtaikhoan.set_column('H:H',6.7)
+    sheet_dongtaikhoan.set_column('I:J',11.7)
+    sheet_dongtaikhoan.set_column('K:K',9.7)
+    sheet_dongtaikhoan.set_column('L:L',8.4)
     sheet_dongtaikhoan.set_default_row(27) # set all row height = 27
-    sheet_dongtaikhoan.set_row(0,15)
-    sheet_dongtaikhoan.set_row(1,15)
+    sheet_dongtaikhoan.set_row(0,30)
     sheet_dongtaikhoan.set_row(2,15)
-    sheet_dongtaikhoan.set_row(3,15)
-    sheet_dongtaikhoan.set_row(4,22)
-    sheet_dongtaikhoan.set_row(5,30)
-    sheet_dongtaikhoan.merge_range('A1:L1','II. Danh sách khách hàng đóng tài khoản',sup_title_format)
+    sheet_dongtaikhoan.merge_range('A1:L1','III. Danh sách khách hàng đóng tài khoản',sup_title_format)
     headers = [
         'STT',
         'Tên khách hàng',
-        'Mã TK',
+        'Mã tài khoản',
         'Số CMND/ Hộ chiếu/Giấy ĐKKD',
         'Địa chỉ',
         'Ngày cấp',
         'Nơi cấp',
         'Loại hình',
-        'Ngày mở',
-        'Ngày đóng',
+        'Ngày mở TK',
+        'Ngày đóng TK',
         'Quốc tịch',
         'Ghi chú',
     ]
@@ -534,7 +599,8 @@ def run(
             'bold': True,
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
-            'font_size': 14
+            'font_size': 14,
+            'text_wrap': True,
         }
     )
     header_format = workbook.add_format(
@@ -575,20 +641,25 @@ def run(
             'valign': 'vcenter',
             'num_format': 'dd\/mm\/yyyy',
             'font_name': 'Times New Roman',
-            'font_size': 10
+            'font_size': 10,
+            'text_wrap': True,
         }
     )
     sheet_thaydoithongtin = workbook.add_worksheet('Thay đổi thông tin')
     sheet_thaydoithongtin.hide_gridlines(option=2)
 
-    sheet_thaydoithongtin.set_column('A:A',4)
-    sheet_thaydoithongtin.set_column('B:B',25)
-    sheet_thaydoithongtin.set_column('C:F',13)
-    sheet_thaydoithongtin.set_column('G:G',24)
-    sheet_thaydoithongtin.set_column('H:I',13)
-    sheet_thaydoithongtin.set_column('J:J',24)
-    sheet_thaydoithongtin.set_column('K:L',26)
-    sheet_thaydoithongtin.set_column('M:P',8)
+    sheet_thaydoithongtin.set_column('A:A',5)
+    sheet_thaydoithongtin.set_column('B:B',20.5)
+    sheet_thaydoithongtin.set_column('C:D',11.6)
+    sheet_thaydoithongtin.set_column('E:E',14.1)
+    sheet_thaydoithongtin.set_column('F:F',9.7)
+    sheet_thaydoithongtin.set_column('G:G',11.9)
+    sheet_thaydoithongtin.set_column('H:H',13.6)
+    sheet_thaydoithongtin.set_column('I:I',9.5)
+    sheet_thaydoithongtin.set_column('J:J',13.9)
+    sheet_thaydoithongtin.set_column('K:L',28)
+    sheet_thaydoithongtin.set_column('M:N',8.5)
+    sheet_thaydoithongtin.set_column('O:P',5)
     sheet_thaydoithongtin.set_row(0,30)
     sheet_thaydoithongtin.set_row(1,28)
     sheet_thaydoithongtin.set_row(2,39)
@@ -619,7 +690,7 @@ def run(
     sheet_thaydoithongtin.write_row('E3',sub_header,header_format)
     sheet_thaydoithongtin.write_row(
         'A4',
-        [f'({i})' for i in np.arange(16)+1], # cong them 2 cot ghi chu
+        [f'{i}' for i in np.arange(16)+1], # cong them 2 cot ghi chu
         header_format,
     )
     sheet_thaydoithongtin.write_column(
@@ -634,7 +705,7 @@ def run(
     )
     sheet_thaydoithongtin.write_column(
         'C5',
-        customer_information_change['old_id_number'],
+        customer_information_change.index,
         text_center_format,
     )
     sheet_thaydoithongtin.write_column(
@@ -713,7 +784,8 @@ def run(
             'bold': True,
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
-            'font_size': 14
+            'font_size': 14,
+            'text_wrap': True,
         }
     )
     header_format = workbook.add_format(
@@ -754,22 +826,23 @@ def run(
             'valign': 'vcenter',
             'num_format': 'dd\/mm\/yyyy',
             'font_name': 'Times New Roman',
-            'font_size': 10
+            'font_size': 10,
+            'text_wrap': True,
         }
     )
     sheet_uyquyen = workbook.add_worksheet('Ủy quyền')
     sheet_uyquyen.hide_gridlines(option=2)
 
-    sheet_uyquyen.set_column('A:A',4)
-    sheet_uyquyen.set_column('B:B',25)
-    sheet_uyquyen.set_column('C:D',12)
-    sheet_uyquyen.set_column('E:E',35)
-    sheet_uyquyen.set_column('F:F',10)
-    sheet_uyquyen.set_column('G:G',20)
-    sheet_uyquyen.set_column('H:H',12)
-    sheet_uyquyen.set_column('I:I',35)
-    sheet_uyquyen.set_column('J:J',15)
-    sheet_uyquyen.set_column('K:K',6)
+    sheet_uyquyen.set_column('A:A',3)
+    sheet_uyquyen.set_column('B:B',18.9)
+    sheet_uyquyen.set_column('C:D',11.6)
+    sheet_uyquyen.set_column('E:E',38.9)
+    sheet_uyquyen.set_column('F:F',9.8)
+    sheet_uyquyen.set_column('G:G',20.4)
+    sheet_uyquyen.set_column('H:H',13.7)
+    sheet_uyquyen.set_column('I:I',34)
+    sheet_uyquyen.set_column('J:J',13.3)
+    sheet_uyquyen.set_column('K:K',5.8)
     sheet_uyquyen.set_row(0,30)
     sheet_uyquyen.set_row(1,51)
 
@@ -812,6 +885,7 @@ def run(
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
             'font_size': 14,
+            'text_wrap': True,
         }
     )
     header_format = workbook.add_format(
@@ -830,7 +904,8 @@ def run(
             'align': 'center',
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
-            'font_size': 12
+            'font_size': 12,
+            'text_wrap': True,
         }
     )
     text_left_format = workbook.add_format(
@@ -860,7 +935,8 @@ def run(
             'valign': 'vcenter',
             'num_format': 'dd\/mm\/yyyy',
             'font_name': 'Times New Roman',
-            'font_size': 10
+            'font_size': 10,
+            'text_wrap': True,
         }
     )
     sheet_thaydoiuyquyen = workbook.add_worksheet('Thay đổi ủy quyền')

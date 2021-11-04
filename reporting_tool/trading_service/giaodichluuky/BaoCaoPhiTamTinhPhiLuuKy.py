@@ -16,44 +16,51 @@ def run(
         os.mkdir(join(dept_folder, folder_name, period))
     
     depository_fee = pd.read_sql(
-        "SELECT sub_account, fee_amount FROM depository_fee "
-        f"WHERE date BETWEEN '{start_date}' AND '{end_date}'",
+        f"""
+        SELECT date, sub_account, fee_amount
+        FROM depository_fee
+        WHERE date BETWEEN '{start_date}' AND '{end_date}'
+        """,
         connect_DWH_CoSo,
-        index_col='sub_account',
+        index_col=['date','sub_account'],
     )
-    account = pd.read_sql(
-        "SELECT sub_account, account_code FROM sub_account;",
-        connect_DWH_CoSo,
-        index_col='sub_account',
-    ).squeeze()
-    broker = pd.read_sql(
-        "SELECT account_code, broker_id FROM account",
-        connect_DWH_CoSo,
-        index_col='account_code',
-    ).squeeze()
     branch_id = pd.read_sql(
-        "SELECT broker_id, branch_id FROM broker",
+        f"""
+        SELECT date, sub_account, branch_id
+        FROM relationship
+        WHERE date BETWEEN '{start_date}' AND '{end_date}'
+        """,
         connect_DWH_CoSo,
-        index_col='broker_id',
+        index_col=['date','sub_account'],
     ).squeeze()
-    branch_name = pd.read_sql(
-        "SELECT branch_id, branch_name FROM branch;",
-        connect_DWH_CoSo,
-        index_col='branch_id',
-    ).squeeze()
+    depository_fee['branch_id'] = branch_id
+    depository_fee = depository_fee.groupby('branch_id')['fee_amount'].sum()
+    branch_name_mapper = {
+        '0001': 'HQ',
+        '0101': 'Quận 3',
+        '0102': 'PMH',
+        '0104': 'Q7',
+        '0105': 'TB',
+        '0116': 'P.QLTK1',
+        '0111': 'InB1',
+        '0113': 'IB',
+        '0201': 'Hà nội',
+        '0202': 'TX',
+        '0301': 'Hải phòng',
+        '0117': 'Quận 1',
+        '0118': 'P.QLTK3',
+        '0119': 'InB2',
+    }
     result = pd.DataFrame(
         columns=[
             'STT',
             'Tên Chi Nhánh',
             'Phí Lưu Ký'
         ],
-        index=branch_name.index
+        index=branch_name_mapper.keys()
     )
-    depository_fee['account'] = account
-    depository_fee['branch'] = depository_fee['account'].map(broker).map(branch_id)
-    depository_fee = depository_fee.groupby('branch')['fee_amount'].sum()
     result['STT'] = np.arange(1,result.shape[0]+1)
-    result['Tên Chi Nhánh'] = branch_name
+    result['Tên Chi Nhánh'] = result.index.map(branch_name_mapper)
     result['Phí Lưu Ký'] = depository_fee
     result['Phí Lưu Ký'].fillna(0,inplace=True)
     result.index.name = 'Mã Chi Nhánh'

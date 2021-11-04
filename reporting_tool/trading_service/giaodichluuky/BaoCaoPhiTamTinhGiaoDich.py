@@ -16,36 +16,25 @@ def run(
         os.mkdir(join(dept_folder, folder_name, period))
 
     trading_record = pd.read_sql(
-        "SELECT sub_account, exchange, type_of_asset, volume, value FROM trading_record "
-        f"WHERE date BETWEEN '{start_date}' AND '{end_date}'",
+        f"""
+        SELECT date, sub_account, exchange, type_of_asset, volume, value
+        FROM trading_record
+        WHERE date BETWEEN '{start_date}' AND '{end_date}'
+        """,
         connect_DWH_CoSo,
-        index_col='sub_account',
+        index_col=['date','sub_account']
     )
-    account = pd.read_sql(
-        "SELECT sub_account, account_code FROM sub_account;",
-        connect_DWH_CoSo,
-        index_col='sub_account',
-    ).squeeze()
-    broker = pd.read_sql(
-        "SELECT account_code, broker_id FROM account",
-        connect_DWH_CoSo,
-        index_col='account_code',
-    ).squeeze()
     branch_id = pd.read_sql(
-        "SELECT broker_id, branch_id FROM broker",
+        f"""
+        SELECT date, sub_account, branch_id
+        FROM relationship
+        WHERE date BETWEEN '{start_date}' AND '{end_date}'
+        """,
         connect_DWH_CoSo,
-        index_col='broker_id',
-    ).squeeze()
-    branch_name = pd.read_sql(
-        "SELECT branch_id, branch_name FROM branch;",
-        connect_DWH_CoSo,
-        index_col='branch_id',
-    ).squeeze()
-
-    result = trading_record.copy()
-    result['branch_id'] = account.map(broker).map(branch_id)
-    result.reset_index(drop=True,inplace=True)
-    result = result.groupby(['branch_id','exchange','type_of_asset']).sum()
+        index_col=['date','sub_account']
+    )
+    trading_record['branch_id'] = branch_id
+    result = trading_record.groupby(['branch_id','exchange','type_of_asset']).sum()
     result.loc[pd.IndexSlice[:,'HNX',:],'service_fee'] = result['value'] * 0.027/100
     result.loc[pd.IndexSlice[:,'UPCOM',:],'service_fee'] = result['value'] * 0.018/100
     check_cp = 'Cổ phiếu thường' in result.index.get_level_values(2)
@@ -62,8 +51,23 @@ def run(
         result.loc[pd.IndexSlice[:,'HOSE','Trái phiếu'],'service_fee'] = result['value'] * 0.0054/100
     result = result.groupby(['branch_id','exchange']).sum()
     result = result.sort_index().reset_index()
-    result.insert(1,'branch_name',result['branch_id'].map(branch_name))
-
+    branch_name_mapper = {
+        '0001':'HQ',
+        '0101':'Quận 3',
+        '0102':'PMH',
+        '0104':'Q7',
+        '0105':'TB',
+        '0116':'P.QLTK1',
+        '0111':'InB1',
+        '0113':'IB',
+        '0201':'Hà nội',
+        '0202':'TX',
+        '0301':'Hải phòng',
+        '0117':'Quận 1',
+        '0118':'P.QLTK3',
+        '0119':'InB2',
+    }
+    result.insert(1,'branch_name',result['branch_id'].map(branch_name_mapper))
     result_hose = result.loc[result['exchange'].isin(['HOSE'])].reset_index()
     result_hose['stt'] = result_hose.index + 1
     result_hose = result_hose[['stt','exchange','branch_id','branch_name','volume','value','service_fee']]

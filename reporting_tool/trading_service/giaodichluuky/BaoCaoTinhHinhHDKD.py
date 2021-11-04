@@ -21,7 +21,7 @@ def run(
         "FROM trading_record "
         f"WHERE date BETWEEN '{begin_of_year}' AND '{end_date}' "
         f"AND settlement_period IN (1,2);",
-        connect,
+        connect_DWH_CoSo,
         index_col='sub_account',
     )
     period_trading_record = pd.read_sql(
@@ -29,7 +29,7 @@ def run(
         "FROM trading_record "
         f"WHERE date BETWEEN '{start_date}' AND '{end_date}' "
         f"AND settlement_period IN (1,2);",
-        connect,
+        connect_DWH_CoSo,
         index_col='sub_account',
     )
 

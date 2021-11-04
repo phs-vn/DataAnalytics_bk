@@ -105,8 +105,8 @@ def bdate(date:str, bdays:int=0) -> str:
 def btime(time:str, bhours:int=0) -> str:
 
     """
-    This function return the business date before/after a certain business days
-    since a given date
+    This function returns the business datetime before/after a certain business hours
+    since a given datetime
 
     :param time: allow string like 'yyyy-mm-dd hh:mm:ss', 'yyyy/mm/dd hh:mm:ss'
     :param bhours: allow positive integer (after) or negative integer (before)
@@ -131,8 +131,7 @@ def btime(time:str, bhours:int=0) -> str:
     while abs(d) < abs(bhours):
         d += step
         result_time += dt.timedelta(hours=step)
-        while result_time.weekday() in holidays.WEEKEND \
-                or result_time in holidays.VN():
+        while result_time.weekday() in holidays.WEEKEND or result_time in holidays.VN():
             result_time += dt.timedelta(days=step)
 
     result_time = result_time.strftime('%Y-%m-%d %H:%M:%S')

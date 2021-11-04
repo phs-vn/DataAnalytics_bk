@@ -17,70 +17,82 @@ def run(
         os.mkdir(join(dept_folder,folder_name,period))
 
     period_account = pd.read_sql(
-        "SELECT "
-        "account_type,"
-        "account_code, "
-        "customer_name, "
-        "nationality, "
-        "address, "
-        "customer_id_number, "
-        "date_of_issue, "
-        "place_of_issue, "
-        "date_of_open, "
-        "date_of_close "
-        "FROM account "
-        f"WHERE (date_of_open BETWEEN '{start_date}' AND '{end_date}') "
-        f"OR (date_of_close BETWEEN '{start_date}' AND '{end_date}') ",
+        f"""
+        SELECT
+        account_type,
+        account_code,
+        customer_name,
+        nationality,
+        address,
+        customer_id_number,
+        date_of_issue,
+        place_of_issue,
+        date_of_open,
+        date_of_close
+        FROM account
+        WHERE (date_of_open BETWEEN '{start_date}' AND '{end_date}')
+        OR (date_of_close BETWEEN '{start_date}' AND '{end_date}')
+        """,
         connect_DWH_CoSo,
         index_col='account_code',
     )
     contract_type = pd.read_sql(
-        "SELECT "
-        "customer_information.sub_account, "
-        "sub_account.account_code, "
-        "customer_information.contract_code, "
-        "customer_information.contract_type "
-        "FROM customer_information "
-        "LEFT JOIN sub_account ON customer_information.sub_account=sub_account.sub_account",
+        """
+        SELECT
+        customer_information.sub_account,
+        sub_account.account_code,
+        customer_information.contract_code,
+        customer_information.contract_type
+        FROM customer_information
+        LEFT JOIN sub_account ON customer_information.sub_account = sub_account.sub_account
+        """,
         connect_DWH_CoSo,
         index_col='sub_account',
     )
     customer_information_change = pd.read_sql(
-        "SELECT * "
-        "FROM customer_information_change "
-        f"WHERE change_date BETWEEN '{start_date}' AND '{end_date}'",
+        f"""
+        SELECT *
+        FROM customer_information_change
+        WHERE change_date BETWEEN '{start_date}' AND '{end_date}'
+        """,
         connect_DWH_CoSo,
         index_col='account_code',
     )
     authorization = pd.read_sql(
-        "SELECT * "
-        "FROM [authorization] "
-        f"WHERE date_of_authorization BETWEEN '{start_date}' AND '{end_date}' "
-        f"AND authorized_person_id = '155/GCNTVLK' "
-        f"AND scope_of_authorization IS NOT NULL "
-        f"AND scope_of_authorization <> 'I,IV,V' ",
+        f"""
+        SELECT * 
+        FROM [authorization] 
+        WHERE date_of_authorization BETWEEN '{start_date}' AND '{end_date}'
+        AND authorized_person_id = '155/GCNTVLK'
+        AND scope_of_authorization IS NOT NULL
+        AND scope_of_authorization <> 'I,IV,V'
+        """,
         connect_DWH_CoSo,
         index_col='account_code',
     )
     # Loai cac uy quyen duoc mo moi chi de dang ky uy quyen them (rule ben DVKH)
     drop_account = pd.read_sql(
-        "SELECT account_code "
-        "FROM authorization_change "
-        f"WHERE date_of_change BETWEEN '{start_date}' AND '{end_date}' "
-        "AND new_end_date IS NOT NULL",
+        f"""
+        SELECT account_code
+        FROM authorization_change
+        WHERE date_of_change BETWEEN '{start_date}' AND '{end_date}'
+        AND new_end_date IS NOT NULL
+        """,
         connect_DWH_CoSo,
         index_col='account_code'
     )
     authorization_change = pd.read_sql(
-        "SELECT * "
-        "FROM authorization_change "
-        f"WHERE date_of_change BETWEEN '{start_date}' AND '{end_date}'",
+        f"""
+        SELECT *
+        FROM authorization_change
+        WHERE date_of_change BETWEEN '{start_date}' AND '{end_date}'
+        """,
         connect_DWH_CoSo,
         index_col='account_code'
     )
     authorization = authorization.loc[~authorization.index.isin(drop_account.index)]
     authorization['scope_of_authorization'] = 'I,II,IV,V,VII,IX,X'
-
+    authorization.loc[authorization['authorized_person_name'] == 'CTY CP CHỨNG KHOÁN PHÚ HƯNG','authorized_person_address'] = CompanyAddress
     mapper = lambda x: 'Thường' if x.startswith('Thường') else 'Ký Quỹ'
     contract_type['contract_type'] = contract_type['contract_type'].map(mapper)
 
@@ -178,15 +190,15 @@ def run(
     sheet_motaikhoan = workbook.add_worksheet('Mở TK')
     sheet_motaikhoan.hide_gridlines(option=2)
     # set column width
-    sheet_motaikhoan.set_column('A:A',4)
-    sheet_motaikhoan.set_column('B:B',30)
-    sheet_motaikhoan.set_column('C:D',15)
-    sheet_motaikhoan.set_column('E:E',60)
-    sheet_motaikhoan.set_column('F:F',13)
-    sheet_motaikhoan.set_column('G:G',30)
-    sheet_motaikhoan.set_column('H:H',6)
+    sheet_motaikhoan.set_column('A:A',6.5)
+    sheet_motaikhoan.set_column('B:B',35.6)
+    sheet_motaikhoan.set_column('C:D',16)
+    sheet_motaikhoan.set_column('E:E',58)
+    sheet_motaikhoan.set_column('F:F',15.9)
+    sheet_motaikhoan.set_column('G:G',25)
+    sheet_motaikhoan.set_column('H:H',5.7)
     sheet_motaikhoan.set_column('I:I',13)
-    sheet_motaikhoan.set_column('J:J',12)
+    sheet_motaikhoan.set_column('J:J',11.6)
     sheet_motaikhoan.set_column('K:K',5)
     sheet_motaikhoan.set_default_row(27) # set all row height = 27
     sheet_motaikhoan.set_row(0,15)

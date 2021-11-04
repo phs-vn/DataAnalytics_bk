@@ -61,8 +61,8 @@ def run(
         else:
             result = np.round(price,-2) # 11840 -> 11800, 11860 -> 11900
         return result
-    price_vietstock.loc[price_vietstock['exchange'].isin(['HOSE','HNX']),'price'] = np.round(price_vietstock.loc[price_vietstock['exchange'].isin(['HOSE','HNX']),'price'],0)
-    price_vietstock.loc[price_vietstock['exchange']=='UPCOM','price'] = price_vietstock.loc[price_vietstock['exchange']=='UPCOM','price'].map(modified_round)
+    price_vietstock.loc[price_vietstock['exchange'].isin(['HOSE','HNX']),'price'] = np.round(price_vietstock['price'],0)
+    price_vietstock.loc[price_vietstock['exchange']=='UPCOM','price'] = price_vietstock['price'].map(modified_round)
 
     # take union ticker index
     ticker_idx = price_exchange.index.union(price_vietstock.index)

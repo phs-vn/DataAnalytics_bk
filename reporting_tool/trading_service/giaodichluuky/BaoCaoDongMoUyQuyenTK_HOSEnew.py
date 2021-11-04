@@ -16,80 +16,101 @@ def run(
         os.mkdir(join(dept_folder,folder_name,period))
 
     period_account = pd.read_sql(
-        "SELECT "
-        "account_type,"
-        "account_code, "
-        "customer_name, "
-        "nationality, "
-        "address, "
-        "customer_id_number, "
-        "date_of_issue, "
-        "place_of_issue, "
-        "date_of_open, "
-        "date_of_close "
-        "FROM account "
-        f"WHERE (date_of_open BETWEEN '{start_date}' AND '{end_date}') "
-        f"OR (date_of_close BETWEEN '{start_date}' AND '{end_date}') ",
+        f"""
+        SELECT
+        account_type,
+        account_code,
+        customer_name,
+        nationality,
+        address,
+        customer_id_number,
+        date_of_issue,
+        place_of_issue,
+        date_of_open,
+        date_of_close
+        FROM account
+        WHERE (date_of_open BETWEEN '{start_date}' AND '{end_date}')
+        OR (date_of_close BETWEEN '{start_date}' AND '{end_date}')
+        """,
         connect_DWH_CoSo,
         index_col='account_code',
     )
-    count_account = pd.read_sql(
-        "SELECT "
-        "COUNT('account_type') AS count, "
-        "account_type "
-        "FROM account "
-        "GROUP BY account_type",
+    start_account = pd.read_sql(
+        f"""
+        SELECT account_code, account_type
+        FROM account
+        WHERE (date_of_open <= '{bdate(start_date,-1)}') AND (date_of_close IS NULL OR date_of_close > '{bdate(start_date,-1)}')
+        """,
         connect_DWH_CoSo,
-        index_col='account_type',
-    )
+        index_col='account_code',
+    ).squeeze()
+    end_account = pd.read_sql(
+        f"""
+        SELECT account_code, account_type
+        FROM account
+        WHERE (date_of_open <= '{end_date}') AND (date_of_close IS NULL OR date_of_close > '{end_date}')
+        """,
+        connect_DWH_CoSo,
+        index_col='account_code',
+    ).squeeze()
     contract_type = pd.read_sql(
-        "SELECT "
-        "customer_information.sub_account, "
-        "sub_account.account_code, "
-        "customer_information.contract_code, "
-        "customer_information.contract_type "
-        "FROM customer_information "
-        "LEFT JOIN sub_account ON customer_information.sub_account=sub_account.sub_account",
+        """
+        SELECT
+        customer_information.sub_account,
+        sub_account.account_code,
+        customer_information.contract_code,
+        customer_information.contract_type
+        FROM customer_information
+        LEFT JOIN sub_account ON customer_information.sub_account = sub_account.sub_account
+        """,
         connect_DWH_CoSo,
         index_col='sub_account',
     )
     customer_information_change = pd.read_sql(
-        "SELECT * "
-        "FROM customer_information_change "
-        f"WHERE change_date BETWEEN '{start_date}' AND '{end_date}'",
+        f"""
+        SELECT *
+        FROM customer_information_change
+        WHERE change_date BETWEEN '{start_date}' AND '{end_date}'
+        """,
         connect_DWH_CoSo,
         index_col='account_code',
     )
     authorization = pd.read_sql(
-        "SELECT * "
-        "FROM [authorization] "
-        f"WHERE date_of_authorization BETWEEN '{start_date}' AND '{end_date}' "
-        f"AND authorized_person_id = '155/GCNTVLK' "
-        f"AND scope_of_authorization IS NOT NULL "
-        f"AND scope_of_authorization <> 'I,IV,V' ",
+        f"""
+        SELECT * 
+        FROM [authorization] 
+        WHERE date_of_authorization BETWEEN '{start_date}' AND '{end_date}'
+        AND authorized_person_id = '155/GCNTVLK'
+        AND scope_of_authorization IS NOT NULL
+        AND scope_of_authorization <> 'I,IV,V'
+        """,
         connect_DWH_CoSo,
         index_col='account_code',
     )
     # Loai cac uy quyen duoc mo moi chi de dang ky uy quyen them (rule ben DVKH)
     drop_account = pd.read_sql(
-        "SELECT account_code "
-        "FROM authorization_change "
-        f"WHERE date_of_change BETWEEN '{start_date}' AND '{end_date}' "
-        "AND new_end_date IS NOT NULL",
+        f"""
+        SELECT account_code
+        FROM authorization_change
+        WHERE date_of_change BETWEEN '{start_date}' AND '{end_date}'
+        AND new_end_date IS NOT NULL
+        """,
         connect_DWH_CoSo,
         index_col='account_code'
     )
     authorization_change = pd.read_sql(
-        "SELECT * "
-        "FROM authorization_change "
-        f"WHERE date_of_change BETWEEN '{start_date}' AND '{end_date}'",
+        f"""
+        SELECT *
+        FROM authorization_change
+        WHERE date_of_change BETWEEN '{start_date}' AND '{end_date}'
+        """,
         connect_DWH_CoSo,
         index_col='account_code'
     )
 
     authorization = authorization.loc[~authorization.index.isin(drop_account.index)]
     authorization['scope_of_authorization'] = 'I,II,IV,V,VII,IX,X'
-
+    authorization.loc[authorization['authorized_person_name']=='CTY CP CHỨNG KHOÁN PHÚ HƯNG','authorized_person_address'] = CompanyAddress
     mapper = lambda x: 'Thường' if x.startswith('Thường') else 'Ký Quỹ'
     contract_type['contract_type'] = contract_type['contract_type'].map(mapper)
 
@@ -100,15 +121,6 @@ def run(
     period_account.loc[period_account['account_type'].str.startswith('Tổ chức'),'entity_type'] = 'TC'
     account_open = period_account.loc[period_account['date_of_close'].isnull()]
     account_close = period_account.loc[period_account['date_of_close'].notnull()]
-
-    # Cuoi ky
-    closing_ind_domestic = count_account.loc['Cá nhân trong nước','count']
-    closing_ins_domestic = count_account.loc['Tổ chức trong nước','count']
-    closing_ind_foreign = count_account.loc['Cá nhân nước ngoài','count']
-    closing_ins_foreign = count_account.loc['Tổ chức nước ngoài','count']
-    closing_totaL_domestic = closing_ind_domestic + closing_ins_domestic
-    closing_totaL_foreign = closing_ind_foreign + closing_ins_foreign
-    closing_total = closing_totaL_domestic + closing_totaL_foreign
 
     # Tinh bien dong TK
     open_ind_domestic = (account_open['account_type']=='Cá nhân trong nước').sum()
@@ -125,6 +137,28 @@ def run(
     close_total_foreign = close_ind_foreign + close_ins_foreign
     open_total = open_total_domestic + open_total_foreign
     close_total = close_total_domestic + close_total_foreign
+
+    # Dau ky
+    start_account_count = start_account.value_counts()
+    opening_ind_domestic = start_account_count.loc['Cá nhân trong nước']
+    opening_ins_domestic = start_account_count.loc['Tổ chức trong nước']
+    opening_ind_foreign = start_account_count.loc['Cá nhân nước ngoài']
+    opening_ins_foreign = start_account_count.loc['Tổ chức nước ngoài']
+
+    opening_total_domestic = opening_ind_domestic + opening_ins_domestic
+    opening_total_foreign = opening_ind_foreign + opening_ins_foreign
+    opening_total = opening_total_domestic + opening_total_foreign
+
+    # Cuoi ky
+    end_account_count = end_account.value_counts()
+    closing_ind_domestic = end_account_count.loc['Cá nhân trong nước']
+    closing_ins_domestic = end_account_count.loc['Tổ chức trong nước']
+    closing_ind_foreign = end_account_count.loc['Cá nhân nước ngoài']
+    closing_ins_foreign = end_account_count.loc['Tổ chức nước ngoài']
+
+    closing_totaL_domestic = closing_ind_domestic + closing_ins_domestic
+    closing_totaL_foreign = closing_ind_foreign + closing_ins_foreign
+    closing_total = closing_totaL_domestic + closing_totaL_foreign
 
     ###########################################################################
     ###########################################################################
@@ -297,7 +331,7 @@ def run(
             closing_ins_domestic,
             closing_totaL_foreign,
             closing_ind_foreign,
-            close_ins_foreign,
+            closing_ins_foreign,
             closing_total,
         ]
     )
@@ -323,7 +357,17 @@ def run(
             open_total,
         ]
     )
-    opening_column = closing_column + close_column - open_column
+    opening_column = np.array(
+        [
+            opening_total_domestic,
+            opening_ind_domestic,
+            opening_ins_domestic,
+            opening_total_foreign,
+            opening_ind_foreign,
+            opening_ins_foreign,
+            opening_total,
+        ]
+    )
     value_array = np.array([opening_column,open_column,close_column,closing_column]).transpose()
     for col in range(4):
         for row in range(7):

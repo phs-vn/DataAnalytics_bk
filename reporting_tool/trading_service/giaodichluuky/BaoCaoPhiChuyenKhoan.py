@@ -17,55 +17,52 @@ def run(
 
     # Phi chuyen khoan sang cong ty chung khoan khac xuat theo ngay mac dinh
     transfer_fee_CTCK = pd.read_sql(
-        "SELECT account_code, date, [transaction], volume FROM deposit_withdraw_stock "
-        f"WHERE date BETWEEN '{start_date}' AND '{end_date}' "
-        f"AND creator NOT IN ('User Online trading') "
-        f"AND [transaction] LIKE 'Chuy_n CK (____)'",
+        f"""
+        SELECT date, account_code, volume
+        FROM deposit_withdraw_stock
+        WHERE date BETWEEN '{start_date}' AND '{end_date}'
+        AND creator NOT IN ('User Online trading')
+        AND [transaction] LIKE 'Chuy_n CK (____)'
+        """,
         connect_DWH_CoSo,
-        index_col='account_code',
+        index_col=['date','account_code'],
     )
     # Phi chuyen khoan thanh toan bu tru xuat theo ngay duoc dieu chinh
     adj_start_date = bdate(start_date,-1)
     adj_end_date = bdate(end_date,-2)
     transfer_fee_TTBT = pd.read_sql(
-        "SELECT sub_account, date, ticker, volume FROM trading_record "
-        f"WHERE date BETWEEN '{adj_start_date}' AND '{adj_end_date}' "
-        f"AND type_of_order = 'S' "
-        f"AND depository_place LIKE 'T_i PHS'",
+        f"""
+        SELECT date, sub_account, ticker, volume
+        FROM trading_record
+        WHERE date BETWEEN '{start_date}' AND '{end_date}' 
+        AND type_of_order = 'S' 
+        AND depository_place LIKE 'T_i PHS'
+        """,
+        connect_DWH_CoSo,
+        index_col=['date','sub_account'],
+    )
+    relationship = pd.read_sql(
+        f"""
+        SELECT date, sub_account, account_code, branch_id
+        FROM relationship
+        WHERE date BETWEEN '{adj_start_date}' AND '{end_date}'
+        """,
         connect_DWH_CoSo
     )
-    account = pd.read_sql(
-        "SELECT sub_account, account_code FROM sub_account",
-        connect_DWH_CoSo,
-        index_col='sub_account',
-    ).squeeze()
-    broker = pd.read_sql(
-        "SELECT account_code, broker_id FROM account",
-        connect_DWH_CoSo,
-        index_col='account_code',
-    ).squeeze()
-    branch_id = pd.read_sql(
-        "SELECT broker_id, branch_id FROM broker",
-        connect_DWH_CoSo,
-        index_col='broker_id',
-    ).squeeze()
-    branch_name = pd.read_sql(
-        "SELECT branch_id, branch_name FROM branch;",
-        connect_DWH_CoSo,
-        index_col='branch_id',
-    ).squeeze()
 
-    # calculate transfer fee on TTBT
-    case = transfer_fee_CTCK['date'] > dt.datetime(2020,3,19)
+    # calculate transfer fee to CTCK
+    case = transfer_fee_CTCK.index.get_level_values(0) > dt.datetime(2020,3,19)
     transfer_fee_CTCK.loc[case,'fee'] = transfer_fee_CTCK['volume'] *  0.3
     transfer_fee_CTCK.loc[~case,'fee'] = transfer_fee_CTCK['volume'] * 0.5
     transfer_fee_CTCK['fee'] = transfer_fee_CTCK['fee'].apply(min,args=(300000,))
-    transfer_fee_CTCK['branch_id'] = transfer_fee_CTCK.index.map(broker).map(branch_id)
+    branch_id_mapper = relationship[['date','account_code','branch_id']].set_index(['date','account_code']).squeeze()
+    branch_id_mapper = branch_id_mapper.loc[~branch_id_mapper.index.duplicated()] # select unique index
+    transfer_fee_CTCK['branch_id'] = transfer_fee_CTCK.index.map(branch_id_mapper)
     transfer_fee_CTCK.reset_index(drop=True,inplace=True)
     transfer_fee_CTCK = transfer_fee_CTCK.groupby('branch_id',as_index=True).sum()
     # calculate transfer fee on TTBT
     sum_volume = transfer_fee_TTBT.groupby(['date','ticker']).sum().squeeze().sort_index()
-    transfer_fee_TTBT.set_index(['date','ticker'],inplace=True)
+    transfer_fee_TTBT = transfer_fee_TTBT.reset_index().set_index(['date','ticker'])
     transfer_fee_TTBT['sum_volume'] = sum_volume
     transfer_fee_TTBT.reset_index(inplace=True)
     transfer_fee_TTBT['vol_percent'] = transfer_fee_TTBT['volume']/transfer_fee_TTBT['sum_volume']
@@ -75,20 +72,38 @@ def run(
     case = transfer_fee_TTBT['date'] > dt.datetime(2020,3,16)
     transfer_fee_TTBT.loc[case,'fee'] = transfer_fee_TTBT['charged_volume']*0.3
     transfer_fee_TTBT.loc[~case,'fee'] = transfer_fee_TTBT['charged_volume']*0.5
-    transfer_fee_TTBT = transfer_fee_TTBT[['sub_account','volume','fee']]
-    transfer_fee_TTBT.set_index('sub_account',inplace=True)
-    transfer_fee_TTBT['branch_id'] = account.map(broker).map(branch_id)
+    transfer_fee_TTBT = transfer_fee_TTBT[['date','sub_account','volume','fee']]
+    transfer_fee_TTBT.set_index(['date','sub_account'],inplace=True)
+    transfer_fee_TTBT['branch_id'] = relationship[['date','sub_account','branch_id']].set_index(['date','sub_account'])
     transfer_fee_TTBT.reset_index(drop=True,inplace=True)
     transfer_fee_TTBT = transfer_fee_TTBT.groupby('branch_id',as_index=True).sum()
 
+    branch_name_mapper = {
+        '0001': 'HQ',
+        '0101': 'Quận 3',
+        '0102': 'PMH',
+        '0104': 'Q7',
+        '0105': 'TB',
+        '0116': 'P.QLTK1',
+        '0111': 'InB1',
+        '0113': 'IB',
+        '0201': 'Hà nội',
+        '0202': 'TX',
+        '0301': 'Hải phòng',
+        '0117': 'Quận 1',
+        '0118': 'P.QLTK3',
+        '0119': 'InB2',
+    }
     transfer_fee = pd.DataFrame(
         columns=[
+            'Mã Chi Nhánh',
             'Tên Chi Nhánh',
             'Phí Chuyển Khoản',
         ],
-        index=branch_name.index
     )
-    transfer_fee['Tên Chi Nhánh'] = branch_name
+    transfer_fee['Mã Chi Nhánh'] = branch_name_mapper.keys()
+    transfer_fee['Tên Chi Nhánh'] = branch_name_mapper.values()
+    transfer_fee.set_index('Mã Chi Nhánh',inplace=True)
     transfer_fee['Phí Chuyển Khoản'] = transfer_fee_CTCK['fee'] + transfer_fee_TTBT['fee']
     transfer_fee['Phí Chuyển Khoản'].fillna(0, inplace=True)
     transfer_fee.index.name = 'Mã Chi Nhánh'
@@ -175,11 +190,10 @@ def run(
     worksheet.write(tong_row,3,sum_fee,tongphiluuky_format)
     writer.close()
 
-    branch_index = branch_name.reset_index(name='Tên Chi Nhánh')
     lv1_col = ['Chuyển khoản thanh toán bù trừ']*3 + ['Chuyển khoản chứng khoán sang CTCK khác']*3 + ['Tổng cộng']*2
     lv2_col = ['Số lượng','Phí','Phí làm tròn']*2 + ['Số lượng','Phí']
     summary = pd.DataFrame(
-        index=pd.MultiIndex.from_frame(branch_index),
+        index=pd.MultiIndex.from_frame(transfer_fee[['Mã Chi Nhánh','Tên Chi Nhánh']]),
         columns=pd.MultiIndex.from_arrays([lv1_col,lv2_col])
     )
     summary[('Chuyển khoản thanh toán bù trừ','Số lượng')] = summary.index.get_level_values(0).map(transfer_fee_TTBT['volume'])
