@@ -18,11 +18,11 @@ def run(
     # Phi chuyen khoan sang cong ty chung khoan khac xuat theo ngay mac dinh
     transfer_fee_CTCK = pd.read_sql(
         f"""
-        SELECT date, account_code, volume
+        SELECT date, account_code, volume, creator
         FROM deposit_withdraw_stock
         WHERE date BETWEEN '{start_date}' AND '{end_date}'
         AND creator NOT IN ('User Online trading')
-        AND [transaction] LIKE 'Chuy_n CK (____)'
+        AND [transaction] = 'Chuyen CK'
         """,
         connect_DWH_CoSo,
         index_col=['date','account_code'],
@@ -36,7 +36,7 @@ def run(
         FROM trading_record
         WHERE date BETWEEN '{start_date}' AND '{end_date}' 
         AND type_of_order = 'S' 
-        AND depository_place LIKE 'T_i PHS'
+        AND depository_place = 'Tai PHS'
         """,
         connect_DWH_CoSo,
         index_col=['date','sub_account'],
@@ -49,35 +49,6 @@ def run(
         """,
         connect_DWH_CoSo
     )
-
-    # calculate transfer fee to CTCK
-    case = transfer_fee_CTCK.index.get_level_values(0) > dt.datetime(2020,3,19)
-    transfer_fee_CTCK.loc[case,'fee'] = transfer_fee_CTCK['volume'] *  0.3
-    transfer_fee_CTCK.loc[~case,'fee'] = transfer_fee_CTCK['volume'] * 0.5
-    transfer_fee_CTCK['fee'] = transfer_fee_CTCK['fee'].apply(min,args=(300000,))
-    branch_id_mapper = relationship[['date','account_code','branch_id']].set_index(['date','account_code']).squeeze()
-    branch_id_mapper = branch_id_mapper.loc[~branch_id_mapper.index.duplicated()] # select unique index
-    transfer_fee_CTCK['branch_id'] = transfer_fee_CTCK.index.map(branch_id_mapper)
-    transfer_fee_CTCK.reset_index(drop=True,inplace=True)
-    transfer_fee_CTCK = transfer_fee_CTCK.groupby('branch_id',as_index=True).sum()
-    # calculate transfer fee on TTBT
-    sum_volume = transfer_fee_TTBT.groupby(['date','ticker']).sum().squeeze().sort_index()
-    transfer_fee_TTBT = transfer_fee_TTBT.reset_index().set_index(['date','ticker'])
-    transfer_fee_TTBT['sum_volume'] = sum_volume
-    transfer_fee_TTBT.reset_index(inplace=True)
-    transfer_fee_TTBT['vol_percent'] = transfer_fee_TTBT['volume']/transfer_fee_TTBT['sum_volume']
-    case = transfer_fee_TTBT['volume'] > 1000000
-    transfer_fee_TTBT.loc[case,'charged_volume'] = transfer_fee_TTBT['vol_percent'] * 1000000
-    transfer_fee_TTBT.loc[~case,'charged_volume'] = transfer_fee_TTBT['volume']
-    case = transfer_fee_TTBT['date'] > dt.datetime(2020,3,16)
-    transfer_fee_TTBT.loc[case,'fee'] = transfer_fee_TTBT['charged_volume']*0.3
-    transfer_fee_TTBT.loc[~case,'fee'] = transfer_fee_TTBT['charged_volume']*0.5
-    transfer_fee_TTBT = transfer_fee_TTBT[['date','sub_account','volume','fee']]
-    transfer_fee_TTBT.set_index(['date','sub_account'],inplace=True)
-    transfer_fee_TTBT['branch_id'] = relationship[['date','sub_account','branch_id']].set_index(['date','sub_account'])
-    transfer_fee_TTBT.reset_index(drop=True,inplace=True)
-    transfer_fee_TTBT = transfer_fee_TTBT.groupby('branch_id',as_index=True).sum()
-
     branch_name_mapper = {
         '0001': 'HQ',
         '0101': 'Quận 3',
@@ -94,6 +65,36 @@ def run(
         '0118': 'P.QLTK3',
         '0119': 'InB2',
     }
+    # calculate transfer fee to CTCK
+    transfer_fee_CTCK['volume'] = transfer_fee_CTCK['volume'].apply(min,args=(1000000,))
+    case = transfer_fee_CTCK.index.get_level_values(0) > dt.datetime(2020,3,19)
+    transfer_fee_CTCK.loc[case,'fee'] = transfer_fee_CTCK['volume']*0.3
+    transfer_fee_CTCK.loc[~case,'fee'] = transfer_fee_CTCK['volume']*0.5
+    branch_id_mapper = relationship[['date','account_code','branch_id']].set_index(['date','account_code']).squeeze()
+    branch_id_mapper = branch_id_mapper.loc[~branch_id_mapper.index.duplicated()] # select unique index
+    transfer_fee_CTCK['branch_id'] = transfer_fee_CTCK.index.map(branch_id_mapper)
+    transfer_fee_CTCK.reset_index(drop=True,inplace=True)
+    transfer_fee_CTCK = transfer_fee_CTCK.groupby('branch_id',as_index=True).sum()
+    transfer_fee_CTCK = transfer_fee_CTCK.reindex(branch_name_mapper.keys()).fillna(0)
+    # calculate transfer fee on TTBT
+    sum_volume = transfer_fee_TTBT.groupby(['date','ticker']).sum().squeeze().sort_index()
+    transfer_fee_TTBT = transfer_fee_TTBT.reset_index().set_index(['date','ticker'])
+    transfer_fee_TTBT['sum_volume'] = sum_volume
+    transfer_fee_TTBT.reset_index(inplace=True)
+    transfer_fee_TTBT['vol_percent'] = transfer_fee_TTBT['volume']/transfer_fee_TTBT['sum_volume']
+    case = transfer_fee_TTBT['sum_volume'] > 1000000
+    transfer_fee_TTBT.loc[case,'charged_volume'] = transfer_fee_TTBT['vol_percent'] * 1000000
+    transfer_fee_TTBT.loc[~case,'charged_volume'] = transfer_fee_TTBT['volume']
+    case = transfer_fee_TTBT['date'] > dt.datetime(2020,3,16)
+    transfer_fee_TTBT.loc[case,'fee'] = transfer_fee_TTBT['charged_volume']*0.3
+    transfer_fee_TTBT.loc[~case,'fee'] = transfer_fee_TTBT['charged_volume']*0.5
+    transfer_fee_TTBT = transfer_fee_TTBT[['date','sub_account','volume','fee']]
+    transfer_fee_TTBT.set_index(['date','sub_account'],inplace=True)
+    transfer_fee_TTBT['branch_id'] = relationship[['date','sub_account','branch_id']].set_index(['date','sub_account'])
+    transfer_fee_TTBT.reset_index(drop=True,inplace=True)
+    transfer_fee_TTBT = transfer_fee_TTBT.groupby('branch_id',as_index=True).sum()
+    transfer_fee_TTBT = transfer_fee_TTBT.reindex(branch_name_mapper.keys()).fillna(0)
+
     transfer_fee = pd.DataFrame(
         columns=[
             'Mã Chi Nhánh',
@@ -105,7 +106,6 @@ def run(
     transfer_fee['Tên Chi Nhánh'] = branch_name_mapper.values()
     transfer_fee.set_index('Mã Chi Nhánh',inplace=True)
     transfer_fee['Phí Chuyển Khoản'] = transfer_fee_CTCK['fee'] + transfer_fee_TTBT['fee']
-    transfer_fee['Phí Chuyển Khoản'].fillna(0, inplace=True)
     transfer_fee.index.name = 'Mã Chi Nhánh'
     transfer_fee.reset_index(inplace=True)
     transfer_fee.insert(0,'STT',transfer_fee.index+1)
