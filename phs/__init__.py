@@ -8,7 +8,7 @@ CompanyCode = '022'
 
 import numpy as np
 import pandas as pd
-import bottleneck as bn
+# import bottleneck as bn
 import numexpr as ne
 import openpyxl
 import os
@@ -18,7 +18,8 @@ from os.path import isfile, isdir, join, realpath, dirname
 import win32com as win32
 from win32com.client import Dispatch
 import time
-import datetime as dt
+from datetime import timedelta
+from datetime import datetime as dt
 import requests
 import json
 import holidays
@@ -36,8 +37,14 @@ import csv
 
 ###############################################################################
 
-import matplotlib as mpl ; mpl.use('Agg')
-import matplotlib.pyplot as plt ; plt.ioff()
+import matplotlib as mpl
+
+mpl.use('Agg')
+
+import matplotlib.pyplot as plt
+
+plt.ioff()
+
 from matplotlib.ticker import MaxNLocator, FuncFormatter, ScalarFormatter, FormatStrFormatter
 import matplotlib.ticker
 from matplotlib.dates import DateFormatter

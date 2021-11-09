@@ -5,7 +5,7 @@ def run(
         run_time=None,
 ):
     start = time.time()
-    info = get_info(periodicity,run_time)
+    info = get_info(periodicity, run_time)
     run_time = info['run_time']
     start_date = info['start_date']
     end_date = info['end_date']

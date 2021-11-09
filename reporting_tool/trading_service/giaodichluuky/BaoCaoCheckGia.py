@@ -12,7 +12,7 @@ def run(
 
     # create folder
     if not os.path.isdir(join(dept_folder,folder_name,period)):  # dept_folder from import
-        os.mkdir(join(dept_folder,folder_name,period))
+        os.mkdir(join(dept_folder, folder_name,period))
 
     # Lấy danh sách hủy niêm yết
     huyniemyet = pd.read_excel(

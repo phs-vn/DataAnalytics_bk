@@ -1,7 +1,8 @@
 from reporting_tool import *
 
+
 def get_info(
-        periodicity:str,
+        periodicity: str,
         run_time=None,
 ):
     if run_time == 'now' or run_time is None:
@@ -14,18 +15,18 @@ def get_info(
     run_weekday = run_time.weekday() + 2
 
     # Calculate time for quarterly report
-    if run_month in [1,2,3]:
-        soq = dt.datetime(run_year-1,10,1)
-        eoq = dt.datetime(run_year-1,12,31)
-    elif run_month in [4,5,6]:
-        soq = dt.datetime(run_year,1,1)
-        eoq = dt.datetime(run_year,3,31)
-    elif run_month in [7,8,9]:
-        soq = dt.datetime(run_year,4,1)
-        eoq = dt.datetime(run_year,6,30)
+    if run_month in [1, 2, 3]:
+        soq = dt.datetime(run_year - 1, 10, 1)
+        eoq = dt.datetime(run_year - 1, 12, 31)
+    elif run_month in [4, 5, 6]:
+        soq = dt.datetime(run_year, 1, 1)
+        eoq = dt.datetime(run_year, 3, 31)
+    elif run_month in [7, 8, 9]:
+        soq = dt.datetime(run_year, 4, 1)
+        eoq = dt.datetime(run_year, 6, 30)
     else:
-        soq = dt.datetime(run_year,7,1)
-        eoq = dt.datetime(run_year,9,30)
+        soq = dt.datetime(run_year, 7, 1)
+        eoq = dt.datetime(run_year, 9, 30)
 
     # Calculate time for monthly report
     if run_month == 1:
@@ -34,13 +35,13 @@ def get_info(
     else:
         mreport_year = run_year
         mreport_month = run_month - 1
-    som = dt.datetime(mreport_year,mreport_month,1)
-    eom = dt.datetime(run_year,run_month,1) - dt.timedelta(days=1)
+    som = dt.datetime(mreport_year, mreport_month, 1)
+    eom = dt.datetime(run_year, run_month, 1) - dt.timedelta(days=1)
 
     # Calculate time for weekly report
-    if run_weekday in [2,3,4,5,6]:
-        sow = run_time - dt.timedelta(days=run_weekday+5)
-        eow = run_time - dt.timedelta(days=run_weekday+1)
+    if run_weekday in [2, 3, 4, 5, 6]:
+        sow = run_time - dt.timedelta(days=run_weekday + 5)
+        eow = run_time - dt.timedelta(days=run_weekday + 1)
     elif run_weekday == 7:
         sow = run_time - dt.timedelta(days=5)
         eow = run_time - dt.timedelta(days=1)
@@ -95,6 +96,7 @@ def get_info(
     }
 
     return result_as_dict
+
 
 def convert_int(x: int):
     x = str(x)

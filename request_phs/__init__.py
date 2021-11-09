@@ -4,8 +4,8 @@ from function_phs import *
 driver_RMD = '{SQL Server}'
 server_RMD = 'SRV-RPT'
 db_RMD = 'RiskDb'
-id_RMD = 'hiep'
-password_RMD = '5B7Cv6huj2FcGEM4'
+id_RMD = 'namtran'
+password_RMD = 'nam!tran@2021'
 
 connect_RMD = pyodbc.connect(
     f'Driver={driver_RMD};'
@@ -23,8 +23,8 @@ TableNames_DWH_CoSo = pd.read_sql(
 driver_DWH_CoSo = '{SQL Server}'
 server_DWH_CoSo = 'SRV-RPT'
 db_DWH_CoSo = 'DWH-CoSo'
-id_DWH_CoSo = 'hiep'
-password_DWH_CoSo = '5B7Cv6huj2FcGEM4'
+id_DWH_CoSo = 'namtran'
+password_DWH_CoSo = 'nam!tran@2021'
 
 connect_DWH_CoSo = pyodbc.connect(
     f'Driver={driver_DWH_CoSo};'
@@ -42,8 +42,8 @@ TableNames_RMD = pd.read_sql(
 driver_DWH_PhaiSinh = '{SQL Server}'
 server_DWH_PhaiSinh = 'SRV-RPT'
 db_DWH_PhaiSinh = 'DWH-PhaiSinh'
-id_DWH_PhaiSinh = 'hiep'
-password_DWH_PhaiSinh = '5B7Cv6huj2FcGEM4'
+id_DWH_PhaiSinh = 'namtran'
+password_DWH_PhaiSinh = 'nam!tran@2021'
 
 connect_DWH_PhaiSinh = pyodbc.connect(
     f'Driver={driver_DWH_PhaiSinh};'
