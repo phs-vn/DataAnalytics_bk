@@ -123,6 +123,7 @@ def run(
     ###################################################
 
     # --------------------- Viet sheet ---------------------
+    # Format
     header_format = workbook.add_format(
         {
             'border': 1,
@@ -188,6 +189,17 @@ def run(
             'bg_color': '#FFFF00'
         }
     )
+    sum_format_hom_truoc_hom_nay = workbook.add_format(
+        {
+            'bold': True,
+            'text_wrap': True,
+            'align': 'right',
+            'valign': 'vcenter',
+            'font_name': 'Times New Roman',
+            'font_size': 10,
+            'num_format': '#,##0',
+        }
+    )
     text_left_format = workbook.add_format(
         {
             'border': 1,
@@ -231,7 +243,7 @@ def run(
         }
     )
 
-    # Lay tu file ngan hang
+    # Format lấy từ file ngân hàng
     account_format = workbook.add_format(
         {
             'border': 1,
@@ -334,6 +346,7 @@ def run(
         'DỰ KIẾN CUỐI NGÀY',
         'LỆCH'
     ]
+    ################################################
 
     # Sheet File Tang Tien
     sheet_tang_tien = workbook.add_worksheet('File tăng tiền')
@@ -463,6 +476,7 @@ def run(
         increase_money_ocb['outflow_amount'].sum(),
         sum_format,
     )
+    ################################################
 
     # Sheet file Giam Tien
     sheet_giam_tien = workbook.add_worksheet('File giảm tiền')
@@ -591,6 +605,7 @@ def run(
         decrease_money_ocb['inflow_amount'].sum(),
         sum_format,
     )
+    ################################################
 
     # Sheet file Nhap Rut Tien
     sheet_nhap_rut = workbook.add_worksheet('Nhập Rút Tiền')
@@ -703,6 +718,7 @@ def run(
         nhap_rut['status'],
         text_center_format,
     )
+    ################################################
 
     # Sheet file Ngay hom truoc
     sheet_hom_truoc = workbook.add_worksheet('Ngày hôm trước')
@@ -813,6 +829,7 @@ def run(
         text_center_format
     )
 
+    bank_file_ocb['SỐ DƯ'].fillna(0, inplace=True)
     sheet_hom_truoc.write_column(
         f'G{bank_file_ocb_start_row}',
         bank_file_ocb['SỐ DƯ'],
@@ -855,7 +872,137 @@ def run(
     )
 
     # Groupby trong sheet File Tang Tien
-    tang_tien_groupby = increase_money_eib.groupby(['bank', 'bank_account'])['outflow_amount'].sum().unstack()
+    tang_tien_eib_groupby = increase_money_eib.groupby(['bank', 'bank_account'])['outflow_amount'].sum().unstack().T
+    tang_tien_ocb_groupby = increase_money_ocb.groupby(['bank', 'bank_account'])['outflow_amount'].sum().unstack().T
+
+    # them column TĂNG TIỀN trong df
+    bank_file_eib['TANGTIEN'] = bank_file_eib['FORACID'].map(tang_tien_eib_groupby['EIB'])
+    bank_file_eib['TANGTIEN'].fillna(0, inplace=True)
+    bank_file_ocb['TANGTIEN'] = bank_file_ocb['TÀI KHOẢN'].map(tang_tien_ocb_groupby['OCB'])
+    bank_file_ocb['TANGTIEN'].fillna(0, inplace=True)
+
+    sheet_hom_truoc.write_column(
+        'J3',
+        bank_file_eib['TANGTIEN'],
+        num_format
+    )
+
+    sheet_hom_truoc.write_column(
+        f'J{bank_file_ocb_start_row}',
+        bank_file_ocb['TANGTIEN'],
+        num_format
+    )
+
+    # Groupby trong sheet File Tang Tien
+    giam_tien_eib_groupby = decrease_money_eib.groupby(['bank', 'bank_account'])['inflow_amount'].sum().unstack().T
+    giam_tien_ocb_groupby = decrease_money_ocb.groupby(['bank', 'bank_account'])['inflow_amount'].sum().unstack().T
+
+    # them column GIẢM TIỀN trong df
+    bank_file_eib['GIAMTIEN'] = bank_file_eib['FORACID'].map(giam_tien_eib_groupby['EIB'])
+    bank_file_eib['GIAMTIEN'].fillna(0, inplace=True)
+    bank_file_ocb['GIAMTIEN'] = bank_file_ocb['TÀI KHOẢN'].map(giam_tien_ocb_groupby['OCB'])
+    bank_file_ocb['GIAMTIEN'].fillna(0, inplace=True)
+
+    sheet_hom_truoc.write_column(
+        'K3',
+        bank_file_eib['GIAMTIEN'],
+        num_format
+    )
+
+    sheet_hom_truoc.write_column(
+        f'K{bank_file_ocb_start_row}',
+        bank_file_ocb['GIAMTIEN'],
+        num_format
+    )
+
+    # Tính Số tiền dự kiến cuối ngày
+    bank_file_eib['DUKIENCUOINGAY'] = bank_file_eib['ACCOUNT BALANCE'] + bank_file_eib['NHAPTIEN'] - bank_file_eib['RUTTIEN'] + bank_file_eib['TANGTIEN'] - bank_file_eib['GIAMTIEN']
+    bank_file_ocb['DUKIENCUOINGAY'] = bank_file_ocb['SỐ DƯ'] + bank_file_ocb['NHAPTIEN'] - bank_file_ocb['RUTTIEN'] + bank_file_ocb['TANGTIEN'] - bank_file_ocb['GIAMTIEN']
+
+    sheet_hom_truoc.write_column(
+        'L3',
+        bank_file_eib['DUKIENCUOINGAY'],
+        num_format
+    )
+
+    sheet_hom_truoc.write_column(
+        f'L{bank_file_ocb_start_row}',
+        bank_file_ocb['DUKIENCUOINGAY'],
+        num_format
+    )
+
+    sheet_hom_truoc.write_column(
+        'M3',
+        bank_file_eib['ACCOUNT BALANCE'],
+        num_format,
+    )
+
+    sheet_hom_truoc.write_column(
+        f'M{bank_file_ocb_start_row}',
+        bank_file_ocb['SỐ DƯ'],
+        num_format
+    )
+
+    bank_file_eib['Lệch'] = bank_file_eib['DUKIENCUOINGAY'] - bank_file_eib['ACCOUNT BALANCE']
+    bank_file_ocb['Lệch'] = bank_file_ocb['DUKIENCUOINGAY'] - bank_file_ocb['SỐ DƯ']
+
+    sheet_hom_truoc.write_column(
+        'N3',
+        bank_file_eib['Lệch'],
+        num_format
+    )
+
+    sheet_hom_truoc.write_column(
+        f'N{bank_file_ocb_start_row}',
+        bank_file_ocb['Lệch'],
+        num_format
+    )
+
+    # Tính tổng các cột (Nhập tiền, rút tiền, file tăng tiền, file giảm tiền, số dư tiền dự kiến cuối ngày,File NH gửi, lệch
+    hom_truoc_nay_sum_row = bank_file_eib.shape[0] + bank_file_ocb.shape[0] + 3
+
+    sheet_hom_truoc.write(
+        f'H{hom_truoc_nay_sum_row}',
+        bank_file_eib['NHAPTIEN'].sum() + bank_file_ocb['NHAPTIEN'].sum(),
+        sum_format_hom_truoc_hom_nay,
+    )
+
+    sheet_hom_truoc.write(
+        f'I{hom_truoc_nay_sum_row}',
+        bank_file_eib['RUTTIEN'].sum() + bank_file_ocb['RUTTIEN'].sum(),
+        sum_format_hom_truoc_hom_nay,
+    )
+
+    sheet_hom_truoc.write(
+        f'J{hom_truoc_nay_sum_row}',
+        bank_file_eib['TANGTIEN'].sum() + bank_file_ocb['TANGTIEN'].sum(),
+        sum_format_hom_truoc_hom_nay,
+    )
+
+    sheet_hom_truoc.write(
+        f'K{hom_truoc_nay_sum_row}',
+        bank_file_eib['GIAMTIEN'].sum() + bank_file_ocb['GIAMTIEN'].sum(),
+        sum_format_hom_truoc_hom_nay,
+    )
+
+    sheet_hom_truoc.write(
+        f'L{hom_truoc_nay_sum_row}',
+        bank_file_eib['DUKIENCUOINGAY'].sum() + bank_file_ocb['DUKIENCUOINGAY'].sum(),
+        sum_format_hom_truoc_hom_nay,
+    )
+
+    sheet_hom_truoc.write(
+        f'M{hom_truoc_nay_sum_row}',
+        bank_file_eib['ACCOUNT BALANCE'].sum() + bank_file_ocb['SỐ DƯ'].sum(),
+        sum_format_hom_truoc_hom_nay,
+    )
+
+    sheet_hom_truoc.write(
+        f'N{hom_truoc_nay_sum_row}',
+        bank_file_eib['Lệch'].sum() + bank_file_ocb['Lệch'].sum(),
+        sum_format_hom_truoc_hom_nay,
+    )
+    ################################################
 
     # Sheet file Ngay hom nay
     sheet_hom_nay = workbook.add_worksheet('Ngày hôm nay')
@@ -908,6 +1055,18 @@ def run(
         num_format
     )
 
+    sheet_hom_nay.write_column(
+        'G2',
+        bank_file_eib['DUKIENCUOINGAY'],
+        num_format
+    )
+
+    sheet_hom_nay.write_column(
+        'H2',
+        bank_file_eib['DUKIENCUOINGAY'] - bank_file_eib['ACCOUNT BALANCE'],
+        num_format
+    )
+
     bank_file_ocb_start_row = bank_file_eib.shape[0] + 2
     sheet_hom_nay.write_column(
         f'B{bank_file_ocb_start_row}',
@@ -938,6 +1097,31 @@ def run(
         bank_file_ocb['SỐ DƯ'],
         num_format
     )
+
+    sheet_hom_nay.write_column(
+        f'G{bank_file_ocb_start_row}',
+        bank_file_ocb['DUKIENCUOINGAY'],
+        num_format
+    )
+
+    sheet_hom_nay.write_column(
+        f'H{bank_file_ocb_start_row}',
+        bank_file_ocb['DUKIENCUOINGAY'] - bank_file_ocb['SỐ DƯ'],
+        num_format
+    )
+
+    sheet_hom_nay.write(
+        f'G{hom_truoc_nay_sum_row}',
+        bank_file_eib['DUKIENCUOINGAY'].sum() + bank_file_ocb['DUKIENCUOINGAY'].sum(),
+        sum_format_hom_truoc_hom_nay,
+    )
+
+    sheet_hom_nay.write(
+        f'H{hom_truoc_nay_sum_row}',
+        bank_file_eib['Lệch'].sum() + bank_file_ocb['Lệch'].sum(),
+        sum_format_hom_truoc_hom_nay,
+    )
+
     ###########################################################################
     ###########################################################################
     ###########################################################################
