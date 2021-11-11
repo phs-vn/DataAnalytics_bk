@@ -2,6 +2,7 @@ from request_phs.stock import *
 from breakeven_price import monte_carlo
 from text_mining import newsts
 from text_mining import newsrmd
+import reporting_tool.trading_service.giaodichluuky.BaoCaoCheckGia
 
 class post:
 
@@ -52,14 +53,14 @@ class post:
         now = dt.datetime.now()
         github_file_name = f'{now.day}.{now.month}.{now.year}.csv'
         github_table_path = join(destination_dir_github,github_file_name)
-        table = pd.DataFrame(columns=['Ticker','0% at Risk','1% at Risk','3% at Risk','5% at Risk','Groupp','Breakeven Price'])
+        table = pd.DataFrame(columns=['Ticker','0% at Risk','1% at Risk','3% at Risk','5% at Risk','Group','Breakeven Price'])
         table.set_index(keys=['Ticker'],inplace=True)
         table.to_csv(github_table_path)
 
         rmd_file_name = f'{now.day}.{now.month}.{now.year}.csv'
         rmd_table_path = join(destination_dir_rmd,rmd_file_name)
         table = pd.DataFrame(
-            columns=['Ticker','Group','Breakeven Price']
+            columns=['Ticker','Group','Breakeven Price','0% at Risk']
         )
         table.set_index(keys=['Ticker'], inplace=True)
         table.to_csv(rmd_table_path)
@@ -81,7 +82,7 @@ class post:
                         network_writer.writerow([ticker,breakeven_price])
                     with open(rmd_table_path,mode='a',newline='') as rmd_file:
                         rmd_writer = csv.writer(rmd_file,delimiter=',')
-                        rmd_writer.writerow([ticker,group,breakeven_price])
+                        rmd_writer.writerow([ticker,group,breakeven_price,lv0_price])
                     break
                 except (ValueError, KeyError, IndexError):
                     print(f'{ticker} cannot be simulated with given significance level, running with higher alpha instead')
@@ -487,13 +488,6 @@ class post:
                 hose_tintonghop = pd.DataFrame()
             break
 
-        check_dt = lambda dt_time: True if dt_time > time_point else False
-        mask_vsd_TCPH = vsd_TCPH['Thời gian'].map(check_dt)
-        mask_vsd_TVBT = vsd_TVBT['Thời gian'].map(check_dt)
-        mask_hnx_TCPH = hnx_TCPH['Thời gian'].map(check_dt)
-        mask_hnx_tintuso = hnx_tintuso['Thời gian'].map(check_dt)
-        mask_hose_tintonghop = hose_tintonghop['Thời gian'].map(check_dt)
-
         writer = pd.ExcelWriter(file_path,engine='xlsxwriter')
         workbook = writer.book
         vsd_TCPH_sheet = workbook.add_worksheet('vsd_TCPH')
@@ -549,36 +543,42 @@ class post:
         hnx_tintuso_sheet.hide_gridlines(option=2)
         hose_tintonghop_sheet.hide_gridlines(option=2)
 
+        check_dt = lambda dt_time: True if dt_time > time_point else False
+
         vsd_TCPH_sheet.set_column('A:A',18)
         vsd_TCPH_sheet.set_column('B:D',7)
         vsd_TCPH_sheet.set_column('E:E',50)
         vsd_TCPH_sheet.set_column('F:F',7)
-        vsd_TCPH_sheet.write_row('A1',vsd_TCPH.columns,header_fmt)
-        for col in range(vsd_TCPH.shape[1]):
-            for row in range(vsd_TCPH.shape[0]):
-                if col == 0 and mask_vsd_TCPH.loc[row] == True:
-                    vsd_TCPH_sheet.write(row+1,col,vsd_TCPH.iloc[row,col],highlight_time_fmt)
-                elif col != 0 and mask_vsd_TCPH.loc[row] == True:
-                    vsd_TCPH_sheet.write(row+1,col,vsd_TCPH.iloc[row,col],highlight_regular_fmt)
-                elif col == 0 and mask_vsd_TCPH.loc[row] == False:
-                    vsd_TCPH_sheet.write(row+1,col,vsd_TCPH.iloc[row,col],time_fmt)
-                else:
-                    vsd_TCPH_sheet.write(row+1,col,vsd_TCPH.iloc[row,col],regular_fmt)
+        if not vsd_TCPH.empty:
+            mask_vsd_TCPH = vsd_TCPH['Thời gian'].map(check_dt)
+            vsd_TCPH_sheet.write_row('A1',vsd_TCPH.columns,header_fmt)
+            for col in range(vsd_TCPH.shape[1]):
+                for row in range(vsd_TCPH.shape[0]):
+                    if col == 0 and mask_vsd_TCPH.loc[row] == True:
+                        vsd_TCPH_sheet.write(row+1,col,vsd_TCPH.iloc[row,col],highlight_time_fmt)
+                    elif col != 0 and mask_vsd_TCPH.loc[row] == True:
+                        vsd_TCPH_sheet.write(row+1,col,vsd_TCPH.iloc[row,col],highlight_regular_fmt)
+                    elif col == 0 and mask_vsd_TCPH.loc[row] == False:
+                        vsd_TCPH_sheet.write(row+1,col,vsd_TCPH.iloc[row,col],time_fmt)
+                    else:
+                        vsd_TCPH_sheet.write(row+1,col,vsd_TCPH.iloc[row,col],regular_fmt)
 
         vsd_TVBT_sheet.set_column('A:A',18)
         vsd_TVBT_sheet.set_column('B:B',90)
         vsd_TVBT_sheet.set_column('C:C',7)
         vsd_TVBT_sheet.write_row('A1',vsd_TVBT.columns,header_fmt)
-        for col in range(vsd_TVBT.shape[1]):
-            for row in range(vsd_TVBT.shape[0]):
-                if col == 0 and mask_vsd_TVBT.loc[row] == True:
-                    vsd_TVBT_sheet.write(row+1,col,vsd_TVBT.iloc[row,col],highlight_time_fmt)
-                elif col != 0 and mask_vsd_TVBT.loc[row] == True:
-                    vsd_TVBT_sheet.write(row+1,col,vsd_TVBT.iloc[row,col],highlight_regular_fmt)
-                elif col == 0 and mask_vsd_TVBT.loc[row] == False:
-                    vsd_TVBT_sheet.write(row+1,col,vsd_TVBT.iloc[row,col],time_fmt)
-                else:
-                    vsd_TVBT_sheet.write(row+1,col,vsd_TVBT.iloc[row,col],regular_fmt)
+        if not vsd_TVBT.empty:
+            mask_vsd_TVBT = vsd_TVBT['Thời gian'].map(check_dt)
+            for col in range(vsd_TVBT.shape[1]):
+                for row in range(vsd_TVBT.shape[0]):
+                    if col == 0 and mask_vsd_TVBT.loc[row] == True:
+                        vsd_TVBT_sheet.write(row+1,col,vsd_TVBT.iloc[row,col],highlight_time_fmt)
+                    elif col != 0 and mask_vsd_TVBT.loc[row] == True:
+                        vsd_TVBT_sheet.write(row+1,col,vsd_TVBT.iloc[row,col],highlight_regular_fmt)
+                    elif col == 0 and mask_vsd_TVBT.loc[row] == False:
+                        vsd_TVBT_sheet.write(row+1,col,vsd_TVBT.iloc[row,col],time_fmt)
+                    else:
+                        vsd_TVBT_sheet.write(row+1,col,vsd_TVBT.iloc[row,col],regular_fmt)
 
         hnx_TCPH_sheet.set_column('A:A',18)
         hnx_TCPH_sheet.set_column('B:D',7)
@@ -586,51 +586,69 @@ class post:
         hnx_TCPH_sheet.set_column('F:F',120)
         hnx_TCPH_sheet.set_column('G:G',7)
         hnx_TCPH_sheet.write_row('A1',hnx_TCPH.columns,header_fmt)
-        for col in range(hnx_TCPH.shape[1]):
-            for row in range(hnx_TCPH.shape[0]):
-                if col == 0 and mask_hnx_TCPH.loc[row] == True:
-                    hnx_TCPH_sheet.write(row+1,col,hnx_TCPH.iloc[row,col],highlight_time_fmt)
-                elif col != 0 and mask_hnx_TCPH.loc[row] == True:
-                    hnx_TCPH_sheet.write(row+1,col,hnx_TCPH.iloc[row,col],highlight_regular_fmt)
-                elif col == 0 and mask_hnx_TCPH.loc[row] == False:
-                    hnx_TCPH_sheet.write(row+1,col,hnx_TCPH.iloc[row,col],time_fmt)
-                else:
-                    hnx_TCPH_sheet.write(row+1,col,hnx_TCPH.iloc[row,col],regular_fmt)
+        if not hnx_TCPH.empty:
+            mask_hnx_TCPH = hnx_TCPH['Thời gian'].map(check_dt)
+            for col in range(hnx_TCPH.shape[1]):
+                for row in range(hnx_TCPH.shape[0]):
+                    if col == 0 and mask_hnx_TCPH.loc[row] == True:
+                        hnx_TCPH_sheet.write(row+1,col,hnx_TCPH.iloc[row,col],highlight_time_fmt)
+                    elif col != 0 and mask_hnx_TCPH.loc[row] == True:
+                        hnx_TCPH_sheet.write(row+1,col,hnx_TCPH.iloc[row,col],highlight_regular_fmt)
+                    elif col == 0 and mask_hnx_TCPH.loc[row] == False:
+                        hnx_TCPH_sheet.write(row+1,col,hnx_TCPH.iloc[row,col],time_fmt)
+                    else:
+                        hnx_TCPH_sheet.write(row+1,col,hnx_TCPH.iloc[row,col],regular_fmt)
 
         hnx_tintuso_sheet.set_column('A:A',18)
         hnx_tintuso_sheet.set_column('B:D',7)
         hnx_tintuso_sheet.set_column('E:E',70)
         hnx_tintuso_sheet.set_column('F:F',7)
         hnx_tintuso_sheet.write_row('A1',hnx_tintuso,header_fmt)
-        for col in range(hnx_tintuso.shape[1]):
-            for row in range(hnx_tintuso.shape[0]):
-                if col == 0 and mask_hnx_tintuso.loc[row] == True:
-                    hnx_tintuso_sheet.write(row+1,col,hnx_tintuso.iloc[row,col],highlight_time_fmt)
-                elif col != 0 and mask_hnx_tintuso.loc[row] == True:
-                    hnx_tintuso_sheet.write(row+1,col,hnx_tintuso.iloc[row,col],highlight_regular_fmt)
-                elif col == 0 and mask_hnx_tintuso.loc[row] == False:
-                    hnx_tintuso_sheet.write(row+1,col,hnx_tintuso.iloc[row,col],time_fmt)
-                else:
-                    hnx_tintuso_sheet.write(row+1,col,hnx_tintuso.iloc[row,col],regular_fmt)
+        if not hnx_tintuso.empty:
+            mask_hnx_tintuso = hnx_tintuso['Thời gian'].map(check_dt)
+            for col in range(hnx_tintuso.shape[1]):
+                for row in range(hnx_tintuso.shape[0]):
+                    if col == 0 and mask_hnx_tintuso.loc[row] == True:
+                        hnx_tintuso_sheet.write(row+1,col,hnx_tintuso.iloc[row,col],highlight_time_fmt)
+                    elif col != 0 and mask_hnx_tintuso.loc[row] == True:
+                        hnx_tintuso_sheet.write(row+1,col,hnx_tintuso.iloc[row,col],highlight_regular_fmt)
+                    elif col == 0 and mask_hnx_tintuso.loc[row] == False:
+                        hnx_tintuso_sheet.write(row+1,col,hnx_tintuso.iloc[row,col],time_fmt)
+                    else:
+                        hnx_tintuso_sheet.write(row+1,col,hnx_tintuso.iloc[row,col],regular_fmt)
 
         hose_tintonghop_sheet.set_column('A:A',18)
         hose_tintonghop_sheet.set_column('B:D',7)
         hose_tintonghop_sheet.set_column('E:E',70)
         hose_tintonghop_sheet.set_column('F:F',80)
         hose_tintonghop_sheet.write_row('A1',hose_tintonghop,header_fmt)
-        for col in range(hose_tintonghop.shape[1]):
-            for row in range(hose_tintonghop.shape[0]):
-                if col == 0 and mask_hose_tintonghop.iloc[row] == True:
-                    hose_tintonghop_sheet.write(row+1,col,hose_tintonghop.iloc[row,col],highlight_time_fmt)
-                elif col != 0 and mask_hose_tintonghop.iloc[row] == True:
-                    hose_tintonghop_sheet.write(row+1,col,hose_tintonghop.iloc[row,col],highlight_regular_fmt)
-                elif col == 0 and mask_hose_tintonghop.iloc[row] == False:
-                    hose_tintonghop_sheet.write(row+1,col,hose_tintonghop.iloc[row,col],time_fmt)
-                else:
-                    hose_tintonghop_sheet.write(row+1,col,hose_tintonghop.iloc[row,col],regular_fmt)
+        if not hose_tintonghop.empty:
+            mask_hose_tintonghop = hose_tintonghop['Thời gian'].map(check_dt)
+            for col in range(hose_tintonghop.shape[1]):
+                for row in range(hose_tintonghop.shape[0]):
+                    if col == 0 and mask_hose_tintonghop.iloc[row] == True:
+                        hose_tintonghop_sheet.write(row+1,col,hose_tintonghop.iloc[row,col],highlight_time_fmt)
+                    elif col != 0 and mask_hose_tintonghop.iloc[row] == True:
+                        hose_tintonghop_sheet.write(row+1,col,hose_tintonghop.iloc[row,col],highlight_regular_fmt)
+                    elif col == 0 and mask_hose_tintonghop.iloc[row] == False:
+                        hose_tintonghop_sheet.write(row+1,col,hose_tintonghop.iloc[row,col],time_fmt)
+                    else:
+                        hose_tintonghop_sheet.write(row+1,col,hose_tintonghop.iloc[row,col],regular_fmt)
 
         writer.close()
 
 
 post = post()
 
+class report:
+
+    def __init__(
+            self,
+            periodicity:str,
+            run_time=None
+    ):
+        self.periodicity = periodicity
+        self.run_time = run_time
+
+    def BaoCaoCheckGia(self):
+        reporting_tool.trading_service.giaodichluuky.BaoCaoCheckGia.run(self.periodicity,self.run_time)

@@ -881,8 +881,8 @@ class ta:
         This method returns historical trading data of given ticker
 
         :param ticker: allow values in fa.tickers()
-        :param fromdate: [optional] allow any date with format: 'yyyy-mm-dd' or 'yyyy/mm/dd'
-        :param todate: [optional] allow any date with format: 'yyyy-mm-dd' or 'yyyy/mm/dd'
+        :param fromdate: [optional] allow any date with format: 'yyyy-mm-dd'
+        :param todate: [optional] allow any date with format: 'yyyy-mm-dd'
 
         :return: pandas.DataFrame
         """

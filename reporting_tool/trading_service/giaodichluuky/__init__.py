@@ -1,2 +1,2 @@
 from reporting_tool.trading_service import *
-dept_folder = join(realpath(dirname(dirname(__file__))),'output','GiaoDichLuuKy')
+dept_folder = r'C:\Users\hiepdang\Shared Folder\Trading Service\Report\GiaoDichLuuKy'

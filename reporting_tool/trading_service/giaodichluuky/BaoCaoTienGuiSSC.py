@@ -7,6 +7,8 @@ def run(
 ):
     start = time.time()
     info = get_info(periodicity,run_time)
+    start_date = info['start_date']
+    end_date = info['end_date']
     period = info['period']
     folder_name = info['folder_name']
 
@@ -23,14 +25,15 @@ def run(
         squeeze=True
     )
     all_account = pd.read_sql(
-        """
-        SELECT account.account_type, COUNT(DISTINCT sub_account.account_code) AS [count]
-        FROM sub_account
+        f"""
+        SELECT account.account_type, COUNT(DISTINCT relationship.account_code) AS [count]
+        FROM relationship
         LEFT JOIN customer_information 
-        ON customer_information.sub_account = sub_account.sub_account 
-        LEFT JOIN [account]
-        ON account.account_code = sub_account.account_code 
-        WHERE customer_information.status IN ('A','B','N','P') 
+        ON customer_information.sub_account = relationship.sub_account 
+        LEFT JOIN account
+        ON account.account_code = relationship.account_code 
+        WHERE relationship.date BETWEEN N'{start_date}' AND N'{end_date}'
+        AND customer_information.status IN ('A','B','N','P') 
         AND account_type IN (
             N'Cá nhân trong nước',
             N'Cá nhân nước ngoài',

@@ -17,18 +17,48 @@ def run(
         os.mkdir(join(dept_folder, folder_name, period))
 
     ytd_trading_record = pd.read_sql(
-        "SELECT sub_account, exchange, type_of_account, type_of_asset, type_of_order, value "
-        "FROM trading_record "
-        f"WHERE date BETWEEN '{begin_of_year}' AND '{end_date}' "
-        f"AND settlement_period IN (1,2);",
+        f"""
+        SELECT 
+        [trading_record].[sub_account],
+        [trading_record].[exchange],
+        [account].[account_type],
+        [trading_record].[type_of_asset],
+        [trading_record].[type_of_order],
+        [trading_record].[value]
+        FROM [trading_record]
+        LEFT JOIN [relationship]
+	    ON [relationship].[sub_account] = [trading_record].[sub_account]
+        LEFT JOIN [account]
+	    ON [account].[account_code] = [relationship].[account_code]
+	    where
+	    [relationship].[date] = '{end_date}'
+        AND
+        [trading_record].[date] BETWEEN '{begin_of_year}' AND '{end_date}'
+        AND [trading_record].[settlement_period] IN (1,2);
+        """,
         connect_DWH_CoSo,
         index_col='sub_account',
     )
     period_trading_record = pd.read_sql(
-        "SELECT sub_account, exchange, type_of_account, type_of_asset, type_of_order, value "
-        "FROM trading_record "
-        f"WHERE date BETWEEN '{start_date}' AND '{end_date}' "
-        f"AND settlement_period IN (1,2);",
+        f"""
+        SELECT 
+        [trading_record].[sub_account],
+        [trading_record].[exchange],
+        [account].[account_type],
+        [trading_record].[type_of_asset],
+        [trading_record].[type_of_order],
+        [trading_record].[value]
+        FROM [trading_record]
+        LEFT JOIN [relationship]
+        ON [relationship].[sub_account] = [trading_record].[sub_account]
+        LEFT JOIN [account]
+        ON [account].[account_code] = [relationship].[account_code]
+        where
+        [relationship].[date] = '{end_date}'
+        AND
+        [trading_record].[date] BETWEEN '{start_date}' AND '{end_date}'
+        AND [trading_record].[settlement_period] IN (1,2);
+        """,
         connect_DWH_CoSo,
         index_col='sub_account',
     )
@@ -36,25 +66,25 @@ def run(
     def f(df,ttype):
         df['exchange'].replace('UPCOM','HNX',inplace=True)
         df['exchange'].replace('HOSE','HSX', inplace=True)
-        df['type_of_account'].fillna('Tự doanh',inplace=True) # cho IT fill luon tren DB thi bo dong nay di
-        domestic = df['type_of_account'].str.endswith('trong nước')
-        foreign = df['type_of_account'].str.endswith('nước ngoài')
-        tudoanh = df['type_of_account'].str.endswith('Tự doanh')
-        df.loc[domestic,'type_of_account'] = 'domestic'
-        df.loc[foreign,'type_of_account'] = 'foreign'
-        df.loc[tudoanh,'type_of_account'] = 'dealing'
+        domestic = df['account_type'].str.endswith('trong nước')
+        foreign = df['account_type'].str.endswith('nước ngoài')
+        tudoanh = df['account_type']=='Tự doanh'
+        df.loc[domestic,'account_type'] = 'domestic'
+        df.loc[foreign,'account_type'] = 'foreign'
+        df.loc[tudoanh,'account_type'] = 'dealing'
         df['type_of_asset'] = df['type_of_asset'].map(
             {
                 'Cổ phiếu thường': 'stock',
                 'Chứng chỉ quỹ': 'fund_certificate',
                 'Chứng quyền': 'cw',
-                'Trái phiếu': 'bond',
+                'Trái phiếu doanh nghiệp': 'bond',
+                'Trái phiếu chính phủ': 'bond',
             }
         )
-        result = df.groupby(['type_of_order','exchange','type_of_asset','type_of_account']).sum()
+        result = df.groupby(['type_of_order','exchange','type_of_asset','account_type']).sum()
         if ttype == 'ytd':  result.columns = pd.Index(['value_ytd'],name='type_of_period')
         elif ttype == 'period': result.columns = pd.Index(['value_period'],name='type_of_period')
-        else: raise TypeError("ttpe only accepts 'ytd' or 'period'")
+        else: raise TypeError("ttype only accepts 'ytd' or 'period'")
         return result
 
     ytd_table = f(ytd_trading_record,'ytd')
@@ -71,7 +101,7 @@ def run(
         ('stock','dealing'),
         ('bond','dealing'),
         ('fund_certificate','dealing'),
-    ], names=['type_of_asset','type_of_account'])
+    ], names=['type_of_asset','account_type'])
     result = pd.DataFrame(data=0,columns=result.columns,index=needed_idx).add(result,fill_value=0) # ensure complete index
     result[('T','value_period','HSX')] = result[('B','value_period','HSX')] + result[('S','value_period','HSX')]
     result[('T','value_period','HNX')] = result[('B','value_period','HNX')] + result[('S','value_period','HNX')]
