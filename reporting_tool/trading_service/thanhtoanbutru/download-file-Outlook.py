@@ -5,10 +5,8 @@ def run(
         periodicity: str,
         run_time=None,
 ):
-    start = time.time()
     info = get_info(periodicity, run_time)
     start_date = info['start_date']
-    end_date = info['end_date']
     period = info['period']
 
     outlook = Dispatch('outlook.application')
@@ -31,7 +29,9 @@ def run(
             try:
                 emails = ['@ocb', '@eximbank', '@phs']
                 extension_img = ('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif')
-                EIB_form = ['PHU HUNG', 'EIB', 'PH']
+                EIB_form = ['PHU HUNG', 'EIB', 'PH', 'REPORT']
+                OCB_form = ['SỐ DƯ', 'OCB']
+
                 if message.Class == 43:  # Type of email is MailItem, if it = 2
                     check_Email_type = message.SenderEmailType
                     check_date = message.ReceivedTime.date() == dt.strptime(start_date, '%Y/%m/%d').date()
@@ -40,25 +40,26 @@ def run(
                         check_Sender_name = message.Sender.GetExchangeUser().PrimarySmtpAddress
                         if any(email in check_Sender_name for email in emails):
                             for attachment in message.Attachments:
+                                print(attachment)
                                 check_file_extension = attachment.FileName.endswith(extension_img)
-                                check_file_name = (EIB in attachment.FileName for EIB in EIB_form)
-                                if not check_file_extension and check_file_name:
-                                    dir_name = 'EIB'
-                                    if not os.path.isdir(join(dept_folder, 'Attachment', period, dir_name)):
-                                        os.mkdir((join(dept_folder, 'Attachment', period, dir_name)))
+                                # check_file_name = (EIB in attachment.FileName for EIB in EIB_form)
+                                check_file_name_eib = any(eib in attachment.FileName for eib in EIB_form)
+                                check_file_name_ocb = any(ocb in attachment.FileName for ocb in OCB_form)
+                                if not check_file_extension and check_file_name_eib:
+                                    if not os.path.isdir(join(dept_folder, 'Attachment', period, 'EIB')):
+                                        os.mkdir((join(dept_folder, 'Attachment', period, 'EIB')))
                                         attachment.SaveASFile(os.path.join(dept_folder,
                                                                            'Attachment',
                                                                            period,
-                                                                           dir_name,
+                                                                           'EIB',
                                                                            attachment.FileName))
-                                elif not check_file_extension and not check_file_name:
-                                    dir_name = 'OCB'
-                                    if not os.path.isdir(join(dept_folder, 'Attachment', period, dir_name)):
-                                        os.mkdir((join(dept_folder, 'Attachment', period, dir_name)))
+                                elif not check_file_extension and check_file_name_ocb:
+                                    if not os.path.isdir(join(dept_folder, 'Attachment', period, 'OCB')):
+                                        os.mkdir((join(dept_folder, 'Attachment', period, 'OCB')))
                                         attachment.SaveASFile(os.path.join(dept_folder,
                                                                            'Attachment',
                                                                            period,
-                                                                           dir_name,
+                                                                           'OCB',
                                                                            attachment.FileName))
 
             except Exception as e:

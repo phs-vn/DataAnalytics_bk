@@ -108,8 +108,9 @@ def run(
 
     # --------------------- Viet File ---------------------
     # Write file excel Bao cao doi chieu file ngan hang
-    file_name = f'Báo cáo đối chiếu file ngân hàng {period}.xlsx'
-
+    date_file_name = dt.strptime(period, "%Y.%m.%d").date() - timedelta(days=1)
+    # file_name = f'Báo cáo đối chiếu file ngân hàng {period}.xlsx'
+    file_name = f'Báo cáo đối chiếu file ngân hàng {date_file_name}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder, folder_name, period, file_name),
         engine='xlsxwriter',
