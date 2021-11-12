@@ -108,9 +108,8 @@ def run(
 
     # --------------------- Viet File ---------------------
     # Write file excel Bao cao doi chieu file ngan hang
-    date_file_name = dt.strptime(period, "%Y.%m.%d").date() - timedelta(days=1)
-    # file_name = f'Báo cáo đối chiếu file ngân hàng {period}.xlsx'
-    file_name = f'Báo cáo đối chiếu file ngân hàng {date_file_name}.xlsx'
+    # date_file_name = dt.strptime(period, "%Y.%m.%d").date() - timedelta(days=1)
+    file_name = f'Báo cáo đối chiếu file ngân hàng {period}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder, folder_name, period, file_name),
         engine='xlsxwriter',
@@ -136,7 +135,6 @@ def run(
             'font_size': 12
         }
     )
-
     stt_below_header_format = workbook.add_format(
         {
             'border': 1,
@@ -148,7 +146,6 @@ def run(
             'font_size': 10
         }
     )
-
     available_content_format = workbook.add_format(
         {
             'border': 1,
@@ -211,7 +208,6 @@ def run(
             'font_size': 10
         }
     )
-
     text_right_format = workbook.add_format(
         {
             'border': 1,
@@ -222,7 +218,6 @@ def run(
             'font_size': 10
         }
     )
-
     text_right_not_border_format = workbook.add_format(
         {
             'text_wrap': True,
@@ -232,7 +227,6 @@ def run(
             'font_size': 10
         }
     )
-
     text_center_format = workbook.add_format(
         {
             'border': 1,
@@ -243,7 +237,6 @@ def run(
             'font_size': 10
         }
     )
-
     # Format lấy từ file ngân hàng
     account_format = workbook.add_format(
         {
@@ -268,7 +261,6 @@ def run(
             'font_size': 10
         }
     )
-
     date_format = workbook.add_format(
         {
             'border': 1,
@@ -280,7 +272,6 @@ def run(
             'font_size': 10
         }
     )
-
     time_format = workbook.add_format(
         {
             'border': 1,
@@ -301,7 +292,6 @@ def run(
         'Diễn giải',
         'Ghi chú',
     ]
-
     headers_nhap_rut = [
         'STT',
         'Ngày thực hiện',
@@ -319,7 +309,6 @@ def run(
         'Chi nhánh',
         'Trạng thái',
     ]
-
     headers_hom_truoc = [
         'STT',
         'TXDATE',
@@ -336,7 +325,6 @@ def run(
         'File NH gửi',
         'Lệch'
     ]
-
     headers_hom_nay = [
         'STT',
         'TXDATE',
@@ -347,6 +335,7 @@ def run(
         'DỰ KIẾN CUỐI NGÀY',
         'LỆCH'
     ]
+
     ################################################
 
     # Sheet File Tang Tien
@@ -1003,6 +992,7 @@ def run(
         bank_file_eib['Lệch'].sum() + bank_file_ocb['Lệch'].sum(),
         sum_format_hom_truoc_hom_nay,
     )
+
     ################################################
 
     # Sheet file Ngay hom nay

@@ -4,6 +4,8 @@ CompanyPhoneNumber = 'Điện thoại : (+84 28)  5413 5479  |  Fax: (+84 28) 54
 CompanyEmail = 'Email: info@phs.vn / support@phs.vn  - Web: www.phs.vn'
 CompanyCode = '022'
 
+xhcn_title = 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM'
+xhcn_2_title = 'Độc lập – Tự do – Hạnh phúc'
 # IMPORT PACKAGES
 
 import numpy as np
