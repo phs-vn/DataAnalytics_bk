@@ -20,7 +20,8 @@ def run(
             if not os.path.isdir(join(dept_folder, folder_name, end_date.replace(date_char, '.'))):
                 os.mkdir((join(dept_folder, folder_name, end_date.replace(date_char, '.'))))
                 end_fixed = end_fixed + end_date.replace(date_char, '.')
-            end_fixed = end_fixed + end_date.replace(date_char, '.')
+            else:
+                end_fixed = end_fixed + end_date.replace(date_char, '.')
         if date_char in start_date:
             start_fixed = start_fixed + start_date.replace(date_char, '.')
 
