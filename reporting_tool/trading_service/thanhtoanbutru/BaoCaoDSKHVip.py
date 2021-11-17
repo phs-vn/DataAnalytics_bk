@@ -3,18 +3,22 @@ from reporting_tool.trading_service.thanhtoanbutru import *
 
 def run(
         periodicity: str,
+        start_date: str,  # 2015-01-01
+        end_date: str,    # 2021-10-31
         run_time=None,
 ):
     start = time.time()
     info = get_info(periodicity, run_time)
-    start_date = info['start_date']
-    end_date = info['end_date']
     period = info['period']
     folder_name = info['folder_name']
+    date_character = ['/', '-', '.']
 
     # create folder
-    if not os.path.isdir(join(dept_folder, folder_name, period)):  # dept_folder from import
-        os.mkdir(join(dept_folder, folder_name, period))
+    for date_char in date_character:
+        if date_char in end_date:
+            end_date.replace(date_char, '.')
+            if not os.path.isdir(join(dept_folder, folder_name, period)):  # dept_folder from import
+                os.mkdir(join(dept_folder, folder_name, period))
 
     ###################################################
     ###################################################
@@ -52,6 +56,7 @@ def run(
         """,
         connect_DWH_CoSo
     )
+    vip_phs_query = vip_phs_query.sort_values(by=['date_of_birth'])
 
     ###################################################
     ###################################################
@@ -235,8 +240,6 @@ def run(
         'Mã môi giới quản lý tài khoản',
         'Tên môi giới quản lý tài khoản',
         'Note',
-        'Địa chỉ thực',
-        'SĐT thực'
     ]
     headers_tong_theo_cn = [
         'Location',
@@ -258,15 +261,16 @@ def run(
     vip_phs_groupby_H = (vip_phs_query.groupby('account_code')['date_of_change'].min())
     vip_phs_query['min_date'] = vip_phs_query['account_code'].map(vip_phs_groupby_H)
     vip_phs_groupby_N = (vip_phs_query.groupby('account_code')['time_of_change'].min())
-    vip_phs_query['min-time'] = vip_phs_query['account_code'].map(vip_phs_groupby_N)
-    vip_phs_query = vip_phs_query.loc[vip_phs_query['time_of_change'] == vip_phs_query['min-time']]
-
+    vip_phs_query['min_time'] = vip_phs_query['account_code'].map(vip_phs_groupby_N)
     vip_phs_groupby_H_approval = (vip_phs_query.groupby('account_code')['date_of_approval'].max())
     vip_phs_query['max_date'] = vip_phs_query['account_code'].map(vip_phs_groupby_H_approval)
     vip_phs_groupby_N_approval = (vip_phs_query.groupby('account_code')['time_of_approval'].max())
-    vip_phs_query['max-time'] = vip_phs_query['account_code'].map(vip_phs_groupby_N_approval)
-    vip_phs_query = vip_phs_query.loc[vip_phs_query['time_of_approval'] == vip_phs_query['max-time']]
+    vip_phs_query['max_time'] = vip_phs_query['account_code'].map(vip_phs_groupby_N_approval)
 
+    # loc duplicate row
+    vip_phs_query = vip_phs_query.loc[vip_phs_query['time_of_approval'] == vip_phs_query['max_time']]
+    vip_phs_query = vip_phs_query.drop_duplicates('customer_name')
+    # xuất cột contract_type
     mapper = vip_phs_query['contract_type'].apply(
         lambda x: 'SILV PHS' if 'SILV' in x else ('GOLD PHS' if 'GOLD' in x else 'VIP Branch'))
     vip_phs_query['contract_type'] = mapper
@@ -274,49 +278,64 @@ def run(
     def last_day_of_month(date_value):
         return date_value.replace(day=calendar.monthrange(date_value.year, date_value.month)[1])
 
+    # điều kiện phân biệt giữa SILV, GOLD và VIP Branch
+    # for idx in vip_phs_query.index:
+    #     contract_type = vip_phs_query.loc[idx, 'contract_type']
+    #     date_present = dt.now()
+    #     if contract_type == 'SILV PHS' or contract_type == 'GOLD PHS':
+    #         if 1 <= date_present.month < 6:
+    #             last_day_of_June = last_day_of_month(dt(date_present.year, 6, 1).date())
+    #             vip_phs_query.loc[idx, 'review_date'] = last_day_of_June.strftime("%d/%m/%Y")
+    #         elif 6 <= date_present.month < 12:
+    #             last_day_of_Dec = last_day_of_month(dt(date_present.year, 12, 1).date())
+    #             vip_phs_query.loc[idx, 'review_date'] = last_day_of_Dec.strftime("%d/%m/%Y")
+    #         else:
+    #             last_day_of_June_next_year = last_day_of_month(dt(date_present.year + 1, 6, 1).date())
+    #             vip_phs_query.loc[idx, 'review_date'] = last_day_of_June_next_year.strftime("%d/%m/%Y")
+    #     elif contract_type == 'VIP Branch':
+    #         if 1 <= date_present.month < 3:
+    #             last_day_of_Mar = last_day_of_month(dt(date_present.year, 3, 1).date())
+    #             vip_phs_query.loc[idx, 'review_date'] = last_day_of_Mar.strftime("%d/%m/%Y")
+    #         elif 3 <= date_present.month < 6:
+    #             last_day_of_June = last_day_of_month(dt(date_present.year, 6, 1).date())
+    #             vip_phs_query.loc[idx, 'review_date'] = last_day_of_June.strftime("%d/%m/%Y")
+    #         elif 6 <= date_present.month < 9:
+    #             last_day_of_Sep = last_day_of_month(dt(date_present.year + 1, 9, 1).date())
+    #             vip_phs_query.loc[idx, 'review_date'] = last_day_of_Sep.strftime("%d/%m/%Y")
+    #         else:
+    #             last_day_of_Mar_next_year = last_day_of_month(dt(date_present.year + 1, 3, 1).date())
+    #             vip_phs_query.loc[idx, 'review_date'] = last_day_of_Mar_next_year.strftime("%d/%m/%Y")
+
+    # ko phân biệt SILV, GOLD và VIP Branch
     for idx in vip_phs_query.index:
-        contract_type = vip_phs_query.loc[idx, 'contract_type']
-        approval_date = vip_phs_query.loc[idx, 'date_of_approval']
-        if contract_type == 'SILV PHS' or contract_type == 'GOLD PHS':
-            if 1 <= approval_date.month < 6:
-                last_day_of_June = last_day_of_month(dt(approval_date.year, 6, 1).date())
-                vip_phs_query.loc[idx, 'review_date'] = last_day_of_June.strftime("%d/%m/%Y")
-            elif 6 <= approval_date.month < 12:
-                last_day_of_Dec = last_day_of_month(dt(approval_date.year, 12, 1).date())
-                vip_phs_query.loc[idx, 'review_date'] = last_day_of_Dec.strftime("%d/%m/%Y")
-            else:
-                last_day_of_June_next_year = last_day_of_month(dt(approval_date.year + 1, 6, 1).date())
-                vip_phs_query.loc[idx, 'review_date'] = last_day_of_June_next_year.strftime("%d/%m/%Y")
-        elif contract_type == 'VIP Branch':
-            if 1 <= approval_date.month < 3:
-                last_day_of_Mar = last_day_of_month(dt(approval_date.year, 3, 1).date())
-                vip_phs_query.loc[idx, 'review_date'] = last_day_of_Mar.strftime("%d/%m/%Y")
-            elif 3 <= approval_date.month < 6:
-                last_day_of_June = last_day_of_month(dt(approval_date.year, 6, 1).date())
-                vip_phs_query.loc[idx, 'review_date'] = last_day_of_June.strftime("%d/%m/%Y")
-            elif 6 <= approval_date.month < 9:
-                last_day_of_Sep = last_day_of_month(dt(approval_date.year + 1, 9, 1).date())
-                vip_phs_query.loc[idx, 'review_date'] = last_day_of_Sep.strftime("%d/%m/%Y")
-            else:
-                last_day_of_Mar_next_year = last_day_of_month(dt(approval_date.year + 1, 3, 1).date())
-                vip_phs_query.loc[idx, 'review_date'] = last_day_of_Mar_next_year.strftime("%d/%m/%Y")
+        date_present = dt.now()
+        if 1 <= date_present.month < 6:
+            last_day_of_June = last_day_of_month(dt(date_present.year, 6, 1).date())
+            vip_phs_query.loc[idx, 'review_date'] = last_day_of_June.strftime("%d/%m/%Y")
+        elif 6 <= date_present.month < 12:
+            last_day_of_Dec = last_day_of_month(dt(date_present.year, 12, 1).date())
+            vip_phs_query.loc[idx, 'review_date'] = last_day_of_Dec.strftime("%d/%m/%Y")
+        else:
+            last_day_of_June_next_year = last_day_of_month(dt(date_present.year + 1, 6, 1).date())
+            vip_phs_query.loc[idx, 'review_date'] = last_day_of_June_next_year.strftime("%d/%m/%Y")
 
     # Set Column Width and Row Height
     sheet_vip_phs.set_column('A:A', 0)
     sheet_vip_phs.set_column('B:B', 3.56)
     sheet_vip_phs.set_column('C:C', 10.71)
-    sheet_vip_phs.set_column('D:D', 34.14)
-    sheet_vip_phs.set_column('E:E', 15.57)
-    sheet_vip_phs.set_column('F:F', 11.43)
+    sheet_vip_phs.set_column('D:D', 30.57)
+    sheet_vip_phs.set_column('E:E', 26.29)
+    sheet_vip_phs.set_column('F:F', 9.43)
     sheet_vip_phs.set_column('G:G', 12.86)
     sheet_vip_phs.set_column('H:H', 11)
-    sheet_vip_phs.set_column('I:I', 13.14)
+    sheet_vip_phs.set_column('I:I', 13)
     sheet_vip_phs.set_column('J:J', 11.86)
-    sheet_vip_phs.set_column('K:K', 16.14)
-    sheet_vip_phs.set_column('L:L', 30.86)
+    sheet_vip_phs.set_column('K:K', 11.43)
+    sheet_vip_phs.set_column('L:L', 65.86)
     sheet_vip_phs.set_column('M:M', 13.78)
     sheet_vip_phs.set_column('N:N', 21.71)
     sheet_vip_phs.set_column('O:S', 13.71)
+
     sheet_vip_phs.set_row(0, 22.8)
     sheet_vip_phs.set_row(1, 39)
     sheet_vip_phs.set_row(2, 21.8)
@@ -374,7 +393,7 @@ def run(
     )
     sheet_vip_phs.write_column(
         'I5',
-        vip_phs_query['date_of_approval'],
+        vip_phs_query['max_date'],
         date_format
     )
     sheet_vip_phs.write_column(

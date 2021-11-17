@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="Hiep Dang 28/10/2021">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phs/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/phs/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoThang/10.2021/DH KH VIP SINH NHAT.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoThang/10.2021/DH KH VIP SINH NHAT.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDSKHVip.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDSKHVip.py" afterDir="false" />
     </list>
@@ -86,7 +85,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDSKHVip.py" />
       <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
