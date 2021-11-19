@@ -24,7 +24,7 @@ def run(
     ###################################################
     ###################################################
 
-    # --------------------- Viết Sheet ---------------------
+    # --------------------- Viết Query ---------------------
     # query file Tang Tien
     increase_money = pd.read_sql(
         f"""
@@ -883,7 +883,7 @@ def run(
         num_format
     )
 
-    # Groupby trong sheet File Tang Tien
+    # Groupby trong sheet File Giam Tien
     giam_tien_eib_groupby = decrease_money_eib.groupby(['bank', 'bank_account'])['inflow_amount'].sum().unstack().T
     giam_tien_ocb_groupby = decrease_money_ocb.groupby(['bank', 'bank_account'])['inflow_amount'].sum().unstack().T
 
