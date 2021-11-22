@@ -290,14 +290,6 @@ def run(
     content_type_of_call_vn = 'Xác nhận rút nộp ngân hàng liên kết'
     content_type_of_call_eng = 'Confirmation withdrawal-payment of affiliate bank'
 
-    # # Fix dataframe
-    # for idx in ksnb_query.index:
-    #     bank = ksnb_query.loc[idx, 'bank']
-    #     if bank == 'OCB':
-    #         ksnb_query.loc[idx, 'SDT'] = sub_cont_tel_ocb
-    #     else:
-    #         ksnb_query.loc[idx, 'SDT'] = sub_cont_tel_eib
-
     # Set Column Width and Row Height
     sheet1.set_column('A:A', 34.43)
     sheet1.set_column('B:B', 4.14)
