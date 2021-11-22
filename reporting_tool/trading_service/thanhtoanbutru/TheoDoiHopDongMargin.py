@@ -3,17 +3,11 @@ from reporting_tool.trading_service.thanhtoanbutru import *
 
 def run(
         periodicity: str,
-        start_date: str,
-        end_date: str,
+        start_date: str,  # 2021-11-18
+        end_date: str,  # 2021-11-19
         run_time=None,
 ):
     date_character = ['/', '-', '.']
-
-    # create folder
-    for date_char in date_character:
-        if date_char in start_date and date_char in end_date:
-            start_date = start_date.replace(date_char, '/')
-            end_date = end_date.replace(date_char, '/')
 
     start = time.time()
     info = get_info(periodicity, run_time)
@@ -60,6 +54,11 @@ def run(
 
     # --------------------- Viet File Excel ---------------------
     # Write file excel Bao cao doi chieu file ngan hang
+    for date_char in date_character:
+        if date_char in start_date and date_char in end_date:
+            start_date = start_date.replace(date_char, '/')
+            end_date = end_date.replace(date_char, '/')
+
     start_date = dt.strptime(start_date, "%Y/%m/%d").strftime("%d-%m")
     end_date = dt.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
     f_name = ''

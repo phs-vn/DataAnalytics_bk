@@ -5,10 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="Hiep Dang 28/10/2021">
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoNgay/2021.11.22/Theo dõi hợp đồng Margin from 18-11 to 19-11.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/TheoDoiHopDongMargin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoNgay/2021.11.22/Báo cáo phát sinh giao dịch tiền.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/CheckSoDuBatThuong.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoNgay/2021.11.22/Theo dõi hợp đồng Margin from 18-11 to 19-11.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoNgay/2021.11.22/Theo dõi hợp đồng Margin from 18-11 to 19-11.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoThang/10.2021/BaoCao14.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoThang/10.2021/BaoCao14.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoThang/10.2021/DH KH VIP SINH NHAT.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoThang/10.2021/DH KH VIP SINH NHAT.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDSKHVip.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDSKHVip.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoFileGhiAmKSNB.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoFileGhiAmKSNB.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/TheoDoiHopDongMargin.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/TheoDoiHopDongMargin.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +79,7 @@
       <recent name="C:\Users\hiepdang\PycharmProjects\datadriven-project\reporting_tool\trading_service\data_validation" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.TheoDoiHopDongMargin">
+  <component name="RunManager" selected="Python.CheckSoDuBatThuong">
     <configuration name="BaoCaoCheckSoDu" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -100,9 +105,6 @@
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -121,9 +123,6 @@
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -138,19 +137,16 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="GuiMailOutlook" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="CheckSoDuBatThuong" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/GuiMailOutlook.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/CheckSoDuBatThuong.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -178,19 +174,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.BaoCaoDSKHVip" />
-      <item itemvalue="Python.GuiMailOutlook" />
-      <item itemvalue="Python.BaoCaoFileGhiAmKSNB" />
       <item itemvalue="Python.BaoCaoCheckSoDu" />
+      <item itemvalue="Python.BaoCaoDSKHVip" />
+      <item itemvalue="Python.BaoCaoFileGhiAmKSNB" />
       <item itemvalue="Python.TheoDoiHopDongMargin" />
+      <item itemvalue="Python.CheckSoDuBatThuong" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.TheoDoiHopDongMargin" />
-        <item itemvalue="Python.BaoCaoFileGhiAmKSNB" />
-        <item itemvalue="Python.BaoCaoCheckSoDu" />
-        <item itemvalue="Python.GuiMailOutlook" />
+        <item itemvalue="Python.CheckSoDuBatThuong" />
         <item itemvalue="Python.BaoCaoDSKHVip" />
+        <item itemvalue="Python.BaoCaoFileGhiAmKSNB" />
+        <item itemvalue="Python.TheoDoiHopDongMargin" />
+        <item itemvalue="Python.BaoCaoCheckSoDu" />
       </list>
     </recent_temporary>
   </component>

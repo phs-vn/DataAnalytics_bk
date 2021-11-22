@@ -11,24 +11,22 @@ def run(
     info = get_info(periodicity, run_time)
     period = info['period']
     folder_name = info['folder_name']
-    date_character = ['/', '-', '.']
 
     # create folder
-    for date_char in date_character:
-        if date_char in end_date:
-            end_date.replace(date_char, '.')
-            if not os.path.isdir(join(dept_folder, folder_name, period)):  # dept_folder from import
-                os.mkdir(join(dept_folder, folder_name, period))
+    if not os.path.isdir(join(dept_folder, folder_name)):  # dept_folder from import
+        os.mkdir(join(dept_folder, folder_name))
+    if not os.path.isdir(join(dept_folder, folder_name, period)):
+        os.mkdir((join(dept_folder, folder_name, period)))
 
     ###################################################
     ###################################################
     ###################################################
 
     # --------------------- Viết Query ---------------------
-
     vip_phs_query = pd.read_sql(
         f"""
             SELECT
+            DISTINCT
             customer_information.sub_account,
             account.account_code, 
             account.customer_name, 
@@ -52,7 +50,7 @@ def run(
             OR customer_information.contract_type LIKE N'%VIPCN%')
             AND relationship.date='2021-10-31'
             AND (customer_information_change.date_of_change BETWEEN '{start_date}' AND '{end_date}')
-            AND customer_information_change.change_content = N'Loại hình hợp đồng'
+            AND customer_information_change.change_content = 'Loai hinh hop dong'
         """,
         connect_DWH_CoSo
     )

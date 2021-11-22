@@ -14,11 +14,10 @@ def run(
     date_character = ['/', '-', '.']
 
     # create folder
-    for date_char in date_character:
-        if date_char in end_date:
-            end_date.replace(date_char, '.')
-            if not os.path.isdir(join(dept_folder, folder_name, period)):  # dept_folder from import
-                os.mkdir(join(dept_folder, folder_name, period))
+    if not os.path.isdir(join(dept_folder, folder_name)):  # dept_folder from import
+        os.mkdir(join(dept_folder, folder_name))
+    if not os.path.isdir(join(dept_folder, folder_name, period)):
+        os.mkdir((join(dept_folder, folder_name, period)))
 
     ###################################################
     ###################################################
@@ -74,6 +73,11 @@ def run(
 
     # --------------------- Viet File Excel ---------------------
     # Write file excel Bao cao doi chieu file ngan hang
+    for date_char in date_character:
+        if date_char in end_date and date_char in start_date:
+            end_date.replace(date_char, '-')
+            start_date.replace(date_char, '-')
+
     file_name = f'BaoCao14.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder, folder_name, period, file_name),
@@ -279,7 +283,7 @@ def run(
     sheet1 = workbook.add_worksheet('Sheet1')
     # content in sheet
     sheet_title_vn = 'DANH SÁCH CUỘC GỌI ĐẾN KHÁCH HÀNG_THÁNG 07/2021 (01/07/2021- 31/07/2021)'
-    sheet_title_eng = 'LIST OF PHONE CALLS TO CUSTOMERS__ July of 2021  (01/07/2021- 31/07/2021)'
+    sheet_title_eng = 'LIST OF PHONE CALLS TO CUSTOMERS__July of 2021  (01/07/2021- 31/07/2021)'
     location_vn = 'Địa điểm: phòng TTBT- HỘI SỞ'
     location_eng = 'Location: TTBT department - HỘI SỞ'
     sub_cont_tel_eib = '39143152/38216082/39144080/939142155'
