@@ -63,9 +63,9 @@ def run(
     end_date = dt.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
     f_name = ''
     if start_date == end_date:
-        f_name = f_name + f'Theo dõi hợp đồng Margin {start_date}.xlsx'
+        f_name = f_name + f'Theo dõi hợp đồng Margin {end_date}.xlsx'
     else:
-        f_name = f_name + f'Theo dõi hợp đồng Margin from {start_date} to {end_date}.xlsx'
+        f_name = f_name + f'Theo dõi hợp đồng Margin từ {start_date} đến {end_date}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder, folder_name, period, f_name),
         engine='xlsxwriter',

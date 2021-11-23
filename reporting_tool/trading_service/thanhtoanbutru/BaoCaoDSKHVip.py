@@ -306,15 +306,15 @@ def run(
 
     # ko phân biệt SILV, GOLD và VIP Branch
     for idx in vip_phs_query.index:
-        date_present = dt.now()
+        date_present = dt.datetime.now()
         if 1 <= date_present.month < 6:
-            last_day_of_June = last_day_of_month(dt(date_present.year, 6, 1).date())
+            last_day_of_June = last_day_of_month(dt.datetime(date_present.year, 6, 1).date())
             vip_phs_query.loc[idx, 'review_date'] = last_day_of_June.strftime("%d/%m/%Y")
         elif 6 <= date_present.month < 12:
-            last_day_of_Dec = last_day_of_month(dt(date_present.year, 12, 1).date())
+            last_day_of_Dec = last_day_of_month(dt.datetime(date_present.year, 12, 1).date())
             vip_phs_query.loc[idx, 'review_date'] = last_day_of_Dec.strftime("%d/%m/%Y")
         else:
-            last_day_of_June_next_year = last_day_of_month(dt(date_present.year + 1, 6, 1).date())
+            last_day_of_June_next_year = last_day_of_month(dt.datetime(date_present.year + 1, 6, 1).date())
             vip_phs_query.loc[idx, 'review_date'] = last_day_of_June_next_year.strftime("%d/%m/%Y")
 
     # Set Column Width and Row Height

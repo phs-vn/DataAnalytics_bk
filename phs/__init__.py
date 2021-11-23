@@ -1,7 +1,7 @@
-CompanyName = 'Công Ty Cổ Phần Chứng Khoán Phú Hưng'
+CompanyName = 'CÔNG TY CỔ PHẦN CHỨNG KHOÁN PHÚ HƯNG'
 CompanyAddress = 'Tầng 21, Phú Mỹ Hưng Tower, 08 Hoàng Văn Thái, phường Tân Phú, quận 7, Thành phố Hồ Chí Minh'
-CompanyPhoneNumber = 'Điện thoại : (+84 28)  5413 5479  |  Fax: (+84 28) 5413 5472'
-CompanyEmail = 'Email: info@phs.vn / support@phs.vn  - Web: www.phs.vn'
+CompanyPhoneNumber = 'Điện thoại: (84-8) 5 413 5479 | Fax: (84-8) 5 413 5472'
+CompanyEmail = 'Email: info@phs.vn / support@phs.vn - Web: www.phs.vn'
 CompanyCode = '022'
 
 xhcn_title = 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM'
@@ -22,7 +22,7 @@ from win32com.client import Dispatch
 import time
 from datetime import timedelta
 import calendar
-from datetime import datetime as dt
+import datetime as dt
 import requests
 import json
 import holidays
