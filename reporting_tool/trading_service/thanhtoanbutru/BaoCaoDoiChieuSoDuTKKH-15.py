@@ -38,15 +38,47 @@ def run(
             relationship.sub_account, 
             account.customer_name, 
             sub_account_deposit.opening_balance,
-            sub_account_deposit.closing_balance
+            sub_account_deposit.closing_balance,
+            branch.branch_name,
+            broker.broker_name
             FROM sub_account_deposit
             LEFT JOIN relationship ON relationship.sub_account = sub_account_deposit.sub_account
             LEFT JOIN account ON account.account_code = relationship.account_code
+            LEFT JOIN branch ON branch.branch_id = relationship.branch_id
+            LEFT JOIN broker ON broker.broker_id = relationship.broker_id
             WHERE sub_account_deposit.date BETWEEN '{start_date}' AND '{end_date}'
             AND relationship.date = '{end_date}'
             ORDER BY sub_account_deposit.date ASC
         """,
-        connect_DWH_CoSo
+        connect_DWH_CoSo,
+        index_col='sub_account'
+    )
+    # lọc bảng lớn thành theo 2 ngày 22 và 23
+    info_T_tru_1 = doi_chieu_so_du_query.loc[doi_chieu_so_du_query['date'] == start_date]  # 22-11
+    info_T0 = doi_chieu_so_du_query.loc[doi_chieu_so_du_query['date'] == end_date]         # 23-11
+    idx = info_T_tru_1.index.union(info_T0.index)  # lấy phần hợp của 2 dataframe
+    # set lại index
+    info_T_tru_1 = info_T_tru_1.reindex(idx)
+    info_T0 = info_T0.reindex(idx)
+    # tạo dataframe mới chỉ lấy 2 cột opening và closing balance
+    balance_tru_1 = info_T_tru_1[['opening_balance', 'closing_balance']].copy()
+    # rename column
+    balance_tru_1.rename(
+        {
+            'opening_balance': 'opening_t_tru_1',
+            'closing_balance': 'closing_t_tru_1'
+        },
+        axis=1,
+        inplace=True
+    )
+    balance_0 = info_T0[['opening_balance', 'closing_balance']].copy()
+    balance_0.rename(
+        {
+            'opening_balance': 'opening_t_0',
+            'closing_balance': 'closing_t_0'
+        },
+        axis=1,
+        inplace=True
     )
 
     ###################################################
@@ -59,8 +91,7 @@ def run(
         if date_char in start_date and date_char in end_date:
             start_date = start_date.replace(date_char, '/')
             end_date = end_date.replace(date_char, '/')
-
-    start_date = dt.datetime.strptime(start_date, "%Y/%m/%d").strftime("%d-%m")
+    footer_date = bdate(end_date, 1).split('-')
     end_date = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
     f_name = f'Báo cáo đối chiếu số dư tiền tài khoản khách hàng {end_date}.xlsx'
     writer = pd.ExcelWriter(
@@ -162,10 +193,11 @@ def run(
             'font_name': 'Times New Roman'
         }
     )
-    text_right_format = workbook.add_format(
+    text_left_wrap_format = workbook.add_format(
         {
             'border': 1,
-            'align': 'right',
+            'align': 'left',
+            'text_wrap': True,
             'valign': 'top',
             'font_size': 10,
             'font_name': 'Times New Roman'
@@ -188,6 +220,17 @@ def run(
             'valign': 'vcenter',
             'font_size': 11,
             'font_name': 'Times New Roman',
+        }
+    )
+    footer_text_format = workbook.add_format(
+        {
+            'bold': True,
+            'italic': True,
+            'align': 'center',
+            'valign': 'vcenter',
+            'font_size': 12,
+            'font_name': 'Times New Roman',
+            'text_wrap': True
         }
     )
     headers = [
@@ -220,17 +263,17 @@ def run(
 
     # Set Column Width and Row Height
     sheet_bao_cao_can_lam.set_column('A:A', 6.29)
-    sheet_bao_cao_can_lam.set_column('B:B', 13.29)
-    sheet_bao_cao_can_lam.set_column('C:C', 15.71)
-    sheet_bao_cao_can_lam.set_column('D:D', 15.86)
-    sheet_bao_cao_can_lam.set_column('E:E', 16.71)
-    sheet_bao_cao_can_lam.set_column('F:F', 17.43)
-    sheet_bao_cao_can_lam.set_column('G:G', 13.86)
+    sheet_bao_cao_can_lam.set_column('B:B', 12.14)
+    sheet_bao_cao_can_lam.set_column('C:C', 13.43)
+    sheet_bao_cao_can_lam.set_column('D:D', 25.43)
+    sheet_bao_cao_can_lam.set_column('E:E', 14.14)
+    sheet_bao_cao_can_lam.set_column('F:F', 14.57)
+    sheet_bao_cao_can_lam.set_column('G:G', 12)
     sheet_bao_cao_can_lam.set_column('H:H', 17.14)
     sheet_bao_cao_can_lam.set_column('I:I', 17.57)
     sheet_bao_cao_can_lam.set_column('J:J', 13.86)
-    sheet_bao_cao_can_lam.set_column('K:K', 17.71)
-    sheet_bao_cao_can_lam.set_column('L:L', 15.86)
+    sheet_bao_cao_can_lam.set_column('K:K', 19.43)
+    sheet_bao_cao_can_lam.set_column('L:L', 29)
     sheet_bao_cao_can_lam.set_row(6, 18)
     sheet_bao_cao_can_lam.set_row(7, 15.75)
     sheet_bao_cao_can_lam.set_row(10, 47.25)
@@ -250,12 +293,45 @@ def run(
     sheet_bao_cao_can_lam.merge_range('J10:J11', headers[6], headers_format)
     sheet_bao_cao_can_lam.merge_range('K10:K11', headers[7], headers_format)
     sheet_bao_cao_can_lam.merge_range('L10:L11', headers[8], headers_format)
+    sum_start_row = info_T0.shape[0] + 13
+    sheet_bao_cao_can_lam.merge_range(
+        f'A{sum_start_row}:D{sum_start_row}',
+        'Tổng',
+        headers_format
+    )
+    sheet_bao_cao_can_lam.merge_range(
+        f'K{sum_start_row}:L{sum_start_row}',
+        '',
+        text_left_wrap_format
+    )
+    footer_start_row = sum_start_row + 2
+    sheet_bao_cao_can_lam.merge_range(
+        f'J{footer_start_row}:L{footer_start_row}',
+        f'Ngày {footer_date[2]} tháng {footer_date[1]} năm {footer_date[0]}',
+        footer_dmy_format
+    )
+    sheet_bao_cao_can_lam.merge_range(
+        f'J{footer_start_row + 1}:L{footer_start_row + 1}',
+        'Người duyệt',
+        footer_text_format
+    )
+    sheet_bao_cao_can_lam.merge_range(
+        f'A{footer_start_row + 1}:C{footer_start_row + 1}',
+        'Người lập',
+        footer_text_format
+    )
+    sheet_bao_cao_can_lam.set_row(footer_start_row, 21.75)
 
     # write row, column
     sheet_bao_cao_can_lam.write_row(
         'A4',
-        [''] * len(headers),
+        [''] * (len(headers) + len(sub_headers) - 2),
         empty_row_format
+    )
+    sheet_bao_cao_can_lam.write_row(
+        f'E{sum_start_row}',
+        [''] * 6,
+        money_format
     )
     sheet_bao_cao_can_lam.write_row(
         'E11',
@@ -267,15 +343,156 @@ def run(
         [f'({i})' for i in np.arange(len(headers) + len(sub_headers) - 2) + 1],
         stt_row_format,
     )
+    sheet_bao_cao_can_lam.write_column(
+        'A13',
+        [int(i) for i in np.arange(info_T0.shape[0]) + 1],
+        stt_col_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'B13',
+        info_T0['account_code'],
+        text_left_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'C13',
+        info_T0.index,
+        text_left_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'D13',
+        info_T0['customer_name'],
+        text_left_wrap_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'E13',
+        balance_tru_1['opening_t_tru_1'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'F13',
+        balance_tru_1['closing_t_tru_1'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'G13',
+        balance_0['opening_t_0'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'H13',
+        [''] * info_T0.shape[0],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'I13',
+        [''] * info_T0.shape[0],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'J13',
+        [''] * info_T0.shape[0],
+        text_left_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'K13',
+        info_T0['branch_name'],
+        text_left_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'L13',
+        info_T0['broker_name'],
+        text_left_wrap_format
+    )
+
+    ###########################################################################
+    ###########################################################################
+    ###########################################################################
+
+    # ------------- write 2 column 'opening_t_0' and 'closing_t_0' in 'df t_0' to file -------------
+    path = join(realpath(dirname(dirname(__file__))), 'output')
+    file_name = f'Dữ liệu lưu ngoài flex {end_date}.xlsx'
+    writer2 = pd.ExcelWriter(
+        join(path, file_name),
+        engine='xlsxwriter',
+        engine_kwargs={'options': {'nan_inf_to_errors': True}}
+    )
+    workbook2 = writer2.book
+
+    ###################################################
+    ###################################################
+    ###################################################
+
+    # ------------- Viết sheet -------------
+    # Format
+    header_format = workbook2.add_format(
+        {
+            'border': 1,
+            'bold': True,
+            'align': 'center',
+            'valign': 'vcenter',
+            'text_wrap': True,
+            'font_size': 12,
+            'font_name': 'Times New Roman'
+        }
+    )
+    text_center_format = workbook2.add_format(
+        {
+            'border': 1,
+            'align': 'left',
+            'valign': 'top',
+            'font_size': 10,
+            'font_name': 'Times New Roman',
+        }
+    )
+    money_format = workbook2.add_format(
+        {
+            'border': 1,
+            'align': 'right',
+            'valign': 'top',
+            'font_size': 10,
+            'font_name': 'Times New Roman',
+            'num_format': '#,##0'
+        }
+    )
+    header = [
+        'Sub account',
+        'Opening balance T0',
+        'Closing balance T0',
+    ]
+
+    # --------- sheet Balance ---------
+    sheet_balance = workbook2.add_worksheet('Balance')
+
+    sheet_balance.set_column('A:A', 12)
+    sheet_balance.set_column('B:C', 13)
+
+    sheet_balance.write_row('A1', header, header_format)
+    sheet_balance.write_column(
+        'A2',
+        balance_0.index,
+        text_center_format
+    )
+    sheet_balance.write_column(
+        'B2',
+        balance_0['opening_t_0'],
+        money_format
+    )
+    sheet_balance.write_column(
+        'C2',
+        balance_0['closing_t_0'],
+        money_format
+    )
 
     ###########################################################################
     ###########################################################################
     ###########################################################################
 
     writer.close()
+    writer2.close()
+
     if __name__ == '__main__':
         print(f"{__file__.split('/')[-1].replace('.py', '')}::: Finished")
     else:
         print(f"{__name__.split('.')[-1]} ::: Finished")
     print(f'Total Run Time ::: {np.round(time.time() - start, 1)}s')
-
+    
