@@ -5,17 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="Hiep Dang 28/10/2021">
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/Dữ liệu lưu ngoài flex 22-11.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/Dữ liệu lưu ngoài flex 23-11.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoNgay/2021.11.24/Báo cáo đối chiếu UTTB 22-11.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoNgay/2021.11.24/Báo cáo đối chiếu số dư tiền tài khoản khách hàng 23-11.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/Dữ liệu lưu ngoài flex 24-11.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoNgay/2021.11.25/Báo cáo đối chiếu UTTB 22-11.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoNgay/2021.11.27/Báo cáo đối chiếu thanh toán bù trừ tiền mua bán chứng khoán 23-11.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/TienMuaBanChungKhoan.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoNgay/2021.11.23/Báo cáo đối chiếu UTTB 22-11.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoNgay/2021.11.23/Báo cáo đối chiếu lãi tiền gửi phát sinh trên tài khoản khách hàng 22-11.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoNgay/2021.11.23/Báo cáo đối chiếu số dư tiền tài khoản khách hàng 22-11.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/Dữ liệu lưu ngoài flex 22-11.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/Dữ liệu lưu ngoài flex 23-11.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/Dữ liệu lưu ngoài flex 23-11.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoNgay/2021.11.24/Báo cáo đối chiếu UTTB 22-11.xlsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDoiChieuSoDuTKKH-15.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDoiChieuSoDuTKKH-15.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB-15.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB-15.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/DoiChieuLaiTienGuiPhatSinh-15.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/DoiChieuLaiTienGuiPhatSinh-15.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/TheoDoiHopDongMargin.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/TheoDoiHopDongMargin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/request_phs/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/request_phs/__init__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +82,7 @@
       <recent name="C:\Users\hiepdang\PycharmProjects\datadriven-project\reporting_tool\trading_service\data_validation" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.BaoCaoDoiChieuUTTB-15">
+  <component name="RunManager" selected="Python.TienMuaBanChungKhoan">
     <configuration name="BaoCaoDoiChieuSoDuTKKH-15" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -139,27 +140,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="DoiChieuLaiTienGuiPhatSinh-15" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="DataAnalytics" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/DoiChieuLaiTienGuiPhatSinh-15.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="TheoDoiHopDongMargin" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -181,20 +161,38 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="TienMuaBanChungKhoan" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DataAnalytics" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/TienMuaBanChungKhoan.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.TheoDoiHopDongMargin" />
       <item itemvalue="Python.BaoCaoPhatSinhGiaoDichTien-15" />
       <item itemvalue="Python.BaoCaoDoiChieuSoDuTKKH-15" />
-      <item itemvalue="Python.DoiChieuLaiTienGuiPhatSinh-15" />
       <item itemvalue="Python.BaoCaoDoiChieuUTTB-15" />
+      <item itemvalue="Python.TienMuaBanChungKhoan" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.BaoCaoDoiChieuUTTB-15" />
+        <item itemvalue="Python.TienMuaBanChungKhoan" />
         <item itemvalue="Python.BaoCaoDoiChieuSoDuTKKH-15" />
+        <item itemvalue="Python.BaoCaoDoiChieuUTTB-15" />
         <item itemvalue="Python.BaoCaoPhatSinhGiaoDichTien-15" />
         <item itemvalue="Python.TheoDoiHopDongMargin" />
-        <item itemvalue="Python.DoiChieuLaiTienGuiPhatSinh-15" />
       </list>
     </recent_temporary>
   </component>

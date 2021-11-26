@@ -8,7 +8,7 @@ from reporting_tool.trading_service.thanhtoanbutru import *
 def run(
         periodicity: str,
         start_date: str,  # 2021-11-22
-        end_date: str,    # 2021-11-23
+        end_date: str,  # 2021-11-23
         run_time=None,
 ):
     start = time.time()
@@ -17,7 +17,6 @@ def run(
     # end_date = info['end_date']
     period = info['period']
     folder_name = info['folder_name']
-    date_character = ['/', '-', '.']
 
     # create folder
     if not os.path.isdir(join(dept_folder, folder_name)):  # dept_folder from import
@@ -54,12 +53,30 @@ def run(
         index_col='sub_account'
     )
     # lọc bảng lớn thành theo 2 ngày 22 và 23
-    info_T_tru_1 = doi_chieu_so_du_query.loc[doi_chieu_so_du_query['date'] == start_date]  # 22-11
-    info_T0 = doi_chieu_so_du_query.loc[doi_chieu_so_du_query['date'] == end_date]         # 23-11
+    info_T_tru_1 = doi_chieu_so_du_query.loc[doi_chieu_so_du_query['date'] == start_date]  # start_date
+    info_T0 = doi_chieu_so_du_query.loc[doi_chieu_so_du_query['date'] == end_date]         # end_date
+
+    # Xử lý format của date
+    date_character = ['/', '-', '.']
+    for date_char in date_character:
+        if date_char in start_date and date_char in end_date:
+            start_date = start_date.replace(date_char, '/')
+            end_date = end_date.replace(date_char, '/')
+
+    # read File Đã lưu hôm qua
+    read_file_start_date = dt.datetime.strptime(start_date, "%Y/%m/%d").strftime("%d-%m")
+    path = 'D:\\DataAnalytics\\reporting_tool\\trading_service\\output'
+    file_name = f'Dữ liệu lưu ngoài flex {read_file_start_date}.xlsx'
+    if os.path.isfile(join(path, file_name)):
+        save_yesterday = pd.read_excel(join(path, file_name), sheet_name=0, dtype={'Sub account': object}, na_filter=False)
+        save_yesterday = save_yesterday.set_index('Sub account')
+        save_yesterday = save_yesterday.dropna()
+
     idx = info_T_tru_1.index.union(info_T0.index)  # lấy phần hợp của 2 dataframe
     # set lại index
     info_T_tru_1 = info_T_tru_1.reindex(idx)
     info_T0 = info_T0.reindex(idx)
+    save_yesterday = save_yesterday.reindex(idx)
     # tạo dataframe mới chỉ lấy 2 cột opening và closing balance
     balance_tru_1 = info_T_tru_1[['opening_balance', 'closing_balance']].copy()
     # rename column
@@ -87,10 +104,6 @@ def run(
 
     # --------------------- Viet File Excel ---------------------
     # Write file BÁO CÁO ĐỐI CHIẾU SỐ DƯ TIỀN TÀI KHOẢN KHÁCH HÀNG
-    for date_char in date_character:
-        if date_char in start_date and date_char in end_date:
-            start_date = start_date.replace(date_char, '/')
-            end_date = end_date.replace(date_char, '/')
     footer_date = bdate(end_date, 1).split('-')
     end_date = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
     f_name = f'Báo cáo đối chiếu số dư tiền tài khoản khách hàng {end_date}.xlsx'
@@ -380,17 +393,31 @@ def run(
     )
     sheet_bao_cao_can_lam.write_column(
         'H13',
-        [''] * info_T0.shape[0],
+        save_yesterday['Opening balance T0'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
         'I13',
-        [''] * info_T0.shape[0],
+        save_yesterday['Closing balance T0'],
         money_format
     )
+    # tạo dataframe mới với đầy đủ điều kiện balance từ 3 dataframe (balance0, balance T trừ 1, đọc từ file cũ)
+    final_table = pd.concat([balance_0, balance_tru_1, save_yesterday], axis=1)
+
+    save_yesterday['bat_thuong'] = None
+    for idx in final_table.index:
+        five = final_table.loc[idx, 'opening_t_tru_1']
+        six = final_table.loc[idx, 'closing_t_tru_1']
+        seven = final_table.loc[idx, 'opening_t_0']
+        eight = final_table.loc[idx, 'Opening balance T0']
+        nine = final_table.loc[idx, 'Closing balance T0']
+        if ((seven - six) != 0) or ((eight-five) != 0) or ((nine - six) != 0):
+            final_table.loc[idx, 'check_bat_thuong'] = True     # bất thường
+        else:
+            final_table.loc[idx, 'check_bat_thuong'] = False    # bình thường
     sheet_bao_cao_can_lam.write_column(
         'J13',
-        [''] * info_T0.shape[0],
+        save_yesterday['bat_thuong'],
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
@@ -495,4 +522,3 @@ def run(
     else:
         print(f"{__name__.split('.')[-1]} ::: Finished")
     print(f'Total Run Time ::: {np.round(time.time() - start, 1)}s')
-    

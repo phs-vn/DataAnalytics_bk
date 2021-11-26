@@ -59,8 +59,8 @@ def run(
             start_date = start_date.replace(date_char, '/')
             end_date = end_date.replace(date_char, '/')
 
-    start_date = dt.strptime(start_date, "%Y/%m/%d").strftime("%d-%m")
-    end_date = dt.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
+    start_date = dt.datetime.strptime(start_date, "%Y/%m/%d").strftime("%d-%m")
+    end_date = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
     f_name = ''
     if start_date == end_date:
         f_name = f_name + f'Theo dõi hợp đồng Margin {end_date}.xlsx'

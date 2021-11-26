@@ -5,7 +5,7 @@ driver_RMD = '{SQL Server}'
 server_RMD = 'SRV-RPT'
 db_RMD = 'RiskDb'
 id_RMD = 'namtran'
-password_RMD = 'nam!tran@2021'
+password_RMD = open(r"C:\Users\namtran\Desktop\pass_word.txt", "r").read()
 
 connect_RMD = pyodbc.connect(
     f'Driver={driver_RMD};'

@@ -1,6 +1,9 @@
 """
     1. daily
     2. table: trading_record, cash_balance
+    3. Tiền Hoàn trả UTTB T0: điều kiện mã 8851
+    4. Tổng giá trị tiền bán có thể ứng: (phí bán (fee), thuế bán (tax_of_selling), phí ứng tiền (cột decrease - 1153))
+    5. Tiền đã ứng: cột increase - 1153
 """
 from reporting_tool.trading_service.thanhtoanbutru import *
 
@@ -8,7 +11,7 @@ from reporting_tool.trading_service.thanhtoanbutru import *
 def run(
         periodicity: str,
         start_date: str,  # 2021-11-18
-        end_date: str,    # 2021-11-22
+        end_date: str,  # 2021-11-22
         run_time=None,
 ):
     start = time.time()
@@ -29,54 +32,116 @@ def run(
     ###################################################
     ###################################################
 
-    # --------------------- Viết Query ---------------------
-    doi_chieu_uttb_query = pd.read_sql(
+    # --------------------- Viết Query và xử lý dataframe ---------------------
+    # query gets value T0,T-1. T-2
+    trading_record_query = pd.read_sql(
         f"""
             SELECT
             trading_record.date,
-            MAX(relationship.account_code) as account_code,
-            MAX(relationship.sub_account) as sub_account,
-            MAX(account.customer_name) as customer_name,
-            SUM(trading_record.value) as value,
-            SUM(cash_balance.decrease) as decrease
-            from trading_record
+            relationship.sub_account, 
+            trading_record.value,
+            trading_record.fee,
+            trading_record.tax_of_selling
+            FROM trading_record
             LEFT JOIN relationship ON relationship.sub_account = trading_record.sub_account
-            LEFT JOIN account ON account.account_code = relationship.account_code
-            LEFT JOIN cash_balance ON cash_balance.sub_account = relationship.sub_account
             WHERE trading_record.date BETWEEN '{start_date}' AND '{end_date}'
-            AND cash_balance.date BETWEEN '{start_date}' AND '{end_date}'
             AND relationship.date = '{end_date}'
             AND trading_record.type_of_order = 'S'
-            AND cash_balance.remark like N'%Hoàn trả ƯTTB%'
-            GROUP BY trading_record.date, relationship.sub_account
             ORDER BY trading_record.date ASC
         """,
         connect_DWH_CoSo,
     )
+    # Query get account_code and customer_name
+    account = pd.read_sql(
+        f"""
+            SELECT
+            sub_account, 
+            relationship.account_code,
+            account.customer_name
+            FROM relationship 
+            LEFT JOIN account ON relationship.account_code = account.account_code 
+            WHERE date = '{end_date}'
+        """,
+        connect_DWH_CoSo,
+        index_col='sub_account'
+    )
+    # data of T-2 day
+    value_T2 = trading_record_query.loc[
+        trading_record_query['date'] == start_date,
+        [
+            'sub_account',
+            'value',
+        ]
+    ].copy()
+    value_T2 = value_T2.groupby(['sub_account']).sum()
+    value_T2 = value_T2.add_suffix('_T2')
 
-    # ------------- Xử lý Dataframe -------------
-    def converter(x):
-        if x == dt.datetime.strptime(start_date, '%Y-%m-%d'):
-            result = 'T-2'
-        elif x == dt.datetime.strptime(end_date, '%Y-%m-%d'):
-            result = 'T0'
-        else:
-            result = 'T-1'
-        return result
+    # data of T-1 day
+    value_T1 = trading_record_query.loc[
+        trading_record_query['date'] == bdate(start_date, 1),
+        [
+            'sub_account',
+            'value',
+        ]
+    ].copy()
+    value_T1 = value_T1.groupby(['sub_account']).sum()
+    value_T1 = value_T1.add_suffix('_T1')
 
-    # thay đổi giá trị trong cột date thành các giá trị trong hàm converter
-    doi_chieu_uttb_query.date = doi_chieu_uttb_query.date.map(converter)
-    # thêm các cột account_code, customer_name vào df doi_chieu_uttb_groupby
-    account = doi_chieu_uttb_query[['sub_account', 'account_code']].drop_duplicates().set_index('sub_account').squeeze()
-    customer = doi_chieu_uttb_query[['sub_account', 'customer_name']].drop_duplicates().set_index(
-        'sub_account').squeeze()
-    # tạo dataframe mới bằng cách group by df lấy từ sql
-    uttb_groupby = doi_chieu_uttb_query.groupby(['date', 'sub_account'])[['value', 'decrease']].sum()
-    df_uttb = uttb_groupby.unstack(level=0)
-    df_uttb.fillna(0, inplace=True)  # thay các dòng có giá trị NaN bằng 0
-    df_uttb = df_uttb.drop([('decrease', 'T-1'), ('decrease', 'T-2')], axis=1)
-    df_uttb['account_code'] = account
-    df_uttb['customer_name'] = customer
+    # data of T0 day
+    value_T0 = trading_record_query.loc[
+        trading_record_query['date'] == end_date,
+        [
+            'sub_account',
+            'value',
+            'fee',
+            'tax_of_selling'
+        ]
+    ].copy()
+    value_T0 = value_T0.groupby(['sub_account']).sum()
+    value_T0 = value_T0.add_suffix('_T0')
+
+    # Query to get transaction_id, increase, decrease
+    cash_balance_query = pd.read_sql(
+        f"""
+            SELECT 
+            date,
+            sub_account, 
+            transaction_id, 
+            remark, 
+            increase, 
+            decrease
+            FROM cash_balance 
+            WHERE date = '{end_date}'
+            AND (transaction_id = '8851' or transaction_id = '1153') 
+        """,
+        connect_DWH_CoSo,
+    )
+    hoan_tra_uttb_T0_table = cash_balance_query.loc[
+        cash_balance_query['transaction_id'] == '8851', ['sub_account', 'decrease']].copy()
+    hoan_tra_uttb_T0_table = hoan_tra_uttb_T0_table.groupby(['sub_account']).sum()
+    hoan_tra_uttb_T0_table.columns = ['hoan_tra_UTTB_T0']
+
+    tien_da_ung_table = cash_balance_query.loc[
+        cash_balance_query['transaction_id'] == '1153', ['sub_account', 'increase']].copy()
+    tien_da_ung_table = tien_da_ung_table.groupby(['sub_account']).sum()
+    tien_da_ung_table.columns = ['tien_da_ung']
+
+    phi_ung_tien_table = cash_balance_query.loc[
+        cash_balance_query['transaction_id'] == '1153', ['sub_account', 'decrease']].copy()
+    phi_ung_tien_table = phi_ung_tien_table.groupby(['sub_account']).sum()
+    phi_ung_tien_table.columns = ['phi_ung_tien']
+
+    final_table = pd.concat([
+        value_T2,
+        value_T1,
+        value_T0,
+        hoan_tra_uttb_T0_table,
+        phi_ung_tien_table,
+        tien_da_ung_table
+    ], axis=1)
+    final_table.fillna(0, inplace=True)
+    final_table.insert(0, 'account_code', account['account_code'])
+    final_table.insert(1, 'customer_name', account['customer_name'])
 
     ###################################################
     ###################################################
@@ -89,7 +154,6 @@ def run(
             start_date = start_date.replace(date_char, '/')
             end_date = end_date.replace(date_char, '/')
     footer_date = bdate(end_date, 1).split('-')
-    start_date = dt.datetime.strptime(start_date, "%Y/%m/%d").strftime("%d-%m")
     end_date = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
     f_name = f'Báo cáo đối chiếu UTTB {end_date}.xlsx'
     writer = pd.ExcelWriter(
@@ -260,7 +324,7 @@ def run(
     sheet_bao_cao_can_lam.set_column('A:A', 6.29)
     sheet_bao_cao_can_lam.set_column('B:B', 12.14)
     sheet_bao_cao_can_lam.set_column('C:C', 13)
-    sheet_bao_cao_can_lam.set_column('D:D', 30)
+    sheet_bao_cao_can_lam.set_column('D:D', 31.43)
     sheet_bao_cao_can_lam.set_column('E:F', 11.86)
     sheet_bao_cao_can_lam.set_column('G:G', 14.71)
     sheet_bao_cao_can_lam.set_column('H:H', 14.29)
@@ -275,7 +339,7 @@ def run(
     sheet_bao_cao_can_lam.merge_range('C3:L3', CompanyPhoneNumber, company_format)
     sheet_bao_cao_can_lam.merge_range('A7:L7', sheet_title_name, sheet_title_format)
     sheet_bao_cao_can_lam.merge_range('A8:L8', sub_title_name, from_to_format)
-    sum_start_row = df_uttb.shape[0] + 13
+    sum_start_row = final_table.shape[0] + 13
     sheet_bao_cao_can_lam.merge_range(
         f'A{sum_start_row}:D{sum_start_row}',
         'Tổng',
@@ -317,63 +381,115 @@ def run(
     )
     sheet_bao_cao_can_lam.write_column(
         'A13',
-        [int(i) for i in np.arange(df_uttb.shape[0]) + 1],
+        [int(i) for i in np.arange(final_table.shape[0]) + 1],
         stt_col_format
     )
     sheet_bao_cao_can_lam.write_column(
         'B13',
-        df_uttb['account_code'],
+        final_table['account_code'],
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
         'C13',
-        df_uttb.index,
+        final_table.index,
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
         'D13',
-        df_uttb['customer_name'],
+        final_table['customer_name'],
         text_left_wrap_format
     )
     sheet_bao_cao_can_lam.write_column(
         'E13',
-        df_uttb[('value', 'T-2')],
+        final_table['value_T2'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
         'F13',
-        df_uttb[('value', 'T-1')],
+        final_table['value_T1'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
         'G13',
-        df_uttb[('value', 'T0')],
+        final_table['value_T0'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
         'H13',
-        df_uttb['decrease', 'T0'],
+        final_table['hoan_tra_UTTB_T0'],
         money_format
     )
+    calc_1 = final_table['value_T1'] + final_table['value_T0']
+    calc_2 = final_table['fee_T0'] + final_table['tax_of_selling_T0'] + final_table['phi_ung_tien']
+    sum_gia_tri_tien_ban = calc_1 - calc_2
+    final_table['tong_gia_tri_tien_ban'] = sum_gia_tri_tien_ban
     sheet_bao_cao_can_lam.write_column(
         'I13',
-        [''] * df_uttb.shape[0],
+        final_table['tong_gia_tri_tien_ban'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
         'J13',
-        [''] * df_uttb.shape[0],
+        final_table['tien_da_ung'],
         money_format
     )
+    final_table['tien_con_co_the_ung'] = final_table['tong_gia_tri_tien_ban'] - final_table['tien_da_ung']
     sheet_bao_cao_can_lam.write_column(
         'K13',
-        [''] * df_uttb.shape[0],
+        final_table['tien_con_co_the_ung'],
         money_format
     )
+    # Bất thường = True - Bình thường = False
+    final_table['check_bat_thuong'] = None
+    for idx in final_table.index:
+        value_T2 = final_table.loc[idx, 'value_T2']
+        hoan_tra_uttb_T0 = final_table.loc[idx, 'hoan_tra_UTTB_T0']
+        tien_da_ung = final_table.loc[idx, 'tien_da_ung']
+        tong_gia_tri_tien_ban = final_table.loc[idx, 'tong_gia_tri_tien_ban']
+        tien_con_co_the_ung = final_table.loc[idx, 'tien_con_co_the_ung']
+        if (hoan_tra_uttb_T0 != value_T2) or (tien_da_ung > tong_gia_tri_tien_ban) or (tien_con_co_the_ung < 0):
+            final_table.loc[idx, 'check_bat_thuong'] = True
+        else:
+            final_table.loc[idx, 'check_bat_thuong'] = False
     sheet_bao_cao_can_lam.write_column(
         'L13',
-        [''] * df_uttb.shape[0],
-        text_left_format
+        final_table['check_bat_thuong'],
+        text_left_wrap_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'E{sum_start_row}',
+        final_table['value_T2'].sum(),
+        money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'F{sum_start_row}',
+        final_table['value_T1'].sum(),
+        money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'G{sum_start_row}',
+        final_table['value_T0'].sum(),
+        money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'H{sum_start_row}',
+        final_table['hoan_tra_UTTB_T0'].sum(),
+        money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'I{sum_start_row}',
+        final_table['tong_gia_tri_tien_ban'].sum(),
+        money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'J{sum_start_row}',
+        final_table['tien_da_ung'].sum(),
+        money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'K{sum_start_row}',
+        final_table['tien_con_co_the_ung'].sum(),
+        money_format
     )
 
     ###########################################################################
