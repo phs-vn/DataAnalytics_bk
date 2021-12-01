@@ -237,8 +237,8 @@ def run(
     footer_5_name = 'PHÙNG NGỌC QUỲNH'
     footer_6_name = 'TRẦN THU TRANG'
 
-    start_date_format = dt.strptime(start_fixed, "%Y.%m.%d").strftime('%d/%m/%Y')
-    end_date_format = dt.strptime(end_fixed, "%Y.%m.%d").strftime('%d/%m/%Y')
+    start_date_format = dt.datetime.strptime(start_fixed, "%Y.%m.%d").strftime('%d/%m/%Y')
+    end_date_format = dt.datetime.strptime(end_fixed, "%Y.%m.%d").strftime('%d/%m/%Y')
     ngay_xuat_file = f'from {start_date_format} to {end_date_format}'
 
     sheet_thang_11 = workbook.add_worksheet('tháng 11')

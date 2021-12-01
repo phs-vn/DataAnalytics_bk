@@ -36,7 +36,6 @@ def run(
     phat_sinh_giao_dich_query = pd.read_sql(
         f"""
             SELECT
-            DISTINCT
             cash_balance.date, 
             relationship.account_code, 
             relationship.sub_account, 
@@ -48,13 +47,14 @@ def run(
             FROM cash_balance
             LEFT JOIN relationship ON relationship.sub_account = cash_balance.sub_account
             LEFT JOIN account ON account.account_code = relationship.account_code
-            WHERE relationship.date = '{end_date}'
-            AND (cash_balance.date BETWEEN '{start_date}' AND '{end_date}')
-            ORDER BY decrease, transaction_id
+            where relationship.date = '{end_date}'
+            and (cash_balance.date between '{start_date}' and '{end_date}')
+            and (relationship.account_code <> '022P002222' 
+            or relationship.sub_account NOT IN ('0001002222', '0001920028'))
         """,
         connect_DWH_CoSo
     )
-    # lấy tổng số dư đầu kỳ
+    # Lấy tổng số dư đầu kỳ
     sum_so_du_dau_ky_query = pd.read_sql(
         f"""
             SELECT sum(opening_balance) as sum_opening_balance 

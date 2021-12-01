@@ -3,8 +3,8 @@ from reporting_tool.trading_service.thanhtoanbutru import *
 
 def run(
         periodicity: str,
-        start_date: str,  # 2021-11-18
-        end_date: str,  # 2021-11-19
+        start_date: str,
+        end_date: str,
         run_time=None,
 ):
     date_character = ['/', '-', '.']

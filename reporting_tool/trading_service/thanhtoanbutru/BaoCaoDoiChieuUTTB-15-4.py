@@ -148,7 +148,7 @@ def run(
     ###################################################
 
     # --------------------- Viet File Excel ---------------------
-    # Write file BÁO CÁO ĐỐI CHIẾU LÃI TIỀN GỬI PHÁT SINH TRÊN TÀI KHOẢN KHÁCH HÀNG
+    # Write file BÁO CÁO ĐỐI CHIẾU UTTB
     for date_char in date_character:
         if date_char in start_date and date_char in end_date:
             start_date = start_date.replace(date_char, '/')

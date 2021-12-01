@@ -72,7 +72,7 @@ def run(
     ###################################################
 
     # --------------------- Viet File Excel ---------------------
-    # Write file excel Bao cao doi chieu file ngan hang
+    # Write file excel BÁO CÁO FILE GHI ÂM GỬI KSNB HÀNG THÁNG
     for date_char in date_character:
         if date_char in end_date and date_char in start_date:
             end_date.replace(date_char, '-')

@@ -7,13 +7,11 @@ from reporting_tool.trading_service.thanhtoanbutru import *
 
 def run(
         periodicity: str,
-        start_date: str,  # 2021-11-24
+        start_date: str,  # 2021-11-23
         run_time=None,
 ):
     start = time.time()
     info = get_info(periodicity, run_time)
-    # start_date = info['start_date']
-    # end_date = info['end_date']
     end_date = bdate(start_date, 2)
     period = info['period']
     folder_name = info['folder_name']
@@ -40,8 +38,8 @@ def run(
             value,
             fee,
             tax_of_selling,
-            tax_of_share_dividend,
-            type_of_order
+            type_of_order,
+            price
             FROM trading_record
             WHERE trading_record.date = '{start_date}'
             order by sub_account ASC
@@ -59,8 +57,9 @@ def run(
             increase, 
             decrease
             FROM cash_balance 
-            WHERE transaction_id IN ('8855', '8865', '8856', '8866')
-            AND (date = '{start_date}' OR date = '{end_date}')
+            WHERE (transaction_id in ('8855', '8865') and date = '{start_date}')
+            OR (transaction_id in ('8856', '8866') and date = '{end_date}')
+            ORDER BY date, sub_account ASC
         """,
         connect_DWH_CoSo
     )
@@ -135,28 +134,31 @@ def run(
     ket_qua_khop_lenh_groupby.loc[
         ket_qua_khop_lenh_groupby['type_of_order'] == 'S', 'date_thanh_toan'
     ] = res_rcf_T2.loc[res_rcf_T2['transaction_id_T+2'] == '8856', 'date_T+2']
-
     ket_qua_khop_lenh_groupby.fillna(0, inplace=True)
-
+    # thêm 3 cột mã tài khoản, tên KH, ngày GD vào df
     ket_qua_khop_lenh_groupby.insert(0, 'account_code', get_info_customer_query['account_code'])
     ket_qua_khop_lenh_groupby.insert(1, 'customer_name', get_info_customer_query['customer_name'])
     ket_qua_khop_lenh_groupby.insert(2, 'date', get_info_customer_query['date'])
-    tax_GDT = ket_qua_khop_lenh_groupby["tax_of_selling_KQKL"]
-    ket_qua_khop_lenh_groupby.insert(10, 'tax_GDT', tax_GDT)
+    # thêm cột thuế giao dịch tiền vào df
+    tax_GDT_S = ket_qua_khop_lenh_groupby.loc[ket_qua_khop_lenh_groupby['type_of_order'] == 'S', 'tax_of_selling_KQKL']
+    tax_GDT_B = ket_qua_khop_lenh_groupby.loc[ket_qua_khop_lenh_groupby['type_of_order'] == 'B', 'tax_of_selling_KQKL']
+    tax_GDT = pd.DataFrame({'tax_GDT_S': tax_GDT_S, 'tax_GDT_B': tax_GDT_B})
+    tax_GDT.fillna(0, inplace=True)
+    ket_qua_khop_lenh_groupby.loc[ket_qua_khop_lenh_groupby['type_of_order'] == 'B', 'tax_GDT'] = tax_GDT['tax_GDT_B']
+    ket_qua_khop_lenh_groupby.loc[ket_qua_khop_lenh_groupby['type_of_order'] == 'S', 'tax_GDT'] = tax_GDT['tax_GDT_S']
 
     ###################################################
     ###################################################
     ###################################################
 
     # --------------------- Viet File Excel ---------------------
-    # Write file BÁO CÁO ĐỐI CHIẾU LÃI TIỀN GỬI PHÁT SINH TRÊN TÀI KHOẢN KHÁCH HÀNG
+    # Write file BÁO CÁO ĐỐI CHIẾU THANH TOÁN BÙ TRỪ TIỀN MUA BÁN CHỨNG KHOÁN
     for date_char in date_character:
         if date_char in start_date and date_char in end_date:
             start_date = start_date.replace(date_char, '/')
             end_date = end_date.replace(date_char, '/')
-    footer_date = bdate(end_date, 1).split('-')
-    start_date = dt.datetime.strptime(start_date, "%Y/%m/%d").strftime("%d-%m")
-    f_name = f'Báo cáo đối chiếu thanh toán bù trừ tiền mua bán chứng khoán {start_date}.xlsx'
+    s_date_file_name = dt.datetime.strptime(start_date, "%Y/%m/%d").strftime("%d-%m")
+    f_name = f'Báo cáo đối chiếu thanh toán bù trừ tiền mua bán chứng khoán {s_date_file_name}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder, folder_name, period, f_name),
         engine='xlsxwriter',
@@ -267,6 +269,16 @@ def run(
             'num_format': '#,##0'
         }
     )
+    zero_to_dashes_format = workbook.add_format(
+        {
+            'border': 1,
+            'align': 'center',
+            'valign': 'vbottom',
+            'font_size': 11,
+            'font_name': 'Times New Roman',
+            'num_format': '0;-0;-;@'
+        }
+    )
     date_format = workbook.add_format(
         {
             'border': 1,
@@ -317,7 +329,8 @@ def run(
 
     companyAddress = 'Tầng 3, CR3-03A, 109 Tôn Dật Tiên, phường Tân Phú, Quận 7, Thành phố Hồ Chí Minh'
     sheet_title_name = 'BÁO CÁO ĐỐI CHIẾU THANH TOÁN BÙ TRỪ TIỀN MUA BÁN CHỨNG KHOÁN'
-    sub_title_name = f'Từ ngày {start_date} đến {start_date}'
+    sub_title_start_date = dt.datetime.strptime(start_date, "%Y/%m/%d").strftime("%d/%m/%Y")
+    sub_title_name = f'Từ ngày {sub_title_start_date} đến {sub_title_start_date}'
 
     # --------- sheet BAO CAO CAN LAM ---------
     sheet_bao_cao_can_lam = workbook.add_worksheet('BAO CAO CAN LAM')
@@ -329,13 +342,15 @@ def run(
     sheet_bao_cao_can_lam.set_column('A:A', 4.43)
     sheet_bao_cao_can_lam.set_column('B:C', 14.14)
     sheet_bao_cao_can_lam.set_column('D:E', 12.14)
-    sheet_bao_cao_can_lam.set_column('F:F', 21.14)
+    sheet_bao_cao_can_lam.set_column('F:F', 31.5)
     sheet_bao_cao_can_lam.set_column('G:G', 9.14)
     sheet_bao_cao_can_lam.set_column('H:H', 13.71)
-    sheet_bao_cao_can_lam.set_column('I:J', 11.57)
+    sheet_bao_cao_can_lam.set_column('I:I', 11.57)
+    sheet_bao_cao_can_lam.set_column('J:J', 10.14)
     sheet_bao_cao_can_lam.set_column('K:K', 13.71)
-    sheet_bao_cao_can_lam.set_column('L:M', 11.57)
-    sheet_bao_cao_can_lam.set_column('N:P', 11.86)
+    sheet_bao_cao_can_lam.set_column('L:L', 11.57)
+    sheet_bao_cao_can_lam.set_column('M:M', 10.14)
+    sheet_bao_cao_can_lam.set_column('N:P', 10.5)
 
     # merge row
     sheet_bao_cao_can_lam.merge_range('C1:I1', CompanyName, company_name_format)
@@ -359,6 +374,7 @@ def run(
         'Tổng',
         headers_format
     )
+    footer_date = bdate(end_date, 1).split('-')
     footer_start_row = sum_start_row + 2
     sheet_bao_cao_can_lam.merge_range(
         f'N{footer_start_row}:P{footer_start_row}',
@@ -370,8 +386,8 @@ def run(
         'Người duyệt',
         footer_text_format
     )
-    sheet_bao_cao_can_lam.write(
-        f'D{footer_start_row + 1}',
+    sheet_bao_cao_can_lam.merge_range(
+        f'C{footer_start_row + 1}:E{footer_start_row + 1}',
         'Người lập',
         footer_text_format
     )
@@ -415,7 +431,7 @@ def run(
     )
     sheet_bao_cao_can_lam.write_column(
         'F13',
-        ket_qua_khop_lenh_groupby['customer_name'],
+        ket_qua_khop_lenh_groupby['customer_name'].str.upper(),
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
@@ -505,6 +521,21 @@ def run(
         f'M{sum_start_row}',
         ket_qua_khop_lenh_groupby['tax_GDT'].sum(),
         money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'N{sum_start_row}',
+        ket_qua_khop_lenh_groupby['value_lech'].sum(),
+        zero_to_dashes_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'O{sum_start_row}',
+        ket_qua_khop_lenh_groupby['fee_lech'].sum(),
+        zero_to_dashes_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'P{sum_start_row}',
+        ket_qua_khop_lenh_groupby['tax_lech'].sum(),
+        zero_to_dashes_format
     )
 
     ###########################################################################

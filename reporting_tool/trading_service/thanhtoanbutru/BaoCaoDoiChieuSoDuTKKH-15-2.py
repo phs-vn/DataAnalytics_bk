@@ -106,7 +106,11 @@ def run(
     # Write file BÁO CÁO ĐỐI CHIẾU SỐ DƯ TIỀN TÀI KHOẢN KHÁCH HÀNG
     footer_date = bdate(end_date, 1).split('-')
     end_date = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
-    f_name = f'Báo cáo đối chiếu số dư tiền tài khoản khách hàng {end_date}.xlsx'
+    f_name = ''
+    if start_date == end_date:
+        f_name += f'Báo cáo đối chiếu số dư tiền tài khoản khách hàng {end_date}.xlsx'
+    else:
+        f_name += f'Báo cáo đối chiếu số dư tiền tài khoản khách hàng từ {start_date} đến {end_date}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder, folder_name, period, f_name),
         engine='xlsxwriter',
