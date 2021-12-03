@@ -49,8 +49,7 @@ def run(
             LEFT JOIN account ON account.account_code = relationship.account_code
             where relationship.date = '{end_date}'
             and (cash_balance.date between '{start_date}' and '{end_date}')
-            and (relationship.account_code <> '022P002222' 
-            or relationship.sub_account NOT IN ('0001002222', '0001920028'))
+            and relationship.account_code <> '022P002222'
         """,
         connect_DWH_CoSo
     )

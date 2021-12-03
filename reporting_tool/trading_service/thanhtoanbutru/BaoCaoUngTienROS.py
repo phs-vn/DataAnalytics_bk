@@ -1,5 +1,6 @@
 """
     cột Doanh thu UTTB lấy từ cột fee_PHS trong table payment_in_advance
+    có 3/6 kết quả bị lệch so với file mẫu -> do dữ liệu trong DB
 """
 
 from reporting_tool.trading_service.thanhtoanbutru import *

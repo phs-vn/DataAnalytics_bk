@@ -1,6 +1,7 @@
 """
 1. RCF1002 -> cash_balance
    ROD0040 -> trading_record
+   sum các giá trị giống nhau theo price (đa số chứ ko phải tất cả, sum ko theo qui tắc nhất định)
 """
 from reporting_tool.trading_service.thanhtoanbutru import *
 

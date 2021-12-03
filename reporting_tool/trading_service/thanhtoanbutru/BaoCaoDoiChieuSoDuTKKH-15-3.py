@@ -1,22 +1,22 @@
 """
     1. daily
     2. table:
+    3. start_date : T-1
+       end_date : T
 """
 from reporting_tool.trading_service.thanhtoanbutru import *
 
 
 def run(
         periodicity: str,
-        start_date: str,  # 2021-11-22
-        end_date: str,  # 2021-11-23
+        end_date: str,  # 2021-11-29
         run_time=None,
 ):
     start = time.time()
     info = get_info(periodicity, run_time)
-    # start_date = info['start_date']
-    # end_date = info['end_date']
     period = info['period']
     folder_name = info['folder_name']
+    start_date = bdate(end_date, -1)
 
     # create folder
     if not os.path.isdir(join(dept_folder, folder_name)):  # dept_folder from import
@@ -52,10 +52,9 @@ def run(
         connect_DWH_CoSo,
         index_col='sub_account'
     )
-    # lọc bảng lớn thành theo 2 ngày 22 và 23
+    # lọc bảng lớn thành theo 2 ngày start_date và end_date
     info_T_tru_1 = doi_chieu_so_du_query.loc[doi_chieu_so_du_query['date'] == start_date]  # start_date
-    info_T0 = doi_chieu_so_du_query.loc[doi_chieu_so_du_query['date'] == end_date]         # end_date
-
+    info_T0 = doi_chieu_so_du_query.loc[doi_chieu_so_du_query['date'] == end_date]  # end_date
     # Xử lý format của date
     date_character = ['/', '-', '.']
     for date_char in date_character:
@@ -67,10 +66,19 @@ def run(
     read_file_start_date = dt.datetime.strptime(start_date, "%Y/%m/%d").strftime("%d-%m")
     path = 'D:\\DataAnalytics\\reporting_tool\\trading_service\\output'
     file_name = f'Dữ liệu lưu ngoài flex {read_file_start_date}.xlsx'
-    if os.path.isfile(join(path, file_name)):
-        save_yesterday = pd.read_excel(join(path, file_name), sheet_name=0, dtype={'Sub account': object}, na_filter=False)
-        save_yesterday = save_yesterday.set_index('Sub account')
-        save_yesterday = save_yesterday.dropna()
+    save_yesterday = pd.read_excel(join(path, file_name),
+                                   sheet_name='Balance',
+                                   dtype={'Sub account': object},
+                                   na_filter=True)
+    save_yesterday = save_yesterday.set_index('Sub account')
+    save_yesterday.rename(
+        {
+            'Opening balance T0': 'opening_balance',
+            'Closing balance T0': 'closing_balance'
+        },
+        axis=1,
+        inplace=True
+    )
 
     idx = info_T_tru_1.index.union(info_T0.index)  # lấy phần hợp của 2 dataframe
     # set lại index
@@ -88,15 +96,14 @@ def run(
         axis=1,
         inplace=True
     )
-    balance_0 = info_T0[['opening_balance', 'closing_balance']].copy()
-    balance_0.rename(
-        {
-            'opening_balance': 'opening_t_0',
-            'closing_balance': 'closing_t_0'
-        },
-        axis=1,
-        inplace=True
-    )
+    balance_tru_1.fillna(0, inplace=True)
+
+    info_T0['opening_balance_tru_1'] = balance_tru_1['opening_t_tru_1']
+    info_T0['closing_balance_tru_1'] = balance_tru_1['closing_t_tru_1']
+    info_T0 = info_T0.dropna()
+    info_T0['yesterday_opening'] = save_yesterday['opening_balance']
+    info_T0['yesterday_closing'] = save_yesterday['closing_balance']
+    info_T0.fillna(0, inplace=True)
 
     ###################################################
     ###################################################
@@ -105,12 +112,9 @@ def run(
     # --------------------- Viet File Excel ---------------------
     # Write file BÁO CÁO ĐỐI CHIẾU SỐ DƯ TIỀN TÀI KHOẢN KHÁCH HÀNG
     footer_date = bdate(end_date, 1).split('-')
-    end_date = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
-    f_name = ''
-    if start_date == end_date:
-        f_name += f'Báo cáo đối chiếu số dư tiền tài khoản khách hàng {end_date}.xlsx'
-    else:
-        f_name += f'Báo cáo đối chiếu số dư tiền tài khoản khách hàng từ {start_date} đến {end_date}.xlsx'
+    eod = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
+
+    f_name = f'Báo cáo đối chiếu số dư tiền tài khoản khách hàng {eod}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder, folder_name, period, f_name),
         engine='xlsxwriter',
@@ -230,6 +234,17 @@ def run(
             'num_format': '#,##0'
         }
     )
+    money_sum_format = workbook.add_format(
+        {
+            'bold': True,
+            'border': 1,
+            'align': 'right',
+            'valign': 'top',
+            'font_size': 10,
+            'font_name': 'Times New Roman',
+            'num_format': '#,##0'
+        }
+    )
     footer_dmy_format = workbook.add_format(
         {
             'italic': True,
@@ -270,7 +285,8 @@ def run(
     ]
     companyAddress = 'Tầng 3, CR3-03A, 109 Tôn Dật Tiên, phường Tân Phú, Quận 7, Thành phố Hồ Chí Minh'
     sheet_title_name = 'BÁO CÁO ĐỐI CHIẾU SỐ DƯ TIỀN TÀI KHOẢN KHÁCH HÀNG'
-    sub_title_name = f'Ngày {end_date}'
+    eod_sub = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d/%m/%Y")
+    sub_title_name = f'Ngày {eod_sub}'
 
     # --------- sheet BAO CAO CAN LAM ---------
     sheet_bao_cao_can_lam = workbook.add_worksheet('BAO CAO CAN LAM')
@@ -285,7 +301,7 @@ def run(
     sheet_bao_cao_can_lam.set_column('D:D', 25.43)
     sheet_bao_cao_can_lam.set_column('E:E', 14.14)
     sheet_bao_cao_can_lam.set_column('F:F', 14.57)
-    sheet_bao_cao_can_lam.set_column('G:G', 12)
+    sheet_bao_cao_can_lam.set_column('G:G', 13.71)
     sheet_bao_cao_can_lam.set_column('H:H', 17.14)
     sheet_bao_cao_can_lam.set_column('I:I', 17.57)
     sheet_bao_cao_can_lam.set_column('J:J', 13.86)
@@ -310,7 +326,7 @@ def run(
     sheet_bao_cao_can_lam.merge_range('J10:J11', headers[6], headers_format)
     sheet_bao_cao_can_lam.merge_range('K10:K11', headers[7], headers_format)
     sheet_bao_cao_can_lam.merge_range('L10:L11', headers[8], headers_format)
-    sum_start_row = info_T0.shape[0] + 13
+    sum_start_row = info_T0.shape[0] + 12
     sheet_bao_cao_can_lam.merge_range(
         f'A{sum_start_row}:D{sum_start_row}',
         'Tổng',
@@ -355,84 +371,91 @@ def run(
         sub_headers,
         headers_format
     )
-    sheet_bao_cao_can_lam.write_row(
-        'A12',
-        [f'({i})' for i in np.arange(len(headers) + len(sub_headers) - 2) + 1],
-        stt_row_format,
-    )
     sheet_bao_cao_can_lam.write_column(
-        'A13',
+        'A12',
         [int(i) for i in np.arange(info_T0.shape[0]) + 1],
         stt_col_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'B13',
+        'B12',
         info_T0['account_code'],
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'C13',
+        'C12',
         info_T0.index,
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'D13',
+        'D12',
         info_T0['customer_name'],
         text_left_wrap_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'E13',
-        balance_tru_1['opening_t_tru_1'],
+        'E12',
+        info_T0['opening_balance_tru_1'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'F13',
-        balance_tru_1['closing_t_tru_1'],
+        'F12',
+        info_T0['closing_balance_tru_1'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'G13',
-        balance_0['opening_t_0'],
+        'G12',
+        info_T0['opening_balance'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'H13',
-        save_yesterday['Opening balance T0'],
+        'H12',
+        info_T0['yesterday_opening'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'I13',
-        save_yesterday['Closing balance T0'],
+        'I12',
+        info_T0['yesterday_closing'],
         money_format
     )
-    # tạo dataframe mới với đầy đủ điều kiện balance từ 3 dataframe (balance0, balance T trừ 1, đọc từ file cũ)
-    final_table = pd.concat([balance_0, balance_tru_1, save_yesterday], axis=1)
 
-    save_yesterday['bat_thuong'] = None
-    for idx in final_table.index:
-        five = final_table.loc[idx, 'opening_t_tru_1']
-        six = final_table.loc[idx, 'closing_t_tru_1']
-        seven = final_table.loc[idx, 'opening_t_0']
-        eight = final_table.loc[idx, 'Opening balance T0']
-        nine = final_table.loc[idx, 'Closing balance T0']
-        if ((seven - six) != 0) or ((eight-five) != 0) or ((nine - six) != 0):
-            final_table.loc[idx, 'check_bat_thuong'] = True     # bất thường
+    for idx in info_T0.index:
+        five = info_T0.loc[idx, 'opening_balance_tru_1']
+        six = info_T0.loc[idx, 'closing_balance_tru_1']
+        seven = info_T0.loc[idx, 'opening_balance']
+        eight = info_T0.loc[idx, 'yesterday_opening']
+        nine = info_T0.loc[idx, 'yesterday_closing']
+        if ((seven - six) != 0) or ((eight - five) != 0) or ((nine - six) != 0):
+            info_T0.loc[idx, 'check_bat_thuong'] = True  # bất thường
         else:
-            final_table.loc[idx, 'check_bat_thuong'] = False    # bình thường
+            info_T0.loc[idx, 'check_bat_thuong'] = False  # bình thường
     sheet_bao_cao_can_lam.write_column(
-        'J13',
-        save_yesterday['bat_thuong'],
+        'J12',
+        info_T0['check_bat_thuong'],
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'K13',
+        'K12',
         info_T0['branch_name'],
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'L13',
+        'L12',
         info_T0['broker_name'],
         text_left_wrap_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'E{sum_start_row}',
+        info_T0['opening_balance_tru_1'].sum(),
+        money_sum_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'F{sum_start_row}',
+        info_T0['closing_balance_tru_1'].sum(),
+        money_sum_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'G{sum_start_row}',
+        info_T0['opening_balance'].sum(),
+        money_sum_format
     )
 
     ###########################################################################
@@ -441,7 +464,8 @@ def run(
 
     # ------------- write 2 column 'opening_t_0' and 'closing_t_0' in 'df t_0' to file -------------
     path = join(realpath(dirname(dirname(__file__))), 'output')
-    file_name = f'Dữ liệu lưu ngoài flex {end_date}.xlsx'
+    eod_save_file = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
+    file_name = f'Dữ liệu lưu ngoài flex {eod_save_file}.xlsx'
     writer2 = pd.ExcelWriter(
         join(path, file_name),
         engine='xlsxwriter',
@@ -500,17 +524,17 @@ def run(
     sheet_balance.write_row('A1', header, header_format)
     sheet_balance.write_column(
         'A2',
-        balance_0.index,
+        info_T0.index,
         text_center_format
     )
     sheet_balance.write_column(
         'B2',
-        balance_0['opening_t_0'],
+        info_T0['opening_balance'],
         money_format
     )
     sheet_balance.write_column(
         'C2',
-        balance_0['closing_t_0'],
+        info_T0['closing_balance'],
         money_format
     )
 
