@@ -8,8 +8,6 @@
 4. Dữ liệu bị lệch khá nhiều so với dữ liệu trên flex
 5. Cách để thêm danh sách KH nợ xấu vào báo cáo (Set cứng hay sao)
 """
-import pandas as pd
-
 from reporting_tool.trading_service.thanhtoanbutru import *
 
 
@@ -37,7 +35,7 @@ def run(
 
     # --------------------- Viết Query và xử lý dataframe ---------------------
     # query RLN0006
-    day_dau_ki = bdate(start_date, -1)
+    day_dau_ki = bdate(start_date, -1)  # tính đầu kỳ tháng 11
     query_sum_du_no_goc = pd.read_sql(
         f"""
             SELECT
@@ -70,14 +68,20 @@ def run(
     # query VCF0051
     query_total_account = pd.read_sql(
         f"""
-            SELECT sub_account, contract_type, status
-            FROM customer_information
-            WHERE (contract_type NOT LIKE N'Tự doanh' AND contract_type NOT LIKE N'Thường%')
-            AND (status = 'A' OR status = 'B')
-            ORDER BY contract_type
+            SELECT relationship.date, customer_information.sub_account, contract_type, status
+            FROM relationship
+            LEFT JOIN customer_information 
+            ON customer_information.sub_account = relationship.sub_account 
+            LEFT JOIN account
+            ON account.account_code = relationship.account_code 
+            WHERE (relationship.date = '{day_dau_ki}' OR relationship.date = '{end_date}')
+            AND customer_information.status IN ('A','B')
+            AND (contract_type NOT LIKE N'Tự doanh' and contract_type NOT LIKE N'Thường%')
+            ORDER BY date, contract_type
         """,
         connect_DWH_CoSo,
     )
+
     mapper = query_total_account['contract_type'].apply(
         lambda x: 'VIPCN - T1'
         if ('MR 1' and 'VIPCN') in x
@@ -107,22 +111,89 @@ def run(
     query_total_account['TK DP'] = mapper_2
     query_total_account['all_TK'] = mapper_3
 
-    loc_TK_VIP = query_total_account.groupby('TK VIP').size()
-    loc_TK_DP = query_total_account.groupby('TK DP').size()
-    loc_all_TK = query_total_account.groupby('all_TK').size()
+    amount_TK_dau_ky = query_total_account.loc[query_total_account['date'] == day_dau_ki]
+    loc_TK_VIP_dau_ky = amount_TK_dau_ky.groupby('TK VIP').size()
+    loc_TK_DP_dau_ky = amount_TK_dau_ky.groupby('TK DP').size()
+    loc_all_TK_dau_ky = amount_TK_dau_ky.groupby('all_TK').size()
 
-    df_tk_vip = pd.DataFrame(loc_TK_VIP,
-                             index=["VIPCN - T1", "SILV - T1", "GOLD - T0", "GOLD - T2", "NOR"],
-                             columns=['num_account']
-                             ).drop('NOR')
-    df_tk_dp = pd.DataFrame(loc_TK_DP,
-                            index=["Normal DP +2", "VIP CN - DP +3", "SILV DP+4", "GOLD DP +5", "NotDP"],
-                            columns=['num_account']
-                            ).drop('NotDP')
-    df_tk_all = pd.DataFrame(loc_all_TK,
-                             index=["VIPCN", "SILVER", "GOLDEN", "NOR"],
-                             columns=['num_account']
-                             ).drop('NOR')
+    df_tk_vip_dau_ky = pd.DataFrame(loc_TK_VIP_dau_ky,
+                                    index=["VIPCN - T1", "SILV - T1", "GOLD - T0", "GOLD - T2", "NOR"],
+                                    columns=['num_account']
+                                    ).drop('NOR')
+    df_tk_dp_dau_ky = pd.DataFrame(loc_TK_DP_dau_ky,
+                                   index=["Normal DP +2", "VIP CN - DP +3", "SILV DP+4", "GOLD DP +5", "NotDP"],
+                                   columns=['num_account']
+                                   ).drop('NotDP')
+    df_tk_all_dau_ky = pd.DataFrame(loc_all_TK_dau_ky,
+                                    index=["VIPCN", "SILVER", "GOLDEN", "NOR"],
+                                    columns=['num_account']
+                                    ).drop('NOR')
+    amount_TK_cuoi_ky = query_total_account.loc[query_total_account['date'] == end_date]
+    loc_TK_VIP_cuoi_ky = amount_TK_cuoi_ky.groupby('TK VIP').size()
+    loc_TK_DP_cuoi_ky = amount_TK_cuoi_ky.groupby('TK DP').size()
+    loc_all_TK_cuoi_ky = amount_TK_cuoi_ky.groupby('all_TK').size()
+
+    df_tk_vip_cuoi_ky = pd.DataFrame(loc_TK_VIP_cuoi_ky,
+                                     index=["VIPCN - T1", "SILV - T1", "GOLD - T0", "GOLD - T2", "NOR"],
+                                     columns=['num_account']
+                                     ).drop('NOR')
+    df_tk_dp_cuoi_ky = pd.DataFrame(loc_TK_DP_cuoi_ky,
+                                    index=["Normal DP +2", "VIP CN - DP +3", "SILV DP+4", "GOLD DP +5", "NotDP"],
+                                    columns=['num_account']
+                                    ).drop('NotDP')
+    df_tk_all_cuoi_ky = pd.DataFrame(loc_all_TK_cuoi_ky,
+                                     index=["VIPCN", "SILVER", "GOLDEN", "NOR"],
+                                     columns=['num_account']
+                                     ).drop('NOR')
+
+    # Query which account has branch_id = 0111
+    inb_01_query = pd.read_sql(
+        f"""
+            select
+            margin_outstanding.account_code as account_code, 
+            case margin_outstanding.type
+                      when N'Trả chậm' then 'DP'
+                      when N'Margin' then 'MR'
+                      when N'Bảo lãnh' then 'BL'
+                      end as type, 
+            principal_outstanding
+            from margin_outstanding
+            left join relationship on relationship.account_code = margin_outstanding.account_code
+            left join account on account.account_code = relationship.account_code
+            where margin_outstanding.date = '{end_date}'
+            and relationship.date = '{end_date}'
+            and relationship.branch_id = '0111'
+            order by case when type = 'MR' then '1'
+                          when type = 'DP' then '2'
+                          when type = 'BL' then '3'
+                          END ASC
+        """,
+        connect_DWH_CoSo
+    )
+    inb_01_query = inb_01_query.drop_duplicates()
+    inb_groupby = inb_01_query.groupby(['type']).sum()
+    sum_du_no_goc_cuoi_ky = sum_du_no_goc_cuoi_ky.set_index('type')
+    sum_du_no_goc_cuoi_ky['INB-01'] = inb_groupby['principal_outstanding']
+    sum_du_no_goc_cuoi_ky['ty_le'] = (
+            (sum_du_no_goc_cuoi_ky['INB-01'] / sum_du_no_goc_cuoi_ky['principal_outstanding']) * 100)
+    sum_du_no_goc_cuoi_ky.fillna('', inplace=True)
+
+    # Query số lượng tài khoản margin INB-01
+    query_amount_account_INB = pd.read_sql(
+        f"""
+            SELECT customer_information.sub_account, contract_type, customer_information.status, branch.branch_name
+            FROM relationship
+            LEFT JOIN customer_information 
+            ON customer_information.sub_account = relationship.sub_account 
+            LEFT JOIN branch
+            ON branch.branch_id = relationship.branch_id
+            WHERE relationship.date = '{end_date}'
+            AND customer_information.status IN ('A','B')
+            AND (contract_type LIKE '%MR%')
+            AND branch_name = 'Institutional Business 01'
+        """,
+        connect_DWH_CoSo
+    )
 
     ###################################################
     ###################################################
@@ -179,6 +250,16 @@ def run(
             'font_name': 'Arial',
         }
     )
+    num_ty_le_format = workbook.add_format(
+        {
+            'border': 1,
+            'align': 'right',
+            'valign': 'vcenter',
+            'font_size': 11,
+            'font_name': 'Arial',
+            'num_format': '#,##0.00'
+        }
+    )
     header_format = workbook.add_format(
         {
             'border': 1,
@@ -212,16 +293,6 @@ def run(
             'num_format': '#,##0'
         }
     )
-    cuoi_ky_num_format = workbook.add_format(
-        {
-            'border': 1,
-            'align': 'right',
-            'valign': 'vcenter',
-            'font_size': 11,
-            'font_name': 'Arial',
-            'color': '#FF0000',
-        }
-    )
     normal_money_format = workbook.add_format(
         {
             'border': 1,
@@ -240,6 +311,16 @@ def run(
             'font_size': 11,
             'font_name': 'Arial',
             'num_format': '#,##0.00;(#,##0.00)'
+        }
+    )
+    trong_ky_num_account_format = workbook.add_format(
+        {
+            'border': 1,
+            'align': 'right',
+            'valign': 'vcenter',
+            'font_size': 11,
+            'font_name': 'Arial',
+            'num_format': '#,##0;(#,##0)'
         }
     )
     tong_format = workbook.add_format(
@@ -343,15 +424,7 @@ def run(
             'text_wrap': True
         }
     )
-    num_right_format = workbook.add_format(
-        {
-            'border': 1,
-            'align': 'right',
-            'valign': 'vcenter',
-            'font_size': 11,
-            'font_name': 'Arial',
-        }
-    )
+
     # --------- sheet BAO CAO CAN LAM ---------
     sheet_DVTC = workbook.add_worksheet('DVTC')
     sheet_title_name = 'TOÀN CÔNG TY'
@@ -399,7 +472,7 @@ def run(
         sum_du_no_goc_cuoi_ky['principal_outstanding'],
         cuoi_ky_no_xau_values_format
     )
-    sheet_DVTC.write_column('B5', 'MR', TK_margin_empty_format)
+    sheet_DVTC.write('B5', 'MR', TK_margin_empty_format)
 
     sum_row = sum_du_no_goc_dau_ky.shape[0] + 3
     sheet_DVTC.merge_range(f'A3:A{sum_row}', 'Tổng Dư nợ gốc', text_left_wrap_text_format)
@@ -436,37 +509,87 @@ def run(
     sheet_DVTC.write(f'D{sum_row + 1}', '', SSC_value_format)
     sheet_DVTC.write(f'E{sum_row + 1}', '', SSC_value_format)
     sheet_DVTC.write(f'F{sum_row + 1}', '', SSC_value_format)
+
+    # Tổng số lượng TK Margin (Active & Block)
     sheet_DVTC.write(f'A{sum_row + 2}', TK_margin, text_left_wrap_text_format)
     sheet_DVTC.write(f'B{sum_row + 2}', '', TK_margin_empty_format)
-    sheet_DVTC.write(f'C{sum_row + 2}', '', num_right_format)
-    sheet_DVTC.write(f'D{sum_row + 2}', '', num_right_format)
-    sheet_DVTC.write(f'E{sum_row + 2}', query_total_account.shape[0], cuoi_ky_num_format)
+    sheet_DVTC.write(f'C{sum_row + 2}', amount_TK_dau_ky.shape[0], normal_money_format)
+    sheet_DVTC.write(
+        f'D{sum_row + 2}',
+        amount_TK_cuoi_ky.shape[0] - amount_TK_dau_ky.shape[0],
+        trong_ky_num_account_format
+    )
+    sheet_DVTC.write(f'E{sum_row + 2}', amount_TK_cuoi_ky.shape[0], cuoi_ky_no_xau_values_format)
+    sheet_DVTC.write(
+        f'H{sum_row + 2}',
+        query_amount_account_INB.shape[0],
+        cuoi_ky_no_xau_values_format
+    )
+    sheet_DVTC.write(
+        f'I{sum_row + 2}',
+        (query_amount_account_INB.shape[0]/amount_TK_cuoi_ky.shape[0]) * 100,
+        num_ty_le_format
+    )
+
+    # Tổng số lượng TK VIP miễn lãi vay MR  (Active &Block)
     sheet_DVTC.merge_range(f'A{sum_row + 3}:A{sum_row + 6}', TK_vip, text_center_wrap_text_format)
-    sheet_DVTC.write_column(f'B{sum_row + 3}', df_tk_vip.index, text_left_format)
-    sheet_DVTC.write_column(f'E{sum_row + 3}', df_tk_vip['num_account'], cuoi_ky_num_format)
+    sheet_DVTC.write_column(f'B{sum_row + 3}', df_tk_vip_dau_ky.index, text_left_format)
+    sheet_DVTC.write_column(f'C{sum_row + 3}', df_tk_vip_dau_ky['num_account'], normal_money_format)
+    sheet_DVTC.write_column(
+        f'D{sum_row + 3}',
+        (df_tk_vip_cuoi_ky['num_account'] - df_tk_vip_dau_ky['num_account']).abs(),
+        trong_ky_num_account_format
+    )
+    sheet_DVTC.write_column(f'E{sum_row + 3}', df_tk_vip_cuoi_ky['num_account'], cuoi_ky_no_xau_values_format)
+
+    # Tổng số lượng TK sử dụng hạn mức DP  (Active &Block)
     sheet_DVTC.merge_range(f'A{sum_row + 7}:A{sum_row + 10}', TK_use_DP, text_center_wrap_text_format)
-    sheet_DVTC.write_column(f'B{sum_row + 7}', df_tk_dp.index, text_left_format)
-    sheet_DVTC.write_column(f'E{sum_row + 7}', df_tk_dp['num_account'], cuoi_ky_num_format)
+    sheet_DVTC.write_column(f'B{sum_row + 7}', df_tk_dp_dau_ky.index, text_left_format)
+    sheet_DVTC.write_column(f'C{sum_row + 7}', df_tk_dp_dau_ky['num_account'], normal_money_format)
+    sheet_DVTC.write_column(
+        f'D{sum_row + 7}',
+        df_tk_dp_cuoi_ky['num_account'] - df_tk_dp_dau_ky['num_account'],
+        trong_ky_num_account_format
+    )
+    sheet_DVTC.write_column(f'E{sum_row + 7}', df_tk_dp_cuoi_ky['num_account'], cuoi_ky_no_xau_values_format)
+
+    # Tổng số lượng TK VIPCN, TK SILVER, TK GOLDEN
     sheet_DVTC.write(f'A{sum_row + 11}', total_account_vipcn, text_left_format)
     sheet_DVTC.write(f'A{sum_row + 12}', total_account_silv, text_left_format)
     sheet_DVTC.write(f'A{sum_row + 13}', total_account_gold, text_left_format)
-    sheet_DVTC.write_column(f'E{sum_row + 11}', df_tk_all['num_account'], cuoi_ky_num_format)
-    sheet_DVTC.write_column(f'B{sum_row + 11}', [''] * 3, text_center_format)
+    sheet_DVTC.write_column(f'C{sum_row + 11}', df_tk_all_dau_ky['num_account'], normal_money_format)
     sheet_DVTC.write_column(
-        f'G3',
-        [''] * (sum_row + df_tk_vip.shape[0] + df_tk_dp.shape[0] + df_tk_all.shape[0]),
+        f'D{sum_row + 11}',
+        df_tk_all_cuoi_ky['num_account'] - df_tk_all_dau_ky['num_account'],
+        trong_ky_num_account_format
+    )
+    sheet_DVTC.write_column(
+        f'E{sum_row + 11}',
+        df_tk_all_cuoi_ky['num_account'],
+        cuoi_ky_no_xau_values_format
+    )
+
+    sheet_DVTC.write_column(f'B{sum_row + 11}', [''] * 3, text_center_format)
+
+    # Ghi chú column
+    sheet_DVTC.write_column(
+        'G3',
+        [''] * (sum_row + df_tk_vip_dau_ky.shape[0] + df_tk_dp_dau_ky.shape[0] + df_tk_all_dau_ky.shape[0]),
         text_center_format
     )
     sheet_DVTC.write(f'G{sum_row + 5}', 'HPX', text_left_format)
+
+    # INB-01 column
     sheet_DVTC.write_column(
-        f'H3',
-        [''] * (sum_row + df_tk_vip.shape[0] + df_tk_dp.shape[0] + df_tk_all.shape[0]),
-        num_right_format
+        'H3',
+        sum_du_no_goc_cuoi_ky['INB-01'],
+        cuoi_ky_no_xau_values_format
     )
+    # Tỷ lệ column
     sheet_DVTC.write_column(
-        f'I3',
-        [''] * (sum_row + df_tk_vip.shape[0] + df_tk_dp.shape[0] + df_tk_all.shape[0]),
-        num_right_format
+        'I3',
+        sum_du_no_goc_cuoi_ky['ty_le'],
+        num_ty_le_format
     )
     # DANH SÁCH KH NỢ XẤU
 
