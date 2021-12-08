@@ -1,6 +1,18 @@
 """
-    cột Doanh thu UTTB lấy từ cột fee_PHS trong table payment_in_advance
-    có 3/6 kết quả bị lệch so với file mẫu -> do dữ liệu trong DB
+    1. cột Doanh thu UTTB lấy từ cột fee_PHS trong table payment_in_advance
+    2. có 3/6 kết quả bị lệch so với file mẫu
+        a. Trên flex:
+            022C017482	CÔNG TY TNHH ĐẦU TƯ XÂY DỰNG VÀ THƯƠNG MẠI ĐẠI DƯƠNG XANH	72,895,066
+        Trên Database SQL:
+            022C017482	CÔNG TY TNHH ĐẦU TƯ XÂY DỰNG VÀ THƯƠNG MẠI ĐẠI DƯƠNG XANH	76,204,995
+        b. Trên flex:
+            022C018358	CÔNG TY TNHH ĐẦU TƯ THƯƠNG MẠI VÀ XUẤT NHẬP KHẨU TÂM AN	    27,733,192
+        Trên Database SQL:
+            022C018358	CÔNG TY TNHH ĐẦU TƯ THƯƠNG MẠI VÀ XUẤT NHẬP KHẨU TÂM AN	    28,462,132
+        c. Trên flex:
+            022C019357	CÔNG TY CỔ PHẦN ĐẦU TƯ THƯƠNG MẠI VÀ PHÁT TRIỂN DỊCH VỤ PHÚC THỊNH	 69,056,567
+        Trên Database SQL:
+            022C019357	CÔNG TY CỔ PHẦN ĐẦU TƯ THƯƠNG MẠI VÀ PHÁT TRIỂN DỊCH VỤ PHÚC THỊNH	 69,050,864
 """
 
 from reporting_tool.trading_service.thanhtoanbutru import *

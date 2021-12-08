@@ -9,7 +9,7 @@ from reporting_tool.trading_service.thanhtoanbutru import *
 
 def run(
         periodicity: str,
-        end_date: str,  # 2021-11-29
+        end_date: str,
         run_time=None,
 ):
     start = time.time()
@@ -17,6 +17,13 @@ def run(
     period = info['period']
     folder_name = info['folder_name']
     start_date = bdate(end_date, -1)
+
+    # Xử lý format của date
+    date_character = ['/', '-', '.']
+    for date_char in date_character:
+        if date_char in start_date and date_char in end_date:
+            start_date = start_date.replace(date_char, '/')
+            end_date = end_date.replace(date_char, '/')
 
     # create folder
     if not os.path.isdir(join(dept_folder, folder_name)):  # dept_folder from import
@@ -55,15 +62,9 @@ def run(
     # lọc bảng lớn thành theo 2 ngày start_date và end_date
     info_T_tru_1 = doi_chieu_so_du_query.loc[doi_chieu_so_du_query['date'] == start_date]  # start_date
     info_T0 = doi_chieu_so_du_query.loc[doi_chieu_so_du_query['date'] == end_date]  # end_date
-    # Xử lý format của date
-    date_character = ['/', '-', '.']
-    for date_char in date_character:
-        if date_char in start_date and date_char in end_date:
-            start_date = start_date.replace(date_char, '/')
-            end_date = end_date.replace(date_char, '/')
 
     # read File Đã lưu hôm qua
-    read_file_start_date = dt.datetime.strptime(start_date, "%Y/%m/%d").strftime("%d-%m")
+    read_file_start_date = dt.datetime.strptime(start_date, "%Y/%m/%d").strftime("%d-%m-%Y")
     path = 'D:\\DataAnalytics\\reporting_tool\\trading_service\\output'
     file_name = f'Dữ liệu lưu ngoài flex {read_file_start_date}.xlsx'
     save_yesterday = pd.read_excel(join(path, file_name),
@@ -111,10 +112,8 @@ def run(
 
     # --------------------- Viet File Excel ---------------------
     # Write file BÁO CÁO ĐỐI CHIẾU SỐ DƯ TIỀN TÀI KHOẢN KHÁCH HÀNG
-    footer_date = bdate(end_date, 1).split('-')
-    eod = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
-
-    f_name = f'Báo cáo đối chiếu số dư tiền tài khoản khách hàng {eod}.xlsx'
+    eod = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m-%Y")
+    f_name = f'Đối chiếu số dư tiền TKKH {eod}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder, folder_name, period, f_name),
         engine='xlsxwriter',
@@ -182,16 +181,6 @@ def run(
             'align': 'center',
             'valign': 'vcenter',
             'font_size': 12,
-            'font_name': 'Times New Roman',
-            'text_wrap': True
-        }
-    )
-    stt_row_format = workbook.add_format(
-        {
-            'border': 1,
-            'align': 'center',
-            'valign': 'vcenter',
-            'font_size': 10,
             'font_name': 'Times New Roman',
             'text_wrap': True
         }
@@ -338,6 +327,7 @@ def run(
         text_left_wrap_format
     )
     footer_start_row = sum_start_row + 2
+    footer_date = bdate(end_date, 1).split('-')
     sheet_bao_cao_can_lam.merge_range(
         f'J{footer_start_row}:L{footer_start_row}',
         f'Ngày {footer_date[2]} tháng {footer_date[1]} năm {footer_date[0]}',
@@ -464,7 +454,7 @@ def run(
 
     # ------------- write 2 column 'opening_t_0' and 'closing_t_0' in 'df t_0' to file -------------
     path = join(realpath(dirname(dirname(__file__))), 'output')
-    eod_save_file = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
+    eod_save_file = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m-%Y")
     file_name = f'Dữ liệu lưu ngoài flex {eod_save_file}.xlsx'
     writer2 = pd.ExcelWriter(
         join(path, file_name),

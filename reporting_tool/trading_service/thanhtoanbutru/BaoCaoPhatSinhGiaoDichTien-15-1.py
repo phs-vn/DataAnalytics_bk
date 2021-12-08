@@ -4,20 +4,19 @@
     3. tăng tiền, giảm tiền lấy từ bảng cashflow_balance
     4. mã nghiệp vụ: transaction_id
     5. số dư đầu kỳ query riêng từ bảng sub_account_deposit
+    6. Thiếu cột Người lập, người duyệt
 """
 from reporting_tool.trading_service.thanhtoanbutru import *
 
 
 def run(
         periodicity: str,
-        start_date: str,  # 2021-11-22
-        end_date: str,  # 2021-11-22
+        start_date: str,
+        end_date: str,
         run_time=None,
 ):
     start = time.time()
     info = get_info(periodicity, run_time)
-    # start_date = info['start_date']
-    # end_date = info['end_date']
     period = info['period']
     folder_name = info['folder_name']
     date_character = ['/', '-', '.']
@@ -74,13 +73,8 @@ def run(
             start_date = start_date.replace(date_char, '/')
             end_date = end_date.replace(date_char, '/')
     footer_date = bdate(end_date, 1).split('-')
-    start_date = dt.datetime.strptime(start_date, "%Y/%m/%d").strftime("%d-%m")
-    end_date = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
-    f_name = ''
-    if start_date == end_date:
-        f_name += f'Báo cáo phát sinh giao dịch tiền {end_date}.xlsx'
-    else:
-        f_name += f'Báo cáo phát sinh giao dịch tiền từ {start_date} đến {end_date}.xlsx'
+    eod_f_name = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d.%m.%Y")
+    f_name = f'Phát sinh giao dịch tiền {eod_f_name}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder, folder_name, period, f_name),
         engine='xlsxwriter',
@@ -276,7 +270,9 @@ def run(
     ]
     companyAddress = 'Tầng 3, CR3-03A, 109 Tôn Dật Tiên, phường Tân Phú, Quận 7, Thành phố Hồ Chí Minh'
     sheet_title_name = 'BÁO CÁO PHÁT SINH GIAO DỊCH TIỀN'
-    sub_title_name = f'Từ ngày {start_date} đến ngày {end_date}'
+    sod_sub_title = dt.datetime.strptime(start_date, "%Y/%m/%d").strftime("%d/%m/%Y")
+    eod_sub_title = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d/%m/%Y")
+    sub_title_name = f'Từ ngày {sod_sub_title} đến ngày {eod_sub_title}'
     so_du_dau_ky_name = 'Số dư tiền đầu kỳ'
     cong_phat_sinh = 'Cộng phát sinh'
     so_du_cuoi_ky_name = 'Số dư tiền cuối kỳ'
@@ -342,7 +338,7 @@ def run(
     )
     sheet_bao_cao_can_lam.merge_range(
         f'I{so_du_tien_cuoi_ky_start_row + 2}:K{so_du_tien_cuoi_ky_start_row + 2}',
-        f'Ngày{footer_date[2]} tháng {footer_date[1]} năm {footer_date[0]}',
+        f'Ngày {footer_date[2]} tháng {footer_date[1]} năm {footer_date[0]}',
         footer_dmy_format
     )
     sheet_bao_cao_can_lam.merge_range(

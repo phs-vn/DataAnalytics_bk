@@ -159,7 +159,7 @@ def run(
             start_date = start_date.replace(date_char, '/')
             end_date = end_date.replace(date_char, '/')
     s_date_file_name = dt.datetime.strptime(start_date, "%Y/%m/%d").strftime("%d-%m")
-    f_name = f'Báo cáo đối chiếu thanh toán bù trừ tiền mua bán chứng khoán {s_date_file_name}.xlsx'
+    f_name = f'Đối chiếu TTBT tiền mua bán chứng khoán {s_date_file_name}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder, folder_name, period, f_name),
         engine='xlsxwriter',
@@ -231,23 +231,13 @@ def run(
             'text_wrap': True
         }
     )
-    stt_row_format = workbook.add_format(
-        {
-            'border': 1,
-            'align': 'center',
-            'valign': 'vcenter',
-            'font_size': 12,
-            'font_name': 'Times New Roman',
-            'text_wrap': True
-        }
-    )
     stt_col_format = workbook.add_format(
         {
             'border': 1,
             'align': 'right',
             'valign': 'vbottom',
-            'font_size': 11,
-            'font_name': 'Times New Roman'
+            'font_size': 12,
+            'font_name': 'Calibri'
         }
     )
     text_left_format = workbook.add_format(
@@ -256,8 +246,8 @@ def run(
             'align': 'left',
             'valign': 'vbottom',
             'text_wrap': True,
-            'font_size': 11,
-            'font_name': 'Times New Roman'
+            'font_size': 12,
+            'font_name': 'Calibri'
         }
     )
     money_format = workbook.add_format(
@@ -265,7 +255,17 @@ def run(
             'border': 1,
             'align': 'right',
             'valign': 'vbottom',
-            'font_size': 11,
+            'font_size': 12,
+            'font_name': 'Calibri',
+            'num_format': '#,##0'
+        }
+    )
+    sum_money_format = workbook.add_format(
+        {
+            'border': 1,
+            'align': 'right',
+            'valign': 'vcenter',
+            'font_size': 10,
             'font_name': 'Times New Roman',
             'num_format': '#,##0'
         }
@@ -369,7 +369,7 @@ def run(
     sheet_bao_cao_can_lam.merge_range('H10:J10', headers[7], headers_format)
     sheet_bao_cao_can_lam.merge_range('K10:M10', headers[8], headers_format)
     sheet_bao_cao_can_lam.merge_range('N10:P10', headers[9], headers_format)
-    sum_start_row = ket_qua_khop_lenh_groupby.shape[0] + 13
+    sum_start_row = ket_qua_khop_lenh_groupby.shape[0] + 12
     sheet_bao_cao_can_lam.merge_range(
         f'A{sum_start_row}:G{sum_start_row}',
         'Tổng',
@@ -396,77 +396,72 @@ def run(
     # write row & column
     sheet_bao_cao_can_lam.write_row('H11', sub_headers * 3, headers_format)
     sheet_bao_cao_can_lam.write_row(
-        'A12',
-        [f'({i})' for i in np.arange(len(headers) + len(sub_headers) + 3) + 1],
-        stt_row_format,
-    )
-    sheet_bao_cao_can_lam.write_row(
         'A4',
         [''] * (len(headers) + len(sub_headers) + 3),
         empty_row_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'A13',
+        'A12',
         [int(i) for i in np.arange(ket_qua_khop_lenh_groupby.shape[0]) + 1],
         stt_col_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'B13',
+        'B12',
         ket_qua_khop_lenh_groupby['date'],
         date_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'C13',
+        'C12',
         ket_qua_khop_lenh_groupby['date_thanh_toan'],
         date_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'D13',
+        'D12',
         ket_qua_khop_lenh_groupby['account_code'],
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'E13',
+        'E12',
         ket_qua_khop_lenh_groupby.index,
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'F13',
+        'F12',
         ket_qua_khop_lenh_groupby['customer_name'].str.upper(),
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'G13',
+        'G12',
         ket_qua_khop_lenh_groupby['type_of_order'],
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'H13',
+        'H12',
         ket_qua_khop_lenh_groupby['value_KQKL'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'I13',
+        'I12',
         ket_qua_khop_lenh_groupby['fee_KQKL'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'J13',
+        'J12',
         ket_qua_khop_lenh_groupby['tax_of_selling_KQKL'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'K13',
+        'K12',
         ket_qua_khop_lenh_groupby['value_GDT'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'L13',
+        'L12',
         ket_qua_khop_lenh_groupby['fee_GDT'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'M13',
+        'M12',
         ket_qua_khop_lenh_groupby['tax_GDT'],
         money_format
     )
@@ -474,17 +469,17 @@ def run(
     ket_qua_khop_lenh_groupby['fee_lech'] = ket_qua_khop_lenh_groupby['fee_GDT'] - ket_qua_khop_lenh_groupby['fee_KQKL']
     ket_qua_khop_lenh_groupby['tax_lech'] = ket_qua_khop_lenh_groupby['tax_GDT'] - ket_qua_khop_lenh_groupby['tax_of_selling_KQKL']
     sheet_bao_cao_can_lam.write_column(
-        'N13',
+        'N12',
         ket_qua_khop_lenh_groupby['value_lech'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'O13',
+        'O12',
         ket_qua_khop_lenh_groupby['fee_lech'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'P13',
+        'P12',
         ket_qua_khop_lenh_groupby['tax_lech'],
         money_format
     )

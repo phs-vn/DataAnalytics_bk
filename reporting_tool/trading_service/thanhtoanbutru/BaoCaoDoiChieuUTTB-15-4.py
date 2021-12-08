@@ -1,26 +1,29 @@
 """
     1. daily
     2. table: trading_record, cash_balance
-    3. Tiền Hoàn trả UTTB T0: điều kiện mã 8851
-    4. Tổng giá trị tiền bán có thể ứng: (phí bán (fee), thuế bán (tax_of_selling), phí ứng tiền (cột decrease - 1153))
-    5. Tiền đã ứng: cột increase - 1153
+    3. Tiền Hoàn trả UTTB T0: mã giao dịch 8851
+    4. Tiền đã ứng: mã giao dịch - 1153
+    5. Chị Tuyết bảo nên dùng bảng RCI0015 thay cho RCF1002
 """
+import string
 from reporting_tool.trading_service.thanhtoanbutru import *
 
 
 def run(
         periodicity: str,
-        start_date: str,  # 2021-11-18
-        end_date: str,  # 2021-11-22
+        end_date: str,
         run_time=None,
 ):
     start = time.time()
     info = get_info(periodicity, run_time)
-    # start_date = info['start_date']
-    # end_date = info['end_date']
     period = info['period']
     folder_name = info['folder_name']
+    start_date = bdate(end_date, -2)  # T-2 date
     date_character = ['/', '-', '.']
+    for date_char in date_character:
+        if date_char in start_date and date_char in end_date:
+            start_date = start_date.replace(date_char, '/')
+            end_date = end_date.replace(date_char, '/')
 
     # create folder
     if not os.path.isdir(join(dept_folder, folder_name)):  # dept_folder from import
@@ -41,13 +44,14 @@ def run(
             relationship.sub_account, 
             trading_record.value,
             trading_record.fee,
-            trading_record.tax_of_selling
+            trading_record.tax_of_selling,
+            trading_record.tax_of_share_dividend
             FROM trading_record
             LEFT JOIN relationship ON relationship.sub_account = trading_record.sub_account
             WHERE trading_record.date BETWEEN '{start_date}' AND '{end_date}'
             AND relationship.date = '{end_date}'
             AND trading_record.type_of_order = 'S'
-            ORDER BY trading_record.date ASC
+            ORDER BY trading_record.date, sub_account ASC
         """,
         connect_DWH_CoSo,
     )
@@ -61,6 +65,7 @@ def run(
             FROM relationship 
             LEFT JOIN account ON relationship.account_code = account.account_code 
             WHERE date = '{end_date}'
+            ORDER BY account_code
         """,
         connect_DWH_CoSo,
         index_col='sub_account'
@@ -71,6 +76,9 @@ def run(
         [
             'sub_account',
             'value',
+            'fee',
+            'tax_of_selling',
+            'tax_of_share_dividend'
         ]
     ].copy()
     value_T2 = value_T2.groupby(['sub_account']).sum()
@@ -82,6 +90,9 @@ def run(
         [
             'sub_account',
             'value',
+            'fee',
+            'tax_of_selling',
+            'tax_of_share_dividend'
         ]
     ].copy()
     value_T1 = value_T1.groupby(['sub_account']).sum()
@@ -94,7 +105,8 @@ def run(
             'sub_account',
             'value',
             'fee',
-            'tax_of_selling'
+            'tax_of_selling',
+            'tax_of_share_dividend'
         ]
     ].copy()
     value_T0 = value_T0.groupby(['sub_account']).sum()
@@ -111,37 +123,91 @@ def run(
             increase, 
             decrease
             FROM cash_balance 
-            WHERE date = '{end_date}'
-            AND (transaction_id = '8851' or transaction_id = '1153') 
+            WHERE date BETWEEN '{start_date}' AND '{end_date}'
+            AND transaction_id IN ('1153', '8851')
+            ORDER BY date, sub_account, transaction_id
         """,
         connect_DWH_CoSo,
     )
-    hoan_tra_uttb_T0_table = cash_balance_query.loc[
-        cash_balance_query['transaction_id'] == '8851', ['sub_account', 'decrease']].copy()
+    cash_balance_T0 = cash_balance_query.loc[cash_balance_query['date'] == end_date]
+
+    # column Tiền Hoàn trả UTTB T0
+    hoan_tra_uttb_T0_table = cash_balance_T0.loc[
+        cash_balance_T0['transaction_id'] == '8851', ['sub_account', 'decrease']].copy()
     hoan_tra_uttb_T0_table = hoan_tra_uttb_T0_table.groupby(['sub_account']).sum()
     hoan_tra_uttb_T0_table.columns = ['hoan_tra_UTTB_T0']
 
+    # column Tiền đã ứng
     tien_da_ung_table = cash_balance_query.loc[
-        cash_balance_query['transaction_id'] == '1153', ['sub_account', 'increase']].copy()
-    tien_da_ung_table = tien_da_ung_table.groupby(['sub_account']).sum()
-    tien_da_ung_table.columns = ['tien_da_ung']
-
-    phi_ung_tien_table = cash_balance_query.loc[
-        cash_balance_query['transaction_id'] == '1153', ['sub_account', 'decrease']].copy()
-    phi_ung_tien_table = phi_ung_tien_table.groupby(['sub_account']).sum()
-    phi_ung_tien_table.columns = ['phi_ung_tien']
+        cash_balance_query['transaction_id'] == '1153', ['date', 'sub_account', 'increase', 'decrease']].copy()
+    # Số tiền UTTB KH đã nhận và Phí UTTB ngày T-2
+    tien_da_ung_T2 = tien_da_ung_table.loc[
+        tien_da_ung_table['date'] == start_date,
+        [
+            'sub_account',
+            'increase',
+            'decrease'
+        ]
+    ].copy()
+    tien_da_ung_T2 = tien_da_ung_T2.groupby(['sub_account']).sum()
+    tien_da_ung_T2 = tien_da_ung_T2.add_suffix('_T2')
+    # Số tiền UTTB KH đã nhận và Phí UTTB ngày T-1
+    tien_da_ung_T1 = tien_da_ung_table.loc[
+        tien_da_ung_table['date'] == bdate(end_date, -1),
+        [
+            'sub_account',
+            'increase',
+            'decrease'
+        ]
+    ].copy()
+    tien_da_ung_T1 = tien_da_ung_T1.groupby(['sub_account']).sum()
+    tien_da_ung_T1 = tien_da_ung_T1.add_suffix('_T1')
+    # Số tiền UTTB KH đã nhận và Phí UTTB ngày T0
+    tien_da_ung_T0 = tien_da_ung_table.loc[
+        tien_da_ung_table['date'] == end_date,
+        [
+            'sub_account',
+            'increase',
+            'decrease'
+        ]
+    ].copy()
+    tien_da_ung_T0 = tien_da_ung_T0.groupby(['sub_account']).sum()
+    tien_da_ung_T0 = tien_da_ung_T0.add_suffix('_T0')
 
     final_table = pd.concat([
         value_T2,
         value_T1,
         value_T0,
         hoan_tra_uttb_T0_table,
-        phi_ung_tien_table,
-        tien_da_ung_table
+        tien_da_ung_T2,
+        tien_da_ung_T1,
+        tien_da_ung_T0
     ], axis=1)
+    final_table = final_table.dropna(subset=final_table.columns[:13], how='all')
     final_table.fillna(0, inplace=True)
     final_table.insert(0, 'account_code', account['account_code'])
     final_table.insert(1, 'customer_name', account['customer_name'])
+
+    six = final_table['value_T1'] - final_table['fee_T1'] - final_table['tax_of_selling_T1'] - final_table[
+        'tax_of_share_dividend_T1']
+    seven = final_table['value_T0'] - final_table['fee_T0'] - final_table['tax_of_selling_T0'] - final_table[
+        'tax_of_share_dividend_T0']
+    ten = final_table['increase_T1'] + final_table['decrease_T1'] + final_table['increase_T0'] + final_table[
+        'decrease_T0']
+    # Tính cột 'Tổng giá trị tiền bán có thể ứng'
+    final_table['sum_value_selling_co_the_ung'] = six + seven
+    # Tính cột 'Tổng tiền còn có thể ứng'
+    final_table['sum_tien_con_co_the_ung'] = final_table['sum_value_selling_co_the_ung'] - ten
+    # Xử lý cột bất thường
+    d = final_table['value_T2'] - final_table['fee_T2'] - final_table['tax_of_selling_T2'] - final_table[
+        'tax_of_share_dividend_T2']
+    final_table.loc[final_table['hoan_tra_UTTB_T0'] > d, 'bat_thuong'] = 'A'
+    final_table.loc[ten > final_table['sum_value_selling_co_the_ung'], 'bat_thuong'] = 'B'
+    final_table.loc[final_table['sum_tien_con_co_the_ung'] < 0, 'bat_thuong'] = 'C'
+    count_bat_thuong = final_table['bat_thuong'].value_counts()
+    # fillna giá trị của cột bất thường
+    final_table.fillna('', inplace=True)
+    final_table = final_table.sort_values(by=['account_code'])
 
     ###################################################
     ###################################################
@@ -149,13 +215,9 @@ def run(
 
     # --------------------- Viet File Excel ---------------------
     # Write file BÁO CÁO ĐỐI CHIẾU UTTB
-    for date_char in date_character:
-        if date_char in start_date and date_char in end_date:
-            start_date = start_date.replace(date_char, '/')
-            end_date = end_date.replace(date_char, '/')
     footer_date = bdate(end_date, 1).split('-')
-    end_date = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
-    f_name = f'Báo cáo đối chiếu UTTB {end_date}.xlsx'
+    eod_f_name = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m-%Y")
+    f_name = f'Đối chiếu UTTB {eod_f_name}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder, folder_name, period, f_name),
         engine='xlsxwriter',
@@ -230,6 +292,7 @@ def run(
     stt_row_format = workbook.add_format(
         {
             'border': 1,
+            'bold': True,
             'align': 'center',
             'valign': 'vcenter',
             'font_size': 10,
@@ -255,21 +318,32 @@ def run(
             'font_name': 'Times New Roman'
         }
     )
-    text_left_wrap_format = workbook.add_format(
-        {
-            'border': 1,
-            'align': 'left',
-            'text_wrap': True,
-            'valign': 'top',
-            'font_size': 10,
-            'font_name': 'Times New Roman'
-        }
-    )
     money_format = workbook.add_format(
         {
             'border': 1,
             'align': 'right',
             'valign': 'top',
+            'font_size': 10,
+            'font_name': 'Times New Roman',
+            'num_format': '#,##0'
+        }
+    )
+    sum_name_format = workbook.add_format(
+        {
+            'border': 1,
+            'bold': True,
+            'align': 'center',
+            'valign': 'vcenter',
+            'font_size': 12,
+            'font_name': 'Times New Roman',
+        }
+    )
+    sum_money_format = workbook.add_format(
+        {
+            'border': 1,
+            'bold': True,
+            'align': 'right',
+            'valign': 'vcenter',
             'font_size': 10,
             'font_name': 'Times New Roman',
             'num_format': '#,##0'
@@ -306,13 +380,27 @@ def run(
         'Tiền Hoàn trả UTTB T0',
         'Tổng giá trị tiền bán có thể ứng',
         'Tiền đã ứng',
-        'Tiền còn có thể ứng',
+        'Tổng tiền còn có thể ứng',
         'Bất Thường'
     ]
-
+    sub_headers_1 = [
+        'Giá trị tiền bán',
+        'Phí bán',
+        'Thuế bán',
+        'Thuế Cổ Tức'
+    ]
+    sub_headers_2 = [
+        'Số tiền UTTB KH đã nhận ngày T-2',
+        'Phí UTTB ngày T-2',
+        'Số tiền UTTB KH đã nhận ngày T-1',
+        'Phí UTTB ngày T-1',
+        'Số tiền UTTB KH đã nhận ngày T0',
+        'Phí UTTB ngày T0'
+    ]
     companyAddress = 'Tầng 3, CR3-03A, 109 Tôn Dật Tiên, phường Tân Phú, Quận 7, Thành phố Hồ Chí Minh'
     sheet_title_name = 'BÁO CÁO ĐỐI CHIẾU UTTB'
-    sub_title_name = f'Ngày {end_date}'
+    eod_sub = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d/%m/%Y")
+    sub_title_name = f'Ngày {eod_sub}'
 
     # --------- sheet BAO CAO CAN LAM ---------
     sheet_bao_cao_can_lam = workbook.add_worksheet('BAO CAO CAN LAM')
@@ -321,29 +409,47 @@ def run(
     sheet_bao_cao_can_lam.insert_image('A1', './img/phu_hung.png', {'x_scale': 0.65, 'y_scale': 0.71})
 
     # Set Column Width and Row Height
-    sheet_bao_cao_can_lam.set_column('A:A', 6.29)
-    sheet_bao_cao_can_lam.set_column('B:B', 12.14)
-    sheet_bao_cao_can_lam.set_column('C:C', 13)
-    sheet_bao_cao_can_lam.set_column('D:D', 31.43)
-    sheet_bao_cao_can_lam.set_column('E:F', 11.86)
-    sheet_bao_cao_can_lam.set_column('G:G', 14.71)
-    sheet_bao_cao_can_lam.set_column('H:H', 14.29)
-    sheet_bao_cao_can_lam.set_column('I:I', 15.71)
-    sheet_bao_cao_can_lam.set_column('J:J', 11.71)
-    sheet_bao_cao_can_lam.set_column('K:K', 14.86)
-    sheet_bao_cao_can_lam.set_column('L:L', 15.86)
-
+    sheet_bao_cao_can_lam.set_column('A:A', 8.43)
+    sheet_bao_cao_can_lam.set_column('B:B', 10.14)
+    sheet_bao_cao_can_lam.set_column('C:C', 11.14)
+    sheet_bao_cao_can_lam.set_column('D:D', 18.43)
+    sheet_bao_cao_can_lam.set_column('E:E', 24.14)
+    sheet_bao_cao_can_lam.set_column('F:F', 13.71)
+    sheet_bao_cao_can_lam.set_column('G:G', 12.43)
+    sheet_bao_cao_can_lam.set_column('H:H', 12.29)
+    sheet_bao_cao_can_lam.set_column('I:I', 13.14)
+    sheet_bao_cao_can_lam.set_column('J:J', 15.14)
+    sheet_bao_cao_can_lam.set_column('K:K', 11.43)
+    sheet_bao_cao_can_lam.set_column('L:L', 13.14)
+    sheet_bao_cao_can_lam.set_column('M:M', 11.71)
+    sheet_bao_cao_can_lam.set_column('N:Q', 8.43)
+    sheet_bao_cao_can_lam.set_column('R:R', 16.29)
+    sheet_bao_cao_can_lam.set_column('S:X', 8.43)
+    sheet_bao_cao_can_lam.set_column('Y:Y', 16.29)
+    sheet_bao_cao_can_lam.set_column('Z:Z', 8.43)
     # merge row
-    sheet_bao_cao_can_lam.merge_range('C1:L1', CompanyName, company_name_format)
-    sheet_bao_cao_can_lam.merge_range('C2:L2', companyAddress, company_format)
-    sheet_bao_cao_can_lam.merge_range('C3:L3', CompanyPhoneNumber, company_format)
-    sheet_bao_cao_can_lam.merge_range('A7:L7', sheet_title_name, sheet_title_format)
-    sheet_bao_cao_can_lam.merge_range('A8:L8', sub_title_name, from_to_format)
-    sum_start_row = final_table.shape[0] + 13
+    sheet_bao_cao_can_lam.merge_range('D1:M1', CompanyName, company_name_format)
+    sheet_bao_cao_can_lam.merge_range('D2:M2', companyAddress, company_format)
+    sheet_bao_cao_can_lam.merge_range('D3:M3', CompanyPhoneNumber, company_format)
+    sheet_bao_cao_can_lam.merge_range('A7:Z7', sheet_title_name, sheet_title_format)
+    sheet_bao_cao_can_lam.merge_range('A8:Z8', sub_title_name, from_to_format)
+    sheet_bao_cao_can_lam.merge_range('A11:A12', headers[0], headers_format)
+    sheet_bao_cao_can_lam.merge_range('B11:B12', headers[1], headers_format)
+    sheet_bao_cao_can_lam.merge_range('C11:C12', headers[2], headers_format)
+    sheet_bao_cao_can_lam.merge_range('D11:D12', headers[3], headers_format)
+    sheet_bao_cao_can_lam.merge_range('E11:H11', headers[4], headers_format)
+    sheet_bao_cao_can_lam.merge_range('I11:L11', headers[5], headers_format)
+    sheet_bao_cao_can_lam.merge_range('M11:P11', headers[6], headers_format)
+    sheet_bao_cao_can_lam.merge_range('Q11:Q12', headers[7], headers_format)
+    sheet_bao_cao_can_lam.merge_range('R11:R12', headers[8], headers_format)
+    sheet_bao_cao_can_lam.merge_range('S11:X11', headers[9], headers_format)
+    sheet_bao_cao_can_lam.merge_range('Y11:Y12', headers[10], headers_format)
+    sheet_bao_cao_can_lam.merge_range('Z11:Z12', headers[11], headers_format)
+    sum_start_row = final_table.shape[0] + 14
     sheet_bao_cao_can_lam.merge_range(
         f'A{sum_start_row}:D{sum_start_row}',
         'Tổng',
-        headers_format
+        sum_name_format
     )
     footer_start_row = sum_start_row + 2
     sheet_bao_cao_can_lam.merge_range(
@@ -365,14 +471,53 @@ def run(
     # write row, column
     sheet_bao_cao_can_lam.write_row(
         'A4',
-        [''] * len(headers),
+        [''] * (len(headers) + len(sub_headers_1) * 3 + 2),
         empty_row_format
     )
-    sheet_bao_cao_can_lam.write_row('A11', headers, headers_format)
     sheet_bao_cao_can_lam.write_row(
-        'A12',
-        [f'({i})' for i in np.arange(len(headers)) + 1],
-        stt_row_format,
+        'E12',
+        sub_headers_1 * 3,
+        headers_format,
+    )
+    sheet_bao_cao_can_lam.write_row(
+        'S12',
+        sub_headers_2,
+        headers_format,
+    )
+    sheet_bao_cao_can_lam.write_row(
+        'A13',
+        [f'({i})' for i in range(1, 5)],
+        stt_row_format
+    )
+    sheet_bao_cao_can_lam.write_row(
+        'E13',
+        [f'(5{alpha})' for alpha in string.ascii_lowercase[:4]],
+        stt_row_format
+    )
+    sheet_bao_cao_can_lam.write_row(
+        'I13',
+        [f'(6{alpha})' for alpha in string.ascii_lowercase[:4]],
+        stt_row_format
+    )
+    sheet_bao_cao_can_lam.write_row(
+        'M13',
+        [f'(7{alpha})' for alpha in string.ascii_lowercase[:4]],
+        stt_row_format
+    )
+    sheet_bao_cao_can_lam.write_row(
+        'Q13',
+        [f'({i})' for i in range(8, 10)],
+        stt_row_format
+    )
+    sheet_bao_cao_can_lam.write_row(
+        'S13',
+        [f'(10{alpha})' for alpha in string.ascii_lowercase[:6]],
+        stt_row_format
+    )
+    sheet_bao_cao_can_lam.write_row(
+        'Y13',
+        [f'({i})' for i in range(11, 13)],
+        stt_row_format
     )
     sheet_bao_cao_can_lam.write_row(
         f'E{sum_start_row}',
@@ -380,116 +525,244 @@ def run(
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'A13',
-        [int(i) for i in np.arange(final_table.shape[0]) + 1],
+        'A14',
+        [f'{i}' for i in np.arange(final_table.shape[0]) + 1],
         stt_col_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'B13',
+        'B14',
         final_table['account_code'],
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'C13',
+        'C14',
         final_table.index,
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'D13',
+        'D14',
         final_table['customer_name'],
-        text_left_wrap_format
+        text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'E13',
+        'E14',
         final_table['value_T2'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'F13',
+        'F14',
+        final_table['fee_T2'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'G14',
+        final_table['tax_of_selling_T2'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'H14',
+        final_table['tax_of_share_dividend_T2'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'I14',
         final_table['value_T1'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'G13',
+        'J14',
+        final_table['fee_T1'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'K14',
+        final_table['tax_of_selling_T1'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'L14',
+        final_table['tax_of_share_dividend_T1'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'M14',
         final_table['value_T0'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'H13',
+        'N14',
+        final_table['fee_T0'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'O14',
+        final_table['tax_of_selling_T0'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'P14',
+        final_table['tax_of_share_dividend_T0'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'Q14',
         final_table['hoan_tra_UTTB_T0'],
         money_format
     )
-    calc_1 = final_table['value_T1'] + final_table['value_T0']
-    calc_2 = final_table['fee_T0'] + final_table['tax_of_selling_T0'] + final_table['phi_ung_tien']
-    sum_gia_tri_tien_ban = calc_1 - calc_2
-    final_table['tong_gia_tri_tien_ban'] = sum_gia_tri_tien_ban
     sheet_bao_cao_can_lam.write_column(
-        'I13',
-        final_table['tong_gia_tri_tien_ban'],
+        'R14',
+        final_table['sum_value_selling_co_the_ung'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
-        'J13',
-        final_table['tien_da_ung'],
+        'S14',
+        final_table['increase_T2'],
         money_format
     )
-    final_table['tien_con_co_the_ung'] = final_table['tong_gia_tri_tien_ban'] - final_table['tien_da_ung']
     sheet_bao_cao_can_lam.write_column(
-        'K13',
-        final_table['tien_con_co_the_ung'],
+        'T14',
+        final_table['decrease_T2'],
         money_format
     )
-    # Bất thường = True - Bình thường = False
-    final_table['check_bat_thuong'] = None
-    for idx in final_table.index:
-        value_T2 = final_table.loc[idx, 'value_T2']
-        hoan_tra_uttb_T0 = final_table.loc[idx, 'hoan_tra_UTTB_T0']
-        tien_da_ung = final_table.loc[idx, 'tien_da_ung']
-        tong_gia_tri_tien_ban = final_table.loc[idx, 'tong_gia_tri_tien_ban']
-        tien_con_co_the_ung = final_table.loc[idx, 'tien_con_co_the_ung']
-        if (hoan_tra_uttb_T0 != value_T2) or (tien_da_ung > tong_gia_tri_tien_ban) or (tien_con_co_the_ung < 0):
-            final_table.loc[idx, 'check_bat_thuong'] = True
-        else:
-            final_table.loc[idx, 'check_bat_thuong'] = False
     sheet_bao_cao_can_lam.write_column(
-        'L13',
-        final_table['check_bat_thuong'],
-        text_left_wrap_format
+        'U14',
+        final_table['increase_T1'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'V14',
+        final_table['decrease_T1'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'W14',
+        final_table['increase_T0'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'X14',
+        final_table['decrease_T0'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'Y14',
+        final_table['sum_tien_con_co_the_ung'],
+        money_format
+    )
+    sheet_bao_cao_can_lam.write_column(
+        'Z14',
+        final_table['bat_thuong'],
+        money_format
     )
     sheet_bao_cao_can_lam.write(
         f'E{sum_start_row}',
         final_table['value_T2'].sum(),
-        money_format
+        sum_money_format
     )
     sheet_bao_cao_can_lam.write(
         f'F{sum_start_row}',
-        final_table['value_T1'].sum(),
-        money_format
+        final_table['fee_T2'].sum(),
+        sum_money_format
     )
     sheet_bao_cao_can_lam.write(
         f'G{sum_start_row}',
-        final_table['value_T0'].sum(),
-        money_format
+        final_table['tax_of_selling_T2'].sum(),
+        sum_money_format
     )
     sheet_bao_cao_can_lam.write(
         f'H{sum_start_row}',
-        final_table['hoan_tra_UTTB_T0'].sum(),
-        money_format
+        final_table['tax_of_share_dividend_T2'].sum(),
+        sum_money_format
     )
     sheet_bao_cao_can_lam.write(
         f'I{sum_start_row}',
-        final_table['tong_gia_tri_tien_ban'].sum(),
-        money_format
+        final_table['value_T1'].sum(),
+        sum_money_format
     )
     sheet_bao_cao_can_lam.write(
         f'J{sum_start_row}',
-        final_table['tien_da_ung'].sum(),
-        money_format
+        final_table['fee_T1'].sum(),
+        sum_money_format
     )
     sheet_bao_cao_can_lam.write(
         f'K{sum_start_row}',
-        final_table['tien_con_co_the_ung'].sum(),
-        money_format
+        final_table['tax_of_selling_T1'].sum(),
+        sum_money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'L{sum_start_row}',
+        final_table['tax_of_share_dividend_T1'].sum(),
+        sum_money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'M{sum_start_row}',
+        final_table['value_T0'].sum(),
+        sum_money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'N{sum_start_row}',
+        final_table['fee_T0'].sum(),
+        sum_money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'O{sum_start_row}',
+        final_table['tax_of_selling_T0'].sum(),
+        sum_money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'P{sum_start_row}',
+        final_table['tax_of_share_dividend_T0'].sum(),
+        sum_money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'Q{sum_start_row}',
+        final_table['hoan_tra_UTTB_T0'].sum(),
+        sum_money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'R{sum_start_row}',
+        final_table['sum_value_selling_co_the_ung'].sum(),
+        sum_money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'S{sum_start_row}',
+        final_table['increase_T2'].sum(),
+        sum_money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'T{sum_start_row}',
+        final_table['decrease_T2'].sum(),
+        sum_money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'U{sum_start_row}',
+        final_table['increase_T1'].sum(),
+        sum_money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'V{sum_start_row}',
+        final_table['decrease_T1'].sum(),
+        sum_money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'W{sum_start_row}',
+        final_table['increase_T0'].sum(),
+        sum_money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'X{sum_start_row}',
+        final_table['decrease_T0'].sum(),
+        sum_money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'Y{sum_start_row}',
+        final_table['sum_tien_con_co_the_ung'].sum(),
+        sum_money_format
+    )
+    sheet_bao_cao_can_lam.write(
+        f'Z{sum_start_row}',
+        count_bat_thuong.sum(),
+        sum_money_format
     )
 
     ###########################################################################
