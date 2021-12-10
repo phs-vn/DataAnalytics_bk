@@ -37,6 +37,7 @@ import unidecode
 import shutil
 from PIL import Image
 import csv
+import itertools
 
 ###############################################################################
 

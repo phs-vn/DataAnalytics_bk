@@ -8,12 +8,12 @@ from reporting_tool.trading_service.thanhtoanbutru import *
 
 def run(
         periodicity: str,
-        start_date: str,  # 2021-11-23
+        end_date: str,  # 2021-12-06
         run_time=None,
 ):
     start = time.time()
     info = get_info(periodicity, run_time)
-    end_date = bdate(start_date, 2)
+    start_date = bdate(end_date, -2)
     period = info['period']
     folder_name = info['folder_name']
     date_character = ['/', '-', '.']
@@ -39,11 +39,12 @@ def run(
             value,
             fee,
             tax_of_selling,
-            type_of_order,
-            price
+            tax_of_share_dividend,
+            type_of_order
             FROM trading_record
-            WHERE trading_record.date = '{start_date}'
-            order by sub_account ASC
+            WHERE trading_record.date = '{start_date}' 
+            OR trading_record.date = '{end_date}'
+            order by date, sub_account, type_of_order ASC
         """,
         connect_DWH_CoSo
     )
@@ -58,8 +59,8 @@ def run(
             increase, 
             decrease
             FROM cash_balance 
-            WHERE (transaction_id in ('8855', '8865') and date = '{start_date}')
-            OR (transaction_id in ('8856', '8866') and date = '{end_date}')
+            WHERE transaction_id in ('8855', '8865', '8856', '8866', '0066') 
+            AND date = '{end_date}'
             ORDER BY date, sub_account ASC
         """,
         connect_DWH_CoSo
@@ -67,86 +68,72 @@ def run(
     get_info_customer_query = pd.read_sql(
         f"""
             SELECT
+            DISTINCT
             date,
             sub_account, 
             relationship.account_code,
             account.customer_name
             FROM relationship 
             LEFT JOIN account ON relationship.account_code = account.account_code 
-            WHERE date = '{start_date}'
+            WHERE date = '{end_date}'
+            order by date
         """,
         connect_DWH_CoSo,
         index_col='sub_account'
     )
     # Xử lý dataframe
     # Xử lý ROD0040 - ket_qua_khop_lenh_query
-    ket_qua_khop_lenh_groupby = ket_qua_khop_lenh_query.groupby(['sub_account', 'type_of_order']).sum()
-    ket_qua_khop_lenh_groupby = ket_qua_khop_lenh_groupby.reset_index(['type_of_order'])
+    ket_qua_khop_lenh_query['sum_tax'] = ket_qua_khop_lenh_query['tax_of_selling'] + ket_qua_khop_lenh_query[
+        'tax_of_share_dividend']
+    ket_qua_khop_lenh_groupby = ket_qua_khop_lenh_query.groupby(['sub_account', 'type_of_order', 'date']).sum()
+    ket_qua_khop_lenh_groupby = ket_qua_khop_lenh_groupby.reset_index(['date', 'type_of_order'])
     ket_qua_khop_lenh_groupby = ket_qua_khop_lenh_groupby.rename(
-        columns={"value": "value_KQKL", "fee": "fee_KQKL", "tax_of_selling": "tax_of_selling_KQKL"}
+        columns={"value": "value_KQKL", "fee": "fee_KQKL", "sum_tax": "tax_KQKL"}
     )
-
+    ket_qua_khop_lenh_T0 = ket_qua_khop_lenh_groupby.loc[(ket_qua_khop_lenh_groupby['date'] == end_date)
+                                                         & (ket_qua_khop_lenh_groupby['type_of_order'] == 'B')].copy()
+    ket_qua_khop_lenh_T_tru_2 = ket_qua_khop_lenh_groupby.loc[(ket_qua_khop_lenh_groupby['date'] == start_date)
+                                                              & (ket_qua_khop_lenh_groupby[
+                                                                     'type_of_order'] == 'S')].copy()
     # Xử lý RCF1002 - giao_dich_tien_query
-    # data of start day
-    res_rcf_T0 = giao_dich_tien_query.loc[
-        giao_dich_tien_query['date'] == start_date,
-        [
-            'sub_account',
-            'date',
-            'transaction_id',
-            'increase',
-            'decrease'
-        ]
-    ].copy()
-    res_rcf_T0 = res_rcf_T0.groupby(['sub_account', 'transaction_id', 'date'])[['increase', 'decrease']].sum()
-    res_rcf_T0 = res_rcf_T0.reset_index(['transaction_id', 'date'])
-    res_rcf_T0 = res_rcf_T0.add_suffix('_T0')
+    giao_dich_tien_groupby = giao_dich_tien_query.groupby(['sub_account', 'transaction_id', 'date'])[
+        ['increase', 'decrease']].sum()
+    giao_dich_tien_groupby = giao_dich_tien_groupby.reset_index(['transaction_id', 'date'])
 
-    # data of T+2 day
-    res_rcf_T2 = giao_dich_tien_query.loc[
-        giao_dich_tien_query['date'] == end_date,
-        [
-            'sub_account',
-            'date',
-            'transaction_id',
-            'increase',
-            'decrease'
-        ]
-    ].copy()
-    res_rcf_T2 = res_rcf_T2.groupby(['sub_account', 'transaction_id', 'date'])[['increase', 'decrease']].sum()
-    res_rcf_T2 = res_rcf_T2.reset_index(['transaction_id', 'date'])
-    res_rcf_T2 = res_rcf_T2.add_suffix('_T+2')
+    ket_qua_khop_lenh_T_tru_2.loc[
+        ket_qua_khop_lenh_T_tru_2['type_of_order'] == 'S', 'value_GDT'
+    ] = giao_dich_tien_groupby.loc[giao_dich_tien_groupby['transaction_id'] == '8866', 'increase']
+    ket_qua_khop_lenh_T_tru_2.loc[
+        ket_qua_khop_lenh_T_tru_2['type_of_order'] == 'S', 'fee_GDT'
+    ] = giao_dich_tien_groupby.loc[giao_dich_tien_groupby['transaction_id'] == '8856', 'decrease']
+    ket_qua_khop_lenh_T0.loc[
+        ket_qua_khop_lenh_T0['type_of_order'] == 'B', 'value_GDT'
+    ] = giao_dich_tien_groupby.loc[giao_dich_tien_groupby['transaction_id'] == '8865', 'decrease']
+    ket_qua_khop_lenh_T0.loc[
+        ket_qua_khop_lenh_T0['type_of_order'] == 'B', 'fee_GDT'
+    ] = giao_dich_tien_groupby.loc[giao_dich_tien_groupby['transaction_id'] == '8855', 'decrease']
+    ket_qua_khop_lenh_T_tru_2.loc[
+        ket_qua_khop_lenh_T_tru_2['type_of_order'] == 'S', 'date_thanh_toan'
+    ] = giao_dich_tien_groupby.loc[giao_dich_tien_groupby['transaction_id'] == '8856', 'date']
+    ket_qua_khop_lenh_T0.loc[
+        ket_qua_khop_lenh_T0['type_of_order'] == 'B', 'date_thanh_toan'
+    ] = giao_dich_tien_groupby.loc[giao_dich_tien_groupby['transaction_id'] == '8865', 'date']
 
-    ket_qua_khop_lenh_groupby.loc[
-        ket_qua_khop_lenh_groupby['type_of_order'] == 'B', 'value_GDT'
-    ] = res_rcf_T0.loc[res_rcf_T0['transaction_id_T0'] == '8865', 'decrease_T0']
-    ket_qua_khop_lenh_groupby.loc[
-        ket_qua_khop_lenh_groupby['type_of_order'] == 'B', 'fee_GDT'
-    ] = res_rcf_T0.loc[res_rcf_T0['transaction_id_T0'] == '8855', 'decrease_T0']
-    ket_qua_khop_lenh_groupby.loc[
-        ket_qua_khop_lenh_groupby['type_of_order'] == 'S', 'value_GDT'
-    ] = res_rcf_T2.loc[res_rcf_T2['transaction_id_T+2'] == '8866', 'increase_T+2']
-    ket_qua_khop_lenh_groupby.loc[
-        ket_qua_khop_lenh_groupby['type_of_order'] == 'S', 'fee_GDT'
-    ] = res_rcf_T2.loc[res_rcf_T2['transaction_id_T+2'] == '8856', 'decrease_T+2']
-    ket_qua_khop_lenh_groupby.loc[
-        ket_qua_khop_lenh_groupby['type_of_order'] == 'B', 'date_thanh_toan'
-    ] = res_rcf_T0.loc[res_rcf_T0['transaction_id_T0'] == '8865', 'date_T0']
-    ket_qua_khop_lenh_groupby.loc[
-        ket_qua_khop_lenh_groupby['type_of_order'] == 'S', 'date_thanh_toan'
-    ] = res_rcf_T2.loc[res_rcf_T2['transaction_id_T+2'] == '8856', 'date_T+2']
-    ket_qua_khop_lenh_groupby.fillna(0, inplace=True)
     # thêm 3 cột mã tài khoản, tên KH, ngày GD vào df
-    ket_qua_khop_lenh_groupby.insert(0, 'account_code', get_info_customer_query['account_code'])
-    ket_qua_khop_lenh_groupby.insert(1, 'customer_name', get_info_customer_query['customer_name'])
-    ket_qua_khop_lenh_groupby.insert(2, 'date', get_info_customer_query['date'])
+    ket_qua_khop_lenh_T0.insert(0, 'account_code', get_info_customer_query['account_code'])
+    ket_qua_khop_lenh_T0.insert(1, 'customer_name', get_info_customer_query['customer_name'])
+    ket_qua_khop_lenh_T_tru_2.insert(0, 'account_code', get_info_customer_query['account_code'])
+    ket_qua_khop_lenh_T_tru_2.insert(1, 'customer_name', get_info_customer_query['customer_name'])
+
+    final_table = ket_qua_khop_lenh_T0.append(ket_qua_khop_lenh_T_tru_2)
+
     # thêm cột thuế giao dịch tiền vào df
-    tax_GDT_S = ket_qua_khop_lenh_groupby.loc[ket_qua_khop_lenh_groupby['type_of_order'] == 'S', 'tax_of_selling_KQKL']
-    tax_GDT_B = ket_qua_khop_lenh_groupby.loc[ket_qua_khop_lenh_groupby['type_of_order'] == 'B', 'tax_of_selling_KQKL']
-    tax_GDT = pd.DataFrame({'tax_GDT_S': tax_GDT_S, 'tax_GDT_B': tax_GDT_B})
-    tax_GDT.fillna(0, inplace=True)
-    ket_qua_khop_lenh_groupby.loc[ket_qua_khop_lenh_groupby['type_of_order'] == 'B', 'tax_GDT'] = tax_GDT['tax_GDT_B']
-    ket_qua_khop_lenh_groupby.loc[ket_qua_khop_lenh_groupby['type_of_order'] == 'S', 'tax_GDT'] = tax_GDT['tax_GDT_S']
+    tax_GDT = giao_dich_tien_groupby.loc[giao_dich_tien_groupby['transaction_id'] == '0066']
+    final_table.loc[final_table['type_of_order'] == 'S', 'tax_GDT'] = tax_GDT['decrease']
+    final_table.fillna(0, inplace=True)
+    mapper = final_table['type_of_order'].apply(
+        lambda x: 'BÁN' if x == 'S' else 'MUA')
+    final_table['type_of_order'] = mapper
 
     ###################################################
     ###################################################
@@ -158,7 +145,7 @@ def run(
         if date_char in start_date and date_char in end_date:
             start_date = start_date.replace(date_char, '/')
             end_date = end_date.replace(date_char, '/')
-    s_date_file_name = dt.datetime.strptime(start_date, "%Y/%m/%d").strftime("%d-%m")
+    s_date_file_name = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
     f_name = f'Đối chiếu TTBT tiền mua bán chứng khoán {s_date_file_name}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder, folder_name, period, f_name),
@@ -262,6 +249,7 @@ def run(
     )
     sum_money_format = workbook.add_format(
         {
+            'bold': True,
             'border': 1,
             'align': 'right',
             'valign': 'vcenter',
@@ -330,8 +318,8 @@ def run(
 
     companyAddress = 'Tầng 3, CR3-03A, 109 Tôn Dật Tiên, phường Tân Phú, Quận 7, Thành phố Hồ Chí Minh'
     sheet_title_name = 'BÁO CÁO ĐỐI CHIẾU THANH TOÁN BÙ TRỪ TIỀN MUA BÁN CHỨNG KHOÁN'
-    sub_title_start_date = dt.datetime.strptime(start_date, "%Y/%m/%d").strftime("%d/%m/%Y")
-    sub_title_name = f'Từ ngày {sub_title_start_date} đến {sub_title_start_date}'
+    sub_title_end_date = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d/%m/%Y")
+    sub_title_name = f'Từ ngày {sub_title_end_date} đến {sub_title_end_date}'
 
     # --------- sheet BAO CAO CAN LAM ---------
     sheet_bao_cao_can_lam = workbook.add_worksheet('BAO CAO CAN LAM')
@@ -340,17 +328,17 @@ def run(
     sheet_bao_cao_can_lam.insert_image('A1', './img/phu_hung.png', {'x_scale': 0.66, 'y_scale': 0.71})
 
     # Set Column Width and Row Height
-    sheet_bao_cao_can_lam.set_column('A:A', 4.43)
+    sheet_bao_cao_can_lam.set_column('A:A', 4.86)
     sheet_bao_cao_can_lam.set_column('B:C', 14.14)
     sheet_bao_cao_can_lam.set_column('D:E', 12.14)
-    sheet_bao_cao_can_lam.set_column('F:F', 31.5)
+    sheet_bao_cao_can_lam.set_column('F:F', 34.14)
     sheet_bao_cao_can_lam.set_column('G:G', 9.14)
-    sheet_bao_cao_can_lam.set_column('H:H', 13.71)
+    sheet_bao_cao_can_lam.set_column('H:H', 14.71)
     sheet_bao_cao_can_lam.set_column('I:I', 11.57)
-    sheet_bao_cao_can_lam.set_column('J:J', 10.14)
-    sheet_bao_cao_can_lam.set_column('K:K', 13.71)
+    sheet_bao_cao_can_lam.set_column('J:J', 10.57)
+    sheet_bao_cao_can_lam.set_column('K:K', 14.71)
     sheet_bao_cao_can_lam.set_column('L:L', 11.57)
-    sheet_bao_cao_can_lam.set_column('M:M', 10.14)
+    sheet_bao_cao_can_lam.set_column('M:M', 10.57)
     sheet_bao_cao_can_lam.set_column('N:P', 10.5)
 
     # merge row
@@ -369,7 +357,7 @@ def run(
     sheet_bao_cao_can_lam.merge_range('H10:J10', headers[7], headers_format)
     sheet_bao_cao_can_lam.merge_range('K10:M10', headers[8], headers_format)
     sheet_bao_cao_can_lam.merge_range('N10:P10', headers[9], headers_format)
-    sum_start_row = ket_qua_khop_lenh_groupby.shape[0] + 12
+    sum_start_row = final_table.shape[0] + 12
     sheet_bao_cao_can_lam.merge_range(
         f'A{sum_start_row}:G{sum_start_row}',
         'Tổng',
@@ -402,85 +390,85 @@ def run(
     )
     sheet_bao_cao_can_lam.write_column(
         'A12',
-        [int(i) for i in np.arange(ket_qua_khop_lenh_groupby.shape[0]) + 1],
+        [int(i) for i in np.arange(final_table.shape[0]) + 1],
         stt_col_format
     )
     sheet_bao_cao_can_lam.write_column(
         'B12',
-        ket_qua_khop_lenh_groupby['date'],
+        final_table['date'],
         date_format
     )
     sheet_bao_cao_can_lam.write_column(
         'C12',
-        ket_qua_khop_lenh_groupby['date_thanh_toan'],
+        final_table['date_thanh_toan'],
         date_format
     )
     sheet_bao_cao_can_lam.write_column(
         'D12',
-        ket_qua_khop_lenh_groupby['account_code'],
+        final_table['account_code'],
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
         'E12',
-        ket_qua_khop_lenh_groupby.index,
+        final_table.index,
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
         'F12',
-        ket_qua_khop_lenh_groupby['customer_name'].str.upper(),
+        final_table['customer_name'].str.upper(),
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
         'G12',
-        ket_qua_khop_lenh_groupby['type_of_order'],
+        final_table['type_of_order'],
         text_left_format
     )
     sheet_bao_cao_can_lam.write_column(
         'H12',
-        ket_qua_khop_lenh_groupby['value_KQKL'],
+        final_table['value_KQKL'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
         'I12',
-        ket_qua_khop_lenh_groupby['fee_KQKL'],
+        final_table['fee_KQKL'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
         'J12',
-        ket_qua_khop_lenh_groupby['tax_of_selling_KQKL'],
+        final_table['tax_KQKL'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
         'K12',
-        ket_qua_khop_lenh_groupby['value_GDT'],
+        final_table['value_GDT'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
         'L12',
-        ket_qua_khop_lenh_groupby['fee_GDT'],
+        final_table['fee_GDT'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
         'M12',
-        ket_qua_khop_lenh_groupby['tax_GDT'],
+        final_table['tax_GDT'],
         money_format
     )
-    ket_qua_khop_lenh_groupby['value_lech'] = ket_qua_khop_lenh_groupby['value_GDT'] - ket_qua_khop_lenh_groupby['value_KQKL']
-    ket_qua_khop_lenh_groupby['fee_lech'] = ket_qua_khop_lenh_groupby['fee_GDT'] - ket_qua_khop_lenh_groupby['fee_KQKL']
-    ket_qua_khop_lenh_groupby['tax_lech'] = ket_qua_khop_lenh_groupby['tax_GDT'] - ket_qua_khop_lenh_groupby['tax_of_selling_KQKL']
+    final_table['value_lech'] = final_table['value_GDT'] - final_table['value_KQKL']
+    final_table['fee_lech'] = final_table['fee_GDT'] - final_table['fee_KQKL']
+    final_table['tax_lech'] = final_table['tax_GDT'] - final_table['tax_KQKL']
     sheet_bao_cao_can_lam.write_column(
         'N12',
-        ket_qua_khop_lenh_groupby['value_lech'],
+        final_table['value_lech'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
         'O12',
-        ket_qua_khop_lenh_groupby['fee_lech'],
+        final_table['fee_lech'],
         money_format
     )
     sheet_bao_cao_can_lam.write_column(
         'P12',
-        ket_qua_khop_lenh_groupby['tax_lech'],
+        final_table['tax_lech'],
         money_format
     )
     sheet_bao_cao_can_lam.write(
@@ -490,49 +478,70 @@ def run(
     )
     sheet_bao_cao_can_lam.write(
         f'H{sum_start_row}',
-        ket_qua_khop_lenh_groupby['value_KQKL'].sum(),
-        money_format
+        final_table['value_KQKL'].sum(),
+        sum_money_format
     )
     sheet_bao_cao_can_lam.write(
         f'I{sum_start_row}',
-        ket_qua_khop_lenh_groupby['fee_KQKL'].sum(),
-        money_format
+        final_table['fee_KQKL'].sum(),
+        sum_money_format
     )
     sheet_bao_cao_can_lam.write(
         f'J{sum_start_row}',
-        ket_qua_khop_lenh_groupby['tax_of_selling_KQKL'].sum(),
-        money_format
+        final_table['tax_KQKL'].sum(),
+        sum_money_format
     )
     sheet_bao_cao_can_lam.write(
         f'K{sum_start_row}',
-        ket_qua_khop_lenh_groupby['value_GDT'].sum(),
-        money_format
+        final_table['value_GDT'].sum(),
+        sum_money_format
     )
     sheet_bao_cao_can_lam.write(
         f'L{sum_start_row}',
-        ket_qua_khop_lenh_groupby['fee_GDT'].sum(),
-        money_format
+        final_table['fee_GDT'].sum(),
+        sum_money_format
     )
     sheet_bao_cao_can_lam.write(
         f'M{sum_start_row}',
-        ket_qua_khop_lenh_groupby['tax_GDT'].sum(),
-        money_format
+        final_table['tax_GDT'].sum(),
+        sum_money_format
     )
-    sheet_bao_cao_can_lam.write(
-        f'N{sum_start_row}',
-        ket_qua_khop_lenh_groupby['value_lech'].sum(),
-        zero_to_dashes_format
-    )
-    sheet_bao_cao_can_lam.write(
-        f'O{sum_start_row}',
-        ket_qua_khop_lenh_groupby['fee_lech'].sum(),
-        zero_to_dashes_format
-    )
-    sheet_bao_cao_can_lam.write(
-        f'P{sum_start_row}',
-        ket_qua_khop_lenh_groupby['tax_lech'].sum(),
-        zero_to_dashes_format
-    )
+    if final_table['value_lech'].sum() == 0:
+        sheet_bao_cao_can_lam.write(
+            f'N{sum_start_row}',
+            final_table['value_lech'].sum(),
+            zero_to_dashes_format
+        )
+    else:
+        sheet_bao_cao_can_lam.write(
+            f'N{sum_start_row}',
+            final_table['value_lech'].sum(),
+            sum_money_format
+        )
+    if final_table['fee_lech'].sum() == 0:
+        sheet_bao_cao_can_lam.write(
+            f'O{sum_start_row}',
+            final_table['fee_lech'].sum(),
+            zero_to_dashes_format
+        )
+    else:
+        sheet_bao_cao_can_lam.write(
+            f'O{sum_start_row}',
+            final_table['fee_lech'].sum(),
+            sum_money_format
+        )
+    if final_table['tax_lech'].sum() < 0.1:
+        sheet_bao_cao_can_lam.write(
+            f'P{sum_start_row}',
+            0,
+            zero_to_dashes_format
+        )
+    else:
+        sheet_bao_cao_can_lam.write(
+            f'P{sum_start_row}',
+            final_table['tax_lech'].sum(),
+            sum_money_format
+        )
 
     ###########################################################################
     ###########################################################################
