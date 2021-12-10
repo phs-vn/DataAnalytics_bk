@@ -4,7 +4,7 @@
     3. Bỏ phần lấy mail từ SW
     4. Bên SS thường chạy vào T6 hoặc Chủ nhật (Từ khi chi nhánh báo batch cuối ngày tới chủ nhật)
     5. TK bị lệch: 022C040943   PHẠM THỊ HỒNG LIÊN
-        a. Trên flex
+        a. Trên báo cáo mẫu
             022C040943	0101003744	PHẠM THỊ HỒNG LIÊN  MR - KHTN NOR 60% - Margin.PIA 13.5%
             022C040943	0101003743	PHẠM THỊ HỒNG LIÊN	Thường - KHTN - PIA 13.5%
         b. Trên Database SQL
