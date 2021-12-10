@@ -6,6 +6,11 @@
     - DT0132
     - DT0136
 2. daily
+3. Rule
+    - cột giá trị tài sản ròng lấy từ cột 'deposited_asset_value' của rdt0136
+    - 2 cột 'Số tiền tại công ty' và 'Số tiền ký quỹ tại VSD' lấy từ
+    2 cột 'cash_balance_at_phs' và 'cash_balance_at_vsd' của rdt0121
+    - cột nợ chậm trả lấy từ cột 'deferred_payment_amount_closing'
 """
 
 from reporting_tool.trading_service.thanhtoanbutru import *
@@ -39,7 +44,11 @@ def run(
 
     # --------------------- Viết Query ---------------------
     # query
-
+    query_bao_cao_16 = pd.read_sql(
+        f"""
+        """,
+        connect_DWH_PhaiSinh
+    )
 
     ###################################################
     ###################################################
@@ -219,4 +228,58 @@ def run(
     sheet_bao_cao_can_lam.set_column('G:G', 15.29)
     sheet_bao_cao_can_lam.set_column('H:H', 13.57)
     sheet_bao_cao_can_lam.set_column('I:I', 12)
+    sheet_bao_cao_can_lam.set_row(7, 23.25)
+    sheet_bao_cao_can_lam.set_row(11, 51)
 
+    # merge row
+    sheet_bao_cao_can_lam.merge_range('C1:F1', CompanyName, company_name_format)
+    sheet_bao_cao_can_lam.merge_range('C2:F2', companyAddress, company_format)
+    sheet_bao_cao_can_lam.merge_range('C3:F3', CompanyPhoneNumber, company_format)
+    sheet_bao_cao_can_lam.merge_range('A7:I7', sheet_title_name, sheet_title_format)
+    sheet_bao_cao_can_lam.merge_range('A8:I8', sub_title_name, from_to_format)
+    sum_start_row = query_bao_cao_16.shape[0] + 13
+    sheet_bao_cao_can_lam.merge_range(
+        f'A{sum_start_row}:D{sum_start_row}',
+        'Tổng',
+        headers_format
+    )
+    footer_date = bdate(end_date, 1).split('-')
+    footer_start_row = sum_start_row + 2
+    sheet_bao_cao_can_lam.merge_range(
+        f'G{footer_start_row}:I{footer_start_row}',
+        f'Ngày {footer_date[2]} tháng {footer_date[1]} năm {footer_date[0]}',
+        footer_dmy_format
+    )
+    sheet_bao_cao_can_lam.merge_range(
+        f'G{footer_start_row + 1}:I{footer_start_row + 1}',
+        'Người duyệt',
+        footer_text_format
+    )
+    sheet_bao_cao_can_lam.merge_range(
+        f'A{footer_start_row + 1}:D{footer_start_row + 1}',
+        'Người lập',
+        footer_text_format
+    )
+
+    sheet_bao_cao_can_lam.write_row(
+        'A4',
+        [''] * len(headers),
+        empty_row_format
+    )
+    sheet_bao_cao_can_lam.write_row('A11', headers, headers_format)
+    sheet_bao_cao_can_lam.write_column(
+        'A12',
+        [int(i) for i in np.arange(query_bao_cao_16.shape[0]) + 1],
+        stt_col_format
+    )
+
+    ###########################################################################
+    ###########################################################################
+    ###########################################################################
+
+    writer.close()
+    if __name__ == '__main__':
+        print(f"{__file__.split('/')[-1].replace('.py', '')}::: Finished")
+    else:
+        print(f"{__name__.split('.')[-1]} ::: Finished")
+    print(f'Total Run Time ::: {np.round(time.time() - start, 1)}s')
