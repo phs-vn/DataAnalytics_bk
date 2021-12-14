@@ -157,7 +157,7 @@ def run(
         if date_char in start_date and date_char in end_date:
             start_date = start_date.replace(date_char, '/')
             end_date = end_date.replace(date_char, '/')
-    s_date_file_name = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m")
+    s_date_file_name = dt.datetime.strptime(end_date, "%Y/%m/%d").strftime("%d-%m-%Y")
     f_name = f'Đối chiếu TTBT tiền mua bán chứng khoán {s_date_file_name}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder, folder_name, period, f_name),
@@ -277,7 +277,7 @@ def run(
             'valign': 'vbottom',
             'font_size': 11,
             'font_name': 'Times New Roman',
-            'num_format': '0;-0;-;@'
+            'num_format': '(#,##0.0_);_( (#,##0.0);_(* "-"??_);_(@)'
         }
     )
     date_format = workbook.add_format(
