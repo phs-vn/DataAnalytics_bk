@@ -12,7 +12,7 @@ def run(
     folder_name = info['folder_name']
 
     # create folder
-    if not os.path.isdir(join(dept_folder, folder_name)):  # dept_folder from import
+    if not os.path.isdir(join(dept_folder, folder_name)):
         os.mkdir(join(dept_folder, folder_name))
     if not os.path.isdir(join(dept_folder, folder_name, period)):
         os.mkdir((join(dept_folder, folder_name, period)))
@@ -24,7 +24,8 @@ def run(
     # --------------------- Viết Query ---------------------
     so_du_TK_query = pd.read_sql(
         f"""
-
+            select top 10 *
+            from rmr1062
         """,
         connect_DWH_CoSo
     )

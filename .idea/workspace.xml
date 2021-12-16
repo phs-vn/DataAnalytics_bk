@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="Hiep Dang 28/10/2021">
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoQuy/Q3.2021/RMR1062 30-09-2021.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/DuLieuXuLyGuiKiemToan - 11.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/DuLieuXuLyGuiKiemToan - 11.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/TienMuaBanChungKhoan-15-5.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/TienMuaBanChungKhoan-15-5.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/img/phu_hung.png" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/img/phs_logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoQuy/Q3.2021/RMR1062 30-09-2021.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoQuy/Q3.2021/RMR1062 30-09-2021.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/DoiChieuLaiTienGuiPhatSinh-15-2.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/DoiChieuLaiTienGuiPhatSinh-15-2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/ThongBaoSoDuchoKHNN - 6.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/ThongBaoSoDuchoKHNN - 6.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,11 +74,14 @@
       <recent name="C:\Users\hiepdang\PycharmProjects\datadriven-project\reporting_tool\trading_service\data_validation" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.DuLieuXuLyGuiKiemToan - 11">
+  <component name="RunManager" selected="Python.DoiChieuLaiTienGuiPhatSinh-15-2">
     <configuration name="BaoCaoDoiChieuTTBTTienMuaBanChungKhoan" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -94,19 +96,16 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="BaoCaoDoiChieuUTTB-15-4" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="DoiChieuLaiTienGuiPhatSinh-15-2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB-15-4.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/DoiChieuLaiTienGuiPhatSinh-15-2.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -119,6 +118,9 @@
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -154,7 +156,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="TienMuaBanChungKhoan-15-5" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="XacNhanNopRutEIB" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -166,7 +168,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/TienMuaBanChungKhoan-15-5.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/XacNhanNopRutEIB.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -176,19 +178,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.BaoCaoDoiChieuUTTB-15-4" />
-      <item itemvalue="Python.TienMuaBanChungKhoan-15-5" />
       <item itemvalue="Python.MsThuAnh" />
       <item itemvalue="Python.BaoCaoDoiChieuTTBTTienMuaBanChungKhoan" />
       <item itemvalue="Python.DuLieuXuLyGuiKiemToan - 11" />
+      <item itemvalue="Python.XacNhanNopRutEIB" />
+      <item itemvalue="Python.DoiChieuLaiTienGuiPhatSinh-15-2" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.DoiChieuLaiTienGuiPhatSinh-15-2" />
         <item itemvalue="Python.DuLieuXuLyGuiKiemToan - 11" />
+        <item itemvalue="Python.XacNhanNopRutEIB" />
         <item itemvalue="Python.BaoCaoDoiChieuTTBTTienMuaBanChungKhoan" />
         <item itemvalue="Python.MsThuAnh" />
-        <item itemvalue="Python.BaoCaoDoiChieuUTTB-15-4" />
-        <item itemvalue="Python.TienMuaBanChungKhoan-15-5" />
       </list>
     </recent_temporary>
   </component>
