@@ -15,6 +15,9 @@ def run(
     if not os.path.isdir(join(dept_folder, folder_name, period)): # dept_folder from import
         os.mkdir(join(dept_folder, folder_name, period))
 
+    # chờ batch cuối ngày xong
+    # listen_batch_job('end')
+
     # Phi chuyen khoan sang cong ty chung khoan khac xuat theo ngay mac dinh
     transfer_fee_CTCK = pd.read_sql(
         f"""
@@ -28,13 +31,19 @@ def run(
         index_col=['date','account_code'],
     )
     # Phi chuyen khoan thanh toan bu tru xuat theo ngay duoc dieu chinh
-    adj_start_date = bdate(start_date,-1)
-    adj_end_date = bdate(end_date,-2)
+    def adjust_time(x):
+        x_dt = dt.datetime.strptime(x,'%Y/%m/%d')
+        if x_dt.weekday() in holidays.WEEKEND or x_dt in holidays.VN():
+            result = bdate(x,-3)
+        else:
+            result =bdate(x,-2)
+        return result
+    adj_start_date, adj_end_date = adjust_time(start_date), adjust_time(end_date)
     transfer_fee_TTBT = pd.read_sql(
         f"""
         SELECT date, sub_account, ticker, volume
         FROM trading_record
-        WHERE date BETWEEN '{start_date}' AND '{end_date}' 
+        WHERE date BETWEEN '{adj_start_date}' AND '{adj_end_date}' 
         AND type_of_order = 'S' 
         AND depository_place = 'Tai PHS'
         """,
@@ -125,18 +134,20 @@ def run(
     worksheet.hide_gridlines(option=2)
     # set column width
     worksheet.set_column('A:A',8)
-    worksheet.set_column('B:B',27)
+    worksheet.set_column('B:B',20)
     worksheet.set_column('C:C',15)
     worksheet.set_column('D:D',18)
 
     title_format = workbook.add_format(
         {
+            'font_name': 'Times New Roman',
             'bold': True,
             'align': 'center',
         }
     )
     header_format = workbook.add_format(
         {
+            'font_name': 'Times New Roman',
             'bold': True,
             'align': 'center',
             'border': 1,
@@ -144,29 +155,34 @@ def run(
     )
     stt_format = workbook.add_format(
         {
+            'font_name': 'Times New Roman',
             'align': 'center',
             'border': 1,
         }
     )
     tenchinhanh_format = workbook.add_format(
         {
+            'font_name': 'Times New Roman',
             'border': 1
         }
     )
     machinhanh_format = workbook.add_format(
         {
+            'font_name': 'Times New Roman',
             'align': 'center',
             'border': 1
         }
     )
     philuuky_format = workbook.add_format(
         {
+            'font_name': 'Times New Roman',
             'num_format': '_(* #,##0_);_(* (#,##0);_(* "-"??_);_(@_)',
             'border': 1
         }
     )
     tong_format = workbook.add_format(
         {
+            'font_name': 'Times New Roman',
             'bold': True,
             'align': 'center',
             'border': 1,
@@ -174,6 +190,7 @@ def run(
     )
     tongphiluuky_format = workbook.add_format(
         {
+            'font_name': 'Times New Roman',
             'bold': True,
             'num_format': '_(* #,##0_);_(* (#,##0);_(* "-"??_);_(@_)',
             'border': 1,
@@ -218,12 +235,13 @@ def run(
     worksheet.hide_gridlines(option=2)
     # set column width
     worksheet.set_column('A:A',8)
-    worksheet.set_column('B:B',27)
+    worksheet.set_column('B:B',20)
     worksheet.set_column('C:J',15)
 
     header_format = workbook.add_format(
         {
             'bold': True,
+            'font_name': 'Times New Roman',
             'align': 'center',
             'valign': 'vcenter',
             'text_wrap': True,
@@ -233,6 +251,7 @@ def run(
     tongcong_format = workbook.add_format(
         {
             'bold': True,
+            'font_name': 'Times New Roman',
             'align': 'center',
             'border': 1,
         }
@@ -240,6 +259,7 @@ def run(
     column_sum_format = workbook.add_format(
         {
             'bold': True,
+            'font_name': 'Times New Roman',
             'num_format': '_(* #,##0_);_(* (#,##0);_(* "-"??_);_(@_)',
             'align': 'center',
             'border': 1,
@@ -248,18 +268,21 @@ def run(
     branch_id_format = workbook.add_format(
         {
             'num_format': '@',
+            'font_name': 'Times New Roman',
             'align': 'center',
             'border': 1,
         }
     )
     branch_name_format = workbook.add_format(
         {
+            'font_name': 'Times New Roman',
             'valign': 'vcenter',
             'border': 1,
         }
     )
     number_format = workbook.add_format(
         {
+            'font_name': 'Times New Roman',
             'num_format': '_(* #,##0_);_(* (#,##0);_(* "-"??_);_(@_)',
             'border': 1
         }
@@ -267,6 +290,7 @@ def run(
     last_col_format = workbook.add_format(
         {
             'bg_color': 'FFF300',
+            'font_name': 'Times New Roman',
             'num_format': '_(* #,##0_);_(* (#,##0);_(* "-"??_);_(@_)',
             'border': 1
         }

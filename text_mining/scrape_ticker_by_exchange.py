@@ -11,7 +11,7 @@ ignored_exceptions = (
 )
 
 def run(
-        hide_window=True
+        hide_window=True # rất dễ lỗi khi hide_window = True
 ) \
     -> pd.DataFrame:
 
@@ -22,7 +22,7 @@ def run(
     # HOSE
     url_hose = 'https://iboard.ssi.com.vn/bang-gia/hose'
     driver = webdriver.Chrome(executable_path=PATH,options=options)
-    wait = WebDriverWait(driver,10,ignored_exceptions=ignored_exceptions)
+    wait = WebDriverWait(driver,60,ignored_exceptions=ignored_exceptions)
     driver.get(url_hose)
     print('Getting tickers in HOSE')
     ticker_elems_hose = wait.until(
@@ -36,7 +36,7 @@ def run(
     # HNX
     url_hnx = 'https://iboard.ssi.com.vn/bang-gia/hnx'
     driver = webdriver.Chrome(executable_path=PATH,options=options)
-    wait = WebDriverWait(driver,10,ignored_exceptions=ignored_exceptions)
+    wait = WebDriverWait(driver,60,ignored_exceptions=ignored_exceptions)
     driver.get(url_hnx)
     print('Getting tickers in HNX')
     ticker_elems_hnx = wait.until(
@@ -50,7 +50,7 @@ def run(
     # UPCOM
     url_upcom = 'https://iboard.ssi.com.vn/bang-gia/upcom'
     driver = webdriver.Chrome(executable_path=PATH,options=options)
-    wait = WebDriverWait(driver,10,ignored_exceptions=ignored_exceptions)
+    wait = WebDriverWait(driver,60,ignored_exceptions=ignored_exceptions)
     driver.get(url_upcom)
     print('Getting tickers in UPCOM')
     ticker_elems_upcom = wait.until(

@@ -16,6 +16,9 @@ def run(
     if not os.path.isdir(join(dept_folder, folder_name, period)):  # dept_folder from import
         os.mkdir(join(dept_folder, folder_name, period))
 
+    # chờ batch cuối ngày xong
+    listen_batch_job('end')
+
     ytd_trading_record = pd.read_sql(
         f"""
         SELECT 
@@ -136,7 +139,7 @@ def run(
     # set column width
     worksheet.set_column('A:A',8)
     worksheet.set_column('B:B',16)
-    worksheet.set_column('C:N',11.5)
+    worksheet.set_column('C:N',12)
     worksheet.set_row(7,47)
     worksheet.set_row(8,47)
     worksheet.set_row(9,47)
@@ -144,13 +147,15 @@ def run(
     title_format = workbook.add_format(
         {
             'bold': True,
-            'font_name': 'Arial',
+            'font_name': 'Times New Roman',
+            'font_size': 13,
             'align': 'center',
         }
     )
     dvt_format = workbook.add_format(
         {
             'font_name': 'Times New Roman',
+            'font_size': 12,
             'italic': True,
             'align': 'right',
         }
@@ -158,6 +163,7 @@ def run(
     supheader_format = workbook.add_format(
         {
             'font_name': 'Times New Roman',
+            'font_size': 12,
             'bold': True,
             'align': 'center',
             'valign': 'vcenter',
@@ -167,6 +173,7 @@ def run(
     header_format = workbook.add_format(
         {
             'font_name': 'Times New Roman',
+            'font_size': 12,
             'align': 'center',
             'valign': 'vcenter',
             'border': 1,
@@ -175,14 +182,16 @@ def run(
     stt_format = workbook.add_format(
         {
             'font_name': 'Times New Roman',
+            'font_size': 12,
             'align': 'center',
-            'valign': 'top',
+            'valign': 'vcenter',
             'border': 1,
         }
     )
     index_format = workbook.add_format(
         {
             'font_name': 'Times New Roman',
+            'font_size': 12,
             'text_wrap': True,
             'valign': 'top',
             'border': 1
@@ -191,6 +200,7 @@ def run(
     supindex_format = workbook.add_format(
         {
             'font_name': 'Times New Roman',
+            'font_size': 12,
             'bold': True,
             'text_wrap': True,
             'valign': 'top',
@@ -200,11 +210,13 @@ def run(
     value_format = workbook.add_format(
         {
             'font_name': 'Times New Roman',
+            'font_size': 12,
             'num_format': '_(* #,##0_);_(* (#,##0);_(* "-"??_);_(@_)',
+            'valign': 'vcenter',
             'border': 1
         }
     )
-    worksheet.merge_range('A1:N1',f'Báo cáo tình hình HĐKD - Biểu II.6 - {period}',title_format)
+    worksheet.merge_range('A1:N1',f'Báo Cáo Tình Hình HĐKD - Biểu II.6 - {period}',title_format)
     worksheet.merge_range('A3:A5','STT',header_format)
     worksheet.merge_range('B3:B5','Loại chứng khoán',header_format)
     worksheet.merge_range('C3:F3','Tổng mua',supheader_format)

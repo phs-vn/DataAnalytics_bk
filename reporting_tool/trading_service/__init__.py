@@ -6,8 +6,8 @@ def get_info(
 ):
     if run_time == 'now' or run_time is None:
         run_time = dt.datetime.now()
-    if run_time.hour > 19:  # SUA LAI THANH SAU BATCH CUOI NGAY
-        run_time += dt.timedelta(days=1)
+    # if run_time.hour > 19:  # SUA LAI THANH SAU BATCH CUOI NGAY
+    #     run_time += dt.timedelta(days=1)
 
     run_year = run_time.year
     run_month = run_time.month

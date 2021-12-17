@@ -1,3 +1,5 @@
+import pandas as pd
+
 from request_phs.stock import *
 from request_phs import *
 import scrape_cw_stock
@@ -54,8 +56,8 @@ class issuance:
         price = price.astype(np.int64)
         price.sort_index(inplace=True)
         price['return'] = np.log(price['close'] / price['close'].shift(1))
-        price = price.loc[price.index <= t]
-        price = price.tail(30)
+        price = price.loc[:t]
+        price = price.tail(90)
 
         self.sigma = price['return'].std()
 
@@ -64,24 +66,24 @@ class issuance:
         end = f'{t[:4]}-12-31'
         while dt.datetime.strptime(start,'%Y-%m-%d') < dt.datetime.strptime(end,'%Y-%m-%d'):
             year_days += 1
-            start = bdate(start, 1)
+            start = bdate(start,1)
 
         # Compute daily risk-free rate
         self.r = np.log(1+r)/year_days
 
         remaining_days = 0
         start = t
-        while dt.datetime.strptime(start, '%Y-%m-%d') < dt.datetime.strptime(T,'%Y-%m-%d'):
+        while dt.datetime.strptime(start,'%Y-%m-%d') < dt.datetime.strptime(T,'%Y-%m-%d'):
             remaining_days += 1
-            start = bdate(start, 1)
+            start = bdate(start,1)
 
         self.delta_t = remaining_days
-        self.S = price.iloc[-1, price.columns.get_loc('close')]
+        self.S = price.iloc[-1,price.columns.get_loc('close')]
 
         self.d1 = (np.log(self.S/self.K)+(self.r+0.5*self.sigma**2)*self.delta_t)/(self.sigma*np.sqrt(self.delta_t))
         self.d2 = self.d1 - self.sigma*np.sqrt(self.delta_t)
         self.delta = stats.norm.cdf(self.d1)
-
+        print(t,'ticker',ticker,'S',self.S,'K',self.K,'r',self.r,'sigma',self.sigma,'delta_t',self.delta_t,'d1',self.d1)
 
     def valuation(
             self,
@@ -105,9 +107,13 @@ class issuance:
         market_delta = issuance(self.ticker,K_,T_,self.t,k_,self.n,self.r,self.isbacktest).delta
 
         # Create result table
-        self.hedge_table = pd.DataFrame(columns=['n_stock',
-                                                 'n_hedging_cw',
-                                                 'pct_hedged_by_stock'])
+        self.hedge_table = pd.DataFrame(
+            columns=[
+                'n_stock',
+                'n_hedging_cw',
+                'pct_hedged_by_stock'
+            ]
+        )
 
         if risk_by_underlying != 'all':
             self.hedge_table['pct_hedged_by_stock'] = [risk_by_underlying]
@@ -224,7 +230,7 @@ class backtest(preprocessing):
 
     def run(
             self,
-    ) -> int:
+    ) -> pd.DataFrame:
 
         case_price = self.price_table[self.case].dropna()
 
@@ -259,14 +265,14 @@ class backtest(preprocessing):
         rows = self.backtest_table['date'].index
         for row in range(0,len(rows)):
             t = self.backtest_table.loc[row,'date'].strftime('%Y-%m-%d')
-            object1 = issuance(self.ticker, self.K, self.T, t, self.k, self.n, self.r, True)
+            object1 = issuance(self.ticker,self.K,self.T,t,self.k,self.n,self.r,True)
             self.backtest_table.iloc[row,self.backtest_table.columns.get_loc('issued_cw_delta')] = object1.delta
             if self.backtest_table.loc[row,'selected_cw'] != 'No CW Available':
                 K_ = find_K_(self.backtest_table.loc[row,'selected_cw'])
                 T_ = find_T_(self.backtest_table.loc[row,'selected_cw'])
                 k_ = find_k_(self.backtest_table.loc[row,'selected_cw'])
                 result_set = object1.hedge(K_,T_,k_,self.risk_by_underlying).squeeze(axis=0)
-                object2 = issuance(self.ticker, K_, T_, t, k_, self.n, self.r, True)
+                object2 = issuance(self.ticker,K_,T_,t,k_,self.n,self.r,True)
                 self.backtest_table.iloc[row,self.backtest_table.columns.get_loc('market_cw_delta')] = object2.delta
             else:
                 # select any K,T,k -> arbitrarily select self.K,self.T,self.k
@@ -286,7 +292,7 @@ class backtest(preprocessing):
             self.backtest_table.loc[row,'pct_position'] = actual_position / theoritical_position
 
         self.backtest_table['pct_position'] = self.backtest_table['pct_position'].astype(np.float64)
-        self.backtest_table.dropna(subset=['pct_position'], inplace=True)
+        self.backtest_table.dropna(subset=['pct_position'],inplace=True)
         self.backtest_table.reset_index(drop=True,inplace=True)
         columns = self.backtest_table.columns
 
@@ -552,16 +558,20 @@ class forwardtest:
         filter_date = dt.datetime.now().strftime('%Y-%m-%d')
         last_working_date = bdate(filter_date,-1)
         stock_data = pd.read_sql(
-            f"EXEC [dbo].[spStockIntraday] " \
-            f"@FROM_DATE = N'{last_working_date}', " \
-            f"@TO_DATE = N'{last_working_date}'",
+            f"""
+            EXEC [dbo].[spStockIntraday] 
+            @FROM_DATE = N'{last_working_date}'
+            @TO_DATE = N'{last_working_date}',
+            """,
             connect_RMD,
             index_col='SYMBOL',
         )
         cw_data_hose = pd.read_sql(
-            f"EXEC [dbo].[spCoveredWarrantIntraday] " \
-            f"@FROM_DATE = N'{last_working_date}', " \
-            f"@TO_DATE = N'{last_working_date}'",
+            f"""
+            EXEC [dbo].[spCoveredWarrantIntraday]
+            @FROM_DATE = N'{last_working_date}',
+            @TO_DATE = N'{last_working_date}'
+            """,
             connect_RMD,
             index_col='SYMBOL',
         )
@@ -636,6 +646,84 @@ class forwardtest:
         result.to_excel(f'stock_cw_ranking_{np.round(c/1e9,2)}B_{now.year}{now.month}{now.day}.xlsx')
 
         return result
+
+
+    def run(self):
+
+        ranking = pd.read_excel(
+            r"C:\Users\hiepdang\PycharmProjects\DataAnalytics\covered_warrant\stock_cw_ranking_1.0B_20211011.xlsx",
+            index_col=0
+        )
+        exercise_price_table = pd.DataFrame(index=ranking.index,columns=np.round(np.arange(0,0.21,0.05),2))
+        exercise_price_table[0] = exercise_price_table.index.map(lambda x: ta.hist(x,'2021-10-11','2021-10-11')['close'].squeeze()*1000)
+        for p_level in exercise_price_table.columns[1:]:
+            exercise_price_table[p_level] = exercise_price_table[0]*(1+p_level)
+        mirr_table = pd.DataFrame(index=exercise_price_table.index,columns=exercise_price_table.columns)
+
+        def f(ticker,K):
+            price = ta.hist(ticker)[['trading_date','close']].set_index('trading_date') * 1000
+            test_table = pd.DataFrame(
+                index=price.loc['2021-10-11':'2021-11-30'].index,
+                columns=[
+                    'n_issued_cw',
+                    'n_stock',
+                    'delta_n_stock',
+                    'p_issued_cw',
+                    'p_stock',
+                    'issued_cw_delta',
+                    'pct_position',
+                    'cash_flow',
+                ]
+            )
+            n = 1000000
+            k = 2 # k = 2
+            test_table['n_issued_cw'] = n
+            for t in test_table.index:
+                issuance_obj = issuance(ticker,K,'2021-11-30',t,k,n,rf,False)
+                # Column: n_stock
+                n_stock = issuance_obj.hedge(1000000,'2021-11-30',1,1)['n_stock'].squeeze() # first 3 arguments are dummy when risk_by_underlying = 1
+                n_stock = np.round(n_stock,-2)
+                test_table.loc[t,'n_stock'] = n_stock
+                # Column: p_issued_cw
+                val = issuance_obj.valuation()
+                test_table.loc[t,'p_issued_cw'] = val
+                # Column: issued_cw_delta
+                delta = issuance_obj.delta
+                test_table.loc[t,'issued_cw_delta'] = delta
+
+            # Column: delta_n_stock
+            test_table['delta_n_stock'] = test_table['n_stock'].diff(1)
+            test_table.iloc[0,test_table.columns.get_loc('delta_n_stock')] = test_table.iloc[0,test_table.columns.get_loc('n_stock')]
+            # Column: p_stock
+            test_table['p_stock'] = price['close']
+            # Column: pct_position
+            theoritical_position = n * test_table['issued_cw_delta']
+            actual_position = k * test_table['n_stock']
+            test_table['pct_position'] = actual_position / theoritical_position
+            # Column: cash_flow
+            test_table['cash_flow'] = - test_table['delta_n_stock'] * test_table['p_stock']
+            ## at t = 0:
+            issuance_amount = n * test_table.iloc[0,test_table.columns.get_loc('p_issued_cw')]
+            test_table.iloc[0,test_table.columns.get_loc('cash_flow')] = issuance_amount + test_table.iloc[0,test_table.columns.get_loc('cash_flow')]
+            ## at t = T
+            cashout_amount = test_table.iloc[-1,test_table.columns.get_loc('n_stock')] * test_table.iloc[-1,test_table.columns.get_loc('p_stock')]
+            payment_amount = - n * test_table.iloc[-1,test_table.columns.get_loc('p_issued_cw')]
+            test_table.iloc[-1,test_table.columns.get_loc('cash_flow')] = payment_amount + cashout_amount + test_table.iloc[-1,test_table.columns.get_loc('cash_flow')]
+
+            cf = test_table['cash_flow']
+            MIRR = computeMIRR(cf)
+
+            test_table.to_excel(join(dirname(realpath(__file__)),'forwardtest_result',f'{ticker}_{np.round(K,0)}.xlsx'))
+
+            return MIRR
+
+        for ticker in mirr_table.index[17:]:
+            for p_level in mirr_table.columns:
+                exercise_price = exercise_price_table.loc[ticker, p_level]
+                try:
+                    mirr_table.loc[ticker,p_level] = f(ticker,exercise_price)
+                except (Exception,):
+                    continue
 
 
 def computeMIRR(CF_Series):

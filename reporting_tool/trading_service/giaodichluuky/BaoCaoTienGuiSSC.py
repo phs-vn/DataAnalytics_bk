@@ -1,6 +1,7 @@
+import time
+
 from reporting_tool.trading_service.giaodichluuky import *
 
-# khong the chay backtest
 def run(
         periodicity:str,
         run_time=None,
@@ -13,8 +14,18 @@ def run(
     folder_name = info['folder_name']
 
     # create folder
-    if not os.path.isdir(join(dept_folder, folder_name, period)):  # dept_folder from import
-        os.mkdir(join(dept_folder, folder_name, period))
+    if not os.path.isdir(join(dept_folder,folder_name,period)):  # dept_folder from import
+        os.mkdir(join(dept_folder,folder_name,period))
+
+    # chờ file tài chính
+    day = period.split('.')[0][-2:]
+    month = period.split('.')[1]
+    year = period.split('.')[2]
+    fin_dept_folder = f'THANG {month}'
+    fin_dept_file = f'Daily Bank Report {day} {month} {year}.xls'
+    fin_dept_path = r"\\192.168.10.120\Data Warehouse\Datawarehouse\Datawarehouse\Bank Report"
+    while not isfile(join(fin_dept_path,fin_dept_folder,fin_dept_file)):
+        time.sleep(30)
 
     # get data
     machitieu = pd.read_excel(
@@ -45,8 +56,9 @@ def run(
         """,
         connect_DWH_CoSo,
     )
-    all_account = all_account.append({'account_type':'Tổng','count':all_account['count'].sum()},ignore_index=True)
     all_account['machitieu'] = all_account['account_type'].map(machitieu)
+    all_account.sort_values('machitieu',inplace=True)
+    all_account = all_account.append({'account_type':'Tổng','count':all_account['count'].sum()},ignore_index=True)
     all_account.fillna('',inplace=True)
     all_account.index = pd.RangeIndex(start=1,stop=6,name='STT')
 
@@ -208,7 +220,7 @@ def run(
     bia_sheet.merge_range('A23:B23','Người lập biểu',bold_fmt)
     bia_sheet.merge_range('A24:B24','(Ký, họ tên)',italic_small_fmt)
     bia_sheet.merge_range('A29:B29','Điền tên người lập',bold_fmt)
-    bia_sheet.write('D22','Lập, ngày 22 tháng 10 năm 2021',italic_large_fmt)
+    bia_sheet.write('D22',f'Lập, ngày {end_date[-2:]} tháng {end_date[5:7]} năm {end_date[:4]}',italic_large_fmt)
     bia_sheet.write('D23','Tổng Giám đốc',bold_fmt)
     bia_sheet.write('D24','(Ký, họ tên, đóng dấu)',italic_small_fmt)
     bia_sheet.write('D29','Chen Chia Ken',bold_fmt)
@@ -312,15 +324,8 @@ def run(
     # =========================================================================
     # Write to sheet II_06212
 
-    month = period.split('.')[1]
-    folder = f'THANG {month}'
-    path = r'\\192.168.10.120\\Data Warehouse\\Datawarehouse\\Datawarehouse\\Bank Report'
-    day = period.split('.')[0][-2:]
-    month = period.split('.')[1]
-    year = period.split('.')[2]
-    file = f'Daily Bank Report {day} {month} {year}.xls'
     table = pd.read_excel(
-        join(path,folder,file),
+        join(fin_dept_path,fin_dept_folder,fin_dept_file),
         skiprows=7,
         usecols=[2,3,5],
         names=['bank_name','account_no','balance']

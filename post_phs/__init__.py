@@ -1,8 +1,18 @@
 from request_phs.stock import *
-from breakeven_price import monte_carlo
+from breakeven_price import monte_carlo_test
 from text_mining import newsts
 from text_mining import newsrmd
 import reporting_tool.trading_service.giaodichluuky.BaoCaoCheckGia
+import reporting_tool.trading_service.giaodichluuky.BaoCaoDanhSachChungKhoanTheoSanGiaoDich
+import reporting_tool.trading_service.giaodichluuky.BaoCaoDongMoUyQuyenTK_HNX
+import reporting_tool.trading_service.giaodichluuky.BaoCaoDongMoUyQuyenTK_HOSEnew
+import reporting_tool.trading_service.giaodichluuky.BaoCaoDongMoUyQuyenTK_HOSEold
+import reporting_tool.trading_service.giaodichluuky.BaoCaoHoatDongLuuKyNDTNN
+import reporting_tool.trading_service.giaodichluuky.BaoCaoPhiChuyenKhoan
+import reporting_tool.trading_service.giaodichluuky.BaoCaoTamTinhPhiGiaoDich
+import reporting_tool.trading_service.giaodichluuky.BaoCaoTamTinhPhiLuuKy
+import reporting_tool.trading_service.giaodichluuky.BaoCaoTinhHinhHDKD
+
 
 class post:
 
@@ -13,19 +23,8 @@ class post:
     def breakeven(
             tickers:list=None,
             exchanges:list=None,
-            alpha:float=0.05
     ) \
             -> pd.DataFrame:
-
-        """
-        This method post Monte Carlo model's results in breakeven_price
-        sub-project to shared API and return the output table
-
-        :param tickers: list of tickers, if 'all': run all tickers
-        :param exchanges: list of exchanges, if 'all': run all tickers
-        :param alpha: significant level of statistical tests
-        :return: pandas.DataFrame
-        """
 
         start_time = time.time()
 
@@ -66,29 +65,22 @@ class post:
         table.to_csv(rmd_table_path)
 
         for ticker in tickers:
-            full_range = np.arange(start=0,stop=1.01,step=0.1)
-            alpha_range = full_range[full_range>alpha]
-            alpha_range = np.insert(alpha_range,0,alpha)
-            for chosen_alpha in alpha_range:
-                try:
-                    lv0_price,lv1_price,lv2_price,lv3_price,breakeven_price,group = monte_carlo.run(ticker=ticker,alpha=chosen_alpha)
-                    with open(github_table_path,mode='a',newline='') as github_file:
-                        github_writer = csv.writer(github_file,delimiter=',')
-                        github_writer.writerow(
-                            [ticker,lv0_price,lv1_price,lv2_price,lv3_price,group,breakeven_price]
-                        )
-                    with open(network_table_path,mode='a',newline='') as network_file:
-                        network_writer = csv.writer(network_file,delimiter=',')
-                        network_writer.writerow([ticker,breakeven_price])
-                    with open(rmd_table_path,mode='a',newline='') as rmd_file:
-                        rmd_writer = csv.writer(rmd_file,delimiter=',')
-                        rmd_writer.writerow([ticker,group,breakeven_price,lv0_price])
-                    break
-                except (ValueError, KeyError, IndexError):
-                    print(f'{ticker} cannot be simulated with given significance level, running with higher alpha instead')
-                    print('-------')
             try:
-                shutil.copy(join(chart_foler, f'{ticker}.png'),join(realpath(destination_dir_network), 'charts'))
+                lv0_price,lv1_price,lv2_price,lv3_price,breakeven_price,group = monte_carlo_test.run(ticker=ticker)
+                with open(github_table_path,mode='a',newline='') as github_file:
+                    github_writer = csv.writer(github_file,delimiter=',')
+                    github_writer.writerow([ticker,lv0_price,lv1_price,lv2_price,lv3_price,group,breakeven_price])
+                with open(network_table_path,mode='a',newline='') as network_file:
+                    network_writer = csv.writer(network_file,delimiter=',')
+                    network_writer.writerow([ticker,breakeven_price])
+                with open(rmd_table_path,mode='a',newline='') as rmd_file:
+                    rmd_writer = csv.writer(rmd_file,delimiter=',')
+                    rmd_writer.writerow([ticker,group,breakeven_price,lv0_price])
+            except (ValueError, KeyError, IndexError):
+                print(f'{ticker} cannot be simulated')
+                print('-------')
+            try:
+                shutil.copy(join(chart_foler, f'{ticker}.png'),join(realpath(destination_dir_network),'charts'))
             except FileNotFoundError:
                 print(f'{ticker} cannot be graphed')
 
@@ -652,3 +644,31 @@ class report:
 
     def BaoCaoCheckGia(self):
         reporting_tool.trading_service.giaodichluuky.BaoCaoCheckGia.run(self.periodicity,self.run_time)
+
+    @staticmethod
+    def BaoCaoDanhSachChungKhoanTheoSanGiaoDich():
+        reporting_tool.trading_service.giaodichluuky.BaoCaoDanhSachChungKhoanTheoSanGiaoDich.run()
+
+    def BaoCaoDongMoUyQuyenTK_HNX(self):
+        reporting_tool.trading_service.giaodichluuky.BaoCaoDongMoUyQuyenTK_HNX.run(self.periodicity,self.run_time)
+
+    def BaoCaoDongMoUyQuyenTK_HOSEnew(self):
+        reporting_tool.trading_service.giaodichluuky.BaoCaoDongMoUyQuyenTK_HOSEnew.run(self.periodicity,self.run_time)
+
+    def BaoCaoDongMoUyQuyenTK_HOSEold(self):
+        reporting_tool.trading_service.giaodichluuky.BaoCaoDongMoUyQuyenTK_HOSEold.run(self.periodicity,self.run_time)
+
+    def BaoCaoHoatDongLuuKyNDTNN(self):
+        reporting_tool.trading_service.giaodichluuky.BaoCaoHoatDongLuuKyNDTNN.run(self.periodicity,self.run_time)
+
+    def BaoCaoPhiChuyenKhoan(self):
+        reporting_tool.trading_service.giaodichluuky.BaoCaoPhiChuyenKhoan.run(self.periodicity,self.run_time)
+
+    def BaoCaoTamTinhPhiGiaoDich(self):
+        reporting_tool.trading_service.giaodichluuky.BaoCaoTamTinhPhiGiaoDich.run(self.periodicity,self.run_time)
+
+    def BaoCaoTamTinhPhiLuuKy(self):
+        reporting_tool.trading_service.giaodichluuky.BaoCaoTamTinhPhiLuuKy.run(self.periodicity,self.run_time)
+
+    def BaoCaoTinhHinhHDKH(self):
+        reporting_tool.trading_service.giaodichluuky.BaoCaoTinhHinhHDKD.run(self.periodicity,self.run_time)

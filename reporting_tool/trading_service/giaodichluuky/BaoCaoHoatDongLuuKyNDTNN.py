@@ -14,12 +14,15 @@ def run(
     folder_name = info['folder_name']
     now = dt.datetime.now()
 
-    start_date = bdate(start_date,-1)
-    end_date = bdate(bdate(end_date,-1),1)
+    start_date = bdate(start_date,-1).replace('/','-')
+    end_date = end_date.replace('/','-')
 
     # create folder
-    if not os.path.isdir(join(dept_folder, folder_name, period)):  # dept_folder from import
-        os.mkdir(join(dept_folder, folder_name, period))
+    if not os.path.isdir(join(dept_folder,folder_name,period)):  # dept_folder from import
+        os.mkdir(join(dept_folder,folder_name,period))
+
+    # # chờ batch cuối ngày xong
+    # listen_batch_job('end')
 
     account_type = pd.read_sql(
         """SELECT account_code, account_type FROM account""",
@@ -39,7 +42,7 @@ def run(
         holding.asset_type,
         holding.volume
         FROM holding
-        JOIN account ON holding.account_code = account.account_code
+        LEFT JOIN account ON holding.account_code = account.account_code
         WHERE (account.account_type LIKE N'%ngoài') 
         AND holding.date IN ('{start_date}','{end_date}')
         """,
@@ -74,7 +77,7 @@ def run(
     ).squeeze()
     cash_balance = cash_balance.loc[cash_balance['account_code'].isin(foreign_account)]
     # lay san giao dich, xep loai lai co phieu
-    exchange = scrape_ticker_by_exchange.run(True)
+    exchange = scrape_ticker_by_exchange.run(False)
     foreign_investor_holding['exchange'] = foreign_investor_holding['ticker'].map(exchange.squeeze())
     foreign_investor_holding.fillna('OTC',inplace=True)
     cophieuupcom_mask = (foreign_investor_holding['exchange']=='UPCOM')&(foreign_investor_holding['asset_type']=='Co phieu niem yet')
@@ -229,7 +232,7 @@ def run(
 
     tochuc_sheetII = foreign_investor_holding.loc[
         (foreign_investor_holding['account_type'].str.endswith('nước ngoài'))&(foreign_investor_holding['period']=='closing')
-    ].copy()
+        ].copy()
     tochuc_sheetII.insert(6,'value',tochuc_sheetII['ticker'].map(price.squeeze())*tochuc_sheetII['volume'])
     tochuc_sheetII = tochuc_sheetII.groupby(
         ['account_type','account_code','nationality','foreign_trading_code','asset_type']
@@ -377,8 +380,7 @@ def run(
     gioithieu_sheet = workbook.add_worksheet('GioiThieu')
     gioithieu_sheet.hide_gridlines(option=2)
     # set column width
-    gioithieu_sheet.set_column('A:D',9)
-    gioithieu_sheet.set_column('E:N',8.5)
+    gioithieu_sheet.set_column('A:N',9)
     gioithieu_sheet.set_row(2,21)
     gioithieu_sheet.set_row(6,27)
     gioithieu_sheet.set_row(25,95)
@@ -496,7 +498,6 @@ def run(
     sheet_I.set_column('A:A',35)
     sheet_I.set_column('B:B',23)
     sheet_I.set_column('C:E',20)
-    sheet_I.set_default_row(17)
     sheet_I.set_row(0,38)
     sheet_I.set_row(2,24)
     sheet_I.set_row(4,30)
@@ -780,8 +781,6 @@ def run(
     sheet_II.merge_range('N6:O8','Cổ phiếu niêm yết, chứng chỉ quỹ niêm yết',header_fmt)
     sheet_II.merge_range('P6:Q8','Cổ phiếu công ty đại chúng đăng ký giao dịch (upcom)',header_fmt)
     sheet_II.merge_range('R6:S8','Giá trị vốn góp mua cổ phần, quỹ thành viên và chứng khoán khác',header_fmt)
-    sheet_II.merge_range('T5:U8','Tiền và các khoản tương đương tiền (chứng chỉ tiền gửi...)',header_fmt)
-    sheet_II.merge_range('V5:V8','Tổng giá trị danh mục',header_fmt)
     sheet_II.write_row('F9',['Giá trị','Tỷ lệ (%)']*8 + ['Giá trị'],header_fmt)
     start_row = xlsxwriter.utility.xl_cell_to_rowcol('A10')[0]
     for row, elem in enumerate(table_sheetII.index):
@@ -829,6 +828,153 @@ def run(
         '3) Giá trị danh mục của tổ chức, cá nhân được sắp xếp theo thứ tự từ lớn nhất đến nhỏ nhất.\n',
         footer_fmt
     )
+
+    # =========================================================================
+    # Write to Sheet III
+    sheet_III = workbook.add_worksheet('III')
+    sheet_III.hide_gridlines(option=2)
+
+    sheet_III.set_column('A:A',34)
+    sheet_III.set_column('B:B',3)
+    sheet_III.set_column('C:C',13)
+    sheet_III.set_column('D:K',11)
+
+    sheet_III.set_row(1,39)
+    sheet_III.set_row(5,32)
+    sheet_III.set_row(6,35)
+    sheet_III.set_row(7,23)
+
+    title_fmt = workbook.add_format(
+        {
+            'bold': True,
+            'font_name': 'Times New Roman',
+            'font_size': 12,
+            'align': 'center',
+            'valign': 'vcenter',
+            'text_wrap': True,
+        }
+    )
+    date_fmt = workbook.add_format(
+        {
+            'font_name': 'Times New Roman',
+            'font_size': 12,
+            'align': 'center',
+            'valign': 'vcenter',
+            'text_wrap': True,
+        }
+    )
+    sub_title_fmt = workbook.add_format(
+        {
+            'bold': True,
+            'font_name': 'Times New Roman',
+            'font_size': 12,
+            'align': 'center',
+            'valign': 'vcenter',
+            'text_wrap': True,
+        }
+    )
+    header_fmt = workbook.add_format(
+        {
+            'border': 1,
+            'bold': True,
+            'font_name': 'Times New Roman',
+            'font_size': 12,
+            'bg_color': '#99CCFF',
+            'align': 'center',
+            'valign': 'vcenter',
+            'text_wrap': True,
+        }
+    )
+    text_cell_fmt = workbook.add_format(
+        {
+            'border': 1,
+            'font_name': 'Times New Roman',
+            'font_size': 12,
+            'valign': 'vcenter',
+            'text_wrap': True,
+        }
+    )
+    number_cell_fmt = workbook.add_format(
+        {
+            'border': 1,
+            'font_name': 'Times New Roman',
+            'font_size': 12,
+            'num_format': '#,##0.00',
+            'align': 'center',
+            'valign': 'vcenter',
+            'text_wrap': True,
+        }
+    )
+    title = 'BÁO CÁO THỐNG KÊ DANH MỤC LƯU KÝ CỦA NHÀ ĐẦU TƯ NƯỚC NGOÀI, ' \
+            'TỔ CHỨC PHÁT HÀNH CHỨNG CHỈ LƯU KÝ TẠI NƯỚC NGOÀI (PLIII-TT51/2011/TT-BTC)'
+    sheet_III.merge_range('A2:K2',title,title_fmt)
+    sheet_III.merge_range('A3:K3',f"Tháng {period.split('.')[0]}/năm {period.split('.')[1]}",date_fmt)
+    sub_title = 'III. Hoạt động kinh doanh chứng khoán của thành viên lưu ký là chi nhánh các tổ chức tín dụng nước ngoài, ' \
+                'tổ chức tín dụng 100% vốn nước ngoài thành lập tại Việt Nam'
+    sheet_III.merge_range('A4:K4',sub_title,sub_title_fmt)
+    sheet_III.merge_range('A6:B8','STT',header_fmt)
+    sheet_III.merge_range('C6:C7','Loại tài sản/ Mã chứng khoán',header_fmt)
+    sheet_III.merge_range('D6:E6','Mua trong kỳ',header_fmt)
+    sheet_III.merge_range('F6:G6','Bán trong kỳ',header_fmt)
+    sheet_III.merge_range('H6:I6','Mua thuần trong kỳ',header_fmt)
+    sheet_III.merge_range('J6:K6','Số dư cuối kỳ',header_fmt)
+    sheet_III.write_row('D7',['Khối lượng','Giá trị']*4,header_fmt)
+    sheet_III.write_row('C8',[f'({i})' for i in np.arange(5)+2],header_fmt)
+    sheet_III.write('H8','(7) = (3)-(5)',header_fmt)
+    sheet_III.write('I8','(8) = (4)-(6)',header_fmt)
+    sheet_III.write('J8','(9)',header_fmt)
+    sheet_III.write('K8','(10)',header_fmt)
+    row_labels = [
+        'A. Tín phiếu',
+        '',
+        'Tổng',
+        'B. Trái phiếu',
+        'B1.Trái phiếu có thời gian tới khi đáo hạn còn lại dưới 12 tháng',
+        '',
+        'Tổng',
+        'B2. Trái phiếu có thời gian tới khi đáo hạn còn lại từ 12 tháng đến 24 tháng',
+        '',
+        'Tổng',
+        'B3. Trái phiếu có thời gian tới khi đáo hạn còn lại trên 24 tháng đến 60 tháng',
+        '',
+        'Tổng',
+        'B4. Trái phiếu có thời gian đáo hạn trên 60 tháng',
+        '',
+        'Tổng',
+        'C. Cổ phiếu niêm yết, chứng chỉ quỹ niêm yết',
+        '',
+        'Tổng',
+        'D. Cổ phiếu công ty đại chúng đăng ký giao dịch (upcom)',
+        '',
+        'Tổng',
+        'Đ. Giá trị vốn góp mua cổ phần, đơn vị quỹ thành viên',
+        '',
+        'Tổng',
+        'E. Các loại chứng khoán khác',
+        '',
+        'Tổng',
+        'G. Tiền và các khoản tương đương tiền (Chứng chỉ tiền gửi và các công cụ thị trường tiền tệ ..)',
+        '1. Tiền',
+        '',
+        '2. Chứng chỉ tiền gửi và công cụ thị trường tiền tệ...',
+        '',
+        'Tổng',
+        'Tổng',
+        'Ghi chú:',
+        '1) Giá trị chứng khoán tính theo giá thị trường vào thời điểm báo cáo;',
+        'Đối với chứng khoán không có giao dịch, giá trị tính theo giá mua vào hoặc mệnh giá;',
+        '2) Giá trị tài sản tính theo đơn vị VND.'
+    ]
+    sheet_III.write_column('A9',row_labels,text_cell_fmt)
+    for col in np.arange(10)+1:
+        for row in np.arange(39)+8:
+            if col in [1,2] or row in [8,11,12,15,18,21,24,27,30,33,36,39,42,43,44,45,46]:
+                value = ''
+                fmt = text_cell_fmt
+            else:
+                value = 0
+                fmt = number_cell_fmt
+            sheet_III.write(row,col,value,fmt)
 
     # =========================================================================
 

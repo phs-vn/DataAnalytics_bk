@@ -12,26 +12,34 @@ def run(
     period = info['period']
     folder_name = info['folder_name']
 
+    month = int(period.split('.')[0])
+    year = int(period.split('.')[1])
+
     # create folder
     if not os.path.isdir(join(dept_folder,folder_name,period)):  # dept_folder from import
         os.mkdir(join(dept_folder,folder_name,period))
 
+    # chờ batch cuối ngày xong
+    # listen_batch_job('end')
+
     period_account = pd.read_sql(
         f"""
         SELECT
-        account_type,
-        account_code,
-        customer_name,
-        nationality,
-        address,
-        customer_id_number,
-        date_of_issue,
-        place_of_issue,
-        date_of_open,
-        date_of_close
-        FROM account
-        WHERE (date_of_open BETWEEN '{start_date}' AND '{end_date}')
-        OR (date_of_close BETWEEN '{start_date}' AND '{end_date}')
+            [account].[account_type],
+            [account].[account_code],
+            [account].[customer_name],
+            [account].[nationality],
+            [account].[address],
+            [account].[customer_id_number],
+            [account].[date_of_issue],
+            [account].[place_of_issue],
+            [account].[date_of_open],
+            [account].[date_of_close]
+        FROM [account]
+        WHERE 
+            ([account].[date_of_open] BETWEEN '{start_date}' AND '{end_date}')
+        OR 
+            ([account].[date_of_close] BETWEEN '{start_date}' AND '{end_date}')
         """,
         connect_DWH_CoSo,
         index_col='account_code',
@@ -39,58 +47,89 @@ def run(
     contract_type = pd.read_sql(
         """
         SELECT
-        customer_information.sub_account,
-        sub_account.account_code,
-        customer_information.contract_code,
-        customer_information.contract_type
-        FROM customer_information
-        LEFT JOIN sub_account ON customer_information.sub_account = sub_account.sub_account
+            [customer_information].[sub_account],
+            [sub_account].[account_code],
+            [customer_information].[contract_code],
+            [customer_information].[contract_type]
+        FROM 
+            [customer_information]
+        LEFT JOIN 
+            [sub_account] 
+        ON 
+            [customer_information].[sub_account] = [sub_account].[sub_account]
         """,
         connect_DWH_CoSo,
         index_col='sub_account',
     )
     customer_information_change = pd.read_sql(
         f"""
-        SELECT *
-        FROM customer_information_change
-        WHERE change_date BETWEEN '{start_date}' AND '{end_date}'
-        """,
-        connect_DWH_CoSo,
-        index_col='account_code',
-    )
-    authorization = pd.read_sql(
-        f"""
-        SELECT * 
-        FROM [authorization] 
-        WHERE date_of_authorization BETWEEN '{start_date}' AND '{end_date}'
-        AND authorized_person_id = '155/GCNTVLK'
-        AND scope_of_authorization IS NOT NULL
-        AND scope_of_authorization <> 'I,IV,V'
-        """,
-        connect_DWH_CoSo,
-        index_col='account_code',
-    )
-    # Loai cac uy quyen duoc mo moi chi de dang ky uy quyen them (rule ben DVKH)
-    drop_account = pd.read_sql(
-        f"""
-        SELECT account_code
-        FROM authorization_change
-        WHERE date_of_change BETWEEN '{start_date}' AND '{end_date}'
-        AND new_end_date IS NOT NULL
+        SELECT 
+            [rcf0005].[account_code],
+            [account].[customer_name],
+            [rcf0005].[date_of_change],
+            [rcf0005].[old_id_number],
+            [rcf0005].[new_id_number],
+            [rcf0005].[old_date_of_issue],
+            [rcf0005].[new_date_of_issue],
+            [rcf0005].[old_place_of_issue],
+            [rcf0005].[new_place_of_issue],
+            [rcf0005].[old_address],
+            [rcf0005].[new_address],
+            [rcf0005].[old_nationality],
+            [rcf0005].[new_nationality]
+        FROM 
+            [rcf0005]
+        LEFT JOIN
+            [account]
+        ON
+            [account].[account_code] = [rcf0005].[account_code]
+        WHERE 
+            [rcf0005].[date_of_change] BETWEEN '{start_date}' AND '{end_date}'
+        ORDER BY
+            [rcf0005].[account_code],
+            [rcf0005].[date_of_change]
         """,
         connect_DWH_CoSo,
         index_col='account_code'
+    ).drop_duplicates() # RCF0005 có duplicated data
+    authorization = pd.read_sql(
+        f"""
+        SELECT * 
+        FROM 
+            [authorization] 
+        WHERE 
+            [authorization].[date_of_authorization] BETWEEN '{start_date}' AND '{end_date}'
+        AND 
+            [authorization].[scope_of_authorization] IS NOT NULL
+        AND 
+            [authorization].[scope_of_authorization] <> 'I,IV,V'
+        """,
+        connect_DWH_CoSo,
+        index_col='account_code',
+    )
+    # Highlight cac uy quyen duoc mo moi chi de dang ky uy quyen them (rule ben DVKH)
+    highlight_account = pd.read_sql(
+        f"""
+        SELECT
+            [authorization_change].[account_code]
+        FROM 
+            [authorization_change]
+        WHERE 
+            [authorization_change].[new_end_date] BETWEEN '{start_date}' AND '{end_date}'
+        """,
+        connect_DWH_CoSo,
     )
     authorization_change = pd.read_sql(
         f"""
         SELECT *
-        FROM authorization_change
-        WHERE date_of_change BETWEEN '{start_date}' AND '{end_date}'
+        FROM 
+            [authorization_change]
+        WHERE 
+            [authorization_change].[date_of_change] BETWEEN '{start_date}' AND '{end_date}'
         """,
         connect_DWH_CoSo,
         index_col='account_code'
     )
-    authorization = authorization.loc[~authorization.index.isin(drop_account.index)]
     authorization['scope_of_authorization'] = 'I,II,IV,V,VII,IX,X'
     authorization.loc[authorization['authorized_person_name'] == 'CTY CP CHỨNG KHOÁN PHÚ HƯNG','authorized_person_address'] = CompanyAddress
     mapper = lambda x: 'Thường' if x.startswith('Thường') else 'Ký Quỹ'
@@ -102,8 +141,10 @@ def run(
     period_account.dropna(subset=['account_type'],inplace=True) # bỏ tài khoản quỹ
     period_account.loc[period_account['account_type'].str.startswith('Cá nhân'),'entity_type'] = 'CN'
     period_account.loc[period_account['account_type'].str.startswith('Tổ chức'),'entity_type'] = 'TC'
-    account_open = period_account.loc[period_account['date_of_close'].isnull()]
-    account_close = period_account.loc[period_account['date_of_close'].notnull()]
+    open_mask = (period_account['date_of_open'].dt.month==month) & (period_account['date_of_open'].dt.year==year)
+    account_open = period_account.loc[open_mask]
+    close_mask = period_account['date_of_close'].notnull()
+    account_close = period_account.loc[close_mask]
 
     ###########################################################################
     ###########################################################################
@@ -113,7 +154,7 @@ def run(
     ###########################################################################
     ###########################################################################
 
-    file_name = f'HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (old) {period}.xlsx'
+    file_name = f'Danh sách KH đóng mở ủy quyền tài khoản PHS (old) HOSE {period}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder,folder_name,period,file_name),
         engine='xlsxwriter',
@@ -361,7 +402,7 @@ def run(
     sheet_dongtaikhoan.write_column('I7',account_close['date_of_open'].map(convertNaTtoSpaceString),date_format)
     sheet_dongtaikhoan.write_column('J7',account_close['date_of_close'].map(convertNaTtoSpaceString),date_format)
     sheet_dongtaikhoan.write_column('K7',account_close['nationality'],text_center_format)
-    sheet_dongtaikhoan.write_column('L7',account_close['remark'],text_center_format)
+    sheet_dongtaikhoan.write_column('L7',account_close.shape[0]*[''],text_center_format)
 
     ###########################################################################
     ###########################################################################
@@ -481,17 +522,17 @@ def run(
     )
     sheet_thaydoithongtin.write_column(
         'B8',
-        customer_information_change['old_customer_name'],
+        customer_information_change['customer_name'],
         text_left_format,
     )
     sheet_thaydoithongtin.write_column(
         'C8',
-        customer_information_change['old_id_number'],
+        customer_information_change.index,
         text_center_format,
     )
     sheet_thaydoithongtin.write_column(
         'D8',
-        customer_information_change['change_date'].map(convertNaTtoSpaceString),
+        customer_information_change['date_of_change'].map(convertNaTtoSpaceString),
         date_format,
     )
     sheet_thaydoithongtin.write_column(
@@ -599,6 +640,17 @@ def run(
             'font_size': 10
         }
     )
+    text_highlight_left_format = workbook.add_format(
+        {
+            'border': 1,
+            'text_wrap': True,
+            'align': 'left',
+            'valign': 'vcenter',
+            'font_name': 'Times New Roman',
+            'font_size': 10,
+            'bg_color': '#FFFF00'
+        }
+    )
     text_center_format = workbook.add_format(
         {
             'border': 1,
@@ -607,6 +659,17 @@ def run(
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
             'font_size': 10
+        }
+    )
+    text_highlight_center_format = workbook.add_format(
+        {
+            'border': 1,
+            'text_wrap': True,
+            'align': 'center',
+            'valign': 'vcenter',
+            'font_name': 'Times New Roman',
+            'font_size': 10,
+            'bg_color': '#FFFF00'
         }
     )
     date_format = workbook.add_format(
@@ -618,6 +681,17 @@ def run(
             'num_format': 'dd\/mm\/yyyy',
             'font_name': 'Times New Roman',
             'font_size': 10
+        }
+    )
+    date_highlight_format = workbook.add_format(
+        {
+            'border': 1,
+            'align': 'center',
+            'valign': 'vcenter',
+            'num_format': 'dd\/mm\/yyyy',
+            'font_name': 'Times New Roman',
+            'font_size': 10,
+            'bg_color': '#FFFF00'
         }
     )
     sheet_uyquyen = workbook.add_worksheet('Ủy Quyền')
@@ -659,17 +733,28 @@ def run(
         'ĐỊA CHỈ',
         'PV.UQ',
     ]
+    authorization['date_of_authorization'] = authorization['date_of_authorization'].map(convertNaTtoSpaceString)
     sheet_uyquyen.write_row('A6',headers,header_format)
-    sheet_uyquyen.write_column('A7',np.arange(authorization.shape[0])+1,text_center_format)
-    sheet_uyquyen.write_column('B7',authorization['authorizing_person_name'],text_left_format)
-    sheet_uyquyen.write_column('C7',authorization.index,text_center_format)
-    sheet_uyquyen.write_column('D7',authorization['authorizing_person_id'],text_center_format)
-    sheet_uyquyen.write_column('E7',authorization['authorizing_person_address'],text_left_format)
-    sheet_uyquyen.write_column('F7',authorization['date_of_authorization'].map(convertNaTtoSpaceString),date_format)
-    sheet_uyquyen.write_column('G7',authorization['authorized_person_name'],text_center_format)
-    sheet_uyquyen.write_column('H7',authorization['authorized_person_id'],text_center_format)
-    sheet_uyquyen.write_column('I7',authorization['authorized_person_address'],text_left_format)
-    sheet_uyquyen.write_column('J7', authorization['scope_of_authorization'],text_center_format)
+    for row in range(authorization.shape[0]):
+        ticker = authorization.index[row]
+        if ticker in highlight_account.values:
+            fmt1 = text_highlight_center_format
+            fmt2 = text_highlight_left_format
+            fmt3 = date_highlight_format
+        else:
+            fmt1 = text_center_format
+            fmt2 = text_left_format
+            fmt3 = date_format
+        sheet_uyquyen.write(row+6,0,row+1,fmt1)
+        sheet_uyquyen.write(row+6,1,authorization.iloc[row,authorization.columns.get_loc('authorizing_person_name')],fmt2)
+        sheet_uyquyen.write(row+6,2,authorization.index[row],fmt1)
+        sheet_uyquyen.write(row+6,3,authorization.iloc[row,authorization.columns.get_loc('authorizing_person_id')],fmt1)
+        sheet_uyquyen.write(row+6,4,authorization.iloc[row,authorization.columns.get_loc('authorizing_person_address')],fmt2)
+        sheet_uyquyen.write(row+6,5,authorization.iloc[row,authorization.columns.get_loc('date_of_authorization')],fmt3)
+        sheet_uyquyen.write(row+6,6,authorization.iloc[row,authorization.columns.get_loc('authorized_person_name')],fmt1)
+        sheet_uyquyen.write(row+6,7,authorization.iloc[row,authorization.columns.get_loc('authorized_person_id')],fmt1)
+        sheet_uyquyen.write(row+6,8,authorization.iloc[row,authorization.columns.get_loc('authorized_person_address')],fmt2)
+        sheet_uyquyen.write(row+6,9,authorization.iloc[row,authorization.columns.get_loc('scope_of_authorization')],fmt1)
 
     ###########################################################################
     ###########################################################################
@@ -802,15 +887,15 @@ def run(
     sheet_thaydoiuyquyen.write_column('E9',authorization_change['date_of_authorization'].map(convertNaTtoSpaceString),date_format)
     sheet_thaydoiuyquyen.write_column('F9',authorization_change['authorized_person_name'],text_center_format)
     sheet_thaydoiuyquyen.write_column('G9',authorization_change['date_of_termination'].map(convertNaTtoSpaceString),text_center_format)
-    sheet_thaydoiuyquyen.write_column('H9',authorization_change['date_of_change'].map(convertNaTtoSpaceString),text_center_format)
+    sheet_thaydoiuyquyen.write_column('H9',authorization_change['date_of_change'].map(convertNaTtoSpaceString),date_format)
     sheet_thaydoiuyquyen.write_column('I9',authorization_change['old_authorized_person_id'],text_center_format)
     sheet_thaydoiuyquyen.write_column('J9',authorization_change['new_authorized_person_id'],text_center_format)
     sheet_thaydoiuyquyen.write_column('K9',authorization_change['old_authorized_person_address'],text_center_format)
     sheet_thaydoiuyquyen.write_column('L9',authorization_change['new_authorized_person_address'],text_center_format)
     sheet_thaydoiuyquyen.write_column('M9',authorization_change['old_scope_of_authorization'],text_center_format)
     sheet_thaydoiuyquyen.write_column('N9',authorization_change['new_scope_of_authorization'],text_center_format)
-    sheet_thaydoiuyquyen.write_column('O9',authorization_change['old_end_date'].map(convertNaTtoSpaceString),text_center_format)
-    sheet_thaydoiuyquyen.write_column('P9',authorization_change['new_end_date'].map(convertNaTtoSpaceString),text_center_format)
+    sheet_thaydoiuyquyen.write_column('O9',authorization_change['old_end_date'].map(convertNaTtoSpaceString),date_format)
+    sheet_thaydoiuyquyen.write_column('P9',authorization_change['new_end_date'].map(convertNaTtoSpaceString),date_format)
 
     row_of_signature = 7 + authorization_change.shape[0] + 2
     run_day = convert_int(run_time.day)

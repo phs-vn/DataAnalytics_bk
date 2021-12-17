@@ -234,7 +234,7 @@ def run(
                 simulated_price[i,j] = np.exp(logr[i,j]) * simulated_price[i,j-1]
         df_historical = df[['trading_date', 'close']].iloc[int(max(-254,-df['trading_date'].count())):]
 
-    elif p_change_logr <= alpha:
+    elif p_change_logr <= 0.05:
 
         # Testing whether normal skewness
         stat_skew, p_skew = sc.stats.skewtest(df['change_logr'], nan_policy='omit')
