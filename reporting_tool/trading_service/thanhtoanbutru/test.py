@@ -229,8 +229,8 @@ def run(
         'tax_of_share_dividend_T1']
     seven = final_table['value_T0'] - final_table['fee_T0'] - final_table['tax_of_selling_T0'] - final_table[
         'tax_of_share_dividend_T0']
-    ten = final_table['increase_T1'] + final_table['decrease_T1'] + final_table['increase_T0'] + final_table[
-        'decrease_T0']
+    ten = final_table['increase_T1'] + final_table['decrease_T1'] \
+          + final_table['increase_T0'] + final_table['decrease_T0']
     # Tính cột 'Tổng giá trị tiền bán có thể ứng'
     final_table['sum_value_selling_co_the_ung'] = six + seven
     # Tính cột 'Tổng tiền còn có thể ứng'
