@@ -1,22 +1,23 @@
 """
 1. quarterly, ngày cuối của kỳ trước = 2021-09-30
-2. bản  chất của báo cáo này là mình xuất gốc từ RMR1062, bớt 1 số dòng va thêm 1 số dòng (Mrs. Tuyết)
+2. bản chất của báo cáo này là mình xuất gốc từ RMR1062, bớt 1 số dòng va thêm 1 số dòng (Mrs. Tuyết)
 3. Báo cáo RLN0006: lấy loại vay của trả trậm, margin, và bảo lãnh (bảo lãnh trừ tk tự doanh 022p... ) ra
 4. Dựa theo file cách làm
     - cột H và cột O: bắt buộc phải khớp với báo cáo RLN0006
     - cột J: bắt buộc phải  khớp với báo cáo RCI0001
     - cột K: là số tiền còn có thể UTTB: cách lấy: Lấy ROD0040 (2 ngày làm việc cuối cùng
 của tháng) cột giá trị bán trừ ( phí bán và thuế bán) trừ tiếp số tiền đã ứng (xuất
-RCI0015, 2 ngày làm việc cuối cùng, chọn ngày bán là 2 ngày lam việc cuối cùng) là ra.
+RCI0015, 2 ngày làm việc cuối cùng, chọn ngày bán là 2 ngày làm việc cuối cùng) là ra.
     - có thể LOẠI các tài khoản mà giá trị của cả 5 cột (H, J, K, L, O) đều bằng 0
     (chú ý: miễn sao các cột này có số và khớp với mấy báo cáo kia là dc,
     còn nếu nếu họ có số ở các cột này thì không dc phép loại)
+    - kết quả xuất ra có thể ít hơn hoặc bằng so với file kết quả của báo cáo
 """
 from reporting_tool.trading_service.thanhtoanbutru import *
 
 
 def run(
-        run_time=None,
+        run_time=None
 ):
     start = time.time()
     info = get_info('quarterly', run_time)
@@ -35,134 +36,138 @@ def run(
     ###################################################
 
     # --------------------- Viết Query và xử lý dataframe ---------------------
-    # query VCF0051
-    query_vcf = pd.read_sql(
-        f"""
-            SELECT 
-            DISTINCT
-                [branch_name],
-                [relationship].[account_code],
-                [relationship].[sub_account],
-                [account].[customer_name]
-            FROM [relationship]
-            LEFT JOIN [customer_information] 
-            ON [customer_information].[sub_account] = [relationship].[sub_account]
-            LEFT JOIN [branch] 
-            ON [branch].[branch_id] = [relationship].[branch_id]
-            LEFT JOIN [account] 
-            ON [account].[account_code] = [relationship].[account_code]
-            WHERE 
-                [relationship].[date] = '{end_date}'
-                AND [customer_information].[contract_type] LIKE '%MR%'
-                AND [customer_information].[status] IN ('A', 'B')
-        """,
-        connect_DWH_CoSo,
-        index_col='sub_account'
-    )
-    # query RMR1063
+    # query RMR1062 và VCF0051
     query_rmr = pd.read_sql(
         f"""
             SELECT
-                [sub_account], 
-                [credit_line], 
-                [rtt], 
-                [buying_power], 
-                [total_outstanding], 
-                [total_cash], 
-                [margin_value], 
-                [asset_value], 
-                [total_outstanding_and_interest]
-            FROM [sub_account_report]
-            WHERE [date] = '{end_date}'
+                [relationship].[date],
+                [branch].[branch_name],
+                [relationship].[account_code],
+                [relationship].[sub_account],
+                [account].[customer_name],
+                [rmr62].[credit_line],
+                ISNULL([rmr63].[rtt], 0) [rtt],
+                ISNULL([rci01].[closing_balance], 0) [total_cash_RCI01],
+                (ISNULL([rod40].[calc_rod], 0) - ISNULL([rci15].[receivable], 0)) [uttb_con_lai],
+                ISNULL([rmr63].[buying_power], 0) [buying_power],
+                [rmr62].[total_outstanding],
+                [rmr62].[total_cash],
+                [rmr62].[total_margin_value],
+                [rmr62].[total_asset_value],
+                [rmr62].[total_outstanding_plust_interest],
+                50 AS [rai_mortgage_ratio]
+            FROM [relationship]
+            LEFT JOIN ( 
+                SELECT
+                    [sub_account],
+                    [status],
+                    [contract_type]
+                FROM
+                    [customer_information]
+            ) [vcf51]
+            ON [vcf51].[sub_account] = [relationship].[sub_account]
+            LEFT JOIN (
+                SELECT
+                    [branch].[branch_id],
+                    [branch].[branch_name]
+                FROM [branch]
+            ) [branch]
+            ON [branch].[branch_id] = [relationship].[branch_id]
+            LEFT JOIN (
+                SELECT
+                    [account].[account_code],
+                    [account].[customer_name]
+                FROM
+                    [account]
+            ) [account]
+            ON [account].[account_code] = [relationship].[account_code]
+            RIGHT JOIN (
+                SELECT 
+                    [rmr1062].[account_code], 
+                    [rmr1062].[credit_line], 
+                    [rmr1062].[total_outstanding], 
+                    [rmr1062].[total_cash], 
+                    [rmr1062].[total_margin_value], 
+                    [rmr1062].[total_asset_value], 
+                    [rmr1062].[total_outstanding_plust_interest]
+                FROM
+                    [rmr1062]
+                WHERE
+                    [rmr1062].[date] = '{end_date}'
+            ) [rmr62]
+            ON [rmr62].[account_code] = [relationship].[account_code]
+            LEFT JOIN(
+                SELECT
+                    [sub_account_report].[sub_account],
+                    [sub_account_report].[buying_power],
+                    [sub_account_report].[rtt]
+                FROM
+                    [sub_account_report]
+                WHERE
+                    [sub_account_report].[date] = '{end_date}'
+            ) [rmr63]
+            ON [rmr63].[sub_account] = [relationship].[sub_account]
+            LEFT JOIN (
+                SELECT
+                    [sub_account],
+                    [closing_balance]
+                FROM 
+                    [sub_account_deposit]
+                WHERE 
+                    [sub_account_deposit].[date] = '{end_date}'
+            )[rci01]
+            ON [rci01].[sub_account] = [relationship].[sub_account]
+            LEFT JOIN (
+                SELECT 
+                    [sub_account], 
+                    (SUM([value]) - SUM([fee]) - SUM([tax_of_selling])) AS [calc_rod]
+                FROM [trading_record]
+                WHERE [date] BETWEEN '{bdate(end_date, -1)}' AND '{end_date}'
+                AND [type_of_order] = 'S'
+                GROUP BY [sub_account]
+            ) [rod40]
+            ON [rod40].[sub_account] = [relationship].[sub_account]
+            LEFT JOIN(
+                SELECT
+                    [payment_in_advance].[sub_account],
+                    SUM([payment_in_advance].[receivable]) AS [receivable]
+                FROM
+                    [payment_in_advance]
+                WHERE
+                    [payment_in_advance].[date] BETWEEN '{bdate(end_date, -1)}' AND '{end_date}'
+                AND [trading_date] BETWEEN '{bdate(end_date, -1)}' AND '{end_date}'
+                GROUP BY [sub_account]
+            ) [rci15]
+            ON [rci15].[sub_account] = [relationship].[sub_account]
+            WHERE
+                [relationship].[date] = '{end_date}'
+                AND [vcf51].[contract_type] like '%MR%'
+                AND [vcf51].[status] in ('A', 'B')
+            ORDER BY [account_code]
         """,
         connect_DWH_CoSo,
         index_col='sub_account'
     )
-    # query RCI0001
-    query_rci01 = pd.read_sql(
-        f"""
-            SELECT 
-                [sub_account], 
-                [closing_balance]
-            FROM [sub_account_deposit]
-            WHERE [date] = '{end_date}'
-            ORDER BY [sub_account]
-        """,
-        connect_DWH_CoSo,
-        index_col='sub_account'
-    )
-    # query RLN0006
-    query_rln = pd.read_sql(
-        f"""
-            SELECT 
-                [account_code], 
-                SUM([principal_outstanding]) AS [principal_outstanding], 
-                (SUM([principal_outstanding]) + SUM([interest_outstanding])) AS [total_outstanding_plus_interest]
-            FROM [margin_outstanding]
-            WHERE 
-                [date] = '{end_date}'
-                AND [type] NOT IN (N'Ứng trước cổ tức', N'Cầm cố')
-                AND [account_code] <> '022P002222'
-            GROUP BY [account_code]
-        """,
-        connect_DWH_CoSo,
-        index_col='account_code'
-    )
-    # query ROD0040
-    query_rod = pd.read_sql(
-        f"""
-            SELECT 
-                [sub_account], 
-                sum([value]) AS [value], 
-                sum([fee]) AS [fee], 
-                sum([tax_of_selling]) AS [tax_of_selling]
-            FROM [trading_record]
-            WHERE [date] BETWEEN '{bdate(end_date, -1)}' AND '{end_date}'
-            AND [type_of_order] = 'S'
-            GROUP BY [date], [sub_account]
-            ORDER BY [sub_account]
-        """,
-        connect_DWH_CoSo,
-        index_col='sub_account'
-    )
-    query_rod = query_rod.groupby(query_rod.index).sum()
-    query_rod['calc_rod'] = query_rod['value'] - (query_rod['fee'] + query_rod['tax_of_selling'])
-    # query RCI0015
-    query_rci15 = pd.read_sql(
-        f"""
-            SELECT  
-                [sub_account],
-                SUM([receivable]) AS [receivable]
-            FROM [payment_in_advance]
-            WHERE [date] BETWEEN '{bdate(end_date, -1)}' AND '{end_date}'
-            AND [trading_date] BETWEEN '{bdate(end_date, -1)}' AND '{end_date}'
-            GROUP BY [date], [sub_account], [trading_date]
-        """,
-        connect_DWH_CoSo,
-        index_col='sub_account'
-    )
-    query_rci15 = query_rci15.groupby(query_rci15.index).sum()
-
-    # Xử lý dataframe
-    query_rmr['total_cash_rci01'] = query_rci01['closing_balance']
-    final_table = pd.concat([query_vcf, query_rmr], axis=1)
-    final_table = final_table.merge(query_rln, how='outer', left_on='account_code', right_index=True)
-    final_table['rod'] = query_rod['calc_rod']
-    final_table['rci15'] = query_rci15['receivable']
-    final_table['uttb_con_lai'] = final_table['rod'] - final_table['rci15']
-    final_table = final_table.dropna(subset=['branch_name', 'account_code', 'customer_name'])
-    final_table['rai_mortgage_ratio'] = 50
-    final_table.fillna(0, inplace=True)
-
-    a = final_table.loc[
-        (final_table['buying_power'] == 0) &
-        (final_table['total_outstanding'] == 0) &
-        (final_table['total_cash'] == 0) &
-        (final_table['total_outstanding_and_interest'] == 0) &
-        (final_table['uttb_con_lai'] == 0)
-    ].index
-    for i in a:
-        final_table.drop(i, inplace=True)
+    # lọc những tài khoản có value=0 ở cả 5 cột
+    # 'UTTB còn lại, buying power, total outstanding, total cash, total outstanding plus total interest'
+    query_rmr = query_rmr.loc[
+        ~(query_rmr[
+              [
+                  'credit_line',
+                  'rtt',
+                  'buying_power'
+              ]
+          ] == 0).all(axis=1)]
+    query_rmr = query_rmr.loc[
+        ~(query_rmr[
+              [
+                  'uttb_con_lai',
+                  'buying_power',
+                  'total_outstanding',
+                  'total_cash',
+                  'total_outstanding_plust_interest'
+              ]
+          ] == 0).all(axis=1)]
 
     ###################################################
     ###################################################
@@ -280,7 +285,7 @@ def run(
     sheet1.set_column('H:P', 18.56)
     sheet1.set_row(1, 39.6)
 
-    sum_start_row = final_table.shape[0] + 3
+    sum_start_row = query_rmr.shape[0] + 3
     sheet1.merge_range(f'A{sum_start_row}:E{sum_start_row}', 'TỔNG', sum_name_format)
 
     sheet1.write(
@@ -315,138 +320,138 @@ def run(
     )
     sheet1.write_column(
         'A3',
-        [int(i) for i in np.arange(final_table.shape[0]) + 1],
+        [int(i) for i in np.arange(query_rmr.shape[0]) + 1],
         stt_col_format
     )
     sheet1.write_column(
         'B3',
-        final_table['branch_name'],
+        query_rmr['branch_name'],
         text_left_format
     )
     sheet1.write_column(
         'C3',
-        final_table['account_code'],
+        query_rmr['account_code'],
         text_left_format
     )
     sheet1.write_column(
         'D3',
-        final_table.index,
+        query_rmr.index,
         text_left_format
     )
     sheet1.write_column(
         'E3',
-        final_table['customer_name'],
+        query_rmr['customer_name'],
         text_left_format
     )
     sheet1.write_column(
         'F3',
-        final_table['credit_line'],
+        query_rmr['credit_line'],
         money_format
     )
     sheet1.write_column(
         'G3',
-        final_table['rtt'],
+        query_rmr['rtt'],
         money_format
     )
     sheet1.write_column(
         'H3',
-        final_table['total_cash_rci01'],
+        query_rmr['total_cash_RCI01'],
         money_format
     )
     sheet1.write_column(
         'I3',
-        final_table['uttb_con_lai'],
+        query_rmr['uttb_con_lai'],
         money_format
     )
     sheet1.write_column(
         'J3',
-        final_table['buying_power'],
+        query_rmr['buying_power'],
         money_format
     )
     sheet1.write_column(
         'K3',
-        final_table['total_outstanding'],
+        query_rmr['total_outstanding'],
         money_format
     )
     sheet1.write_column(
         'L3',
-        final_table['total_cash'],
+        query_rmr['total_cash'],
         money_format
     )
     sheet1.write_column(
         'M3',
-        final_table['margin_value'],
+        query_rmr['total_margin_value'],
         money_format
     )
     sheet1.write_column(
         'N3',
-        final_table['asset_value'],
+        query_rmr['total_asset_value'],
         money_format
     )
     sheet1.write_column(
         'O3',
-        final_table['total_outstanding_and_interest'],
+        query_rmr['total_outstanding_plust_interest'],
         money_format
     )
     sheet1.write_column(
         'P3',
-        final_table['rai_mortgage_ratio'],
+        query_rmr['rai_mortgage_ratio'],
         money_format
     )
     # Row sum money
     sheet1.write(
         f'F{sum_start_row}',
-        final_table['credit_line'].sum(),
+        query_rmr['credit_line'].sum(),
         sum_money_format
     )
     sheet1.write(
         f'G{sum_start_row}',
-        final_table['rtt'].sum(),
+        query_rmr['rtt'].sum(),
         sum_money_format
     )
     sheet1.write(
         f'H{sum_start_row}',
-        final_table['total_cash_rci01'].sum(),
+        query_rmr['total_cash_RCI01'].sum(),
         sum_money_format
     )
     sheet1.write(
         f'I{sum_start_row}',
-        final_table['uttb_con_lai'].sum(),
+        query_rmr['uttb_con_lai'].sum(),
         sum_money_format
     )
     sheet1.write(
         f'J{sum_start_row}',
-        final_table['buying_power'].sum(),
+        query_rmr['buying_power'].sum(),
         sum_money_format
     )
     sheet1.write(
         f'K{sum_start_row}',
-        final_table['total_outstanding'].sum(),
+        query_rmr['total_outstanding'].sum(),
         sum_money_format
     )
     sheet1.write(
         f'L{sum_start_row}',
-        final_table['total_cash'].sum(),
+        query_rmr['total_cash'].sum(),
         sum_money_format
     )
     sheet1.write(
         f'M{sum_start_row}',
-        final_table['margin_value'].sum(),
+        query_rmr['total_margin_value'].sum(),
         sum_money_format
     )
     sheet1.write(
         f'N{sum_start_row}',
-        final_table['asset_value'].sum(),
+        query_rmr['total_asset_value'].sum(),
         sum_money_format
     )
     sheet1.write(
         f'O{sum_start_row}',
-        final_table['total_outstanding_and_interest'].sum(),
+        query_rmr['total_outstanding_plust_interest'].sum(),
         sum_money_format
     )
     sheet1.write(
         f'P{sum_start_row}',
-        final_table['rai_mortgage_ratio'].sum(),
+        query_rmr['rai_mortgage_ratio'].sum(),
         sum_money_format
     )
 

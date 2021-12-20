@@ -22,12 +22,11 @@ import string
 
 
 def run(
-        periodicity: str,
         end_date: str,
         run_time=None,
 ):
     start = time.time()
-    info = get_info(periodicity, run_time)
+    info = get_info('daily', run_time)
     period = info['period']
     folder_name = info['folder_name']
     start_date = bdate(end_date, -2)  # T-2 date
@@ -53,15 +52,13 @@ def run(
         f"""
             SELECT
             trading_record.date,
-            relationship.sub_account, 
+            trading_record.sub_account, 
             trading_record.value,
             trading_record.fee,
             trading_record.tax_of_selling,
             trading_record.tax_of_share_dividend
             FROM trading_record
-            LEFT JOIN relationship ON relationship.sub_account = trading_record.sub_account
             WHERE trading_record.date BETWEEN '{start_date}' AND '{end_date}'
-            AND relationship.date = '{end_date}'
             AND trading_record.type_of_order = 'S'
             ORDER BY trading_record.date, sub_account ASC
         """,
