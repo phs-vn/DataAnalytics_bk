@@ -314,7 +314,7 @@ def run(
     )
     sheet1.write_column(
         'D3',
-        query_rmr.index,
+        query_rmr['sub_account'],
         text_left_format
     )
     sheet1.write_column(
