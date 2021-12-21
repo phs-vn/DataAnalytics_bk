@@ -83,7 +83,7 @@ def run(
             ON [account].[account_code] = [relationship].[account_code]
             RIGHT JOIN (
                 SELECT 
-                    [rmr1062].[account_code], 
+                    [rmr1062].[sub_account], 
                     [rmr1062].[credit_line], 
                     [rmr1062].[total_outstanding], 
                     [rmr1062].[total_cash], 
@@ -95,7 +95,7 @@ def run(
                 WHERE
                     [rmr1062].[date] = '{end_date}'
             ) [rmr62]
-            ON [rmr62].[account_code] = [relationship].[account_code]
+            ON [rmr62].[sub_account] = [relationship].[sub_account]
             LEFT JOIN(
                 SELECT
                     [sub_account_report].[sub_account],
@@ -120,7 +120,7 @@ def run(
             LEFT JOIN (
                 SELECT 
                     [sub_account], 
-                    (SUM([value]) - SUM([fee]) - SUM([tax_of_selling])) AS [calc_rod]
+                    (SUM([value]) - SUM([fee]) - SUM([tax_of_selling]) - SUM([tax_of_share_dividend])) [calc_rod]
                 FROM [trading_record]
                 WHERE [date] BETWEEN '{bdate(end_date, -1)}' AND '{end_date}'
                 AND [type_of_order] = 'S'
@@ -146,28 +146,7 @@ def run(
             ORDER BY [account_code]
         """,
         connect_DWH_CoSo,
-        index_col='sub_account'
     )
-    # lọc những tài khoản có value=0 ở cả 5 cột
-    # 'UTTB còn lại, buying power, total outstanding, total cash, total outstanding plus total interest'
-    query_rmr = query_rmr.loc[
-        ~(query_rmr[
-              [
-                  'credit_line',
-                  'rtt',
-                  'buying_power'
-              ]
-          ] == 0).all(axis=1)]
-    query_rmr = query_rmr.loc[
-        ~(query_rmr[
-              [
-                  'uttb_con_lai',
-                  'buying_power',
-                  'total_outstanding',
-                  'total_cash',
-                  'total_outstanding_plust_interest'
-              ]
-          ] == 0).all(axis=1)]
 
     ###################################################
     ###################################################
