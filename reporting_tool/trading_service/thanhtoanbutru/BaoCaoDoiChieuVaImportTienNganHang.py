@@ -1,11 +1,12 @@
 from reporting_tool.trading_service.thanhtoanbutru import *
 import reporting_tool
+
 # DONE
 def _get_outlook_files(
         run_time=None,
 ):
     info = get_info('daily',run_time)
-    end_date = info['end_date']
+    t0_date = info['end_date']
     period = info['period']
 
     outlook = Dispatch('outlook.application').GetNamespace("MAPI")
@@ -15,10 +16,10 @@ def _get_outlook_files(
     inbox = outlook.Folders.Item(1).Folders['Inbox']
     messages = inbox.Items
     # Lọc ngày
-    run_date = dt.datetime.strptime(end_date,'%Y/%m/%d').date()
+    run_date = dt.datetime.strptime(t0_date,'%Y/%m/%d').date()
     def catch(m):
         try:
-            result = m.ReceivedTime.date() == run_date - dt.timedelta(days=1)
+            result = m.ReceivedTime.date() == run_date
         except (Exception,):
             result = True
         return result
@@ -69,13 +70,20 @@ def _get_outlook_files(
     result = {}
     for bank in ['EIB','OCB']:
         files = os.listdir(join(dept_folder,'FileFromBanks',period,bank))
-        if len(files)==0: # chỉ xảy ra khi chạy file này trước khi có email
-            raise RuntimeError(f'No email from {bank} today')
+        if len(files)==0:
+            """
+            chỉ xảy ra khi chưa có mail NH
+            -> tiếp tục listen cho tới khi có thì thôi
+            """
+            print(f'No email from {bank}. Waiting...')
+            time.sleep(15)
+            _get_outlook_files(run_time)
         else:
             file = files[0] # should only have 1 file
             result[bank] = join(dept_folder,'FileFromBanks',period,bank,file)
 
     return result
+
 
 # run daily
 def run(
@@ -83,8 +91,7 @@ def run(
 ):
     start = time.time()
     info = get_info('daily',run_time)
-    start_date = info['start_date']
-    end_date = info['end_date']
+    t0_date = info['end_date']
     period = info['period']
     folder_name = info['folder_name']
 
@@ -92,8 +99,10 @@ def run(
     if not os.path.isdir(join(dept_folder,folder_name,period)):  # dept_folder from import
         os.mkdir(join(dept_folder,folder_name,period))
 
+    # đọc mail + download file
     file_path = _get_outlook_files(run_time)
 
+    # đọc file EIB
     eib_sent_data = pd.read_excel(
         file_path['EIB'],
         skiprows=5,
@@ -112,6 +121,7 @@ def run(
     eib_sent_data.set_index(['bank_code','bank_account'],inplace=True)
     eib_sent_data.index.rename(['bank','bank_account'],inplace=True)
 
+    # đọc file OCB
     ocb_sent_data = pd.read_excel(
         file_path['OCB'],
         usecols=['TÀI KHOẢN','SỐ DƯ'],
@@ -129,18 +139,24 @@ def run(
     ocb_sent_data.set_index(['bank_code','bank_account'],inplace=True)
     ocb_sent_data.index.rename(['bank','bank_account'],inplace=True)
 
+    # concat
     bank_sent_balance = pd.concat([eib_sent_data,ocb_sent_data])
 
+    # lấy số trên Flex
     increase_money = pd.read_sql(
         f"""
         SELECT
-        [cashflow_bank].[bank],
-        [cashflow_bank].[bank_account],
-        [cashflow_bank].[outflow_amount]
-        FROM [cashflow_bank]
-        WHERE [cashflow_bank].[bank] IN ('EIB','OCB')
-        AND [cashflow_bank].[date] BETWEEN '{start_date}' AND '{end_date}'
-        AND [cashflow_bank].[outflow_amount] > 0
+            [cashflow_bank].[bank],
+            [cashflow_bank].[bank_account],
+            [cashflow_bank].[outflow_amount]
+        FROM 
+            [cashflow_bank]
+        WHERE 
+            [cashflow_bank].[bank] IN ('EIB','OCB')
+        AND 
+            [cashflow_bank].[date] = '{t0_date}'
+        AND 
+            [cashflow_bank].[outflow_amount] > 0
         """,
         connect_DWH_CoSo,
         index_col=['bank','bank_account'],
@@ -151,13 +167,17 @@ def run(
     decrease_money = pd.read_sql(
         f"""
         SELECT 
-        [cashflow_bank].[bank],
-        [cashflow_bank].[bank_account], 
-        [cashflow_bank].[inflow_amount]
-        FROM [cashflow_bank]
-        WHERE [cashflow_bank].[bank] IN ('EIB','OCB')
-        AND [cashflow_bank].[date] BETWEEN '{start_date}' AND '{end_date}'
-        AND [cashflow_bank].[inflow_amount] > 0
+            [cashflow_bank].[bank],
+            [cashflow_bank].[bank_account], 
+            [cashflow_bank].[inflow_amount]
+        FROM 
+            [cashflow_bank]
+        WHERE 
+            [cashflow_bank].[bank] IN ('EIB','OCB')
+        AND 
+            [cashflow_bank].[date] = '{t0_date}'
+        AND 
+            [cashflow_bank].[inflow_amount] > 0
         """,
         connect_DWH_CoSo,
         index_col=['bank','bank_account'],
@@ -168,13 +188,17 @@ def run(
     in_money = pd.read_sql(
         f"""
         SELECT
-        [money_in_out_transfer].[bank],
-        [money_in_out_transfer].[bank_account],
-        [money_in_out_transfer].[amount]
-        FROM [money_in_out_transfer]
-        WHERE [money_in_out_transfer].[transaction_id] = '6692'
-        AND [money_in_out_transfer].[date] BETWEEN '{start_date}' AND '{end_date}'
-        AND [money_in_out_transfer].[bank] IN ('EIB','OCB')
+            [money_in_out_transfer].[bank],
+            [money_in_out_transfer].[bank_account],
+            [money_in_out_transfer].[amount]
+        FROM 
+            [money_in_out_transfer]
+        WHERE 
+            [money_in_out_transfer].[transaction_id] = '6692'
+        AND 
+            [money_in_out_transfer].[date] = '{t0_date}'
+        AND 
+            [money_in_out_transfer].[bank] IN ('EIB','OCB')
         """,
         connect_DWH_CoSo,
         index_col=['bank','bank_account'],
@@ -182,13 +206,16 @@ def run(
     out_money = pd.read_sql(
         f"""
         SELECT
-        [money_in_out_transfer].[bank],
-        [money_in_out_transfer].[bank_account],
-        [money_in_out_transfer].[amount]
-        FROM [money_in_out_transfer]
-        WHERE [money_in_out_transfer].[transaction_id] = '6693'
-        AND [money_in_out_transfer].[date] BETWEEN '{start_date}' AND '{end_date}'
-        AND [money_in_out_transfer].[bank] IN ('EIB','OCB')
+            [money_in_out_transfer].[bank],
+            [money_in_out_transfer].[bank_account],
+            [money_in_out_transfer].[amount]
+            FROM [money_in_out_transfer]
+        WHERE 
+            [money_in_out_transfer].[transaction_id] = '6693'
+        AND 
+            [money_in_out_transfer].[date] = '{t0_date}'
+        AND 
+            [money_in_out_transfer].[bank] IN ('EIB','OCB')
         """,
         connect_DWH_CoSo,
         index_col=['bank','bank_account'],
@@ -196,17 +223,42 @@ def run(
     imported_balance = pd.read_sql(
         f"""
         SELECT 
-        [imported_bank_balance].[bank_code],
-        [imported_bank_balance].[bank_account],
-        [imported_bank_balance].[account_name],
-        [imported_bank_balance].[balance]
-        FROM [imported_bank_balance]
-        WHERE [imported_bank_balance].[date] = '{bdate(start_date,-1)}'
+            [imported_bank_balance].[bank_code],
+            [imported_bank_balance].[bank_account],
+            [imported_bank_balance].[account_name],
+            [imported_bank_balance].[balance]
+        FROM 
+            [imported_bank_balance]
+        WHERE 
+            [imported_bank_balance].[date] = '{bdate(t0_date,-1)}'
         """,
         connect_DWH_CoSo,
         index_col=['bank_code','bank_account'],
     )
     imported_balance.index.rename(['bank','bank_account'],inplace=True)
+
+    bank_account_name = pd.read_sql( # dùng để fill những tài khoản bị trống
+        f"""
+        SELECT 
+            [bank_account_list].[bank_account],
+            MAX([account].[customer_name]) [customer_name]
+        FROM 
+            [bank_account_list]
+        LEFT JOIN
+            [sub_account]
+            ON [sub_account].[sub_account] = [bank_account_list].[sub_account]
+        LEFT JOIN
+            [account]
+            ON [account].[account_code] = [sub_account].[account_code]
+        WHERE
+            [bank_account_list].[bank_account] IS NOT NULL
+        GROUP BY
+            [bank_account_list].[bank_account]
+        """,
+        connect_DWH_CoSo,
+        index_col=['bank_account'],
+    ).squeeze().map(lambda x: unidecode.unidecode(x))
+
     bank_account_full = set(eib_sent_data.index) | \
                         set(ocb_sent_data.index) | \
                         set(increase_money_eib.index) | \
@@ -218,7 +270,6 @@ def run(
                         set(imported_balance.index)
     bank_sent_balance = bank_sent_balance.reindex(bank_account_full).fillna(0)
     imported_balance = imported_balance.reindex(bank_account_full)
-    imported_balance['account_name'].fillna('',inplace=True)
     imported_balance['balance'].fillna(0,inplace=True)
     increase_money = increase_money.reindex(bank_account_full).fillna(0)
     decrease_money = decrease_money.reindex(bank_account_full).fillna(0)
@@ -235,7 +286,7 @@ def run(
     output['expected_balance'] = output['opening_balance'] + output['increase_money'] - output['decrease_money'] + output['in_money'] - output['out_money']
     output['bank_sent_balance'] = bank_sent_balance['balance']
     output['diff'] = output['expected_balance'] - output['bank_sent_balance']
-    output = output.loc[output['diff']!=0]
+
     def name_converter(x):
         try:
             result = unidecode.unidecode(x)
@@ -243,9 +294,65 @@ def run(
             result = ''
         return result
     output['account_name'] = output['account_name'].map(name_converter)
+
+    # try to fill missing names
+    for idx in output.index:
+        name = output.loc[idx,'account_name']
+        if name == '':
+            try:
+                filled_name = bank_account_name[idx[1]]
+            except (Exception,):
+                filled_name = ''
+            output.loc[idx,'account_name'] = filled_name
+
     output.reset_index(inplace=True)
 
-    file_name = f'Báo cáo đối chiếu số dư Ngân Hàng trước khi Import {period}.xlsx'
+    # df đối chiếu
+    file_check = output.loc[output['diff']!=0].copy()
+
+    # df import
+    file_import = output[[
+        'bank',
+        'bank_account',
+        'account_name',
+        'bank_sent_balance',
+    ]].copy()
+    file_import.columns = ['BANKCODE','ACCOUNT','ACCOUNT NAME','BALANCE']
+
+    """
+    1.	Nếu import file bank trước batch cuối ngày. (trước 19h)
+    -	Ngày TXDATE: N
+    -	Ngày EFFECTIVEDATE: N+1 (nếu N là thứ 6 hay ngày nghỉ lễ, tết, 
+        thì Ngày EFFECTIVEDATE là ngày làm việc đầu tiên sau nghỉ lễ, tết)
+    -	Tên file import: NNmmyyyy
+    2.	Nếu import file bank sau batch cuối ngày (do lỗi bank gửi file muộn…) 
+        bên TTBT chưa thể import file bank lên trước 19h thì:
+    -	Ngày TXDATE: N+1 (ngày làm việc tiếp theo)
+    -	Ngày EFFECTIVEDATE: N+1 (ngày làm việc tiếp theo)
+    -	Tên file import: (N+1)(N+1)mmyyyy
+    """
+
+    now = dt.datetime.now()
+    if now.time() < dt.time(hour=19):
+        t = run_time
+        txdate = t.strftime('%d/%m/%Y')
+        effective_date = (t+dt.timedelta(days=1)).strftime('%d/%m/%Y')
+    else:
+        t = run_time+dt.timedelta(days=1)
+        txdate = t.strftime('%d/%m/%Y')
+        effective_date = t.strftime('%d/%m/%Y')
+
+    file_import.insert(0,'EFFECTIVEDATE',[effective_date]*file_import.shape[0])
+    file_import.insert(0,'TXDATE',[txdate]*file_import.shape[0])
+    file_import.insert(0,'STT',file_import.index+1)
+
+    ###########################################################################
+    ###########################################################################
+    ###########################################################################
+
+    # ----------------- Write file Đối chiếu -----------------
+
+    file_name = f"Đối chiếu số dư Ngân Hàng trước khi import {txdate.replace('/','.')}.xlsx"
     writer = pd.ExcelWriter(
         join(dept_folder,folder_name,period,file_name),
         engine='xlsxwriter',
@@ -275,7 +382,7 @@ def run(
             'text_wrap': True,
         }
     )
-    number_cell_format = workbook.add_format(
+    num_cell_format = workbook.add_format(
         {
             'border': 1,
             'align': 'center',
@@ -321,17 +428,105 @@ def run(
         ],
         header_format
     )
-    worksheet.write_column('A2',output['bank'],text_cell_format)
-    worksheet.write_column('B2',output['bank_account'],text_cell_format)
-    worksheet.write_column('C2',output['account_name'],text_cell_format)
-    worksheet.write_column('D2',output['opening_balance'],number_cell_format)
-    worksheet.write_column('E2',output['increase_money'],number_cell_format)
-    worksheet.write_column('F2',output['decrease_money'],number_cell_format)
-    worksheet.write_column('G2',output['in_money'],number_cell_format)
-    worksheet.write_column('H2',output['out_money'],number_cell_format)
-    worksheet.write_column('I2',output['expected_balance'],number_cell_format)
-    worksheet.write_column('J2',output['bank_sent_balance'],number_cell_format)
-    worksheet.write_column('K2',output['diff'],diff_cell_format)
+    worksheet.write_column('A2',file_check['bank'],text_cell_format)
+    worksheet.write_column('B2',file_check['bank_account'],text_cell_format)
+    worksheet.write_column('C2',file_check['account_name'],text_cell_format)
+    worksheet.write_column('D2',file_check['opening_balance'],num_cell_format)
+    worksheet.write_column('E2',file_check['increase_money'],num_cell_format)
+    worksheet.write_column('F2',file_check['decrease_money'],num_cell_format)
+    worksheet.write_column('G2',file_check['in_money'],num_cell_format)
+    worksheet.write_column('H2',file_check['out_money'],num_cell_format)
+    worksheet.write_column('I2',file_check['expected_balance'],num_cell_format)
+    worksheet.write_column('J2',file_check['bank_sent_balance'],num_cell_format)
+    worksheet.write_column('K2',file_check['diff'],diff_cell_format)
+
+    writer.close()
+
+    ###########################################################################
+    ###########################################################################
+    ###########################################################################
+
+    # ----------------- Write file Import -----------------
+
+    file_name = f"{txdate.replace('/','')} file import.xlsx"
+    writer = pd.ExcelWriter(
+        join(dept_folder,folder_name,period,file_name),
+        engine='xlsxwriter',
+        engine_kwargs={'options':{'nan_inf_to_errors':True}}
+    )
+    workbook = writer.book
+
+    ## Write sheet Sheet 1
+    header_format = workbook.add_format(
+        {
+            'border': 1,
+            'valign': 'vcenter',
+            'font_name': 'Calibri',
+            'font_size': 11,
+            'text_wrap': True,
+        }
+    )
+    text_center_format = workbook.add_format(
+        {
+            'border': 1,
+            'align': 'center',
+            'valign': 'vcenter',
+            'font_name': 'Calibri',
+            'font_size': 11,
+            'text_wrap': True,
+        }
+    )
+    text_left_format = workbook.add_format(
+        {
+            'border': 1,
+            'align': 'left',
+            'valign': 'vcenter',
+            'font_name': 'Calibri',
+            'font_size': 11,
+            'text_wrap': True,
+        }
+    )
+    date_format = workbook.add_format(
+        {
+            'border': 1,
+            'align': 'right',
+            'valign': 'vcenter',
+            'font_name': 'Calibri',
+            'font_size': 11,
+            'num_format': 'dd/mm/yyyy',
+            'text_wrap': True,
+        }
+    )
+    num_cell_format = workbook.add_format(
+        {
+            'border': 1,
+            'align': 'right',
+            'valign': 'vcenter',
+            'font_name': 'Calibri',
+            'font_size': 11,
+            'num_format': '_-* #,##0_-;-* #,##0_-;_-* "-"??_-;_-@_-',
+            'text_wrap': True,
+        }
+    )
+    worksheet = workbook.add_worksheet('Sheet 1')
+    worksheet.hide_gridlines(option=2)
+    worksheet.set_column('A:A',6)
+    worksheet.set_column('B:D',14)
+    worksheet.set_column('E:E',18)
+    worksheet.set_column('F:F',30)
+    worksheet.set_column('G:G',20)
+    worksheet.write_row(
+        'A1',
+        ['STT','TXDATE','BANK','BANKCODE','ACCOUNT','ACCOUNT NAME','BALANCE'],
+        header_format
+    )
+    worksheet.write_column('A2',file_import['STT'],text_center_format)
+    worksheet.write_column('B2',file_import['TXDATE'],date_format)
+    worksheet.write_column('C2',file_import['EFFECTIVEDATE'],date_format)
+    worksheet.write_column('D2',file_import['BANKCODE'], text_left_format)
+    worksheet.write_column('E2',file_import['ACCOUNT'],text_center_format)
+    worksheet.write_column('F2',file_import['ACCOUNT NAME'],text_left_format)
+    worksheet.write_column('G2',file_import['BALANCE'],num_cell_format)
 
     writer.close()
 

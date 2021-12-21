@@ -40,8 +40,6 @@ def run(
     ###################################################
     ###################################################
 
-    target = pd.read_pickle('df154.pickle')
-
     t0_wildcard = f'{t0_date[-2:]}_{t0_date[5:7]}_{t0_date[:4]}'
     t1_wildcard = f'{t1_date[-2:]}_{t1_date[5:7]}_{t1_date[:4]}'
     t2_wildcard = f'{t2_date[-2:]}_{t2_date[5:7]}_{t2_date[:4]}'

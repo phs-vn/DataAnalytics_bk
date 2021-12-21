@@ -12,6 +12,7 @@ import reporting_tool.trading_service.giaodichluuky.BaoCaoPhiChuyenKhoan
 import reporting_tool.trading_service.giaodichluuky.BaoCaoTamTinhPhiGiaoDich
 import reporting_tool.trading_service.giaodichluuky.BaoCaoTamTinhPhiLuuKy
 import reporting_tool.trading_service.giaodichluuky.BaoCaoTinhHinhHDKD
+import reporting_tool.trading_service.thanhtoanbutru.BaoCaoDoiChieuVaImportTienNganHang
 
 
 class post:
@@ -672,3 +673,8 @@ class report:
 
     def BaoCaoTinhHinhHDKH(self):
         reporting_tool.trading_service.giaodichluuky.BaoCaoTinhHinhHDKD.run(self.periodicity,self.run_time)
+
+    def BaoCaoDoiChieuVaImportTienNganHang(self):
+        reporting_tool.trading_service.thanhtoanbutru.BaoCaoDoiChieuVaImportTienNganHang.run(self.run_time)
+
+
