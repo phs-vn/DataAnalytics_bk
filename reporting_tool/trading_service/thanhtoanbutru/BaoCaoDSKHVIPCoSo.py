@@ -125,8 +125,8 @@ def run(
     branch_groupby_table.fillna(0,inplace=True)
 
     # --------------------- Viet File ---------------------
-    # Write file excel Bao cao doi chieu file ngan hang
-    file_name = f'Báo cáo DS KH VIP sinh nhật.xlsx'
+
+    file_name = f'Danh sách KH VIP cơ sở.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder,folder_name,period,file_name),
         engine='xlsxwriter',

@@ -37,9 +37,19 @@ def run(
                 os.mkdir(join(price_exchange_folder,d))
             shutil.move(join(price_exchange_folder,file),join(price_exchange_folder,d,file))
 
-    price_hose = pd.read_excel(join(price_exchange_folder,f'{day}.{month}.{year}',f'SECURITIES_INFO_HSX_{year}{month}{day}.xlsx'))
-    price_hnx = pd.read_excel(join(price_exchange_folder,f'{day}.{month}.{year}',f'SECURITIES_INFO_HNX_{year}{month}{day}.xlsx'))
-    price_upcom = pd.read_excel(join(price_exchange_folder,f'{day}.{month}.{year}',f'SECURITIES_INFO_UPCOM_{year}{month}{day}.xlsx'))
+    def get_file():
+        price_hose = pd.read_excel(join(price_exchange_folder,f'{day}.{month}.{year}',f'SECURITIES_INFO_HSX_{year}{month}{day}.xlsx'))
+        price_hnx = pd.read_excel(join(price_exchange_folder,f'{day}.{month}.{year}',f'SECURITIES_INFO_HNX_{year}{month}{day}.xlsx'))
+        price_upcom = pd.read_excel(join(price_exchange_folder,f'{day}.{month}.{year}',f'SECURITIES_INFO_UPCOM_{year}{month}{day}.xlsx'))
+        return price_hose,price_hnx,price_upcom
+
+    while True:
+        try:
+            price_hose,price_hnx,price_upcom = get_file()
+            break
+        except FileNotFoundError:
+            time.sleep(15)
+
     price_exchange = pd.concat([price_hose,price_hnx,price_upcom])
     price_exchange.rename({'SYMBOL':'ticker','TRADEPLACE':'exchange','AVGPRICE':'price'},axis=1,inplace=True)
     price_exchange = price_exchange.loc[price_exchange['ticker'].str.len()==3]

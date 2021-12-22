@@ -94,6 +94,8 @@ def run(
     t0_date = info['end_date']
     period = info['period']
     folder_name = info['folder_name']
+    if run_time is None:
+        run_time = dt.datetime.now()
 
     # create folder
     if not os.path.isdir(join(dept_folder,folder_name,period)):  # dept_folder from import
@@ -106,38 +108,38 @@ def run(
     eib_sent_data = pd.read_excel(
         file_path['EIB'],
         skiprows=5,
-        usecols=['FORACID','ACCOUNT BALANCE'],
+        usecols=['FORACID','ACCOUNT NAME','ACCOUNT BALANCE'],
         dtype={'FORACID': object},
     )
     eib_sent_data.rename(
         {
             'FORACID': 'bank_account',
+            'ACCOUNT NAME': 'account_name',
             'ACCOUNT BALANCE': 'balance',
         },
         axis=1,
         inplace=True
     )
-    eib_sent_data['bank_code'] = 'EIB'
-    eib_sent_data.set_index(['bank_code','bank_account'],inplace=True)
-    eib_sent_data.index.rename(['bank','bank_account'],inplace=True)
+    eib_sent_data['bank'] = 'EIB'
+    eib_sent_data.set_index(['bank','bank_account'],inplace=True)
 
     # đọc file OCB
     ocb_sent_data = pd.read_excel(
         file_path['OCB'],
-        usecols=['TÀI KHOẢN','SỐ DƯ'],
+        usecols=['TÀI KHOẢN','TÊN KHÁCH HÀNG','SỐ DƯ'],
         dtype={'TÀI KHOẢN': object},
     )
     ocb_sent_data.rename(
         {
             'TÀI KHOẢN': 'bank_account',
+            'TÊN KHÁCH HÀNG': 'account_name',
             'SỐ DƯ': 'balance',
         },
         axis=1,
         inplace=True
     )
-    ocb_sent_data['bank_code'] = 'OCB'
-    ocb_sent_data.set_index(['bank_code','bank_account'],inplace=True)
-    ocb_sent_data.index.rename(['bank','bank_account'],inplace=True)
+    ocb_sent_data['bank'] = 'OCB'
+    ocb_sent_data.set_index(['bank','bank_account'],inplace=True)
 
     # concat
     bank_sent_balance = pd.concat([eib_sent_data,ocb_sent_data])
@@ -237,28 +239,6 @@ def run(
     )
     imported_balance.index.rename(['bank','bank_account'],inplace=True)
 
-    bank_account_name = pd.read_sql( # dùng để fill những tài khoản bị trống
-        f"""
-        SELECT 
-            [bank_account_list].[bank_account],
-            MAX([account].[customer_name]) [customer_name]
-        FROM 
-            [bank_account_list]
-        LEFT JOIN
-            [sub_account]
-            ON [sub_account].[sub_account] = [bank_account_list].[sub_account]
-        LEFT JOIN
-            [account]
-            ON [account].[account_code] = [sub_account].[account_code]
-        WHERE
-            [bank_account_list].[bank_account] IS NOT NULL
-        GROUP BY
-            [bank_account_list].[bank_account]
-        """,
-        connect_DWH_CoSo,
-        index_col=['bank_account'],
-    ).squeeze().map(lambda x: unidecode.unidecode(x))
-
     bank_account_full = set(eib_sent_data.index) | \
                         set(ocb_sent_data.index) | \
                         set(increase_money_eib.index) | \
@@ -287,24 +267,16 @@ def run(
     output['bank_sent_balance'] = bank_sent_balance['balance']
     output['diff'] = output['expected_balance'] - output['bank_sent_balance']
 
+    # try to fill missing names using bank files
+    output.loc[output['account_name'].isna(),'account_name'] = bank_sent_balance['account_name']
+
     def name_converter(x):
         try:
             result = unidecode.unidecode(x)
         except (Exception,):
-            result = ''
+            result = '' # in case of missing names -> fill with empty string
         return result
     output['account_name'] = output['account_name'].map(name_converter)
-
-    # try to fill missing names
-    for idx in output.index:
-        name = output.loc[idx,'account_name']
-        if name == '':
-            try:
-                filled_name = bank_account_name[idx[1]]
-            except (Exception,):
-                filled_name = ''
-            output.loc[idx,'account_name'] = filled_name
-
     output.reset_index(inplace=True)
 
     # df đối chiếu
@@ -332,8 +304,7 @@ def run(
     -	Tên file import: (N+1)(N+1)mmyyyy
     """
 
-    now = dt.datetime.now()
-    if now.time() < dt.time(hour=19):
+    if run_time.time() < dt.time(hour=19):
         t = run_time
         txdate = t.strftime('%d/%m/%Y')
         effective_date = (t+dt.timedelta(days=1)).strftime('%d/%m/%Y')
@@ -385,7 +356,6 @@ def run(
     num_cell_format = workbook.add_format(
         {
             'border': 1,
-            'align': 'center',
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
             'font_size': 10,
@@ -396,7 +366,6 @@ def run(
     diff_cell_format = workbook.add_format(
         {
             'border': 1,
-            'align': 'center',
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
             'font_size': 10,
