@@ -12,13 +12,12 @@ from reporting_tool.trading_service.thanhtoanbutru import *
 
 
 def run(
-        periodicity: str,
         start_date: str,  # 2021-11-01
         end_date: str,  # 2021-11-30
         run_time=None,
 ):
     start = time.time()
-    info = get_info(periodicity, run_time)
+    info = get_info('monthly', run_time)
     period = info['period']
     folder_name = info['folder_name']
     date_character = ['/', '-', '.']
@@ -84,10 +83,10 @@ def run(
 
     mapper = query_total_account['contract_type'].apply(
         lambda x: 'VIPCN - T1'
-        if ('MR 1' and 'VIPCN') in x
-        else ('SILV - T1' if ('SILV' and 'MR 1') in x
-              else ('GOLD - T0' if ('GOLD' and 'MR 0') in x
-                    else ('GOLD - T2' if ('GOLD' and 'MR 2') in x
+        if ('MR 1' in x and 'VIPCN' in x)
+        else ('SILV - T1' if ('SILV' in x and 'MR 1' in x)
+              else ('GOLD - T0' if ('GOLD' in x and 'MR 0' in x)
+                    else ('GOLD - T2' if ('GOLD'  in x and 'MR 2' in x)
                           else 'NOR'
                           )
                     )
@@ -95,10 +94,10 @@ def run(
     )
     mapper_2 = query_total_account['contract_type'].apply(
         lambda x: 'VIP CN - DP +3'
-        if ('VIPCN' and 'DP 3') in x
-        else ('SILV DP+4' if ('SILV' and 'DP 4') in x
-              else ('GOLD DP +5' if ('GOLD' and 'DP 5') in x
-                    else ('Normal DP +2' if ('NOR' and 'DP 2') in x
+        if ('VIPCN' in x and 'DP 3' in x)
+        else ('SILV DP+4' if ('SILV' in x and 'DP 4' in x)
+              else ('GOLD DP +5' if ('GOLD' in x and 'DP 5' in x)
+                    else ('Normal DP +2' if ('NOR' in x and 'DP 2' in x)
                           else 'NotDP'
                           )
                     )
