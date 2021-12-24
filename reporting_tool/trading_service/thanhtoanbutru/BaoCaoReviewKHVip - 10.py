@@ -8,8 +8,14 @@
     3. Các cột M, N, O, P lấy ý kiến từ các phòng ban khác
     4. Cột Note để trắng cho CN họ note cái gì thì note.
        Cột MOI GIOI QUAN LY thì lên dữ liệu cho chị Tuyết
-    5. TK 022C036979 có contract type là 'MR - KHTN GOLD 70% - OD 0.15% - Margin. PIA 10% - MR 2 - DP 5 (Lãi suất)'
+    5. Cột I (Average Net Asset Value - Tài sản Ròng BQ) không lấy từ bảng RCF3002 nữa mà lấy từ bảng nav theo sub_account
+    6. Nếu ngày trở thành vip trong khoảng đánh giá thì lấy từ ngày trở thành vip tới cuối ngày đánh giá. Nếu ngày trở
+    thành vip ngoài khoảng đánh giá thì lấy full toàn bộ giá trị trong khoảng đánh giá
+    Note: tài khoản có vấn đề
+        TK 022C036979 LÊ ĐẶNG QUỐC HÙNG có contract type là 'MR - KHTN GOLD 70% - OD 0.15% - Margin. PIA 10% - MR 2 - DP 5 (Lãi suất)'
 """
+import pandas as pd
+
 from reporting_tool.trading_service.thanhtoanbutru import *
 
 
@@ -35,14 +41,16 @@ def run(
     ###################################################
     ###################################################
 
-    sod = start_date
+    # lưu start_date đầu tiên
+    save_sod = start_date
 
     # query danh sách khách hàng
     review_vip = pd.read_sql(
         f"""
         SELECT
             CONCAT(N'Tháng ',MONTH([account].[date_of_birth])) [birth_month],
-            [account].[account_code], 
+            [account].[account_code],
+            [relationship].[sub_account], 
             [account].[customer_name], 
             [branch].[branch_name], 
             [account].[date_of_birth], 
@@ -51,9 +59,7 @@ def run(
             [customer_information_change].[time_of_change],
             [customer_information_change].[date_of_approval],
             [customer_information_change].[time_of_approval],
-            [broker].[broker_id],
-            [broker].[broker_name], 
-            [customer_information_change].[change_content]
+            [broker].[broker_name]
         FROM 
             [customer_information]
         LEFT JOIN 
@@ -106,6 +112,7 @@ def run(
     review_vip = review_vip.loc[mask]
 
     review_vip = review_vip[[
+        'sub_account',
         'customer_name',
         'branch_name',
         'contract_type',
@@ -123,7 +130,8 @@ def run(
     review_vip['criteria_fee'] = review_vip['current_vip'].apply(
         lambda x: 40000000 if ('GOLD' in x or 'VIP Branch' in x) else 20000000
     )
-    review_vip['rate'] = review_vip['contract_type'].str.split('Margin.PIA ').str.get(1).str.split('%').str.get(0)
+    review_vip['contract_type'] = review_vip['contract_type'].str.replace(' ', '')
+    review_vip['rate'] = review_vip['contract_type'].str.split('Margin.PIA').str.get(1).str.split('%').str.get(0)
     review_vip['rate'] = review_vip['rate'].astype(float)
     mask_phs = (review_vip['current_vip'] == 'GOLD PHS') | (review_vip['current_vip'] == 'SILV PHS')
     review_vip_phs = review_vip.loc[mask_phs].copy()
@@ -135,6 +143,7 @@ def run(
     check_month = check_date.month
     check_year = check_date.year
 
+    # kiểm tra điều kiện để thay đổi start date và end date
     if check_month == 6:
         start_date = dt.datetime(check_year, 1, 1).strftime('%Y-%m-%d')
         end_date = end_date
@@ -145,59 +154,170 @@ def run(
         start_date = start_date
         end_date = end_date
 
-    # query RCF3001
-    query_rcf01 = pd.read_sql(
-        f"""
-            SELECT
-                [date],
-                [account_code],
-                [trading_fee],
-                [loan_fee]
-            FROM [revenue_from_vip]
-            WHERE 
-                [date] BETWEEN '{start_date}' AND '{end_date}'
-            ORDER BY [account_code]
-        """,
-        connect_DWH_CoSo,
-    )
-    # query RCF3002
-    query_rcf02 = pd.read_sql(
-        f"""
-            SELECT 
-                *
-            FROM [vip_evaluation]
-            WHERE 
-                [date] BETWEEN '{start_date}' AND '{end_date}'
-            ORDER BY [account_code]
-        """,
-        connect_DWH_CoSo,
-    )
+    # Nếu start date ko thay đổi so với start date ban đầu thì chỉ duyệt 3 tháng, còn thay đổi thì
+    # duyệt all (vừa 3 tháng, vừa 6 tháng)
+    if save_sod != start_date:
+        query_nav_6m = pd.read_sql(
+            f"""
+                SELECT
+                    [nav].[sub_account],
+                    AVG(nav) as [net_asset_value_avg]
+                FROM [nav] 
+                WHERE 
+                    [nav].[date] BETWEEN '{start_date}' AND '{end_date}'
+                GROUP BY 
+                    [nav].[sub_account]
+                ORDER BY
+                    [sub_account]
+            """,
+            connect_DWH_CoSo,
+            index_col='sub_account'
+        )
+        query_nav_3m = pd.read_sql(
+            f"""
+                SELECT
+                    [nav].[sub_account],
+                    AVG(nav) as [net_asset_value_avg]
+                FROM [nav] 
+                WHERE 
+                    [nav].[date] BETWEEN '{save_sod}' AND '{end_date}'
+                GROUP BY 
+                    [nav].[sub_account]
+                ORDER BY
+                    [sub_account]
+            """,
+            connect_DWH_CoSo,
+            index_col='sub_account'
+        )
 
-    if start_date != sod:
-        start_date_3m = sod
-        # loc RCF3001
-        query_rcf01['date'] = pd.to_datetime(query_rcf01['date'], format='%Y-%m-%d')
-        query_rcf01_3m = query_rcf01.loc[(query_rcf01['date'] >= start_date_3m) and (query_rcf01['date'] <= end_date)]
-        query_rcf01_3m = query_rcf01_3m.groupby('account_code').sum()
-        query_rcf01_6m = query_rcf01.groupby('account_code').sum()
-        # loc RCF3002
-        query_rcf02['date'] = pd.to_datetime(query_rcf02['date'], format='%Y-%m-%d')
-        query_rcf02_3m = query_rcf02.loc[(query_rcf02['date'] >= start_date_3m) and (query_rcf02['date'] <= end_date)]
-        query_rcf02_3m = query_rcf02_3m.groupby('account_code').sum()
-        query_rcf02_6m = query_rcf02.groupby('account_code').sum()
-        # review vip GOLD, SILV 6 months
-        review_vip_phs['trading_fee'] = query_rcf01_6m['trading_fee']
-        # review_vip_phs['tai_san_rong'] = query_rcf02_6m['tai_san_rong']
-        review_vip_phs.fillna(0, inplace=True)
-        # review vip VIP CN 3 months
-        review_vip_branch['trading_fee'] = query_rcf01_3m['trading_fee']
-        # review_vip_branch['tai_san_rong'] = query_rcf02_3m['tai_san_rong']
-        review_vip_branch.fillna(0, inplace=True)
+        review_vip_phs = review_vip_phs.merge(query_nav_6m, left_on='sub_account', right_index=True, how='left')
+        review_vip_branch = review_vip_branch.merge(query_nav_3m, left_on='sub_account', right_index=True, how='left')
+        # concat 2 df vip_phs and vip_branch
+        review_vip = pd.concat([review_vip_phs, review_vip_branch], join='outer')
+        review_vip.fillna(0, inplace=True)
+        review_vip = review_vip.reset_index()[[
+            'account_code',
+            'customer_name',
+            'branch_name',
+            'approved_date',
+            'criteria_fee',
+            'net_asset_value_avg',
+            'current_vip',
+            'rate',
+            'broker_name',
+        ]]
     else:
-        query_rcf01 = query_rcf01.groupby('account_code').sum()
-        review_vip_branch['trading_fee'] = query_rcf01['trading_fee']
-        # review_vip_branch['tai_san_rong'] = query_rcf02['tai_san_rong']
+        query_nav_3m = pd.read_sql(
+            f"""
+                SELECT
+                    [nav].[sub_account],
+                    AVG(nav) as [net_asset_value_avg]
+                FROM [nav] 
+                WHERE 
+                    [nav].[date] BETWEEN '{start_date}' AND '{end_date}'
+                GROUP BY 
+                    [nav].[sub_account]
+                ORDER BY
+                    [sub_account]
+            """,
+            connect_DWH_CoSo,
+            index_col='sub_account'
+        )
+        query_rln = pd.read_sql(
+            f"""
+                SELECT
+                    [date],
+                    [sub_account],
+                    SUM([interest]) [lai_vay]
+                FROM
+                    [rln0019]
+                WHERE
+                    [date] BETWEEN '{start_date}' AND '{end_date}'
+                GROUP BY
+                    [date], [sub_account]
+            """,
+            connect_DWH_CoSo
+        )
+        query_rod = pd.read_sql(
+            f"""
+                SELECT
+                    [date],
+                    [sub_account],
+                    SUM([fee]) [phi_gd]
+                FROM
+                    [trading_record]
+                WHERE
+                    [date] BETWEEN '{start_date}' AND '{end_date}'
+                GROUP BY
+                    [date], [sub_account]
+                ORDER BY
+                    [date], [sub_account]
+            """,
+            connect_DWH_CoSo
+        )
+        query_rci = pd.read_sql(
+            f"""
+                SELECT
+                    [date],
+                    [sub_account],
+                    SUM([total_fee]) AS [phi_uttb]
+                FROM
+                    [payment_in_advance]
+                WHERE
+                    [date] BETWEEN '{start_date}' AND '{end_date}'
+                GROUP BY
+                    [date], [sub_account]
+            """,
+            connect_DWH_CoSo
+        )
+        query_rod = query_rod.set_index(['date', 'sub_account'])
+        query_rci = query_rci.set_index(['date', 'sub_account'])
+        query_rln = query_rln.set_index(['date', 'sub_account'])
+
+        query_3table = query_rod.merge(
+            query_rln, how='outer', left_index=True, right_index=True
+        ).merge(
+            query_rci, how='outer', left_index=True, right_index=True)
+        query_3table.fillna(0, inplace=True)
+
+        query_3table = query_3table.reset_index(['date', 'sub_account'])
+        query_3table['fee_for_assm']=query_3table['phi_gd']+(query_3table['lai_vay']*0.3)+(query_3table['phi_uttb']*0.3)
+
+        review_vip_branch = review_vip_branch.merge(query_nav_3m, left_on='sub_account', right_index=True, how='left')
         review_vip_branch.fillna(0, inplace=True)
+        review_vip_branch = review_vip_branch.sort_values('account_code')
+
+        query_3table = query_3table.merge(
+            review_vip_branch,
+            how='right',
+            left_on=['sub_account'],
+            right_on=['sub_account'],
+        )
+        query_3table = query_3table.loc[~(query_3table['date'] < query_3table['approved_date'])]
+        query_3table = query_3table.drop(columns=['phi_gd', 'lai_vay', 'phi_uttb'])
+        query_3table.fillna(0, inplace=True)
+        fee_for_assessment = query_3table.groupby('sub_account')['fee_for_assm'].sum()
+        review_vip_branch = review_vip_branch.merge(
+            fee_for_assessment,
+            left_on='sub_account',
+            right_index=True,
+            how='left')
+        review_vip_branch.fillna(0, inplace=True)
+        review_vip_branch['%_fee_div_cri'] = review_vip_branch['fee_for_assm'] / review_vip_branch['criteria_fee']
+        review_vip = review_vip_branch.reset_index()[[
+            'account_code',
+            'sub_account',
+            'customer_name',
+            'branch_name',
+            'approved_date',
+            'criteria_fee',
+            'fee_for_assm',
+            '_fee_div_cri',
+            'net_asset_value_avg',
+            'current_vip',
+            'rate',
+            'broker_name',
+        ]]
 
     # --------------------- Viet File ---------------------
     # Write file excel Báo cáo review KH vip
@@ -521,7 +641,7 @@ def run(
     )
     review_vip_sheet.write_column(
         'B7',
-        review_vip.index,
+        review_vip['account_code'],
         text_left_format
     )
     review_vip_sheet.write_column(

@@ -7,10 +7,10 @@
     - DT0136
 2. daily
 3. Rule
-    - cột giá trị tài sản ròng lấy từ cột 'deposited_asset_value' của rdt0136
-    - 2 cột 'Số tiền tại công ty' và 'Số tiền ký quỹ tại VSD' lấy từ
+    - 2 cột E và F ('Số tiền tại công ty' và 'Số tiền ký quỹ tại VSD') lấy từ
     2 cột 'cash_balance_at_phs' và 'cash_balance_at_vsd' của rdt0121
-    - cột nợ chậm trả lấy từ cột 'deferred_payment_amount_closing'
+    - cột G - 'nợ chậm trả' lấy từ cột 'deferred_payment_amount_closing' của rdt0141
+    - cột I - 'giá trị tài sản ròng' lấy từ cột 'deposited_asset_value' của rdt0136
 """
 
 from reporting_tool.trading_service.thanhtoanbutru import *
