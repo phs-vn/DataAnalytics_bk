@@ -189,23 +189,117 @@ def run(
             connect_DWH_CoSo,
             index_col='sub_account'
         )
+        query_rln_6m = pd.read_sql(
+            f"""
+                SELECT
+                    [date],
+                    [sub_account],
+                    SUM([interest]) [lai_vay]
+                FROM
+                    [rln0019]
+                WHERE
+                    [date] BETWEEN '{start_date}' AND '{end_date}'
+                GROUP BY
+                    [date], [sub_account]
+            """,
+            connect_DWH_CoSo
+        )
+        query_rod_6m = pd.read_sql(
+            f"""
+                SELECT
+                    [date],
+                    [sub_account],
+                    SUM([fee]) [phi_gd]
+                FROM
+                    [trading_record]
+                WHERE
+                    [date] BETWEEN '{start_date}' AND '{end_date}'
+                GROUP BY
+                    [date], [sub_account]
+                ORDER BY
+                    [date], [sub_account]
+            """,
+            connect_DWH_CoSo
+        )
+        query_rci_6m = pd.read_sql(
+            f"""
+                SELECT
+                    [date],
+                    [sub_account],
+                    SUM([total_fee]) AS [phi_uttb]
+                FROM
+                    [payment_in_advance]
+                WHERE
+                    [date] BETWEEN '{start_date}' AND '{end_date}'
+                GROUP BY
+                    [date], [sub_account]
+            """,
+            connect_DWH_CoSo
+        )
+        query_rod_6m = query_rod_6m.set_index(['date', 'sub_account'])
+        query_rci_6m = query_rci_6m.set_index(['date', 'sub_account'])
+        query_rln_6m = query_rln_6m.set_index(['date', 'sub_account'])
 
-        review_vip_phs = review_vip_phs.merge(query_nav_6m, left_on='sub_account', right_index=True, how='left')
-        review_vip_branch = review_vip_branch.merge(query_nav_3m, left_on='sub_account', right_index=True, how='left')
-        # concat 2 df vip_phs and vip_branch
-        review_vip = pd.concat([review_vip_phs, review_vip_branch], join='outer')
-        review_vip.fillna(0, inplace=True)
-        review_vip = review_vip.reset_index()[[
+        query_3table_6m = query_rod_6m.merge(
+            query_rln_6m, how='outer', left_index=True, right_index=True
+        ).merge(
+            query_rci_6m, how='outer', left_index=True, right_index=True)
+        query_3table_6m.fillna(0, inplace=True)
+        query_3table_6m = query_3table_6m.reset_index(['date', 'sub_account'])
+        query_3table_6m['fee_for_assm'] = query_3table_6m['phi_gd'] + (query_3table_6m['lai_vay'] * 0.3) + (
+                    query_3table_6m['phi_uttb'] * 0.3)
+
+        review_vip_phs = review_vip_phs.merge(query_nav_3m, left_on='sub_account', right_index=True, how='left')
+        review_vip_phs.fillna(0, inplace=True)
+        review_vip_phs = review_vip_phs.sort_values('account_code')
+
+        query_3table_6m = query_3table_6m.merge(
+            review_vip_phs,
+            how='right',
+            left_on=['sub_account'],
+            right_on=['sub_account'],
+        )
+        query_3table_6m = query_3table_6m.loc[~(query_3table_6m['date'] < query_3table_6m['approved_date'])]
+        query_3table_6m = query_3table_6m.drop(columns=['phi_gd', 'lai_vay', 'phi_uttb'])
+        query_3table_6m.fillna(0, inplace=True)
+        fee_for_assessment = query_3table_6m.groupby('sub_account')['fee_for_assm'].sum()
+        review_vip_phs = review_vip_phs.merge(
+            fee_for_assessment,
+            left_on='sub_account',
+            right_index=True,
+            how='left')
+        review_vip_phs.fillna(0, inplace=True)
+        review_vip_phs['%_fee_div_cri'] = review_vip_phs['fee_for_assm'] / review_vip_phs['criteria_fee']
+        review_vip_phs = review_vip_phs.reset_index()[[
             'account_code',
+            'sub_account',
             'customer_name',
             'branch_name',
             'approved_date',
             'criteria_fee',
+            'fee_for_assm',
+            '_fee_div_cri',
             'net_asset_value_avg',
             'current_vip',
             'rate',
             'broker_name',
         ]]
+
+        # review_vip_branch = review_vip_branch.merge(query_nav_3m, left_on='sub_account', right_index=True, how='left')
+        # concat 2 df vip_phs and vip_branch
+        # review_vip = pd.concat([review_vip_phs, review_vip_branch], join='outer')
+        # review_vip.fillna(0, inplace=True)
+        # review_vip = review_vip.reset_index()[[
+        #     'account_code',
+        #     'customer_name',
+        #     'branch_name',
+        #     'approved_date',
+        #     'criteria_fee',
+        #     'net_asset_value_avg',
+        #     'current_vip',
+        #     'rate',
+        #     'broker_name',
+        # ]]
     else:
         query_nav_3m = pd.read_sql(
             f"""
