@@ -8,16 +8,13 @@
     3. Cột Note để trắng cho CN họ note cái gì thì note.
        Cột MOI GIOI QUAN LY thì lên dữ liệu cho chị Tuyết
     4. Cột I (Average Net Asset Value - Tài sản Ròng BQ) không lấy từ bảng RCF3002 nữa mà lấy từ bảng nav theo sub_account
-    5. Nếu ngày trở thành vip nằm trong khoảng chu kỳ đang được setup thì lấy từ ngày họ bắt đầu trở thành vip tới cuối kì.
-    Nếu ngày trở thành vip nằm ngoài khoảng chu kỳ đang được setup thì lấy full toàn bộ giá trị trong chu kỳ đang được setup
-    (điều kiện này được xét cho tất cả các giá trị của Phí GD, lãi vay và phí ứng tiền, tài sản ròng BQ).
-    Phần Tài sản ròng BQ ta có thể sum rồi chia bình quân cũng dc.
-    6. Cột G Fee for assessment
-        công thức: 100% * Phí GD + 30% * (Phí UTTB và lãi vay)
+    5. Cột G Fee for assessment
+        công thức: Fee for assessment = 100% * Phí GD + 30% * (Phí UTTB và lãi vay)
+        chú ý: ta phải tính tổng phí trung bình và tổng lãi trung bình trước khi thay vào công thức trên
             phí GD: ROD0040
             phí UTTB: RCI0015
             lãi vay: RLN0019
-    7. Rule cột After review
+    6. Rule cột After review
     GOLD:
         - toàn bộ những KH có cột G >= 40tr -> GOLD (nếu khác GOLD thì tăng bậc là PROMOTE GOLD,
         còn nếu là GOLD thì giữ nguyên GOLD)
@@ -29,12 +26,22 @@
     VIP CN:
         tất cả những KH còn lại (cột G < 20tr) --> Demote DP
         KH nào đang là VIP CN, cột H >= 80%, I >= 4 tỷ, giữ là VIP CN, ngược lại sẽ bị DEMOTE DP
-    8. cột H - % Fee for assessment / Criteria Fee
+    7. cột H - % Fee for assessment / Criteria Fee
         - công thức tính nằm trong file kết quả
-    9. cột Rate lấy từ số % nằm trong 'contract_type' nằm sau cụm từ Margin.PIA ...
-    10. Trong file mẫu hay file kết quả có 1 vài trường hợp đặc biệt, DSKH VIP trong kỳ review sẽ có 1 số kh mà tại
+    8. cột Rate lấy từ số % nằm trong 'contract_type' nằm sau cụm từ Margin.PIA ...
+    9. Trong file mẫu hay file kết quả có 1 vài trường hợp đặc biệt, DSKH VIP trong kỳ review sẽ có 1 số kh mà tại
     tháng cuối cùng của chu kỳ họ dc là vip thì họ sẽ không bị review
     và thêm điều kiện xét 6 tháng của TK nào không thuộc DS vip (VCF0051) mà họ có phí >=20 tr thì lấy
+    10. Nếu khoảng thời gian mà từ lúc KH được lên VIP (approved date) cho tới ngày cuối chu kỳ > 30 ngày
+    => KH đó ở giữa chu kỳ => tính như qui tắc bình thường
+    còn KH nào thời gian lên VIP tới cuối chu kỳ <= 30 (tháng cuối cùng của chu kỳ)
+    => không review KH này => bỏ KH này ra khỏi danh sách
+    nếu KH được lên VIP trước khi chu kỳ tới => xét toàn bộ chu kỳ
+    11. Qui tắc xét ngày lấy giá trị:
+    - Nếu ngày KH lên VIP tới trước chu kỳ, thì xét giá trị từ đầu chu kỳ tới cuối chu kỳ
+    - Nếu ngày KH lên VIP nằm trong chu kỳ, thì xét giá trị từ ngày lên VIP tới cuối chu kỳ
+    - theo qui tắc số 10, nếu ngày lên VIP nằm trong khoảng thời gian tháng cuối cùng của chu kỳ thì
+    ko review KH tại thời điểm này mà để sang thời điểm sau.
 """
 from reporting_tool.trading_service.thanhtoanbutru import *
 
@@ -142,8 +149,8 @@ def run(
     ]]
     review_vip['approved_date'] = pd.to_datetime(review_vip['approved_date']).dt.date
     end_day = dt.datetime.strptime(end_date, '%Y-%m-%d').date()
-    review_vip['Ngay_GD'] = (end_day - review_vip['approved_date']).dt.days + 1
-    review_vip = review_vip.loc[~(review_vip['Ngay_GD'] <= 30)]
+    review_vip['ngay_len_vip'] = (end_day - review_vip['approved_date']).dt.days
+    review_vip = review_vip.loc[~(review_vip['ngay_len_vip'] <= 30)]
     # thêm cột current vip (trích dữ liệu từ cột contract type)
     review_vip['current_vip'] = review_vip['contract_type'].apply(
         lambda x: 'SILV PHS' if 'SILV' in x else ('GOLD PHS' if 'GOLD' in x else 'VIP Branch')
@@ -182,6 +189,13 @@ def run(
 
     # query data 6 months
     if save_sod != start_date:
+        begin_day_3m = dt.datetime.strptime(start_date, '%Y-%m-%d').date()
+        review_vip_phs.loc[
+            review_vip_phs['approved_date'] < begin_day_3m, 'Ngay GD'
+        ] = ((end_day - begin_day_3m).days + 1) / 30
+        review_vip_phs.loc[
+            review_vip_phs['approved_date'] > begin_day_3m, 'Ngay GD'
+        ] = ((end_day - review_vip_phs['approved_date']).dt.days + 1) / 30
         query_nav_6m = pd.read_sql(
             f"""
                 SELECT
@@ -247,13 +261,11 @@ def run(
         query_rod_6m = query_rod_6m.set_index(['date', 'sub_account'])
         query_rci_6m = query_rci_6m.set_index(['date', 'sub_account'])
         query_rln_6m = query_rln_6m.set_index(['date', 'sub_account'])
-        query_nav_6m = query_nav_6m.set_index(['date', 'sub_account'])
+
         table_6m = query_rod_6m.merge(
             query_rln_6m, how='outer', left_index=True, right_index=True
         ).merge(
             query_rci_6m, how='outer', left_index=True, right_index=True
-        ).merge(
-            query_nav_6m, how='outer', left_index=True, right_index=True
         )
         table_6m.fillna(0, inplace=True)
         table_6m = table_6m.reset_index(['date', 'sub_account'])
@@ -269,8 +281,17 @@ def run(
         table_6m = table_6m.drop(columns=['phi_gd', 'lai_vay', 'phi_uttb'])
         table_6m.fillna(0, inplace=True)
 
+        query_nav_6m = query_nav_6m.merge(
+            review_vip_phs[['sub_account', 'approved_date']],
+            how='right',
+            left_on=['sub_account'],
+            right_on=['sub_account'],
+        )
+        query_nav_6m = query_nav_6m.loc[~(query_nav_6m['date'] < query_nav_6m['approved_date'])]
+
+        # tính trung bình cộng và bình quân của 2 cột fee for assessment và tài sản ròng BQ
         fee_for_assessment_6m = table_6m.groupby('sub_account')['fee_for_assm'].sum()
-        avg_net_asset_val_6m = table_6m.groupby('sub_account')['avg_net_asset_val'].mean()
+        avg_net_asset_val_6m = query_nav_6m.groupby('sub_account')['avg_net_asset_val'].mean()
 
         review_vip_phs = review_vip_phs.merge(
             fee_for_assessment_6m,
@@ -283,8 +304,16 @@ def run(
             how='left'
         )
         review_vip_phs.fillna(0, inplace=True)
+        review_vip_phs['fee_for_assm'] = review_vip_phs['fee_for_assm'] / review_vip_phs['Ngay GD']
         review_vip_phs['%_fee_div_cri'] = (review_vip_phs['fee_for_assm'] / review_vip_phs['criteria_fee']) * 100
     # query data 3 months
+    begin_day_3m = dt.datetime.strptime(save_sod, '%Y-%m-%d').date()
+    review_vip_branch.loc[
+        review_vip_branch['approved_date'] < begin_day_3m, 'Ngay GD'
+    ] = round(((end_day - begin_day_3m).days + 1) / 30, 0)
+    review_vip_branch.loc[
+        review_vip_branch['approved_date'] > begin_day_3m, 'Ngay GD'
+    ] = ((end_day - review_vip_branch['approved_date']).dt.days + 1) / 30
     query_nav_3m = pd.read_sql(
         f"""
             SELECT
@@ -351,14 +380,13 @@ def run(
     query_rod_3m = query_rod_3m.set_index(['date', 'sub_account'])
     query_rci_3m = query_rci_3m.set_index(['date', 'sub_account'])
     query_rln_3m = query_rln_3m.set_index(['date', 'sub_account'])
-    query_nav_3m = query_nav_3m.set_index(['date', 'sub_account'])
+
     table_3m = query_rod_3m.merge(
         query_rln_3m, how='outer', left_index=True, right_index=True
     ).merge(
         query_rci_3m, how='outer', left_index=True, right_index=True
-    ).merge(
-        query_nav_3m, how='outer', left_index=True, right_index=True
     )
+
     table_3m.fillna(0, inplace=True)
     table_3m = table_3m.reset_index(['date', 'sub_account'])
     table_3m['fee_for_assm'] = table_3m['phi_gd'] + (table_3m['lai_vay'] * 0.3) + (table_3m['phi_uttb'] * 0.3)
@@ -373,9 +401,17 @@ def run(
     table_3m = table_3m.drop(columns=['phi_gd', 'lai_vay', 'phi_uttb'])
     table_3m.fillna(0, inplace=True)
 
+    query_nav_3m = query_nav_3m.merge(
+        review_vip_branch[['sub_account', 'approved_date']],
+        how='right',
+        left_on=['sub_account'],
+        right_on=['sub_account'],
+    )
+    query_nav_3m = query_nav_3m.loc[~(query_nav_3m['date'] < query_nav_3m['approved_date'])]
+
     # tính trung bình cộng và bình quân của 2 cột fee for assessment và tài sản ròng BQ
     fee_for_assessment_3m = table_3m.groupby('sub_account')['fee_for_assm'].sum()
-    avg_net_asset_val_3m = table_3m.groupby('sub_account')['avg_net_asset_val'].mean()
+    avg_net_asset_val_3m = query_nav_3m.groupby('sub_account')['avg_net_asset_val'].mean()
 
     review_vip_branch = review_vip_branch.merge(
         fee_for_assessment_3m,
@@ -387,7 +423,7 @@ def run(
         right_index=True,
         how='left'
     )
-    review_vip_branch.fillna(0, inplace=True)
+    review_vip_branch['fee_for_assm'] = review_vip_branch['fee_for_assm'] / review_vip_branch['Ngay GD']
     review_vip_branch['%_fee_div_cri'] = (review_vip_branch['fee_for_assm'] / review_vip_branch['criteria_fee']) * 100
 
     if save_sod != start_date:
@@ -638,7 +674,7 @@ def run(
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
             'font_size': 8,
-            'num_format': '#,###0',
+            'num_format': '#,##0',
             'color': '#222B33',
             'bg_color': '#FFCCFF'
         }
@@ -892,7 +928,7 @@ def run(
     )
     review_vip_sheet.write_column(
         'Q7',
-        review_vip['branch_name'],
+        review_vip['broker_name'],
         text_left_format
     )
     review_vip_sheet.write_column(
