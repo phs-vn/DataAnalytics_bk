@@ -25,7 +25,7 @@ def run(
     fin_dept_file = f'Daily Bank Report {day} {month} {year}.xls'
     fin_dept_path = r"\\192.168.10.120\Data Warehouse\Datawarehouse\Datawarehouse\Bank Report"
     while not isfile(join(fin_dept_path,fin_dept_folder,fin_dept_file)):
-        time.sleep(30)
+        time.sleep(15)
 
     # get data
     machitieu = pd.read_excel(

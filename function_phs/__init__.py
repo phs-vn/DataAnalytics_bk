@@ -161,9 +161,9 @@ def seopdate(period:str) -> tuple:
     sop_date = sop_date.strftime('%Y-%m-%d')
 
     # end of the period
-    fq = lambda quarter: 1 if quarter == 4 else 3*quarter + 1
-    fy = lambda year: year + 1 if quarter == 4 else year
-    eop_date = dt.datetime(year=fy(year), month=fq(quarter), day=1) + dt.timedelta(days=-1)
+    fq = lambda quarter: 1 if quarter==4 else 3*quarter + 1
+    fy = lambda year: year + 1 if quarter==4 else year
+    eop_date = dt.datetime(year=fy(year),month=fq(quarter),day=1)+dt.timedelta(days=-1)
     while eop_date.weekday() in holidays.WEEKEND or eop_date in holidays.VN():
         eop_date -= dt.timedelta(days=1)
     eop_date = eop_date.strftime('%Y-%m-%d')
@@ -749,7 +749,7 @@ def convertNaTtoSpaceString(d):
 
     """
     Due to Pandas's limitation that make it unable to work well with NaT,
-    this function serves to replace Nat with ' ' (space string)
+    this function serves to replace NaT with ' ' (space string)
 
     :param d: datetime object
     """
@@ -757,3 +757,79 @@ def convertNaTtoSpaceString(d):
     if pd.isnull(d):
         d = ' '
     return d
+
+
+def iterable_to_sqlstring(itr):
+
+    """
+    This function convert an Python's iterable to a SQL string
+    which then can be inserted to SQL code
+
+    :param itr: any 1-dimension Python's interable (list, tuple, set, pd.Series)
+    """
+
+    sqlstr = ','.join(itr)
+    sqlstr = sqlstr.replace(",","','")
+    sqlstr = "('" + sqlstr + "')"
+
+    return sqlstr
+
+
+def month_mapper(x):
+
+    """
+    This function converts month string.
+    Examples
+    --------
+    >>> month_mapper('01')
+    'Jan'
+    >>> month_mapper('10')
+    'Oct'
+    >>> month_mapper('Jun')
+    '06'
+    >>> month_mapper('Dec')
+    '12'
+    >>> month_mapper(5)
+    'May'
+    >>> month_mapper(12)
+    'Dec'
+
+    :param x: input
+
+    """
+
+    mapper = {
+        'Jan': '01',
+        'Feb': '02',
+        'Mar': '03',
+        'Apr': '04',
+        'May': '05',
+        'Jun': '06',
+        'Jul': '07',
+        'Aug': '08',
+        'Sep': '09',
+        'Oct': '10',
+        'Nov': '11',
+        'Dec': '12',
+    }
+
+    if isinstance(x,str):
+        if len(x)==3:
+            pass
+        elif len(x)==2:
+            mapper = {v:k for k,v in mapper.items()}
+        else:
+            raise ValueError('Invalid Input')
+        result = mapper[x]
+
+    elif isinstance(x,int):
+        if x>=10:
+            x = str(x)
+        else:
+            x = '0'+str(x)
+        result = month_mapper(x)
+
+    else:
+        raise ValueError('Invalid Input')
+
+    return result

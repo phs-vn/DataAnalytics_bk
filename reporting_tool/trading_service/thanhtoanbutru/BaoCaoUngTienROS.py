@@ -27,7 +27,6 @@ def run(
     group_table = pd.read_excel(file_path,names=['account_code','ticker','group'])
     group_table['group'] = group_table['group'].str.replace("'s deal",'').str.replace("'s group",'')
     ros_group = group_table.loc[group_table['group']=='ROS&FLC&GAB','account_code'].drop_duplicates()
-    ros_sql_str = '(' + ','.join(ros_group.map(lambda x: f"'{x}'").to_list()) + ')'
     table = pd.read_sql(
         f"""
         WITH 
@@ -39,7 +38,7 @@ def run(
             FROM [sub_account]
             LEFT JOIN [account]
             ON [account].[account_code] = [sub_account].[account_code]
-            WHERE [sub_account].[account_code] IN {ros_sql_str}
+            WHERE [sub_account].[account_code] IN {iterable_to_sqlstring(ros_group)}
             ),
             [uttb] AS (
             SELECT 

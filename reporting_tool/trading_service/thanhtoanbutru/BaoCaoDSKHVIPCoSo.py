@@ -96,9 +96,15 @@ def run(
         'approved_date',
     ]]
     # convert cột contract_type
-    vip_phs['contract_type'] = vip_phs['contract_type'].apply(
-        lambda x: 'SILV PHS' if 'SILV' in x else ('GOLD PHS' if 'GOLD' in x else 'VIP Branch')
-    )
+    def mapper(x):
+        if 'SILV' in x :
+            result = 'SILV PHS'
+        elif 'GOLD' in x:
+            result = 'GOLD PHS'
+        else:
+            result = 'VIP Branch'
+        return result
+    vip_phs['contract_type'] = vip_phs['contract_type'].map(mapper)
     vip_phs.drop_duplicates(keep='last',inplace=True)
 
     # điều kiện phân biệt giữa SILV, GOLD và VIP Branch

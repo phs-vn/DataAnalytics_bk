@@ -1,16 +1,6 @@
-"""
-1. monthly
-2. qui tắc đầu kỳ, cuối kỳ
-    Tháng 11:
-        + số đầu kỳ: lấy RLN0006 cuối tháng 10 (là số đầu kỳ tháng 11)
-        + số cuối kỳ : lấy RLN0006 cuối tháng 11
-3. hỏi về cách lấy dữ liệu đầu kỳ (cuối kỳ tháng trước) trong bảng VCF0051
-4. Dữ liệu bị lệch khá nhiều so với dữ liệu trên flex
-5. Cách để thêm danh sách KH nợ xấu vào báo cáo (Set cứng hay sao)
-"""
 from reporting_tool.trading_service.thanhtoanbutru import *
 
-
+# DONE
 def run(
         periodicity:str,
         run_time=None,
@@ -20,7 +10,7 @@ def run(
     period = info['period']
     folder_name = info['folder_name']
     end_date = info['end_date']
-    start_date = info['start_date']
+    start_date = bdate(info['start_date'],-1)
 
     # create folder
     if not os.path.isdir(join(dept_folder,folder_name,period)):
@@ -38,7 +28,9 @@ def run(
                 [margin_outstanding].[type],
                 SUM([margin_outstanding].[principal_outstanding]) [o_outs]
             FROM [margin_outstanding]
-            WHERE [margin_outstanding].[date] = '{bdate(start_date,-1)}'
+            WHERE [margin_outstanding].[date] = '{start_date}'
+                AND [margin_outstanding].[account_code] NOT IN (
+                    SELECT [account_code] FROM [account] WHERE [account_type] = N'Tự doanh')
             GROUP BY [margin_outstanding].[type]
         ),
         [closing] AS (
@@ -47,12 +39,14 @@ def run(
                 SUM([margin_outstanding].[principal_outstanding]) [c_outs]
             FROM [margin_outstanding]
             WHERE [margin_outstanding].[date] = '{end_date}'
+                AND [margin_outstanding].[account_code] NOT IN (
+                    SELECT [account_code] FROM [account] WHERE [account_type] = N'Tự doanh')
             GROUP BY [margin_outstanding].[type]
         )
         SELECT
             [t].[type],
             [t].[o_outs],
-            [t].[c_outs] - [t].[o_outs] [change],
+            [t].[c_outs] - [t].[o_outs] [d_oust],
             [t].[c_outs]
         FROM (
             SELECT
@@ -80,32 +74,8 @@ def run(
         connect_DWH_CoSo,
     )
 
-    """
-    QUY TẮC MAP TRÊN margin_accounts:
-
-    dim_1:
-    contain: MR 1, VIPCN -> VIPCN T1
-    contain: MR 1, SILV -> SILV T1
-    contain: MR 0, GOLD -> GOLD T0
-    contain: MR 2, GOLD -> GOLD T2
-    contain: other -> NOR
-
-    dim_2:
-    contain: VIPCN, DP 3 -> VIPCN DP+3
-    contain: SILV, DP 4 -> SILV DP+4
-    contain: GOLD, DP 5 -> GOLD DP+5
-    contain: NOR, DP 2 -> NORMAL DP+2
-    contain: other -> NODP
-
-    dim_3:
-    contain: SILV -> SILVER
-    contain: GOLD -> GOLDEN
-    contain: VIPCN -> VIPCN
-    contain: other -> NOR
-
-    """
-
-    margin_accounts = pd.read_sql(
+    def get_margin_accounts(t):
+        return pd.read_sql(
         f"""
         SELECT DISTINCT
             [vcf0051].[sub_account], 
@@ -166,12 +136,12 @@ def run(
     
         RIGHT JOIN (SELECT [t].[time], [t].[date], [t].[sub_account]
             FROM (SELECT MAX(time) [time], [date], [sub_account] 
-                    FROM [vcf0051] WHERE [date] <= '{end_date}'
-                    -- AND [vcf0051].[action] IN ('EDIT','ADD')
+                    FROM [vcf0051] WHERE [date] <= '{t}'
+                    AND [vcf0051].[action] IN ('EDIT','ADD')
                     GROUP BY [sub_account], [date]) [t]
             RIGHT JOIN (SELECT MAX(date) [date], [sub_account]
-                    FROM [vcf0051] WHERE [date] <= '{end_date}' 
-                    -- AND [vcf0051].[action] IN ('EDIT','ADD')
+                    FROM [vcf0051] WHERE [date] <= '{t}' 
+                    AND [vcf0051].[action] IN ('EDIT','ADD')
                     GROUP BY [sub_account]) [d]
             ON 
                 [t].[sub_account] = [d].[sub_account]
@@ -191,10 +161,50 @@ def run(
         """,
         connect_DWH_CoSo,
     )
-    
-    """
-    INB01 -> branch_id = '0111'
-    """
+    o_margin_table = get_margin_accounts(start_date)
+    c_margin_table = get_margin_accounts(end_date)
+
+    o_margin_accounts = o_margin_table.shape[0]
+    c_margin_accounts = c_margin_table.shape[0]
+
+    def get_dim_1(x):
+        if x == 'o':
+            table = o_margin_table
+        elif x == 'c':
+            table = c_margin_table
+        else:
+            raise ValueError('Invalid Input')
+        count_table = table['dim_1'].value_counts()
+        return count_table[['VIPCN T1','SILV T1','GOLD T0','GOLD T2']]
+
+    o_dim_1, c_dim_1 = get_dim_1('o'), get_dim_1('c')
+    d_dim_1 = c_dim_1 - o_dim_1
+
+    def get_dim_2(x):
+        if x == 'o':
+            table = o_margin_table
+        elif x == 'c':
+            table = c_margin_table
+        else:
+            raise ValueError('Invalid Input')
+        count_table = table['dim_2'].value_counts()
+        return count_table[['NORMAL DP+2','VIPCN DP+3','SILV DP+4','GOLD DP+5']]
+
+    o_dim_2, c_dim_2 = get_dim_2('o'), get_dim_2('c')
+    d_dim_2 = c_dim_2 - o_dim_2
+
+    def get_dim_3(x):
+        if x == 'o':
+            table = o_margin_table
+        elif x == 'c':
+            table = c_margin_table
+        else:
+            raise ValueError('Invalid Input')
+        count_table = table['dim_3'].value_counts()
+        return count_table[['VIPCN','SILVER','GOLDEN']]
+
+    o_dim_3, c_dim_3 = get_dim_3('o'), get_dim_3('c')
+    d_dim_3 = c_dim_3 - o_dim_3
 
     outstandings_inb01 = pd.read_sql(
         f"""
@@ -219,6 +229,8 @@ def run(
         WHERE 
             [margin_outstanding].[date] = '{end_date}' 
             AND [r].[branch_id] = '0111'
+            AND [margin_outstanding].[account_code] NOT IN (
+                SELECT [account_code] FROM [account] WHERE [account_type] = N'Tự doanh')
         GROUP BY [type]
         ORDER BY 
             CASE [type]
@@ -230,7 +242,8 @@ def run(
             END ASC;
         """,
         connect_DWH_CoSo,
-    )
+        index_col='type',
+    ).squeeze(axis=1).reindex(['UTTB','DP','MR','BL','Cầm cố']).fillna(0)
     margin_accounts_inb01 = pd.read_sql(
         f"""
         SELECT 
@@ -240,11 +253,11 @@ def run(
         RIGHT JOIN (SELECT [t].[time], [t].[date], [t].[sub_account]
             FROM (SELECT MAX(time) [time], [date], [sub_account] 
                     FROM [vcf0051] WHERE [date] <= '{end_date}'
-                    -- AND [vcf0051].[action] IN ('EDIT','ADD')
+                    AND [vcf0051].[action] IN ('EDIT','ADD')
                     GROUP BY [sub_account], [date]) [t]
             RIGHT JOIN (SELECT MAX(date) [date], [sub_account]
                     FROM [vcf0051] WHERE [date] <= '{end_date}' 
-                    -- AND [vcf0051].[action] IN ('EDIT','ADD')
+                    AND [vcf0051].[action] IN ('EDIT','ADD')
                     GROUP BY [sub_account]) [d]
             ON 
                 [t].[sub_account] = [d].[sub_account]
@@ -270,91 +283,115 @@ def run(
         connect_DWH_CoSo,
     ).squeeze()
 
-    bad_debt_path = r"\\192.168.10.101\phs-storge-2018\RiskManagementDept" \
-                    r"\RMD_Data\Luu tru van ban\Daily Report\03. Not Matched" \
-                    r"\DS nợ xấu\DS nợ xấu.xlsx"
-    bad_debt = pd.read_excel(
-        bad_debt_path,
-        names=['no.','account_code','principal','interest','total','group'],
-        skipfooter=1,
+    path = r"\\192.168.10.101\phs-storge-2018\RiskManagementDept"\
+           r"\RMD_Data\Luu tru van ban\Monthly Report"\
+           r"\2. Monthly Strategy Meeting Report"
+    bad_loan_path = join(
+        path,
+        end_date[:4],
+        f'RMD_Monthly Summary Risk Report for Margin Operations_{month_mapper(end_date[5:7])} {end_date[:4]}.xlsx',
     )
-    bad_debt['group'].fillna(method='ffill',inplace=True)
-    bad_debt.drop(['interest','total'],axis=1,inplace=True)
+    bad_loan = pd.read_excel(bad_loan_path,sheet_name='Bad loan',usecols=[0,1,4])
+    bad_loan.columns = ['account_code','principal','group']
+    last_row = (~bad_loan['account_code'].isna()).idxmin()
+    bad_loan = bad_loan.iloc[:last_row]
+    bad_loan.dropna(subset=['principal'],inplace=True)
+    bad_loan = bad_loan.loc[bad_loan['principal']!=0]
+    bad_loan['group'] = bad_loan['group'].str.replace(' ','').str.replace("case",'')
+    bad_loan['group'].fillna(method='ffill',inplace=True)
 
+    debt_type = pd.read_sql(
+        f"""
+        SELECT DISTINCT
+        	[margin_outstanding].[account_code],
+            CASE [margin_outstanding].[type]
+                WHEN N'Ứng trước cổ tức' THEN 'UTCT'
+                WHEN N'Trả chậm' THEN 'DP'
+                WHEN N'Margin' THEN 'MR'
+                WHEN N'Bảo lãnh' THEN 'BL'
+            ELSE [margin_outstanding].[type]
+            END [type]
+        FROM [margin_outstanding]
+        WHERE [margin_outstanding].[account_code] IN {iterable_to_sqlstring(bad_loan['account_code'])}
+        """,
+        connect_DWH_CoSo,
+        index_col='account_code'
+    ).squeeze()
+
+    bad_loan['type'] = bad_loan['account_code'].map(debt_type)
     name = pd.read_sql(
-        """
+        f"""
         SELECT [account].[account_code], [account].[customer_name] 
         FROM [account]
+        WHERE [account].[account_code] IN {iterable_to_sqlstring(bad_loan['account_code'])}
         """,
         connect_DWH_CoSo,
         index_col='account_code',
     ).squeeze()
+    bad_loan['cutomer_name'] = bad_loan['account_code'].map(name)
+    bad_loan.sort_values('type',inplace=True)
 
+    bad_loan_g = bad_loan.groupby('type')['principal'].sum()
+    outstandings = outstandings.join(bad_loan_g,'type','outer').fillna(0)
+    outstandings.rename({'principal':'bad_loan'},axis=1,inplace=True)
 
+    # Lấy Dư nợ gửi SSC
+    def get_ssc_outs(t):
+        folder_path \
+            = r"\\192.168.10.101\phs-storge-2018\RiskManagementDept\RMD_Data"\
+              r"\Luu tru van ban\SSC Report\Daily SSC before 8AM"
+        if t=='c':
+            d = end_date
+        elif t=='o':
+            d = start_date
+        else:
+            raise ValueError('Invalid Input')
+        path = join(
+            folder_path,
+            f'{d[:4]}',
+            f'{d[5:7]}.{d[:4]}',
+            f'180426_SCMS_Bao cao ngay truoc 8AM {d[-2:]}{d[5:7]}{d[:4]}.xlsx',
+        )
+        ssc_outs = pd.read_excel(
+            path,
+            sheet_name='1.f_thgdkq_06692',
+            skiprows=2,
+            skipfooter=1,
+            usecols=[2],
+        ).sum().squeeze() * 1e6
+        return ssc_outs
+
+    ssc_o_outs, ssc_c_outs = get_ssc_outs('o'), get_ssc_outs('c')
 
     ###################################################
     ###################################################
     ###################################################
-
-    # --------------------- Viet File Excel ---------------------
-    # Write file BÁO CÁO SỐ LIỆU THỐNG KÊ DVTC THÁNG
-    for date_char in date_character:
-        if date_char in start_date and date_char in end_date:
-            start_date = start_date.replace(date_char, '/')
-            end_date = end_date.replace(date_char, '/')
-    som = dt.datetime.strptime(start_date, "%Y/%m/%d").strftime("%m-%Y")
-    f_name = f'Số liệu thống kê DVTC tháng {som}.xlsx'
+    
+    file_name = f'Số liệu thống kê DVTC tháng {period}.xlsx'
     writer = pd.ExcelWriter(
-        join(dept_folder, folder_name, period, f_name),
+        join(dept_folder, folder_name,period,file_name),
         engine='xlsxwriter',
-        engine_kwargs={'options': {'nan_inf_to_errors': True}}
+        engine_kwargs={'options':{'nan_inf_to_errors':True}}
     )
     workbook = writer.book
 
-    ###################################################
-    ###################################################
-    ###################################################
-
-    # ------------- Viết sheet -------------
-    # Format
-    sheet_title_format = workbook.add_format(
+    title_format = workbook.add_format(
         {
             'bold': True,
             'align': 'center',
             'valign': 'vcenter',
             'font_size': 14,
-            'font_name': 'Arial',
-            'bg_color': '#FFFF00',
+            'font_name': 'Times New Roman',
+            'bg_color': '#4BABC6',
         }
     )
-    INB_format = workbook.add_format(
+    percent_format = workbook.add_format(
         {
             'border': 1,
-            'align': 'center',
             'valign': 'vcenter',
             'font_size': 11,
-            'font_name': 'Arial',
-            'bg_color': '#FFFF00',
-            'color': '#00B050'
-        }
-    )
-    ty_le_format = workbook.add_format(
-        {
-            'border': 1,
-            'align': 'center',
-            'valign': 'vcenter',
-            'font_size': 11,
-            'font_name': 'Arial',
-        }
-    )
-    num_ty_le_format = workbook.add_format(
-        {
-            'border': 1,
-            'align': 'right',
-            'valign': 'vcenter',
-            'font_size': 11,
-            'font_name': 'Arial',
-            'num_format': '#,##0.00'
+            'font_name': 'Times New Roman',
+            'num_format': '0.00%'
         }
     )
     header_format = workbook.add_format(
@@ -364,142 +401,46 @@ def run(
             'align': 'center',
             'valign': 'vcenter',
             'font_size': 11,
-            'font_name': 'Arial',
-            'bg_color': '#FFC000'
+            'font_name': 'Times New Roman',
         }
     )
-    no_xau_header_format = workbook.add_format(
+    bad_loan_header_format = workbook.add_format(
         {
             'border': 1,
             'bold': True,
             'align': 'center',
             'valign': 'vcenter',
             'font_size': 11,
-            'font_name': 'Arial',
-            'bg_color': '#00B050'
+            'font_name': 'Times New Roman',
+            'bg_color': '#FFBF00'
         }
     )
-    cuoi_ky_no_xau_values_format = workbook.add_format(
+    num_format = workbook.add_format(
         {
             'border': 1,
-            'align': 'right',
             'valign': 'vcenter',
             'font_size': 11,
-            'font_name': 'Arial',
-            'color': '#FF0000',
-            'num_format': '#,##0'
+            'font_name': 'Times New Roman',
+            'num_format': '_(* #,##0_);_(* (#,##0);_(* "-"_);_(@_)'
         }
     )
-    normal_money_format = workbook.add_format(
-        {
-            'border': 1,
-            'align': 'right',
-            'valign': 'vcenter',
-            'font_size': 11,
-            'font_name': 'Arial',
-            'num_format': '#,##0'
-        }
-    )
-    trong_ky_money_format = workbook.add_format(
-        {
-            'border': 1,
-            'align': 'right',
-            'valign': 'vcenter',
-            'font_size': 11,
-            'font_name': 'Arial',
-            'num_format': '#,##0.00;(#,##0.00)'
-        }
-    )
-    trong_ky_num_account_format = workbook.add_format(
-        {
-            'border': 1,
-            'align': 'right',
-            'valign': 'vcenter',
-            'font_size': 11,
-            'font_name': 'Arial',
-            'num_format': '#,##0;(#,##0)'
-        }
-    )
-    tong_format = workbook.add_format(
+    num_bold_format = workbook.add_format(
         {
             'border': 1,
             'bold': True,
-            'align': 'center',
             'valign': 'vcenter',
             'font_size': 11,
-            'font_name': 'Arial',
+            'font_name': 'Times New Roman',
+            'num_format': '_(* #,##0_);_(* (#,##0);_(* "-"_);_(@_)'
         }
     )
-    sum_money_format = workbook.add_format(
-        {
-            'border': 1,
-            'bold': True,
-            'align': 'right',
-            'valign': 'vcenter',
-            'font_size': 11,
-            'font_name': 'Arial',
-            'num_format': '#,##0'
-        }
-    )
-    text_left_wrap_text_format = workbook.add_format(
-        {
-            'border': 1,
-            'align': 'left',
-            'valign': 'vcenter',
-            'font_size': 11,
-            'font_name': 'Arial',
-            'text_wrap': True
-        }
-    )
-    SSC_name_format = workbook.add_format(
-        {
-            'border': 1,
-            'align': 'left',
-            'valign': 'vcenter',
-            'font_size': 11,
-            'font_name': 'Arial',
-            'text_wrap': True,
-            'bg_color': '#E0FFC1'
-        }
-    )
-    SSC_empty_format = workbook.add_format(
-        {
-            'border': 1,
-            'align': 'center',
-            'valign': 'vcenter',
-            'font_size': 11,
-            'font_name': 'Arial',
-            'bg_color': '#E0FFC1'
-        }
-    )
-    SSC_value_format = workbook.add_format(
-        {
-            'border': 1,
-            'align': 'right',
-            'valign': 'vcenter',
-            'font_size': 11,
-            'font_name': 'Arial',
-            'bg_color': '#E0FFC1'
-        }
-    )
-    TK_margin_empty_format = workbook.add_format(
-        {
-            'border': 1,
-            'align': 'center',
-            'valign': 'vcenter',
-            'font_size': 11,
-            'font_name': 'Arial',
-            'bg_color': '#FFCCFF'
-        }
-    )
-
     text_left_format = workbook.add_format(
         {
             'border': 1,
-            'align': 'left',
             'valign': 'vcenter',
             'font_size': 11,
-            'font_name': 'Arial',
+            'font_name': 'Times New Roman',
+            'text_wrap': True
         }
     )
     text_center_format = workbook.add_format(
@@ -508,187 +449,120 @@ def run(
             'align': 'center',
             'valign': 'vcenter',
             'font_size': 11,
-            'font_name': 'Arial',
+            'font_name': 'Times New Roman',
         }
     )
-    text_center_wrap_text_format = workbook.add_format(
+    text_noborder_format = workbook.add_format(
         {
-            'border': 1,
-            'align': 'center',
             'valign': 'vcenter',
             'font_size': 11,
-            'font_name': 'Arial',
-            'text_wrap': True
+            'font_name': 'Times New Roman',
         }
     )
-
-    # --------- sheet BAO CAO CAN LAM ---------
-    sheet_DVTC = workbook.add_worksheet('DVTC')
-    sheet_title_name = 'TOÀN CÔNG TY'
-    INB_name = 'INB - 01'
-    ty_le = 'TỶ LỆ %'
-    TK_margin = 'Tổng số lượng TK Margin (Active & Block)'
-    TK_vip = 'Tổng số lượng TK VIP miễn lãi vay MR (Active & Block)'
-    TK_use_DP = 'Tổng số lượng TK sử dụng hạn mức DP (Active &Block)'
-    total_account_vipcn = 'Tổng số lượng TK VIPCN'
-    total_account_silv = 'Tổng số lượng TK SILVER'
-    total_account_gold = 'Tổng số lượng TK GOLDEN'
-    header = [
-        '`',
+    worksheet = workbook.add_worksheet('DVTC')
+    worksheet.hide_gridlines(option=2)
+    headers = [
+        '',
         'Loại',
         'Đầu kỳ',
         'Trong kỳ',
         'Cuối kỳ',
         'Nợ xấu',
-        'Ghi chú'
+        'Ghi chú',
+        'INB-01',
+        'Tỷ lệ',
     ]
-    # Set Column Width and Row Height
-    sheet_DVTC.set_column('A:A', 30.43)
-    sheet_DVTC.set_column('B:B', 15)
-    sheet_DVTC.set_column('C:C', 21.14)
-    sheet_DVTC.set_column('D:D', 18.86)
-    sheet_DVTC.set_column('E:E', 19.14)
-    sheet_DVTC.set_column('F:F', 18)
-    sheet_DVTC.set_column('G:G', 37)
-    sheet_DVTC.set_column('H:H', 16.14)
-    sheet_DVTC.set_column('I:I', 10.14)
+    worksheet.set_column('A:A',26)
+    worksheet.set_column('B:B',16)
+    worksheet.set_column('C:F',20)
+    worksheet.set_column('G:G',27)
+    worksheet.set_column('H:H',16)
+    worksheet.set_column('I:I',10)
 
-    sheet_DVTC.merge_range('A1:G1', sheet_title_name, sheet_title_format)
-    sheet_DVTC.merge_range('H1:H2', INB_name, INB_format)
-    sheet_DVTC.merge_range('I1:I2', ty_le, ty_le_format)
-    sheet_DVTC.write_row('A2', header, header_format)
-    sheet_DVTC.write('F2', 'Nợ xấu', no_xau_header_format)
-    sheet_DVTC.write_column('B3', sum_du_no_goc_dau_ky['type'], text_center_format)
-    sheet_DVTC.write_column(
-        'C3',
-        sum_du_no_goc_dau_ky['principal_outstanding'],
-        normal_money_format
-    )
-    sheet_DVTC.write_column(
-        'E3',
-        sum_du_no_goc_cuoi_ky['principal_outstanding'],
-        cuoi_ky_no_xau_values_format
-    )
-    sheet_DVTC.write('B5', 'MR', TK_margin_empty_format)
+    worksheet.merge_range('A1:I1','TOÀN CÔNG TY',title_format)
+    worksheet.write_row('A2',headers,header_format)
+    worksheet.write_column('B3',outstandings['type'],text_center_format)
+    worksheet.write_column('C3',outstandings['o_outs'],num_format)
+    worksheet.write_column('D3',outstandings['d_oust'],num_format)
+    worksheet.write_column('E3',outstandings['c_outs'],num_format)
+    worksheet.write_column('F3',outstandings['bad_loan'],num_format)
+    worksheet.write('F9',0,num_format)
 
-    sum_row = sum_du_no_goc_dau_ky.shape[0] + 3
-    sheet_DVTC.merge_range(f'A3:A{sum_row}', 'Tổng Dư nợ gốc', text_left_wrap_text_format)
-    sheet_DVTC.write(f'A{sum_row}', '', text_left_wrap_text_format)
-    sheet_DVTC.write(f'B{sum_row}', 'TỔNG', tong_format)
-    sheet_DVTC.write(
-        f'C{sum_row}',
-        sum_du_no_goc_dau_ky['principal_outstanding'].sum(),
-        sum_money_format
-    )
-    sheet_DVTC.write(
-        f'D{sum_row}',
-        du_no_goc_trong_ky['values'].abs().sum(),
-        sum_money_format
-    )
-    du_no_goc_trong_ky['values'] = du_no_goc_trong_ky['values'].replace(0, '-')
-    sheet_DVTC.write_column(
-        'D3',
-        du_no_goc_trong_ky['values'],
-        trong_ky_money_format
-    )
-    sheet_DVTC.write(
-        f'E{sum_row}',
-        sum_du_no_goc_cuoi_ky['principal_outstanding'].sum(),
-        sum_money_format
-    )
-    sheet_DVTC.write(
-        f'A{sum_row + 1}',
-        'Dư nợ báo cáo SSC',
-        SSC_name_format
-    )
-    sheet_DVTC.write(f'B{sum_row + 1}', '', SSC_empty_format)
-    sheet_DVTC.write(f'C{sum_row + 1}', '', SSC_value_format)
-    sheet_DVTC.write(f'D{sum_row + 1}', '', SSC_value_format)
-    sheet_DVTC.write(f'E{sum_row + 1}', '', SSC_value_format)
-    sheet_DVTC.write(f'F{sum_row + 1}', '', SSC_value_format)
+    worksheet.merge_range('A3:A7','Tổng Dư nợ gốc',text_left_format)
+    worksheet.write('A8','',text_left_format)
+    worksheet.write('B8','TỔNG',header_format)
+    worksheet.write_row('C8',outstandings.iloc[:,1:].sum(),num_bold_format)
+    worksheet.write('A9','Dư nợ báo cáo SSC',text_left_format)
+    worksheet.write_row('C9',[ssc_o_outs,ssc_c_outs-ssc_o_outs,ssc_c_outs],num_format)
 
-    # Tổng số lượng TK Margin (Active & Block)
-    sheet_DVTC.write(f'A{sum_row + 2}', TK_margin, text_left_wrap_text_format)
-    sheet_DVTC.write(f'B{sum_row + 2}', '', TK_margin_empty_format)
-    sheet_DVTC.write(f'C{sum_row + 2}', amount_TK_dau_ky.shape[0], normal_money_format)
-    sheet_DVTC.write(
-        f'D{sum_row + 2}',
-        amount_TK_cuoi_ky.shape[0] - amount_TK_dau_ky.shape[0],
-        trong_ky_num_account_format
+    worksheet.write('A10','Tổng số lượng TK Margin\n(Active & Block)',text_left_format)
+    worksheet.write('B10','',text_left_format)
+    worksheet.write_row(
+        'C10',
+        [o_margin_accounts,c_margin_accounts-o_margin_accounts,c_margin_accounts],
+        num_format,
     )
-    sheet_DVTC.write(f'E{sum_row + 2}', amount_TK_cuoi_ky.shape[0], cuoi_ky_no_xau_values_format)
-    sheet_DVTC.write(
-        f'H{sum_row + 2}',
-        query_amount_account_INB.shape[0],
-        cuoi_ky_no_xau_values_format
+    worksheet.merge_range(
+        'A11:A14',
+        'Tổng số lượng TK VIP miễn lãi vay MR\n(Active &Block)',
+        text_left_format
     )
-    sheet_DVTC.write(
-        f'I{sum_row + 2}',
-        (query_amount_account_INB.shape[0]/amount_TK_cuoi_ky.shape[0]) * 100,
-        num_ty_le_format
-    )
+    worksheet.write_column('B11',o_dim_1.index,text_center_format)
+    worksheet.write_column('C11',o_dim_1,num_format)
+    worksheet.write_column('D11',d_dim_1,num_format)
+    worksheet.write_column('E11',c_dim_1,num_format)
 
-    # Tổng số lượng TK VIP miễn lãi vay MR  (Active &Block)
-    sheet_DVTC.merge_range(f'A{sum_row + 3}:A{sum_row + 6}', TK_vip, text_center_wrap_text_format)
-    sheet_DVTC.write_column(f'B{sum_row + 3}', df_tk_vip_dau_ky.index, text_left_format)
-    sheet_DVTC.write_column(f'C{sum_row + 3}', df_tk_vip_dau_ky['num_account'], normal_money_format)
-    sheet_DVTC.write_column(
-        f'D{sum_row + 3}',
-        (df_tk_vip_cuoi_ky['num_account'] - df_tk_vip_dau_ky['num_account']).abs(),
-        trong_ky_num_account_format
+    worksheet.merge_range(
+        'A15:A18',
+        'Tổng số lượng TK sử dụng hạn mức DP\n(Active &Block)',
+        text_left_format
     )
-    sheet_DVTC.write_column(f'E{sum_row + 3}', df_tk_vip_cuoi_ky['num_account'], cuoi_ky_no_xau_values_format)
+    worksheet.write_column('B15',o_dim_2.index,text_center_format)
+    worksheet.write_column('C15',o_dim_2,num_format)
+    worksheet.write_column('D15',d_dim_2,num_format)
+    worksheet.write_column('E15',c_dim_2,num_format)
 
-    # Tổng số lượng TK sử dụng hạn mức DP  (Active &Block)
-    sheet_DVTC.merge_range(f'A{sum_row + 7}:A{sum_row + 10}', TK_use_DP, text_center_wrap_text_format)
-    sheet_DVTC.write_column(f'B{sum_row + 7}', df_tk_dp_dau_ky.index, text_left_format)
-    sheet_DVTC.write_column(f'C{sum_row + 7}', df_tk_dp_dau_ky['num_account'], normal_money_format)
-    sheet_DVTC.write_column(
-        f'D{sum_row + 7}',
-        df_tk_dp_cuoi_ky['num_account'] - df_tk_dp_dau_ky['num_account'],
-        trong_ky_num_account_format
+    worksheet.write_column(
+        'A19',
+        ['Tổng số lượng TK VIPCN','Tổng số lượng TK SILVER','Tổng số lượng TK GOLDEN'],
+        text_left_format,
     )
-    sheet_DVTC.write_column(f'E{sum_row + 7}', df_tk_dp_cuoi_ky['num_account'], cuoi_ky_no_xau_values_format)
+    worksheet.write_column('B19',['']*3,text_center_format)
+    worksheet.write_column('C19',o_dim_3,num_format)
+    worksheet.write_column('D19',d_dim_3,num_format)
+    worksheet.write_column('E19',c_dim_3,num_format)
 
-    # Tổng số lượng TK VIPCN, TK SILVER, TK GOLDEN
-    sheet_DVTC.write(f'A{sum_row + 11}', total_account_vipcn, text_left_format)
-    sheet_DVTC.write(f'A{sum_row + 12}', total_account_silv, text_left_format)
-    sheet_DVTC.write(f'A{sum_row + 13}', total_account_gold, text_left_format)
-    sheet_DVTC.write_column(f'C{sum_row + 11}', df_tk_all_dau_ky['num_account'], normal_money_format)
-    sheet_DVTC.write_column(
-        f'D{sum_row + 11}',
-        df_tk_all_cuoi_ky['num_account'] - df_tk_all_dau_ky['num_account'],
-        trong_ky_num_account_format
-    )
-    sheet_DVTC.write_column(
-        f'E{sum_row + 11}',
-        df_tk_all_cuoi_ky['num_account'],
-        cuoi_ky_no_xau_values_format
-    )
+    worksheet.write_column('F10',['']*12,num_format)
+    for col in ['G','H','I']:
+        worksheet.write_column(f'{col}3',['']*19,num_format)
 
-    sheet_DVTC.write_column(f'B{sum_row + 11}', [''] * 3, text_center_format)
+    worksheet.write_column('H3',outstandings_inb01,num_format)
+    worksheet.write('H8',outstandings_inb01.sum(),num_bold_format)
+    worksheet.write('H10',margin_accounts_inb01,num_format)
+    for row in range(3,9):
+        worksheet.write(f'I{row}',f'=H{row}/E{row}',percent_format)
+    worksheet.write('I10','=H10/E10',percent_format)
 
-    # Ghi chú column
-    sheet_DVTC.write_column(
-        'G3',
-        [''] * (sum_row + df_tk_vip_dau_ky.shape[0] + df_tk_dp_dau_ky.shape[0] + df_tk_all_dau_ky.shape[0]),
-        text_center_format
-    )
-    sheet_DVTC.write(f'G{sum_row + 5}', 'HPX', text_left_format)
+    worksheet.merge_range('A23:E23','DANH SÁCH KH NỢ XẤU',bad_loan_header_format)
+    headers = [
+        'STT',
+        'Số TKCK',
+        'Dư nợ gốc',
+        'Note',
+        'Loại nợ',
+    ]
+    worksheet.write_row('A24',headers,header_format)
+    worksheet.write_column('A25',np.arange(bad_loan.shape[0])+1,text_center_format)
+    worksheet.write_column('B25',bad_loan['account_code'],text_center_format)
+    worksheet.write_column('C25',bad_loan['principal'],num_format)
+    worksheet.write_column('D25',bad_loan['group'],text_center_format)
+    worksheet.write_column('E25',bad_loan['type'],text_center_format)
+    worksheet.write_column('F25',bad_loan['cutomer_name'],text_noborder_format)
 
-    # INB-01 column
-    sheet_DVTC.write_column(
-        'H3',
-        sum_du_no_goc_cuoi_ky['INB-01'],
-        cuoi_ky_no_xau_values_format
-    )
-    # Tỷ lệ column
-    sheet_DVTC.write_column(
-        'I3',
-        sum_du_no_goc_cuoi_ky['ty_le'],
-        num_ty_le_format
-    )
-    # DANH SÁCH KH NỢ XẤU
+    last_row = 25 + bad_loan.shape[0]
+    worksheet.merge_range(f'A{last_row}:B{last_row}','Tổng',header_format)
+    worksheet.write(f'C{last_row}',bad_loan['principal'].sum(),num_bold_format)
+    worksheet.write_row(f'D{last_row}',['']*2,header_format)
 
     ###########################################################################
     ###########################################################################

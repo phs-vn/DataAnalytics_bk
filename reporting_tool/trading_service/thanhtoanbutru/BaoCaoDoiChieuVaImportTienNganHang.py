@@ -1,10 +1,23 @@
 from reporting_tool.trading_service.thanhtoanbutru import *
 import reporting_tool
 
+"""
+(Change Request ngày 27/12/2021)
+Sửa lại Rule : Nếu OCB có sớm trước, sinh ra báo cáo "đối chiếu số dư cuối ngày OCB" để 
+bên em đối chiếu trước với OCB, và tạo ra file import OCB. Còn EIB có file trễ hơn, thì 
+sinh ra file đối chiếu, file import lúc này: cả dữ liệu OCB  và EIB
+"""
+
 # DONE
 def _get_outlook_files(
         run_time=None,
 ):
+
+    """
+    Hàm này save file NH từ mail và trả về đường dẫn đến các file đó
+    Chỉ trả về đường dẫn khi nhận được mail từ CẢ HAI ngân hàng (EIB và OCB)
+    """
+
     info = get_info('daily',run_time)
     t0_date = info['end_date']
     period = info['period']
@@ -15,7 +28,7 @@ def _get_outlook_files(
 
     inbox = outlook.Folders.Item(1).Folders['Inbox']
     messages = inbox.Items
-    # Lọc ngày
+    # Lọc ngày (chỉ xét các emails nhận tại ngày chạy)
     run_date = dt.datetime.strptime(t0_date,'%Y/%m/%d').date()
     def catch(m):
         try:
@@ -29,7 +42,7 @@ def _get_outlook_files(
     if not os.path.isdir(join(dept_folder,'FileFromBanks',period)):
         os.mkdir(join(dept_folder,'FileFromBanks',period))
 
-    def f(x,bank): # Hàm lọc mail
+    def f(x,bank): # Hàm lọc mail có sender là ngân hàng
         mapper = {
             'EIB':'@eximbank',
             'OCB':'@ocb',
@@ -48,10 +61,19 @@ def _get_outlook_files(
         if not os.path.isdir(join(dept_folder,'FileFromBanks',period,bank)):
             os.mkdir(join(dept_folder,'FileFromBanks',period,bank))
 
+        # tạo DS emails được nhận vào ngày chạy và có sender là ngân hàng
+        # (có thể nhiều hơn 1 email vì ngân hàng có thể gửi nhiều lần trong ngày)
         emails = [mes for mes in messages if f(mes,bank) is not None]
         received_times = [email.ReceivedTime.time() for email in emails]
+
         if len(received_times)==0:
-            continue
+            """
+            chỉ xảy ra khi chưa có mail NH
+            -> tiếp tục listen cho tới khi có thì thôi
+            """
+            print(f'No email from {bank}. Waiting...')
+            time.sleep(15)
+            _get_outlook_files(run_time)
         else:
             # Delete existing files (if any)
             files = os.listdir(join(dept_folder,'FileFromBanks',period,bank))
@@ -60,7 +82,7 @@ def _get_outlook_files(
             # Get file
             max_time = max(received_times)
             idx = received_times.index(max_time)
-            email = emails[idx]
+            email = emails[idx] # lấy mail cuối cùng cho đến lúc chạy
             for attachment in email.Attachments:
                 check_file_extension = attachment.FileName.endswith('.xlsx') or attachment.FileName.endswith('.xls')
                 if check_file_extension:
@@ -70,17 +92,8 @@ def _get_outlook_files(
     result = {}
     for bank in ['EIB','OCB']:
         files = os.listdir(join(dept_folder,'FileFromBanks',period,bank))
-        if len(files)==0:
-            """
-            chỉ xảy ra khi chưa có mail NH
-            -> tiếp tục listen cho tới khi có thì thôi
-            """
-            print(f'No email from {bank}. Waiting...')
-            time.sleep(15)
-            _get_outlook_files(run_time)
-        else:
-            file = files[0] # should only have 1 file
-            result[bank] = join(dept_folder,'FileFromBanks',period,bank,file)
+        file = files[0] # should only have 1 file
+        result[bank] = join(dept_folder,'FileFromBanks',period,bank,file)
 
     return result
 
@@ -323,7 +336,8 @@ def run(
 
     # ----------------- Write file Đối chiếu -----------------
 
-    file_name = f"Đối chiếu số dư Ngân Hàng trước khi import {txdate.replace('/','.')}.xlsx"
+    # đặt tên file không dấu theo yêu cầu của Nhàn TTBT
+    file_name = f"Doi chieu so du Ngan Hang truoc khi import {txdate.replace('/','.')}.xlsx"
     writer = pd.ExcelWriter(
         join(dept_folder,folder_name,period,file_name),
         engine='xlsxwriter',

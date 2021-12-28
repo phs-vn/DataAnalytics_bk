@@ -4,12 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NXT.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/breakeven_price/result_table/22.12.2021.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoFileImportTKNganHangBuoiSang.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoSoLieuThongKeDVTC.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/diff.xlsx" afterDir="false" />
+    <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="Push 2021-12-21">
+      <change afterPath="$PROJECT_DIR$/breakeven_price/result_table/24.12.2021.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDuLieuGuiKiemToan.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoKHNNCoSoDuNho.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoSoDuTienKyQuyPhaiSinh.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/db.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/log.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AAA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AAA.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AAM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AAM.png" afterDir="false" />
@@ -420,6 +422,7 @@
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NVB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NVB.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NVL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NVL.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NVT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NVT.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NXT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NXT.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/OCB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/OCB.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/OCH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/OCH.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/OGC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/OGC.png" afterDir="false" />
@@ -762,10 +765,13 @@
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/X20.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/X20.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/YBM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/YBM.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/YEG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/YEG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/post_phs/run_baocaodoichieuvaimporttiennganhan.py" beforeDir="false" afterPath="$PROJECT_DIR$/post_phs/run_baocaodoichieuvaimporttiennganhang.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoCheckGia.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoCheckGia.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/function_phs/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/function_phs/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoTienGuiSSC.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoTienGuiSSC.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDSKHVIPCoSo.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDSKHVIPCoSo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportTienNganHang.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportTienNganHang.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoReviewKhachHangVIP.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDSKHVIPCoSo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoSoLieuThongKeDVTC.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoSoLieuThongKeDVTC.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoUngTienROS.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoUngTienROS.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/diff.xlsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -837,53 +843,11 @@
       <recent name="C:\Users\hiepdang\PycharmProjects\datadriven-project\reporting_tool\trading_service\data_validation" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.BaoCaoDSKHVIPCoSo">
-    <configuration name="BaoCaoDSKHVIPCoSo" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="DataAnalytics" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\hiepdang\PycharmProjects\DataAnalytics\reporting_tool\trading_service\thanhtoanbutru\BaoCaoDSKHVIPCoSo.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="BaoCaoDoiChieuLaiTienGuiPhatSinh_p1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="DataAnalytics" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDoiChieuLaiTienGuiPhatSinh_p1.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.BaoCaoDuLieuGuiKiemToan">
     <configuration name="BaoCaoDoiChieuVaImportTienNganHang" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -898,19 +862,16 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="BaoCaoFileImportTKNganHangBuoiSang" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="BaoCaoDuLieuGuiKiemToan" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoFileImportTKNganHangBuoiSang.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDuLieuGuiKiemToan.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -919,19 +880,52 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="BaoCaoSoLieuThongKeDVTC" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="BaoCaoKHNNCoSoDuNho" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoSoLieuThongKeDVTC.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoKHNNCoSoDuNho.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="BaoCaoSoDuTienKyQuyPhaiSinh" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DataAnalytics" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoSoDuTienKyQuyPhaiSinh.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DataAnalytics" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -941,19 +935,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.BaoCaoDoiChieuLaiTienGuiPhatSinh_p1" />
       <item itemvalue="Python.BaoCaoDoiChieuVaImportTienNganHang" />
-      <item itemvalue="Python.BaoCaoFileImportTKNganHangBuoiSang" />
-      <item itemvalue="Python.BaoCaoSoLieuThongKeDVTC" />
-      <item itemvalue="Python.BaoCaoDSKHVIPCoSo" />
+      <item itemvalue="Python.BaoCaoSoDuTienKyQuyPhaiSinh" />
+      <item itemvalue="Python.BaoCaoKHNNCoSoDuNho" />
+      <item itemvalue="Python.BaoCaoDuLieuGuiKiemToan" />
+      <item itemvalue="Python.test" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.BaoCaoDSKHVIPCoSo" />
-        <item itemvalue="Python.BaoCaoSoLieuThongKeDVTC" />
-        <item itemvalue="Python.BaoCaoFileImportTKNganHangBuoiSang" />
-        <item itemvalue="Python.BaoCaoDoiChieuVaImportTienNganHang" />
-        <item itemvalue="Python.BaoCaoDoiChieuLaiTienGuiPhatSinh_p1" />
+        <item itemvalue="Python.BaoCaoDuLieuGuiKiemToan" />
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.BaoCaoKHNNCoSoDuNho" />
+        <item itemvalue="Python.BaoCaoSoDuTienKyQuyPhaiSinh" />
+        <item itemvalue="Python.BaoCaoSoDuTienKyQuyPhaiSinh" />
       </list>
     </recent_temporary>
   </component>
@@ -1123,7 +1117,14 @@
       <option name="project" value="LOCAL" />
       <updated>1640076617231</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Push 2021-12-21">
+      <created>1640213295889</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1640213295890</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
