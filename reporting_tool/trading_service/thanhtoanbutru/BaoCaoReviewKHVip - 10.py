@@ -121,6 +121,7 @@ def run(
             [customer_information].[contract_type] LIKE N'%GOLD%' 
             OR [customer_information].[contract_type] LIKE N'%SILV%' 
             OR [customer_information].[contract_type] LIKE N'%VIPCN%'
+            OR [customer_information].[contract_type] LIKE N'%NOR%'
         )
         AND -- De chay baktest
             [account].[date_of_open] <= '{end_date}' 
@@ -160,9 +161,10 @@ def run(
     review_vip = review_vip.loc[~(review_vip['ngay_len_vip'] <= 30)]
     # thêm cột current vip (trích dữ liệu từ cột contract type)
     review_vip['current_vip'] = review_vip['contract_type'].apply(
-        lambda x: 'SILV PHS' if 'SILV' in x else ('GOLD PHS' if 'GOLD' in x else 'VIP Branch')
-    )
+        lambda x: 'SILV PHS' if 'SILV' in x else ('GOLD PHS' if 'GOLD' in x else ('Nor Margin' if 'NOR' in x else 'VIP Branch')))
+
     review_vip.drop_duplicates(keep='last', inplace=True)
+
     # thêm cột criteria fee
     review_vip['criteria_fee'] = review_vip['current_vip'].apply(
         lambda x: 40000000 if ('GOLD' in x or 'VIP Branch' in x) else 20000000
@@ -177,6 +179,8 @@ def run(
     review_vip_phs = review_vip.loc[mask_phs].copy()
     mask_branch = review_vip['current_vip'] == 'VIP Branch'
     review_vip_branch = review_vip.loc[mask_branch].copy()
+    mask_nor = review_vip['current_vip'] == 'Nor Margin'
+    review_nor_mr = review_vip.loc[mask_nor].copy()
 
     # month, year of end_date
     check_date = dt.datetime.strptime(end_date, "%Y-%m-%d")
@@ -203,6 +207,14 @@ def run(
         review_vip_phs.loc[
             review_vip_phs['approved_date'] > begin_day_3m, 'ngay_gd'
         ] = round(((end_day - review_vip_phs['approved_date']).dt.days + 1) / 30, 0)
+
+        review_nor_mr.loc[
+            review_nor_mr['approved_date'] < begin_day_3m, 'ngay_gd'
+        ] = round(((end_day - begin_day_3m).days + 1) / 30, 0)
+        review_nor_mr.loc[
+            review_nor_mr['approved_date'] > begin_day_3m, 'ngay_gd'
+        ] = round(((end_day - review_nor_mr['approved_date']).dt.days + 1) / 30, 0)
+
         query_nav_6m = pd.read_sql(
             f"""
                 SELECT
@@ -296,6 +308,24 @@ def run(
         review_vip_phs.fillna(0, inplace=True)
         review_vip_phs['fee_for_assm'] = review_vip_phs['fee_for_assm'] / review_vip_phs['ngay_gd']
         review_vip_phs['%_fee_div_cri'] = (review_vip_phs['fee_for_assm'] / review_vip_phs['criteria_fee']) * 100
+
+        review_nor_mr = review_nor_mr.merge(
+            fee_for_assessment_6m,
+            left_on='sub_account',
+            right_index=True,
+            how='left').merge(
+            query_nav_6m,
+            left_on='sub_account',
+            right_index=True,
+            how='left'
+        )
+        review_nor_mr.fillna(0, inplace=True)
+        review_nor_mr['fee_for_assm'] = review_nor_mr['fee_for_assm'] / review_nor_mr['ngay_gd']
+        review_nor_mr['%_fee_div_cri'] = (review_nor_mr['fee_for_assm'] / review_nor_mr['criteria_fee']) * 100
+        review_nor_mr = review_nor_mr.loc[review_nor_mr['fee_for_assm'] >= 20000000]
+        review_nor_mr = review_nor_mr.replace([np.inf, -np.inf], np.nan).dropna(axis=0)
+        review_nor_mr['approved_date'] = 'New'
+
     # query data 3 months
     begin_day_3m = dt.datetime.strptime(save_sod, '%Y-%m-%d').date()
     review_vip_branch.loc[
@@ -401,7 +431,7 @@ def run(
     review_vip_branch['%_fee_div_cri'] = (review_vip_branch['fee_for_assm'] / review_vip_branch['criteria_fee']) * 100
 
     if save_sod != start_date:
-        review_vip = pd.concat([review_vip_branch, review_vip_phs], join='outer')
+        review_vip = pd.concat([review_vip_branch, review_vip_phs, review_nor_mr], join='outer')
         review_vip = review_vip.reset_index()[[
             'account_code',
             'sub_account',
