@@ -61,6 +61,7 @@ def run(
     info = get_info('quarterly', run_time)
     start_date = info['start_date'].replace('/', '-')
     end_date = info['end_date'].replace('/', '-')
+    # end_date = dt.datetime(2021, 12, 29).strftime('%Y/%m/%d').replace('/', '-')
     period = info['period']
     folder_name = info['folder_name']
 
@@ -174,7 +175,7 @@ def run(
     review_vip['rate'] = review_vip['contract_type'].str.split('Margin.PIA').str.get(1).str.split('%').str.get(0)
     review_vip['rate'] = review_vip['rate'].astype(float)
 
-    # Chia dataframe thành 2 loại vip PHS và vip CN
+    # Chia dataframe thành 3 loại vip PHS, vip CN, Nor Margin
     mask_phs = (review_vip['current_vip'] == 'GOLD PHS') | (review_vip['current_vip'] == 'SILV PHS')
     review_vip_phs = review_vip.loc[mask_phs].copy()
     mask_branch = review_vip['current_vip'] == 'VIP Branch'
@@ -201,19 +202,15 @@ def run(
     # query data 6 months
     if save_sod != start_date:
         begin_day_3m = dt.datetime.strptime(start_date, '%Y-%m-%d').date()
+
         review_vip_phs.loc[
-            review_vip_phs['approved_date'] < begin_day_3m, 'ngay_gd'
+            review_vip_phs['approved_date'] <= begin_day_3m, 'ngay_gd'
         ] = round(((end_day - begin_day_3m).days + 1) / 30, 0)
         review_vip_phs.loc[
             review_vip_phs['approved_date'] > begin_day_3m, 'ngay_gd'
         ] = round(((end_day - review_vip_phs['approved_date']).dt.days + 1) / 30, 0)
 
-        review_nor_mr.loc[
-            review_nor_mr['approved_date'] < begin_day_3m, 'ngay_gd'
-        ] = round(((end_day - begin_day_3m).days + 1) / 30, 0)
-        review_nor_mr.loc[
-            review_nor_mr['approved_date'] > begin_day_3m, 'ngay_gd'
-        ] = round(((end_day - review_nor_mr['approved_date']).dt.days + 1) / 30, 0)
+        review_nor_mr['ngay_gd'] = round(((end_day - begin_day_3m).days + 1) / 30, 0)
 
         query_nav_6m = pd.read_sql(
             f"""
@@ -277,6 +274,7 @@ def run(
             connect_DWH_CoSo,
         )
         # xử lý data thời điểm xét 6 tháng
+        review_nor_mr = review_nor_mr.reset_index()
         query_rod_6m = query_rod_6m.set_index(['date', 'sub_account'])
         query_rci_6m = query_rci_6m.set_index(['date', 'sub_account'])
         query_rln_6m = query_rln_6m.set_index(['date', 'sub_account'])
@@ -323,13 +321,12 @@ def run(
         review_nor_mr['fee_for_assm'] = review_nor_mr['fee_for_assm'] / review_nor_mr['ngay_gd']
         review_nor_mr['%_fee_div_cri'] = (review_nor_mr['fee_for_assm'] / review_nor_mr['criteria_fee']) * 100
         review_nor_mr = review_nor_mr.loc[review_nor_mr['fee_for_assm'] >= 20000000]
-        review_nor_mr = review_nor_mr.replace([np.inf, -np.inf], np.nan).dropna(axis=0)
         review_nor_mr['approved_date'] = 'New'
 
     # query data 3 months
     begin_day_3m = dt.datetime.strptime(save_sod, '%Y-%m-%d').date()
     review_vip_branch.loc[
-        review_vip_branch['approved_date'] < begin_day_3m, 'ngay_gd'
+        review_vip_branch['approved_date'] <= begin_day_3m, 'ngay_gd'
     ] = round(((end_day - begin_day_3m).days + 1) / 30, 0)
     review_vip_branch.loc[
         review_vip_branch['approved_date'] > begin_day_3m, 'ngay_gd'
