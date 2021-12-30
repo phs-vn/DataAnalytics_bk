@@ -4,30 +4,28 @@
     =>  Báo cáo chạy vào cuối quý 2, quý 4 => xét toàn bộ KH (normal,gold,silv,vip)
         Báo cáo chạy vào cuối quý 1, quý 3 => chỉ xét vip
 
-    8. Nếu từ được lên VIP (approved date) cho tới ngày cuối chu kỳ > 30 ngày => giữ (có review)
+    2. Nếu từ được lên VIP (approved date) cho tới ngày cuối chu kỳ > 30 ngày => giữ (có review)
     còn KH nào thời gian lên VIP tới ngày cuối chu kỳ <= 30 => bỏ (không review)
-    OK
 
-    9. Qui tắc xét ngày lấy giá trị:
-    - Nếu ngày KH lên VIP tới trước chu kỳ => xét giá trị từ đầu chu kỳ tới cuối chu kỳ
+    3. Qui tắc xét ngày lấy giá trị:
+    - Nếu ngày KH lên VIP vào trước chu kỳ => xét giá trị từ đầu chu kỳ tới cuối chu kỳ
     - Nếu ngày KH lên VIP nằm trong chu kỳ => xét giá trị từ ngày lên VIP tới cuối chu kỳ
-    OK
 
     4. Fee for assessment
     công thức: Fee for assessment = 100% * Phí GD + 30% * (Phí UTTB + lãi vay)
-    chú ý: tính tổng phí trung bình và tổng lãi trung bình trước khi thay vào công thức trên
-        phí GD: ROD0040
-        phí UTTB: RCI0015
-        lãi vay: RLN0019
+    chú ý: tính tổng phí trung bình tháng và tổng lãi trung bình tháng
+           trước khi thay vào công thức trên
+    - phí GD: ROD0040
+    - phí UTTB: RCI0015
+    = lãi vay: RLN0019
 
-    3. Cột I (Average Net Asset Value - Tài sản Ròng BQ) lấy từ bảng nav
+    5. Cột I Average Net Asset Value -> lấy từ bảng nav
 
     6. cột H - % Fee for assessment / Criteria Fee
-    - công thức tính nằm trong file kết quả
 
     7. cột Rate lấy từ số % nằm trong 'contract_type' nằm sau cụm từ Margin.PIA ...
 
-    5. Rule cột After review
+    8. Rule cột After review
     KH GOLD:
         if: KH có Fee for Aseessment >= 40tr -> GOLD
         (nếu khác GOLD thì tăng bậc là PROMOTE GOLD, còn nếu là GOLD thì giữ nguyên GOLD)
@@ -49,8 +47,7 @@
         if: 20tr <= fee < 40tr -> PROMOTE SILV
         else: fee >= 40tr -> PROMOTE GOLD
 
-    2. Các cột M, N, O, P, R để trống
-
+    9. Các cột M, N, O, P, R để trống
 
 """
 
@@ -67,11 +64,11 @@ def review(level,start_date,end_date):
         query = file.read().replace('__input__[0]',f'{start_date}').replace('__input__[1]',f'{end_date}')
 
     table = pd.read_sql(query,connect_DWH_CoSo)
-    table['rate'] = table['rate'].str.split('Margin.PIA').str.get(1).str.split('%').str.get(0).astype(float)
+    table['rate'] = table['rate'].str.split('Margin.PIA').str.get(1).str.split('%').str.get(0).astype(float)/100
 
     return table
 
-# Có thể chạy lùi ngày bắt đầu từ 27/12/2021 (ngày bắt đầu lưu VCF0051 trên DWH)
+# Có thể chạy lùi ngày, bắt đầu từ 27/12/2021 (ngày bắt đầu lưu VCF0051 trên DWH)
 def run(
         run_time=None,
 ):
@@ -276,7 +273,7 @@ def run(
     date_format = workbook.add_format(
         {
             'border': 1,
-            'align': 'right',
+            'align': 'center',
             'valign': 'vcenter',
             'num_format': 'dd/mm/yyyy',
             'font_name': 'Times New Roman',
@@ -307,7 +304,7 @@ def run(
             'num_format': '_(* #,##0_);_(* (#,##0);_(* "-"??_);_(@_)'
         }
     )
-    per_cri_fee_format = workbook.add_format(
+    percent_format = workbook.add_format(
         {
             'border': 1,
             'text_wrap': True,
@@ -315,18 +312,7 @@ def run(
             'valign': 'vcenter',
             'font_name': 'Times New Roman',
             'font_size': 8,
-            'num_format': '0.00"%"'
-        }
-    )
-    rate_format = workbook.add_format(
-        {
-            'border': 1,
-            'text_wrap': True,
-            'align': 'right',
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 8,
-            'num_format': '0.0"%"'
+            'num_format': '0.00%'
         }
     )
     footer_format = workbook.add_format(
@@ -396,7 +382,7 @@ def run(
     description = 'To: Deputy General Director of Phu Hung Securities Corporation' \
                   '\nProposer: Nguyen Thi Tuyet'
     worksheet.merge_range('A2:C3','',empty_format)
-    vworksheet.insert_image('A2','./img/phs_logo.png',{'x_scale':0.66,'y_scale':0.71})
+    worksheet.insert_image('A2','./img/phs_logo.png',{'x_scale':0.49,'y_scale':0.53})
 
     # Set Column Width and Row Height
     worksheet.set_column('A:A',4)
@@ -406,8 +392,7 @@ def run(
     worksheet.set_column('E:I',13)
     worksheet.set_column('J:K',15)
     worksheet.set_column('L:L',9)
-    worksheet.set_column('M:O',19)
-    worksheet.set_column('P:P',26)
+    worksheet.set_column('M:P',18)
     worksheet.set_column('Q:Q',23)
     worksheet.set_column('R:R',19)
 
@@ -440,18 +425,18 @@ def run(
     worksheet.write('Q6',headers[-2],header_3_format)
     worksheet.write('R6',headers[-1],header_2_format)
 
-    worksheet.write_column('A7',np.arange(table.shape[0]) + 1,stt_format)
-    worksheet.write_column('B7',table['account_code'],text_left_format)
+    worksheet.write_column('A7',np.arange(table.shape[0])+1,stt_format)
+    worksheet.write_column('B7',table['account_code'],text_center_format)
     worksheet.write_column('C7',table['customer_name'],text_left_wrap_text_format)
     worksheet.write_column('D7',table['branch_name'],text_left_format)
     worksheet.write_column('E7',table['approve_date'],date_format)
     worksheet.write_column('F7',table['criteria_fee'],criteria_format)
     worksheet.write_column('G7',table['fee'],money_format)
-    worksheet.write_column('H7',table['pct_fee'],per_cri_fee_format)
+    worksheet.write_column('H7',table['pct_fee'],percent_format)
     worksheet.write_column('I7',table['nav'],money_format)
     worksheet.write_column('J7',table['level'],text_center_format)
     worksheet.write_column('K7',table['after_review'],text_left_wrap_text_format)
-    worksheet.write_column('L7',table['rate'],rate_format)
+    worksheet.write_column('L7',table['rate'],percent_format)
     worksheet.write_column('M7',['']*table.shape[0],text_left_format)
     worksheet.write_column('N7',['']*table.shape[0],text_left_format)
     worksheet.write_column('O7',['']*table.shape[0],text_left_format)
