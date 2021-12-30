@@ -1,12 +1,16 @@
+"""
+BC tháng, chạy vào làm việc đầu tiên tháng sau
+Ko chạy lùi trước 23/12/2021 được (vì chưa bắt đầu lưu VCF0051)
+"""
+
 from reporting_tool.trading_service.thanhtoanbutru import *
 
 # DONE
 def run(
-        periodicity:str,
         run_time=None,
 ):
     start = time.time()
-    info = get_info(periodicity,run_time)
+    info = get_info('monthly',run_time)
     period = info['period']
     folder_name = info['folder_name']
     end_date = info['end_date']
@@ -74,8 +78,7 @@ def run(
         connect_DWH_CoSo,
     )
 
-    def get_margin_accounts(t):
-        return pd.read_sql(
+    c_margin_table = pd.read_sql(
         f"""
         SELECT DISTINCT
             [vcf0051].[sub_account], 
@@ -84,127 +87,97 @@ def run(
                 WHEN
                     CHARINDEX('MR1',REPLACE([vcf0051].[contract_type],' ','')) > 0 
                     AND CHARINDEX('VIPCN',REPLACE([vcf0051].[contract_type],' ','')) > 0
-                    THEN 'VIPCN T1'
+                    THEN 'vipcnt1'
                 WHEN
                     CHARINDEX('MR1',REPLACE([vcf0051].[contract_type],' ','')) > 0 
                     AND CHARINDEX('SILV',REPLACE([vcf0051].[contract_type],' ','')) > 0
-                    THEN 'SILV T1'
+                    THEN 'silvt1'
                 WHEN
                     CHARINDEX('MR0',REPLACE([vcf0051].[contract_type],' ','')) > 0 
                     AND CHARINDEX('GOLD',REPLACE([vcf0051].[contract_type],' ','')) > 0
-                    THEN 'GOLD T0'
+                    THEN 'goldt0'
                 WHEN
                     CHARINDEX('MR2',REPLACE([vcf0051].[contract_type],' ','')) > 0 
                     AND CHARINDEX('GOLD',REPLACE([vcf0051].[contract_type],' ','')) > 0
-                    THEN 'GOLD T2'
+                    THEN 'goldt2'
                 ELSE 'NOR'
             END [dim_1],
             CASE
                 WHEN
                     CHARINDEX('VIPCN',REPLACE([vcf0051].[contract_type],' ','')) > 0
                     AND CHARINDEX('DP3',REPLACE([vcf0051].[contract_type],' ','')) > 0
-                    THEN 'VIPCN DP+3'
+                    THEN 'vipcndp3'
                 WHEN
                     CHARINDEX('SILV',REPLACE([vcf0051].[contract_type],' ','')) > 0
                     AND CHARINDEX('DP4',REPLACE([vcf0051].[contract_type],' ','')) > 0
-                    THEN 'SILV DP+4'
+                    THEN 'silvdp4'
                 WHEN
                     CHARINDEX('GOLD',REPLACE([vcf0051].[contract_type],' ','')) > 0
                     AND CHARINDEX('DP5',REPLACE([vcf0051].[contract_type],' ','')) > 0
-                    THEN 'GOLD DP+5'
+                    THEN 'golddp5'
                 WHEN
                     CHARINDEX('NOR',REPLACE([vcf0051].[contract_type],' ','')) > 0
                     AND CHARINDEX('DP2',REPLACE([vcf0051].[contract_type],' ','')) > 0
-                    THEN 'NORMAL DP+2'
+                    THEN 'normaldp2'
                 ELSE 'NODP'
             END [dim_2],
             CASE
                 WHEN
                     CHARINDEX('SILV',REPLACE([vcf0051].[contract_type],' ','')) > 0
-                    THEN 'SILVER'
+                    THEN 'silver'
                 WHEN
                     CHARINDEX('GOLD',REPLACE([vcf0051].[contract_type],' ','')) > 0
-                    THEN 'GOLDEN'
+                    THEN 'golden'
                 WHEN
                     CHARINDEX('VIPCN',REPLACE([vcf0051].[contract_type],' ','')) > 0
-                    THEN 'VIPCN'
+                    THEN 'vipcn'
                 ELSE 'NOR'
             END [dim_3]
             
         FROM 
             [vcf0051]
-    
-        RIGHT JOIN (SELECT [t].[time], [t].[date], [t].[sub_account]
-            FROM (SELECT MAX(time) [time], [date], [sub_account] 
-                    FROM [vcf0051] WHERE [date] <= '{t}'
-                    AND [vcf0051].[action] IN ('EDIT','ADD')
-                    GROUP BY [sub_account], [date]) [t]
-            RIGHT JOIN (SELECT MAX(date) [date], [sub_account]
-                    FROM [vcf0051] WHERE [date] <= '{t}' 
-                    AND [vcf0051].[action] IN ('EDIT','ADD')
-                    GROUP BY [sub_account]) [d]
-            ON 
-                [t].[sub_account] = [d].[sub_account]
-                AND [t].[date] = [d].[date]
-        ) [last_record]
-    
-        ON [last_record].[sub_account] = [vcf0051].[sub_account] 
-            AND [last_record].[date] = [vcf0051].[date] 
-            AND [last_record].[time] = [vcf0051].[time]
         
         WHERE
-            [vcf0051].[contract_type] NOT LIKE N'%Thường%'
+            [vcf0051].[date] = '{end_date}'
+            AND[vcf0051].[contract_type] NOT LIKE N'%Thường%'
             AND [vcf0051].[contract_type] NOT LIKE N'%Tự doanh%'
             AND [vcf0051].[status] IN ('A','B')
+            
         ORDER BY 
             [vcf0051].[sub_account]
+            
         """,
         connect_DWH_CoSo,
     )
-    o_margin_table = get_margin_accounts(start_date)
-    c_margin_table = get_margin_accounts(end_date)
 
-    o_margin_accounts = o_margin_table.shape[0]
+    # get last month's number of accounts
+    o_year = start_date[:4]
+    o_month = start_date[5:7]
+
+    saved_file = f'./soluongtaikhoankhachvip/{o_year}.{o_month}.pickle'
+    o_accounts = pd.read_pickle(saved_file)
+
     c_margin_accounts = c_margin_table.shape[0]
+    o_margin_accounts = o_accounts['margin']
 
-    def get_dim_1(x):
-        if x == 'o':
-            table = o_margin_table
-        elif x == 'c':
-            table = c_margin_table
-        else:
-            raise ValueError('Invalid Input')
-        count_table = table['dim_1'].value_counts()
-        return count_table[['VIPCN T1','SILV T1','GOLD T0','GOLD T2']]
-
-    o_dim_1, c_dim_1 = get_dim_1('o'), get_dim_1('c')
+    # Dim 1
+    count_table = c_margin_table['dim_1'].value_counts()
+    c_dim_1 = count_table.reindex(['vipcnt1','silvt1','goldt0','goldt2']).fillna(0)
+    o_dim_1 = o_accounts[['vipcnt1','silvt1','goldt0','goldt2']]
     d_dim_1 = c_dim_1 - o_dim_1
 
-    def get_dim_2(x):
-        if x == 'o':
-            table = o_margin_table
-        elif x == 'c':
-            table = c_margin_table
-        else:
-            raise ValueError('Invalid Input')
-        count_table = table['dim_2'].value_counts()
-        return count_table[['NORMAL DP+2','VIPCN DP+3','SILV DP+4','GOLD DP+5']]
-
-    o_dim_2, c_dim_2 = get_dim_2('o'), get_dim_2('c')
+    # Dim 2
+    count_table = c_margin_table['dim_2'].value_counts()
+    c_dim_2 = count_table.reindex(['normaldp2','vipcndp3','silvdp4','golddp5']).fillna(0)
+    o_dim_2 = o_accounts[['normaldp2','vipcndp3','silvdp4','golddp5']]
     d_dim_2 = c_dim_2 - o_dim_2
 
-    def get_dim_3(x):
-        if x == 'o':
-            table = o_margin_table
-        elif x == 'c':
-            table = c_margin_table
-        else:
-            raise ValueError('Invalid Input')
-        count_table = table['dim_3'].value_counts()
-        return count_table[['VIPCN','SILVER','GOLDEN']]
-
-    o_dim_3, c_dim_3 = get_dim_3('o'), get_dim_3('c')
+    # Dim 3
+    count_table = c_margin_table['dim_3'].value_counts()
+    c_dim_3 = count_table.reindex(['vipcn','silver','golden']).fillna(0)
+    o_dim_3 = o_accounts[['vipcn','silver','golden']]
     d_dim_3 = c_dim_3 - o_dim_3
+
 
     outstandings_inb01 = pd.read_sql(
         f"""
@@ -244,41 +217,25 @@ def run(
         connect_DWH_CoSo,
         index_col='type',
     ).squeeze(axis=1).reindex(['UTTB','DP','MR','BL','Cầm cố']).fillna(0)
+
     margin_accounts_inb01 = pd.read_sql(
         f"""
         SELECT 
             COUNT(DISTINCT [vcf0051].[sub_account]) [count]
         FROM 
             [vcf0051]
-        RIGHT JOIN (SELECT [t].[time], [t].[date], [t].[sub_account]
-            FROM (SELECT MAX(time) [time], [date], [sub_account] 
-                    FROM [vcf0051] WHERE [date] <= '{end_date}'
-                    AND [vcf0051].[action] IN ('EDIT','ADD')
-                    GROUP BY [sub_account], [date]) [t]
-            RIGHT JOIN (SELECT MAX(date) [date], [sub_account]
-                    FROM [vcf0051] WHERE [date] <= '{end_date}' 
-                    AND [vcf0051].[action] IN ('EDIT','ADD')
-                    GROUP BY [sub_account]) [d]
-            ON 
-                [t].[sub_account] = [d].[sub_account]
-                AND [t].[date] = [d].[date]
-        ) [last_record]
-        ON [last_record].[sub_account] = [vcf0051].[sub_account] 
-        AND [last_record].[date] = [vcf0051].[date] 
-        AND [last_record].[time] = [vcf0051].[time]
-        LEFT JOIN (
-            SELECT 
-                [relationship].[sub_account],
-                [relationship].[branch_id]
-            FROM [relationship]
-            WHERE [relationship].[date] = '{end_date}'
-        ) [r]
-        ON [r].[sub_account] = [vcf0051].[sub_account]        
         WHERE
-            [vcf0051].[contract_type] NOT LIKE N'%Thường%'
+            [vcf0051].[date] = '{end_date}'
+            AND [vcf0051].[contract_type] NOT LIKE N'%Thường%'
             AND [vcf0051].[contract_type] NOT LIKE N'%Tự doanh%'
             AND [vcf0051].[status] IN ('A','B')
-            AND [r].[branch_id] = '0111'
+            AND [vcf0051].[sub_account] IN (
+                SELECT 
+                    [relationship].[sub_account]
+                FROM [relationship]
+                WHERE [relationship].[date] = '{end_date}'
+                    AND [relationship].[branch_id] = '0111'
+        )
         """,
         connect_DWH_CoSo,
     ).squeeze()
@@ -369,7 +326,7 @@ def run(
     
     file_name = f'Số liệu thống kê DVTC tháng {period}.xlsx'
     writer = pd.ExcelWriter(
-        join(dept_folder, folder_name,period,file_name),
+        join(dept_folder,folder_name,period,file_name),
         engine='xlsxwriter',
         engine_kwargs={'options':{'nan_inf_to_errors':True}}
     )
@@ -507,7 +464,13 @@ def run(
         'Tổng số lượng TK VIP miễn lãi vay MR\n(Active &Block)',
         text_left_format
     )
-    worksheet.write_column('B11',o_dim_1.index,text_center_format)
+    mapper = {
+        'vipcnt1': 'VIPCN T1',
+        'silvt1': 'SILV T1',
+        'goldt0': 'GOLD T0',
+        'goldt2': 'GOLD T2',
+    }
+    worksheet.write_column('B11',o_dim_1.index.map(mapper),text_center_format)
     worksheet.write_column('C11',o_dim_1,num_format)
     worksheet.write_column('D11',d_dim_1,num_format)
     worksheet.write_column('E11',c_dim_1,num_format)
@@ -517,7 +480,13 @@ def run(
         'Tổng số lượng TK sử dụng hạn mức DP\n(Active &Block)',
         text_left_format
     )
-    worksheet.write_column('B15',o_dim_2.index,text_center_format)
+    mapper = {
+        'normaldp2': 'NORMAL DP+2',
+        'vipcndp3': 'VIPCN DP+3',
+        'silvdp4': 'SILV DP+4',
+        'golddp5': 'GOLD DP+5',
+    }
+    worksheet.write_column('B15',o_dim_2.index.map(mapper),text_center_format)
     worksheet.write_column('C15',o_dim_2,num_format)
     worksheet.write_column('D15',d_dim_2,num_format)
     worksheet.write_column('E15',c_dim_2,num_format)
@@ -570,7 +539,8 @@ def run(
 
     writer.close()
     if __name__ == '__main__':
-        print(f"{__file__.split('/')[-1].replace('.py', '')}::: Finished")
+        print(f"{__file__.split('/')[-1].replace('.py','')}::: Finished")
     else:
         print(f"{__name__.split('.')[-1]} ::: Finished")
-    print(f'Total Run Time ::: {np.round(time.time() - start, 1)}s')
+    print(f'Total Run Time ::: {np.round(time.time()-start,1)}s')
+

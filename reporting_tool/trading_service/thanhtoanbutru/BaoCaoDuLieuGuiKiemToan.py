@@ -12,9 +12,10 @@ RCI0015, 2 ngày làm việc cuối cùng, chọn ngày bán là 2 ngày làm vi
     (chú ý: miễn sao các cột này có số và khớp với mấy báo cáo kia là dc,
     còn nếu họ có số ở các cột này thì không dc phép loại)
     - kết quả xuất ra có thể ít hơn hoặc bằng so với file kết quả của báo cáo
+5. Không chạy lùi trước ngày 23/12/2021 được (vì chưa bắt đầu lưu VCF0051)
 """
-from reporting_tool.trading_service.thanhtoanbutru import *
 
+from reporting_tool.trading_service.thanhtoanbutru import *
 
 # DONE
 def run(): # BC quý, chạy vào ngày đầu quý sau
@@ -49,7 +50,7 @@ def run(): # BC quý, chạy vào ngày đầu quý sau
             LEFT JOIN 
                 [account] 
             ON [relationship].[account_code] = [account].[account_code]
-            WHERE [relationship].[date] = '{end_date}'
+            WHERE [relationship].[date] = '2021-12-28'
         ),
         [b] AS (
             SELECT
@@ -63,7 +64,7 @@ def run(): # BC quý, chạy vào ngày đầu quý sau
             FROM
                 [rmr1062]
             WHERE
-                [rmr1062].[margin_account] = 1 AND [rmr1062].[date] = '{end_date}'
+                [rmr1062].[margin_account] = 1 AND [rmr1062].[date] = '2021-12-28'
         ),
         [p] AS (
             SELECT
@@ -73,7 +74,7 @@ def run(): # BC quý, chạy vào ngày đầu quý sau
             FROM
                 [sub_account_report]
             WHERE
-                [sub_account_report].[date] = '{end_date}'
+                [sub_account_report].[date] = '2021-12-28'
         ),
         [c] AS (
             SELECT
@@ -82,7 +83,7 @@ def run(): # BC quý, chạy vào ngày đầu quý sau
             FROM
                 [sub_account_deposit]
             WHERE
-                [sub_account_deposit].[date] = '{end_date}'
+                [sub_account_deposit].[date] = '2021-12-28'
         ),
         [s] AS (
             SELECT
@@ -96,7 +97,7 @@ def run(): # BC quý, chạy vào ngày đầu quý sau
             FROM
                 [trading_record]
             WHERE
-                [trading_record].[date] BETWEEN '{bdate(end_date,-1)}' AND '{end_date}'
+                [trading_record].[date] BETWEEN '2021-12-27' AND '2021-12-28'
                 AND [trading_record].[type_of_order] = 'S'
             GROUP BY
                 [trading_record].[sub_account]
@@ -108,8 +109,8 @@ def run(): # BC quý, chạy vào ngày đầu quý sau
             FROM
                 [payment_in_advance]
             WHERE
-                [payment_in_advance].[date] BETWEEN '{bdate(end_date,-1)}' AND '{end_date}'
-                AND [payment_in_advance].[trading_date] BETWEEN '{bdate(end_date,-1)}' AND '{end_date}'
+                [payment_in_advance].[date] BETWEEN '2021-12-27' AND '2021-12-28'
+                AND [payment_in_advance].[trading_date] BETWEEN '2021-12-27' AND '2021-12-28'
             GROUP BY [payment_in_advance].[sub_account]
         )
         SELECT [all].* FROM (
@@ -124,7 +125,9 @@ def run(): # BC quý, chạy vào ngày đầu quý sau
                 [b].[total_cash],
                 [b].[total_margin],
                 [b].[total_asset],
-                [b].[total_outs_plus_int],
+                CASE WHEN [b].[total_outs_plus_int] >= 0 THEN [b].[total_outs_plus_int]
+                 ELSE 0
+                 END [total_outs_plus_int], -- data của FLEX đang sai ở 022C062345 (-9đ), phải lên 0đ
                 50 [rai]
             FROM [i]
             RIGHT JOIN [b] ON [b].[sub_account] = [i].[sub_account]
@@ -146,7 +149,7 @@ def run(): # BC quý, chạy vào ngày đầu quý sau
     ###################################################
     ###################################################
 
-    file_date = dt.datetime.strptime(end_date,"%Y-%m-%d").strftime("%d-%m-%Y")
+    file_date = dt.datetime.strptime('2021-12-28',"%Y-%m-%d").strftime("%d-%m-%Y")
     file_name = f'Dữ liệu gửi kiểm toán {file_date}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder,folder_name,period,file_name),

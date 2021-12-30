@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="Push 2021-12-21">
-      <change afterPath="$PROJECT_DIR$/breakeven_price/result_table/24.12.2021.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDuLieuGuiKiemToan.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoKHNNCoSoDuNho.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoSoDuTienKyQuyPhaiSinh.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/db.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/log.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/test.py" afterDir="false" />
+    <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoReviewKHVIPCoSo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/soluongtaikhoankhachvip/2021.10.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/soluongtaikhoankhachvip/2021.11.pickle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AAA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AAA.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AAM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AAM.png" afterDir="false" />
@@ -765,13 +761,76 @@
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/X20.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/X20.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/YBM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/YBM.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/YEG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/YEG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/function_phs/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/function_phs/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoTienGuiSSC.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoTienGuiSSC.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/bosung_trading_depository/Báo cáo check gia.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/bosung_trading_depository/CHECK 27.08.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/derivatives/RDT0121.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoCheckGia.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/giaodichluuky/BaoCaoCheckGia.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoNgay/2021.11.01/Báo cáo check giá 2021.11.01.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoNgay/2021.11.03/Báo cáo check giá 2021.11.03.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoNgay/2021.11.04/Báo cáo check giá 2021.11.04.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoNgay/2021.11.05/Báo cáo check giá 2021.11.05.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoNgay/2021.11.08/Báo cáo check giá 2021.11.08.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoNgay/2021.11.09/Báo cáo check giá 2021.11.09.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoQuy/Q2.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (old) Q2.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoQuy/Q3.2021/HNX - Danh sách KH đóng mở ủy quyền tài khoản PHS Q3.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoQuy/Q3.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (old) Q3.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/08.2021/Báo cáo giá dịch vụ giao dịch 08.2021 - HNX &amp; UPCOM.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/08.2021/Báo cáo giá dịch vụ giao dịch 08.2021 - HOSE.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/08.2021/HNX - Danh sách KH đóng mở ủy quyền tài khoản PHS 08.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/Báo cáo giá dịch vụ giao dịch 09.2021 - HNX &amp; UPCOM.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/Báo cáo giá dịch vụ giao dịch 09.2021 - HOSE.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/Báo cáo hoạt động lưu ký nhà đầu tư nước ngoài 09.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/Báo cáo phí tạm tính phí lưu ký 09.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/HNX - Danh sách KH đóng mở ủy quyền tài khoản PHS 09.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (new) 09.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/09.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (old) 09.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/10.2021/Báo cáo giá dịch vụ giao dịch 10.2021 - HNX &amp; UPCOM.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/10.2021/Báo cáo giá dịch vụ giao dịch 10.2021 - HOSE.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/10.2021/Báo cáo hoạt động lưu ký nhà đầu tư nước ngoài 10.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/10.2021/Báo cáo phí chuyển khoản 10.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/10.2021/Báo cáo phí chuyển khoản tổng hợp 10.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/10.2021/Báo cáo phí tạm tính phí lưu ký 10.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/10.2021/Báo cáo tình hình HĐKD (Biểu II.6) 10.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/10.2021/HNX - Danh sách KH đóng mở ủy quyền tài khoản PHS 10.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/10.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (new) 10.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/10.2021/HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (old) 10.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoThang/10.2021/~$Báo cáo phí tạm tính phí lưu ký 10.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoTuan/01-05.11.2021/Báo cáo tiền gửi và số lượng tài khoản 01-05.11.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/GiaoDichLuuKy/BaoCaoTuan/25-29.10.2021/Báo cáo tiền gửi và số lượng tài khoản 25-29.10.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoThang/02.2021/Báo cáo phí chuyển khoản sang CTCK khác 02.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoThang/06.2021/Báo cáo phí tạm tính phí lưu ký 06.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/output/ThanhToanBuTru/BaoCaoThang/07.2021/Báo cáo phí tạm tính phí lưu ký 07.2021.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/010002.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/010015.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/032001.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RCF0001.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RCF0004.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RCF0005.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RCF0016.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RCF0032.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RCF3001.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RCF3002.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RCI0001.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RCI0015.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RCI1021.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RCI1025.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RDT0121.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RLN0006.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RM0068_1.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RM0069_1.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RMR0035.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RMR1063.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/ROD0040.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RSA0004.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RSE0080.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RSE2009.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/RSE9992.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/SA0004.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/stock/VCF0051.xls" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDSKHVIPCoSo.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDSKHVIPCoSo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportTienNganHang.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportTienNganHang.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDuLieuGuiKiemToan.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoDuLieuGuiKiemToan.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoSoLieuThongKeDVTC.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoSoLieuThongKeDVTC.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoUngTienROS.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoUngTienROS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/diff.xlsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -838,12 +897,13 @@
       <recent name="C:\Users\hiepdang\PycharmProjects\DataAnalytics\breakeven_price" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\hiepdang\PycharmProjects\DataAnalytics\reporting_tool\trading_service\thanhtoanbutru" />
       <recent name="C:\Users\hiepdang\PycharmProjects\DataAnalytics\breakeven_price" />
       <recent name="C:\Users\hiepdang\PycharmProjects\DataAnalytics\database" />
       <recent name="C:\Users\hiepdang\PycharmProjects\datadriven-project\reporting_tool\trading_service\data_validation" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.BaoCaoDuLieuGuiKiemToan">
+  <component name="RunManager" selected="Python.BaoCaoDoiChieuVaImportTienNganHang">
     <configuration name="BaoCaoDoiChieuVaImportTienNganHang" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -880,7 +940,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="BaoCaoKHNNCoSoDuNho" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="BaoCaoReviewKHVIPCoSo" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -889,7 +949,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoKHNNCoSoDuNho.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoReviewKHVIPCoSo.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -898,7 +958,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="BaoCaoSoDuTienKyQuyPhaiSinh" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="BaoCaoSoLieuThongKeDVTC" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -907,7 +967,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoSoDuTienKyQuyPhaiSinh.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoSoLieuThongKeDVTC.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -916,16 +976,16 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="run_baocaocheckgia" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/post_phs" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/test.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/post_phs/run_baocaocheckgia.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -935,19 +995,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.BaoCaoDoiChieuVaImportTienNganHang" />
-      <item itemvalue="Python.BaoCaoSoDuTienKyQuyPhaiSinh" />
-      <item itemvalue="Python.BaoCaoKHNNCoSoDuNho" />
       <item itemvalue="Python.BaoCaoDuLieuGuiKiemToan" />
-      <item itemvalue="Python.test" />
+      <item itemvalue="Python.BaoCaoSoLieuThongKeDVTC" />
+      <item itemvalue="Python.BaoCaoReviewKHVIPCoSo" />
+      <item itemvalue="Python.run_baocaocheckgia" />
+      <item itemvalue="Python.BaoCaoDoiChieuVaImportTienNganHang" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.BaoCaoDoiChieuVaImportTienNganHang" />
+        <item itemvalue="Python.run_baocaocheckgia" />
         <item itemvalue="Python.BaoCaoDuLieuGuiKiemToan" />
-        <item itemvalue="Python.test" />
-        <item itemvalue="Python.BaoCaoKHNNCoSoDuNho" />
-        <item itemvalue="Python.BaoCaoSoDuTienKyQuyPhaiSinh" />
-        <item itemvalue="Python.BaoCaoSoDuTienKyQuyPhaiSinh" />
+        <item itemvalue="Python.BaoCaoReviewKHVIPCoSo" />
+        <item itemvalue="Python.BaoCaoSoLieuThongKeDVTC" />
       </list>
     </recent_temporary>
   </component>
@@ -1124,8 +1184,18 @@
       <option name="project" value="LOCAL" />
       <updated>1640213295890</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Push 2021-12-28">
+      <created>1640688017287</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1640688017287</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.sql" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -1190,6 +1260,7 @@
     <MESSAGE value="Khop so Bao Cao Phi Chuyen Khoan" />
     <MESSAGE value="Push 2021-12-17" />
     <MESSAGE value="Push 2021-12-21" />
-    <option name="LAST_COMMIT_MESSAGE" value="Push 2021-12-21" />
+    <MESSAGE value="Push 2021-12-28" />
+    <option name="LAST_COMMIT_MESSAGE" value="Push 2021-12-28" />
   </component>
 </project>

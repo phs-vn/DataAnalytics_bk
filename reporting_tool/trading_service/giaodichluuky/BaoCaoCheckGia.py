@@ -48,6 +48,7 @@ def run(
             price_hose,price_hnx,price_upcom = get_file()
             break
         except FileNotFoundError:
+            print('No files received from Stock Exchanges')
             time.sleep(15)
 
     price_exchange = pd.concat([price_hose,price_hnx,price_upcom])

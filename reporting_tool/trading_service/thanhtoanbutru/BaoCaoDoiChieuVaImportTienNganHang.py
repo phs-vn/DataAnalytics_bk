@@ -67,13 +67,7 @@ def _get_outlook_files(
         received_times = [email.ReceivedTime.time() for email in emails]
 
         if len(received_times)==0:
-            """
-            chỉ xảy ra khi chưa có mail NH
-            -> tiếp tục listen cho tới khi có thì thôi
-            """
-            print(f'No email from {bank}. Waiting...')
-            time.sleep(15)
-            _get_outlook_files(run_time)
+            continue
         else:
             # Delete existing files (if any)
             files = os.listdir(join(dept_folder,'FileFromBanks',period,bank))
@@ -92,8 +86,17 @@ def _get_outlook_files(
     result = {}
     for bank in ['EIB','OCB']:
         files = os.listdir(join(dept_folder,'FileFromBanks',period,bank))
-        file = files[0] # should only have 1 file
-        result[bank] = join(dept_folder,'FileFromBanks',period,bank,file)
+        if len(files)==0:
+            """
+            chỉ xảy ra khi chưa có mail NH
+            -> tiếp tục listen cho tới khi có thì thôi
+            """
+            print(f'No email from {bank}. Waiting...')
+            time.sleep(15)
+            _get_outlook_files(run_time)
+        else:
+            file = files[0] # should only have 1 file
+            result[bank] = join(dept_folder,'FileFromBanks',period,bank,file)
 
     return result
 
@@ -163,7 +166,7 @@ def run(
         SELECT
             [cashflow_bank].[bank],
             [cashflow_bank].[bank_account],
-            [cashflow_bank].[outflow_amount]
+            SUM([cashflow_bank].[inflow_amount]) [inflow_amount]
         FROM 
             [cashflow_bank]
         WHERE 
@@ -172,6 +175,9 @@ def run(
             [cashflow_bank].[date] = '{t0_date}'
         AND 
             [cashflow_bank].[outflow_amount] > 0
+        GROUP BY
+            [cashflow_bank].[bank],
+            [cashflow_bank].[bank_account]
         """,
         connect_DWH_CoSo,
         index_col=['bank','bank_account'],
@@ -184,7 +190,7 @@ def run(
         SELECT 
             [cashflow_bank].[bank],
             [cashflow_bank].[bank_account], 
-            [cashflow_bank].[inflow_amount]
+            SUM([cashflow_bank].[inflow_amount]) [inflow_amount]
         FROM 
             [cashflow_bank]
         WHERE 
@@ -193,6 +199,9 @@ def run(
             [cashflow_bank].[date] = '{t0_date}'
         AND 
             [cashflow_bank].[inflow_amount] > 0
+        GROUP BY
+            [cashflow_bank].[bank],
+            [cashflow_bank].[bank_account]
         """,
         connect_DWH_CoSo,
         index_col=['bank','bank_account'],
@@ -205,7 +214,7 @@ def run(
         SELECT
             [money_in_out_transfer].[bank],
             [money_in_out_transfer].[bank_account],
-            [money_in_out_transfer].[amount]
+            SUM([money_in_out_transfer].[amount]) [amount]
         FROM 
             [money_in_out_transfer]
         WHERE 
@@ -214,6 +223,9 @@ def run(
             [money_in_out_transfer].[date] = '{t0_date}'
         AND 
             [money_in_out_transfer].[bank] IN ('EIB','OCB')
+        GROUP BY
+            [money_in_out_transfer].[bank],
+            [money_in_out_transfer].[bank_account]
         """,
         connect_DWH_CoSo,
         index_col=['bank','bank_account'],
@@ -223,14 +235,17 @@ def run(
         SELECT
             [money_in_out_transfer].[bank],
             [money_in_out_transfer].[bank_account],
-            [money_in_out_transfer].[amount]
-            FROM [money_in_out_transfer]
+            SUM([money_in_out_transfer].[amount]) [amount]
+        FROM [money_in_out_transfer]
         WHERE 
             [money_in_out_transfer].[transaction_id] = '6693'
         AND 
             [money_in_out_transfer].[date] = '{t0_date}'
         AND 
             [money_in_out_transfer].[bank] IN ('EIB','OCB')
+        GROUP BY
+            [money_in_out_transfer].[bank],
+            [money_in_out_transfer].[bank_account]
         """,
         connect_DWH_CoSo,
         index_col=['bank','bank_account'],

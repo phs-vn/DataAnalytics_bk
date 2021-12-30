@@ -62,7 +62,7 @@ def run(
         WHERE (
             [customer_information].[contract_type] LIKE N'%GOLD%' 
             OR [customer_information].[contract_type] LIKE N'%SILV%' 
-            OR [customer_information].[contract_type] LIKE N'%VIPCN%'
+            OR [customer_information].[contract_type] LIKE N'%VIP%'
         )
         AND -- De chay baktest
             [account].[date_of_open] <= '{end_date}' 
