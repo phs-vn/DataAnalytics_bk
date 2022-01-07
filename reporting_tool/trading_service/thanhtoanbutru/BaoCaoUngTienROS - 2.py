@@ -19,13 +19,12 @@ from reporting_tool.trading_service.thanhtoanbutru import *
 
 
 def run(
-        periodicity: str,
-        start_date: str,  # 2021-09-26
-        end_date: str,    # 2021-10-25
+        start_date: str,  # 2021-11-26
+        end_date: str,  # 2021-12-25
         run_time=None,
 ):
     start = time.time()
-    info = get_info(periodicity, run_time)
+    info = get_info('monthly', run_time)
     period = info['period']
     folder_name = info['folder_name']
     date_character = ['/', '-', '.']
@@ -41,8 +40,10 @@ def run(
     ###################################################
 
     # --------------------- Viết Query và xử lý dataframe ---------------------
-    so_TK_ROS = ('022C015598',
+    so_TK_ROS = ('022C016567',
+                 '022C016608',
                  '022C015559',
+                 '022C015598',
                  '022C015959',
                  '022C017264',
                  '022C017940',
@@ -53,20 +54,26 @@ def run(
                  '022C019357',
                  '022C696969',
                  '022C040921',
-                 '022C040945')
+                 '022C041906',
+                 '022C042028',
+                 '022C040945'
+                 )
     doanh_thu_UTTB_nhom_ROS = pd.read_sql(
         f"""
             SELECT 
-            MAX(relationship.account_code) AS account_code,
-            SUM(payment_in_advance.fee_at_phs) AS fee_PHS,
-            SUM(payment_in_advance.total_fee) AS total_fee,
-            SUM(payment_in_advance.receivable) AS receivable,
-            SUM(payment_in_advance.received_amount) AS received_amount
-            FROM payment_in_advance
-            LEFT JOIN relationship ON relationship.sub_account = payment_in_advance.sub_account
-            WHERE payment_in_advance.date between '{start_date}' AND '{end_date}'
-            AND relationship.date = '{end_date}'
-            AND relationship.account_code in {so_TK_ROS}
+                MAX(relationship.account_code) AS account_code,
+                SUM(payment_in_advance.fee_at_phs) AS fee_PHS,
+                SUM(payment_in_advance.total_fee) AS total_fee,
+                SUM(payment_in_advance.receivable) AS receivable,
+                SUM(payment_in_advance.received_amount) AS received_amount
+            FROM 
+                payment_in_advance
+            LEFT JOIN 
+                relationship ON relationship.sub_account = payment_in_advance.sub_account
+            WHERE 
+                payment_in_advance.date between '{start_date}' AND '{end_date}'
+                AND relationship.date = '{end_date}'
+                AND relationship.account_code in {so_TK_ROS}
             GROUP BY payment_in_advance.sub_account
         """,
         connect_DWH_CoSo,
@@ -279,9 +286,3 @@ def run(
     else:
         print(f"{__name__.split('.')[-1]} ::: Finished")
     print(f'Total Run Time ::: {np.round(time.time() - start, 1)}s')
-
-
-
-
-
-

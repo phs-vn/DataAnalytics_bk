@@ -54,7 +54,7 @@ def run(
                 [rmr62].[total_cash],
                 [rmr62].[total_margin_value],
                 [rmr62].[total_asset_value],
-                [rmr62].[total_outstanding_plust_interest],
+                [rmr62].[total_outstanding_plus_interest],
                 50 AS [rai_mortgage_ratio]
             FROM [relationship]
             LEFT JOIN ( 
@@ -89,7 +89,7 @@ def run(
                     [rmr1062].[total_cash], 
                     [rmr1062].[total_margin_value], 
                     [rmr1062].[total_asset_value], 
-                    [rmr1062].[total_outstanding_plust_interest]
+                    [rmr1062].[total_outstanding_plus_interest]
                 FROM
                     [rmr1062]
                 WHERE
@@ -238,7 +238,7 @@ def run(
         'Name',
         'Creditline',
         'Margin ratio',
-        'Total Cash',
+        'Total Cash RCI0001',
         'UTTB còn lại',
         'Buying power',
         'Total Outstanding',
@@ -369,7 +369,7 @@ def run(
     )
     sheet1.write_column(
         'O3',
-        query_rmr['total_outstanding_plust_interest'],
+        query_rmr['total_outstanding_plus_interest'],
         money_format
     )
     sheet1.write_column(
@@ -425,7 +425,7 @@ def run(
     )
     sheet1.write(
         f'O{sum_start_row}',
-        query_rmr['total_outstanding_plust_interest'].sum(),
+        query_rmr['total_outstanding_plus_interest'].sum(),
         sum_money_format
     )
     sheet1.write(
