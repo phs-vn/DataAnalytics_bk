@@ -1,7 +1,28 @@
+import time
+
 import pandas as pd
 from selenium.webdriver.chrome.service import Service
 from phs import *
 
+
+class NoNewsFound(Exception):
+    pass
+
+
+class PageFailToLoad(Exception):
+    pass
+
+
+max_wait_time = 10
+ignored_exceptions = (
+    ValueError,
+    IndexError,
+    NoSuchElementException,
+    StaleElementReferenceException,
+    TimeoutException,
+    ElementNotInteractableException,
+    PageFailToLoad,
+)
 
 PATH = r'D:\DataAnalytics\News Filter Project\chromedriver_win32\chromedriver.exe'
 chrome_options = Options()
@@ -16,10 +37,10 @@ url_save = []
 content = []
 time_save = []
 df = pd.DataFrame()
-elements = []
+wait = WebDriverWait(driver, max_wait_time, ignored_exceptions=ignored_exceptions)
 
 while df.shape[0] < 300:
-    element = driver.find_elements(By.XPATH, '//*[@id="channel-container"]/*/div')
+    elements = driver.find_elements(By.XPATH, '//*[@id="channel-container"]/*/div')
 
     for ele in elements:
         news_type = (ele.text.split('\n'))[0]
@@ -51,8 +72,17 @@ while df.shape[0] < 300:
     df = pd.DataFrame(dictionary)
 
     time.sleep(5)
-    nextpage_button = driver.find_element(By.XPATH, '//*[@id="page-next "]/a')
+
+    nextpage_button = wait.until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="page-next "]/a'))
+    )
     nextpage_button.click()
+
+    elements = wait.until(
+        EC.presence_of_all_elements_located((By.XPATH, '//*[@id="channel-container"]/*/div'))
+    )
+    # nextpage_button = driver.find_element(By.XPATH, '//*[@id="page-next "]/a')
+    # nextpage_button.click()
+
 else:
     driver.quit()
-

@@ -19,4 +19,5 @@
 	4. Scrapy crawl with next page
 		https://stackoverflow.com/questions/32624033/scrapy-crawl-with-next-page
 -------------------------------------------- SELENIUM --------------------------------------------
-
+1. Python Selenium how to wait before clicking on link
+	https://stackoverflow.com/questions/27600906/python-selenium-how-to-wait-before-clicking-on-link
