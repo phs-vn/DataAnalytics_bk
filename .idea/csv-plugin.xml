@@ -52,6 +52,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\breakeven_price\result_table\8.12.2021.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>
