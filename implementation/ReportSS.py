@@ -1,17 +1,9 @@
+"""
+This module simply brings functions from reporting package to implementation package
+to ensure consistent workflow among projects.
+"""
+
 from request.stock import *
-
-from reporting.trading_service.giaodichluuky import BaoCaoCheckGia
-from reporting.trading_service.giaodichluuky import BaoCaoDanhSachChungKhoanSSI
-from reporting.trading_service.giaodichluuky import BaoCaoDongMoUyQuyenTK_HNX
-from reporting.trading_service.giaodichluuky import BaoCaoDongMoUyQuyenTK_HOSEnew
-from reporting.trading_service.giaodichluuky import BaoCaoDongMoUyQuyenTK_HOSEold
-from reporting.trading_service.giaodichluuky import BaoCaoHoatDongLuuKyNDTNN
-from reporting.trading_service.giaodichluuky import BaoCaoTamTinhPhiChuyenKhoan
-from reporting.trading_service.giaodichluuky import BaoCaoTamTinhPhiGiaoDich
-from reporting.trading_service.giaodichluuky import BaoCaoTamTinhPhiLuuKy
-from reporting.trading_service.giaodichluuky import BaoCaoTinhHinhHDKD
-from reporting.trading_service.giaodichluuky import BaoCaoTienGuiSSC
-
-from reporting.trading_service.thanhtoanbutru import BaoCaoDoiChieuVaImportEIB
-from reporting.trading_service.thanhtoanbutru import BaoCaoDoiChieuVaImportOCB
+from reporting.trading_service.giaodichluuky import *
+from reporting.trading_service.thanhtoanbutru import *
 
