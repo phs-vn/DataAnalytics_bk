@@ -19,41 +19,73 @@ ignored_exceptions = (
     ElementNotInteractableException,
     PageFailToLoad,
 )
+t = 2
 
+mr_data = pd.read_excel(r'D:\DataAnalytics\News Filter Project\Intranet list_07.01.2022 final.xlsx',
+                        sheet_name='Sheet1', usecols="B")
+margin_list = mr_data['Mã CK'].tolist()
+margin_list = [' {0}'.format(elem) for elem in margin_list]
 
-def scroll_down(driver):
-    """A method for scrolling the page."""
+chrome_options = Options()
+chrome_options.add_argument("--headless")
 
-    # Get scroll height.
-    last_height = driver.execute_script("return document.body.scrollHeight")
-
-    while True:
-
-        # Scroll down to the bottom.
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-
-        # Wait to load the page.
-        time.sleep(2)
-
-        # Calculate new scroll height and compare with last scroll height.
-        new_height = driver.execute_script("return document.body.scrollHeight")
-
-        if new_height == last_height:
-            break
-
-        last_height = new_height
-
+title_save = []
+url_save = []
+content = []
+desc_save = []
 
 PATH = r'D:\DataAnalytics\News Filter Project\chromedriver_win32\chromedriver.exe'
-chrome_options = Options()
-
 driver = webdriver.Chrome(options=chrome_options, service=Service(PATH))
-driver.get('https://cafef.vn/thi-truong-chung-khoan.chn')
 wait = WebDriverWait(driver, 10, ignored_exceptions=ignored_exceptions)
 
-scroll_down(driver)
-next_page = wait.until(
-    EC.presence_of_element_located((
-        By.XPATH, '//*[@id="form1"]/div[2]/div[4]/div[2]/div[1]/div[3]/div[4]/a'
-    )))
-next_page.click()
+df = pd.DataFrame()
+i = 1
+
+"""
+    /31/: thị trường chứng khoán
+    /36/: doanh nghiệp
+    /35/: bất động sản
+    /34/: tài chính ngân hàng
+"""
+while True:
+    url = 'https://cafef.vn/timeline/34/trang-' + str(i) + '.chn'
+    driver.get(url)
+
+    elements = wait.until(
+        EC.presence_of_all_elements_located((By.XPATH, '/html/body/li'))
+    )
+    for ele in elements:
+        title = (ele.text.split('\n'))[0]
+        description = (ele.text.split('\n'))[2]
+
+        next_url = ele.find_element(By.TAG_NAME, 'a').get_attribute('href')
+        next_driver = webdriver.Chrome(options=chrome_options, service=Service(PATH))
+        next_driver.get(next_url)
+
+        next_elements = next_driver.find_elements(By.XPATH, '//*[@id="mainContent"]/p')
+        paragraphs = [each_next_tag.text for each_next_tag in next_elements]
+        para_listToStr = ' '.join([str(elem) for elem in paragraphs])
+        check = [mr in para_listToStr for mr in margin_list]
+
+        if any(check):
+            print("Add title: ", title)
+            url_save.append(next_url)
+            title_save.append(title)
+            desc_save.append(description)
+            content.append(para_listToStr)
+        time.sleep(t)
+    i = i + 1
+    time.sleep(t)
+
+    if len(content) == 30:
+        break
+
+dictionary = {
+    'News link': url_save,
+    'Tiêu đề': title_save,
+    'Mô tả': desc_save,
+    'Nội dung': content
+}
+df = pd.DataFrame(dictionary)
+
+# df.to_pickle("./News Filter Project/output_data/cafef_tai-chinh-ngan-hang_data.pickle")
