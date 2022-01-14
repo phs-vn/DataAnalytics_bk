@@ -25,3 +25,7 @@
 	https://medium.com/analytics-vidhya/using-python-and-selenium-to-scrape-infinite-scroll-web-pages-825d12c24ec7
 	https://www.youtube.com/watch?v=qhJ_gMB772U
 	https://botproxy.net/docs/how-to/stop-the-scroll-in-dynamic-page-with-selenium-in-python/
+3. How to move to the next page on Python Selenium?
+	https://stackoverflow.com/questions/53955988/how-to-move-to-the-next-page-on-python-selenium
+4. Hide/Remove ads with selenium python
+	https://stackoverflow.com/questions/41460265/hide-remove-ads-with-selenium-python
