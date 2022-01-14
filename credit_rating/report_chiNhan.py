@@ -11,13 +11,16 @@ market_n_accounts.sort_index(inplace=True)
 market_n_accounts['MARKET_DOMESTIC_PCT_CHANGE'] = market_n_accounts['MARKET_DOMESTIC_COUNT'].pct_change(periods=1)
 market_n_accounts['MARKET_FOREIGN_PCT_CHANGE'] = market_n_accounts['MARKET_FOREIGN_COUNT'].pct_change(periods=1)
 
-phs_n_accounts = info_table[['OPENING_DATE']].loc[info_table['CUSTOMER_TYPE'] == 'Retail'].copy()
+phs_n_accounts = info_table[['OPENING_DATE']].loc[info_table['CUSTOMER_TYPE']=='Retail'].copy()
 phs_n_accounts.reset_index(inplace=True)
-phs_n_accounts.insert(0,'TYPE',phs_n_accounts['TRADING_CODE'].map(lambda x:'Foreign' if x.startswith('022F') else 'Domestic'))
+phs_n_accounts.insert(0,'TYPE',
+                      phs_n_accounts['TRADING_CODE'].map(lambda x:'Foreign' if x.startswith('022F') else 'Domestic'))
 phs_n_accounts['OPENING_DATE'] = phs_n_accounts['OPENING_DATE'].map(lambda x:date(x.year,x.month,15))
 phs_n_accounts = phs_n_accounts.groupby(['TYPE','OPENING_DATE'],as_index=False).count()
-phs_domestic_n_accounts = phs_n_accounts.loc[phs_n_accounts['TYPE'] == 'Domestic'].drop('TYPE',axis=1).set_index('OPENING_DATE').sort_index().rename({'TRADING_CODE':'PHS_DOMESTIC_COUNT'},axis=1)
-phs_foreign_n_accounts = phs_n_accounts.loc[phs_n_accounts['TYPE'] == 'Foreign'].drop('TYPE',axis=1).set_index('OPENING_DATE').sort_index().rename({'TRADING_CODE':'PHS_FOREIGN_COUNT'},axis=1)
+phs_domestic_n_accounts = phs_n_accounts.loc[phs_n_accounts['TYPE']=='Domestic'].drop('TYPE',axis=1).set_index(
+    'OPENING_DATE').sort_index().rename({'TRADING_CODE':'PHS_DOMESTIC_COUNT'},axis=1)
+phs_foreign_n_accounts = phs_n_accounts.loc[phs_n_accounts['TYPE']=='Foreign'].drop('TYPE',axis=1).set_index(
+    'OPENING_DATE').sort_index().rename({'TRADING_CODE':'PHS_FOREIGN_COUNT'},axis=1)
 
 phs_domestic_n_accounts['PHS_DOMESTIC_COUNT'] = phs_domestic_n_accounts['PHS_DOMESTIC_COUNT'].cumsum()
 phs_foreign_n_accounts['PHS_FOREIGN_COUNT'] = phs_foreign_n_accounts['PHS_FOREIGN_COUNT'].cumsum()

@@ -19,25 +19,27 @@ from reporting.trading_service.thanhtoanbutru import *
 
 
 # DONE
-def run():  # BC quý, chạy vào ngày đầu quý sau
+def run(
+    run_time=None
+):  # BC quý, chạy vào ngày đầu quý sau
 
-  start = time.time()
-  info = get_info('quarterly',None)
-  t0_date = bdate(bdate(info['end_date'],1),-1)
-  t1_date = bdate(t0_date,-1)
-  period = info['period']
-  folder_name = info['folder_name']
+    start = time.time()
+    info = get_info('quarterly',run_time)
+    t0_date = bdate(bdate(info['end_date'],1),-1)
+    t1_date = bdate(t0_date,-1)
+    period = info['period']
+    folder_name = info['folder_name']
 
-  # create folder
-  if not os.path.isdir(join(dept_folder,folder_name,period)):
-    os.mkdir((join(dept_folder,folder_name,period)))
+    # create folder
+    if not os.path.isdir(join(dept_folder,folder_name,period)):
+        os.mkdir((join(dept_folder,folder_name,period)))
 
-  ###################################################
-  ###################################################
-  ###################################################
+    ###################################################
+    ###################################################
+    ###################################################
 
-  table = pd.read_sql(
-    f"""
+    table = pd.read_sql(
+        f"""
         WITH 
         [i] AS (
             SELECT 
@@ -144,172 +146,172 @@ def run():  # BC quý, chạy vào ngày đầu quý sau
             OR [all].[total_outstanding] <> 0
             OR [all].[total_asset] <> 0
     """,
-    connect_DWH_CoSo
-  )
+        connect_DWH_CoSo
+    )
 
-  ###################################################
-  ###################################################
-  ###################################################
+    ###################################################
+    ###################################################
+    ###################################################
 
-  file_date = dt.datetime.strptime(t0_date,"%Y-%m-%d").strftime("%d-%m-%Y")
-  file_name = f'Dữ liệu gửi kiểm toán {file_date}.xlsx'
-  writer = pd.ExcelWriter(
-    join(dept_folder,folder_name,period,file_name),
-    engine='xlsxwriter',
-    engine_kwargs={'options':{'nan_inf_to_errors':True}}
-  )
-  workbook = writer.book
+    file_date = dt.datetime.strptime(t0_date,"%Y-%m-%d").strftime("%d.%m.%Y")
+    file_name = f'Dữ liệu gửi kiểm toán {file_date}.xlsx'
+    writer = pd.ExcelWriter(
+        join(dept_folder,folder_name,period,file_name),
+        engine='xlsxwriter',
+        engine_kwargs={'options':{'nan_inf_to_errors':True}}
+    )
+    workbook = writer.book
 
-  info_company_format = workbook.add_format(
-    {
-      'align'    :'left',
-      'valign'   :'vcenter',
-      'bold'     :True,
-      'font_size':8,
-      'font_name':'Times New Roman',
-    }
-  )
-  title_format = workbook.add_format(
-    {
-      'top'      :1,
-      'bold'     :True,
-      'align'    :'center',
-      'valign'   :'vcenter',
-      'font_size':18,
-      'font_name':'Times New Roman',
-    }
-  )
-  period_format = workbook.add_format(
-    {
-      'italic'   :True,
-      'align'    :'center',
-      'valign'   :'top',
-      'font_size':10,
-      'font_name':'Times New Roman',
-    }
-  )
-  headers_format = workbook.add_format(
-    {
-      'bold'     :True,
-      'border'   :1,
-      'align'    :'center',
-      'valign'   :'vcenter',
-      'font_size':10,
-      'font_name':'Times New Roman',
-      'text_wrap':True,
-      'bg_color' :'#00b050',
-    }
-  )
-  text_left_format = workbook.add_format(
-    {
-      'border'   :1,
-      'align'    :'left',
-      'valign'   :'vcenter',
-      'font_size':10,
-      'font_name':'Times New Roman'
-    }
-  )
-  text_center_format = workbook.add_format(
-    {
-      'border'   :1,
-      'align'    :'center',
-      'valign'   :'vcenter',
-      'font_size':10,
-      'font_name':'Times New Roman'
-    }
-  )
-  num_format = workbook.add_format(
-    {
-      'border'    :1,
-      'valign'    :'vcenter',
-      'font_size' :10,
-      'font_name' :'Times New Roman',
-      'num_format':'_(* #,##0_);_(* (#,##0)'
-    }
-  )
-  sum_name_format = workbook.add_format(
-    {
-      'border'   :1,
-      'bold'     :True,
-      'align'    :'center',
-      'valign'   :'vcenter',
-      'font_size':10,
-      'font_name':'Times New Roman',
-    }
-  )
-  sum_num_format = workbook.add_format(
-    {
-      'border'    :1,
-      'bold'      :True,
-      'valign'    :'vcenter',
-      'font_size' :10,
-      'font_name' :'Times New Roman',
-      'num_format':'_(* #,##0_);_(* (#,##0)'
-    }
-  )
-  headers = [
-    'No.',
-    'Branch',
-    'Account',
-    'Tiểu khoản MR',
-    'Name',
-    'Creditline',
-    'Margin Ratio',
-    'Total Cash\nRCI0001',
-    'UTTB còn lại',
-    'Buying power',
-    'Total Outstanding',
-    'Total Cash',
-    'Total Margin Value',
-    'Total Asset Value',
-    'Total Outstanding plus Total Interest',
-    'Rai - Mortgage Ratio of Account',
-  ]
+    info_company_format = workbook.add_format(
+        {
+            'align':'left',
+            'valign':'vcenter',
+            'bold':True,
+            'font_size':8,
+            'font_name':'Times New Roman',
+        }
+    )
+    title_format = workbook.add_format(
+        {
+            'top':1,
+            'bold':True,
+            'align':'center',
+            'valign':'vcenter',
+            'font_size':18,
+            'font_name':'Times New Roman',
+        }
+    )
+    period_format = workbook.add_format(
+        {
+            'italic':True,
+            'align':'center',
+            'valign':'top',
+            'font_size':10,
+            'font_name':'Times New Roman',
+        }
+    )
+    headers_format = workbook.add_format(
+        {
+            'bold':True,
+            'border':1,
+            'align':'center',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman',
+            'text_wrap':True,
+            'bg_color':'#00b050',
+        }
+    )
+    text_left_format = workbook.add_format(
+        {
+            'border':1,
+            'align':'left',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman'
+        }
+    )
+    text_center_format = workbook.add_format(
+        {
+            'border':1,
+            'align':'center',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman'
+        }
+    )
+    num_format = workbook.add_format(
+        {
+            'border':1,
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman',
+            'num_format':'_(* #,##0_);_(* (#,##0)'
+        }
+    )
+    sum_name_format = workbook.add_format(
+        {
+            'border':1,
+            'bold':True,
+            'align':'center',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman',
+        }
+    )
+    sum_num_format = workbook.add_format(
+        {
+            'border':1,
+            'bold':True,
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman',
+            'num_format':'_(* #,##0_);_(* (#,##0)'
+        }
+    )
+    headers = [
+        'No.',
+        'Branch',
+        'Account',
+        'Tiểu khoản MR',
+        'Name',
+        'Creditline',
+        'Margin Ratio',
+        'Total Cash\nRCI0001',
+        'UTTB còn lại',
+        'Buying power',
+        'Total Outstanding',
+        'Total Cash',
+        'Total Margin Value',
+        'Total Asset Value',
+        'Total Outstanding plus Total Interest',
+        'Rai - Mortgage Ratio of Account',
+    ]
 
-  worksheet = workbook.add_worksheet(f'{period}')
-  worksheet.hide_gridlines(option=2)
-  worksheet.set_column('A:A',6)
-  worksheet.set_column('B:B',16)
-  worksheet.set_column('C:D',13)
-  worksheet.set_column('E:E',24)
-  worksheet.set_column('F:P',18)
-  worksheet.set_row(4,22)
+    worksheet = workbook.add_worksheet(f'{period}')
+    worksheet.hide_gridlines(option=2)
+    worksheet.set_column('A:A',6)
+    worksheet.set_column('B:B',16)
+    worksheet.set_column('C:D',13)
+    worksheet.set_column('E:E',24)
+    worksheet.set_column('F:P',18)
+    worksheet.set_row(4,22)
 
-  worksheet.merge_range('A1:F1',CompanyName,info_company_format)
-  worksheet.merge_range('A2:F2',CompanyAddress,info_company_format)
-  worksheet.merge_range('A3:F3',CompanyPhoneNumber,info_company_format)
-  worksheet.merge_range('A4:P4','ACCOUNT DETAILS REPORT',title_format)
-  worksheet.merge_range('A5:P5',f'Kỳ báo cáo: {period}',period_format)
-  worksheet.write_row('A6',headers,headers_format)
-  worksheet.write_column('A7',np.arange(table.shape[0])+1,text_center_format)
-  worksheet.write_column('B7',table['branch_name'],text_left_format)
-  worksheet.write_column('C7',table['account_code'],text_center_format)
-  worksheet.write_column('D7',table['sub_account'],text_center_format)
-  worksheet.write_column('E7',table['customer_name'],text_left_format)
-  worksheet.write_column('F7',table['credit_line'],num_format)
-  worksheet.write_column('G7',table['rtt'],num_format)
-  worksheet.write_column('H7',table['cash_rci0001'],num_format)
-  worksheet.write_column('I7',table['remain_pia'],num_format)
-  worksheet.write_column('J7',table['buying_power'],num_format)
-  worksheet.write_column('K7',table['total_outstanding'],num_format)
-  worksheet.write_column('L7',table['total_cash'],num_format)
-  worksheet.write_column('M7',table['total_margin'],num_format)
-  worksheet.write_column('N7',table['total_asset'],num_format)
-  worksheet.write_column('O7',table['total_outs_plus_int'],num_format)
-  worksheet.write_column('P7',table['rai'],num_format)
+    worksheet.merge_range('A1:F1',CompanyName,info_company_format)
+    worksheet.merge_range('A2:F2',CompanyAddress,info_company_format)
+    worksheet.merge_range('A3:F3',CompanyPhoneNumber,info_company_format)
+    worksheet.merge_range('A4:P4','ACCOUNT DETAILS REPORT',title_format)
+    worksheet.merge_range('A5:P5',f'Kỳ báo cáo: {period}',period_format)
+    worksheet.write_row('A6',headers,headers_format)
+    worksheet.write_column('A7',np.arange(table.shape[0])+1,text_center_format)
+    worksheet.write_column('B7',table['branch_name'],text_left_format)
+    worksheet.write_column('C7',table['account_code'],text_center_format)
+    worksheet.write_column('D7',table['sub_account'],text_center_format)
+    worksheet.write_column('E7',table['customer_name'],text_left_format)
+    worksheet.write_column('F7',table['credit_line'],num_format)
+    worksheet.write_column('G7',table['rtt'],num_format)
+    worksheet.write_column('H7',table['cash_rci0001'],num_format)
+    worksheet.write_column('I7',table['remain_pia'],num_format)
+    worksheet.write_column('J7',table['buying_power'],num_format)
+    worksheet.write_column('K7',table['total_outstanding'],num_format)
+    worksheet.write_column('L7',table['total_cash'],num_format)
+    worksheet.write_column('M7',table['total_margin'],num_format)
+    worksheet.write_column('N7',table['total_asset'],num_format)
+    worksheet.write_column('O7',table['total_outs_plus_int'],num_format)
+    worksheet.write_column('P7',table['rai'],num_format)
 
-  sum_row = table.shape[0]+7
-  worksheet.merge_range(f'A{sum_row}:E{sum_row}','TỔNG',sum_name_format)
-  bottom_line = table.loc[:,'credit_line':]
-  worksheet.write_row(f'F{sum_row}',bottom_line.sum(),sum_num_format)
+    sum_row = table.shape[0]+7
+    worksheet.merge_range(f'A{sum_row}:E{sum_row}','TỔNG',sum_name_format)
+    bottom_line = table.loc[:,'credit_line':]
+    worksheet.write_row(f'F{sum_row}',bottom_line.sum(),sum_num_format)
 
-  ###########################################################################
-  ###########################################################################
-  ###########################################################################
+    ###########################################################################
+    ###########################################################################
+    ###########################################################################
 
-  writer.close()
-  if __name__ == '__main__':
-    print(f"{__file__.split('/')[-1].replace('.py','')}::: Finished")
-  else:
-    print(f"{__name__.split('.')[-1]} ::: Finished")
-  print(f'Total Run Time ::: {np.round(time.time()-start,1)}s')
+    writer.close()
+    if __name__=='__main__':
+        print(f"{__file__.split('/')[-1].replace('.py','')}::: Finished")
+    else:
+        print(f"{__name__.split('.')[-1]} ::: Finished")
+    print(f'Total Run Time ::: {np.round(time.time()-start,1)}s')

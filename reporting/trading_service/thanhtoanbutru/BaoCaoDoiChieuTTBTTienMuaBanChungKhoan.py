@@ -20,26 +20,26 @@ from reporting.trading_service.thanhtoanbutru import *
 
 # DONE
 def run(
-  run_time=None,
+    run_time=None,
 ):
-  start = time.time()
-  info = get_info('daily',run_time)
-  t0_date = info['end_date'].replace('/','-')
-  t2_date = bdate(t0_date,-2)
-  period = info['period']
-  folder_name = info['folder_name']
+    start = time.time()
+    info = get_info('daily',run_time)
+    t0_date = info['end_date'].replace('/','-')
+    t2_date = bdate(t0_date,-2)
+    period = info['period']
+    folder_name = info['folder_name']
 
-  # create folder
-  if not os.path.isdir(join(dept_folder,folder_name,period)):
-    os.mkdir((join(dept_folder,folder_name,period)))
+    # create folder
+    if not os.path.isdir(join(dept_folder,folder_name,period)):
+        os.mkdir((join(dept_folder,folder_name,period)))
 
-  ###################################################
-  ###################################################
-  ###################################################
+    ###################################################
+    ###################################################
+    ###################################################
 
-  # query ROD0040
-  order_table = pd.read_sql(
-    f"""
+    # query ROD0040
+    order_table = pd.read_sql(
+        f"""
         (
         SELECT
             CASE
@@ -87,12 +87,12 @@ def run(
             [sub_account],
             [type_of_order]
         """,
-    connect_DWH_CoSo,
-    index_col='sub_account'
-  )
-  # query RCF1002
-  cash_table = pd.read_sql(
-    f"""
+        connect_DWH_CoSo,
+        index_col='sub_account'
+    )
+    # query RCF1002
+    cash_table = pd.read_sql(
+        f"""
         WITH 
         [cf_value] AS (
             SELECT 
@@ -171,11 +171,11 @@ def run(
         
         ORDER BY [date], [sub_account], [type_of_order]
         """,
-    connect_DWH_CoSo,
-    index_col='sub_account'
-  ).fillna(0)
-  customer_info = pd.read_sql(
-    f"""
+        connect_DWH_CoSo,
+        index_col='sub_account'
+    ).fillna(0)
+    customer_info = pd.read_sql(
+        f"""
         SELECT 
             [sub_account].[sub_account],
             [sub_account].[account_code],
@@ -186,278 +186,278 @@ def run(
         ON 
             [account].[account_code] = sub_account.account_code
         """,
-    connect_DWH_CoSo,
-    index_col='sub_account'
-  )
-  # các tài khoản mở tại công ty nhưng lưu ký ở nơi khác PHS sẽ ko theo dõi dòng tiền -> loại ra
-  order_table = order_table.loc[order_table.index.isin(cash_table.index)]
-  # join
-  table = customer_info.join(
-    order_table,on='sub_account',
-    how='right',
-  ).join(
-    cash_table.reset_index().set_index(['sub_account','date','type_of_order']),
-    on=['sub_account','date','type_of_order'],
-    how='outer',
-    rsuffix='_cash',
-  )
-  table.rename({'date':'pay_date','value':'value_order','fee':'fee_order','tax':'tax_order'},axis=1,inplace=True)
-  for diff_col,order_col,cash_col in zip(
-    ['diff_value','diff_fee','diff_tax'],
-    ['value_order','fee_order','tax_order'],
-    ['value_cash','fee_cash','tax_cash'],
-  ):
-    table[diff_col] = table[order_col]-table[cash_col]
+        connect_DWH_CoSo,
+        index_col='sub_account'
+    )
+    # các tài khoản mở tại công ty nhưng lưu ký ở nơi khác PHS sẽ ko theo dõi dòng tiền -> loại ra
+    order_table = order_table.loc[order_table.index.isin(cash_table.index)]
+    # join
+    table = customer_info.join(
+        order_table,on='sub_account',
+        how='right',
+    ).join(
+        cash_table.reset_index().set_index(['sub_account','date','type_of_order']),
+        on=['sub_account','date','type_of_order'],
+        how='outer',
+        rsuffix='_cash',
+    )
+    table.rename({'date':'pay_date','value':'value_order','fee':'fee_order','tax':'tax_order'},axis=1,inplace=True)
+    for diff_col,order_col,cash_col in zip(
+            ['diff_value','diff_fee','diff_tax'],
+            ['value_order','fee_order','tax_order'],
+            ['value_cash','fee_cash','tax_cash'],
+    ):
+        table[diff_col] = table[order_col]-table[cash_col]
 
-  table.insert(3,'trade_date',table['pay_date'])
-  table.loc[table['type_of_order'] == 'Bán','trade_date'] = t2_date
+    table.insert(3,'trade_date',table['pay_date'])
+    table.loc[table['type_of_order']=='Bán','trade_date'] = t2_date
 
-  ###################################################
-  ###################################################
-  ###################################################
+    ###################################################
+    ###################################################
+    ###################################################
 
-  # --------------------- Viet File Excel ---------------------
-  # Write file BÁO CÁO ĐỐI CHIẾU THANH TOÁN BÙ TRỪ TIỀN MUA BÁN CHỨNG KHOÁN
-  report_date = dt.datetime.strptime(t0_date,'%Y-%m-%d').strftime('%d-%m-%Y')
-  file_name = f'Đối chiếu TTBT tiền mua bán chứng khoán {report_date}.xlsx'
-  writer = pd.ExcelWriter(
-    join(dept_folder,folder_name,period,file_name),
-    engine='xlsxwriter',
-    engine_kwargs={'options':{'nan_inf_to_errors':True}}
-  )
-  workbook = writer.book
+    # --------------------- Viet File Excel ---------------------
+    # Write file BÁO CÁO ĐỐI CHIẾU THANH TOÁN BÙ TRỪ TIỀN MUA BÁN CHỨNG KHOÁN
+    report_date = dt.datetime.strptime(t0_date,'%Y-%m-%d').strftime('%d.%m.%Y')
+    file_name = f'Đối chiếu TTBT tiền mua bán chứng khoán {report_date}.xlsx'
+    writer = pd.ExcelWriter(
+        join(dept_folder,folder_name,period,file_name),
+        engine='xlsxwriter',
+        engine_kwargs={'options':{'nan_inf_to_errors':True}}
+    )
+    workbook = writer.book
 
-  ###################################################
-  ###################################################
-  ###################################################
+    ###################################################
+    ###################################################
+    ###################################################
 
-  company_name_format = workbook.add_format(
-    {
-      'bold'     :True,
-      'align'    :'left',
-      'valign'   :'vcenter',
-      'font_size':10,
-      'font_name':'Times New Roman',
-      'text_wrap':True
-    }
-  )
-  company_info_format = workbook.add_format(
-    {
-      'align'    :'left',
-      'valign'   :'vcenter',
-      'font_size':10,
-      'font_name':'Times New Roman',
-      'text_wrap':True
-    }
-  )
-  empty_row_format = workbook.add_format(
-    {
-      'bottom'   :1,
-      'valign'   :'vcenter',
-      'font_size':10,
-      'font_name':'Times New Roman',
-    }
-  )
-  sheet_title_format = workbook.add_format(
-    {
-      'bold'     :True,
-      'align'    :'center',
-      'valign'   :'vcenter',
-      'font_size':14,
-      'font_name':'Times New Roman',
-      'text_wrap':True
-    }
-  )
-  from_to_format = workbook.add_format(
-    {
-      'italic'   :True,
-      'align'    :'center',
-      'valign'   :'vcenter',
-      'font_size':10,
-      'font_name':'Times New Roman',
-      'text_wrap':True
-    }
-  )
-  headers_format = workbook.add_format(
-    {
-      'border'   :1,
-      'bold'     :True,
-      'align'    :'center',
-      'valign'   :'vcenter',
-      'font_size':10,
-      'font_name':'Times New Roman',
-      'text_wrap':True
-    }
-  )
-  text_center_format = workbook.add_format(
-    {
-      'border'   :1,
-      'align'    :'center',
-      'valign'   :'vcenter',
-      'font_size':10,
-      'font_name':'Times New Roman'
-    }
-  )
-  text_left_format = workbook.add_format(  # for customer name only
-    {
-      'border'   :1,
-      'align'    :'left',
-      'valign'   :'vcenter',
-      'font_size':10,
-      'font_name':'Times New Roman'
-    }
-  )
-  money_format = workbook.add_format(
-    {
-      'border'    :1,
-      'align'     :'right',
-      'valign'    :'vcenter',
-      'font_size' :10,
-      'font_name' :'Times New Roman',
-      'num_format':'_(* #,##0_);_(* (#,##0);_(* "-"??_);_(@_)'
-    }
-  )
-  sum_money_format = workbook.add_format(
-    {
-      'bold'      :True,
-      'border'    :1,
-      'align'     :'right',
-      'valign'    :'vcenter',
-      'font_size' :10,
-      'font_name' :'Times New Roman',
-      'num_format':'_(* #,##0_);_(* (#,##0);_(* "-"??_);_(@_)'
-    }
-  )
-  date_format = workbook.add_format(
-    {
-      'border'    :1,
-      'align'     :'center',
-      'valign'    :'vcenter',
-      'font_size' :10,
-      'font_name' :'Times New Roman',
-      'num_format':'dd/mm/yyyy'
-    }
-  )
-  footer_dmy_format = workbook.add_format(
-    {
-      'italic'   :True,
-      'align'    :'center',
-      'valign'   :'vcenter',
-      'font_size':10,
-      'font_name':'Times New Roman',
-    }
-  )
-  footer_text_format = workbook.add_format(
-    {
-      'bold'     :True,
-      'italic'   :True,
-      'align'    :'center',
-      'valign'   :'vcenter',
-      'font_size':10,
-      'font_name':'Times New Roman',
-      'text_wrap':True
-    }
-  )
-  headers = [
-    'STT',
-    'Ngày giao dịch',
-    'Ngày thanh toán tiền',
-    'Số tài khoản',
-    'Số tiểu khoản',
-    'Tên khách hàng',
-    'Loại lệnh',
-    'Theo kết quả khớp lệnh',
-    'Theo giao dịch tiền',
-    'Lệch',
-  ]
-  sub_headers = [
-    'Giá trị khớp',
-    'Phí',
-    'Thuế',
-  ]
-  sheet_title_name = 'BÁO CÁO ĐỐI CHIẾU THANH TOÁN BÙ TRỪ TIỀN MUA BÁN CHỨNG KHOÁN'
-  sub_title_date = dt.datetime.strptime(t0_date,"%Y-%m-%d").strftime("%d/%m/%Y")
-  sub_title_name = f'Từ ngày {sub_title_date} đến {sub_title_date}'
+    company_name_format = workbook.add_format(
+        {
+            'bold':True,
+            'align':'left',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman',
+            'text_wrap':True
+        }
+    )
+    company_info_format = workbook.add_format(
+        {
+            'align':'left',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman',
+            'text_wrap':True
+        }
+    )
+    empty_row_format = workbook.add_format(
+        {
+            'bottom':1,
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman',
+        }
+    )
+    sheet_title_format = workbook.add_format(
+        {
+            'bold':True,
+            'align':'center',
+            'valign':'vcenter',
+            'font_size':14,
+            'font_name':'Times New Roman',
+            'text_wrap':True
+        }
+    )
+    from_to_format = workbook.add_format(
+        {
+            'italic':True,
+            'align':'center',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman',
+            'text_wrap':True
+        }
+    )
+    headers_format = workbook.add_format(
+        {
+            'border':1,
+            'bold':True,
+            'align':'center',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman',
+            'text_wrap':True
+        }
+    )
+    text_center_format = workbook.add_format(
+        {
+            'border':1,
+            'align':'center',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman'
+        }
+    )
+    text_left_format = workbook.add_format(  # for customer name only
+        {
+            'border':1,
+            'align':'left',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman'
+        }
+    )
+    money_format = workbook.add_format(
+        {
+            'border':1,
+            'align':'right',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman',
+            'num_format':'_(* #,##0_);_(* (#,##0);_(* "-"??_);_(@_)'
+        }
+    )
+    sum_money_format = workbook.add_format(
+        {
+            'bold':True,
+            'border':1,
+            'align':'right',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman',
+            'num_format':'_(* #,##0_);_(* (#,##0);_(* "-"??_);_(@_)'
+        }
+    )
+    date_format = workbook.add_format(
+        {
+            'border':1,
+            'align':'center',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman',
+            'num_format':'dd/mm/yyyy'
+        }
+    )
+    footer_dmy_format = workbook.add_format(
+        {
+            'italic':True,
+            'align':'center',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman',
+        }
+    )
+    footer_text_format = workbook.add_format(
+        {
+            'bold':True,
+            'italic':True,
+            'align':'center',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman',
+            'text_wrap':True
+        }
+    )
+    headers = [
+        'STT',
+        'Ngày giao dịch',
+        'Ngày thanh toán tiền',
+        'Số tài khoản',
+        'Số tiểu khoản',
+        'Tên khách hàng',
+        'Loại lệnh',
+        'Theo kết quả khớp lệnh',
+        'Theo giao dịch tiền',
+        'Lệch',
+    ]
+    sub_headers = [
+        'Giá trị khớp',
+        'Phí',
+        'Thuế',
+    ]
+    sheet_title_name = 'BÁO CÁO ĐỐI CHIẾU THANH TOÁN BÙ TRỪ TIỀN MUA BÁN CHỨNG KHOÁN'
+    sub_title_date = dt.datetime.strptime(t0_date,"%Y-%m-%d").strftime("%d/%m/%Y")
+    sub_title_name = f'Từ ngày {sub_title_date} đến {sub_title_date}'
 
-  worksheet = workbook.add_worksheet(f'{period}')
-  worksheet.hide_gridlines(option=2)
+    worksheet = workbook.add_worksheet(f'{period}')
+    worksheet.hide_gridlines(option=2)
 
-  worksheet.insert_image('A1','./img/phs_logo.png',{'x_scale':0.66,'y_scale':0.71})
-  worksheet.set_column('A:A',6)
-  worksheet.set_column('B:E',13)
-  worksheet.set_column('F:F',28)
-  worksheet.set_column('G:G',9)
-  worksheet.set_column('H:P',13)
+    worksheet.insert_image('A1',join(dirname(__file__),'img','phs_logo.png'),{'x_scale':0.66,'y_scale':0.71})
+    worksheet.set_column('A:A',6)
+    worksheet.set_column('B:E',13)
+    worksheet.set_column('F:F',28)
+    worksheet.set_column('G:G',9)
+    worksheet.set_column('H:P',13)
 
-  worksheet.merge_range('C1:I1',CompanyName.upper(),company_name_format)
-  worksheet.merge_range('C2:I2',CompanyAddress,company_info_format)
-  worksheet.merge_range('C3:I3',CompanyPhoneNumber,company_info_format)
-  worksheet.merge_range('A7:P7',sheet_title_name,sheet_title_format)
-  worksheet.merge_range('A8:P8',sub_title_name,from_to_format)
-  for col,header in zip(range(len(headers)-3),headers[:-3]):
-    worksheet.merge_range(9,col,10,col,header,headers_format)
-  worksheet.merge_range('H10:J10',headers[-3],headers_format)
-  worksheet.merge_range('K10:M10',headers[-2],headers_format)
-  worksheet.merge_range('N10:P10',headers[-1],headers_format)
-  sum_start_row = table.shape[0]+12
-  worksheet.merge_range(
-    f'A{sum_start_row}:G{sum_start_row}',
-    'Tổng',
-    headers_format
-  )
-  footer_start_row = sum_start_row+2
-  worksheet.merge_range(
-    f'N{footer_start_row}:P{footer_start_row}',
-    f'Ngày     tháng     năm        ',
-    footer_dmy_format
-  )
-  worksheet.merge_range(
-    f'N{footer_start_row+1}:P{footer_start_row+1}',
-    'Người duyệt',
-    footer_text_format
-  )
-  worksheet.merge_range(
-    f'C{footer_start_row+1}:E{footer_start_row+1}',
-    'Người lập',
-    footer_text_format
-  )
-  # write row & column
-  worksheet.write_row('H11',sub_headers*3,headers_format)
-  worksheet.write_row('A4',['']*(len(headers)+len(sub_headers)+3),empty_row_format)
-  worksheet.write_column('A12',np.arange(table.shape[0])+1,text_center_format)
-  worksheet.write_column('B12',table['trade_date'],date_format)
-  worksheet.write_column('C12',table['pay_date'],date_format)
-  worksheet.write_column('D12',table['account_code'],text_center_format)
-  worksheet.write_column('E12',table.index,text_center_format)
-  worksheet.write_column('F12',table['customer_name'].str.title(),text_left_format)
-  worksheet.write_column('G12',table['type_of_order'],text_center_format)
-  worksheet.write_column('H12',table['value_order'],money_format)
-  worksheet.write_column('I12',table['fee_order'],money_format)
-  worksheet.write_column('J12',table['tax_order'],money_format)
-  worksheet.write_column('K12',table['value_cash'],money_format)
-  worksheet.write_column('L12',table['fee_cash'],money_format)
-  worksheet.write_column('M12',table['tax_cash'],money_format)
-  worksheet.write_column('N12',table['diff_value'],money_format)
-  worksheet.write_column('O12',table['diff_fee'],money_format)
-  worksheet.write_column('P12',table['diff_tax'],money_format)
-  worksheet.write(f'D{footer_start_row+1}','Người lập',footer_text_format)
-  worksheet.write(f'H{sum_start_row}',table['value_order'].sum(),sum_money_format)
-  worksheet.write(f'I{sum_start_row}',table['fee_order'].sum(),sum_money_format)
-  worksheet.write(f'J{sum_start_row}',table['tax_order'].sum(),sum_money_format)
-  worksheet.write(f'K{sum_start_row}',table['value_cash'].sum(),sum_money_format)
-  worksheet.write(f'L{sum_start_row}',table['fee_cash'].sum(),sum_money_format)
-  worksheet.write(f'M{sum_start_row}',table['tax_cash'].sum(),sum_money_format)
-  worksheet.write(f'N{sum_start_row}',table['diff_value'].sum(),sum_money_format)
-  worksheet.write(f'O{sum_start_row}',table['diff_fee'].sum(),sum_money_format)
-  worksheet.write(f'P{sum_start_row}',table['diff_tax'].sum(),sum_money_format)
+    worksheet.merge_range('C1:I1',CompanyName.upper(),company_name_format)
+    worksheet.merge_range('C2:I2',CompanyAddress,company_info_format)
+    worksheet.merge_range('C3:I3',CompanyPhoneNumber,company_info_format)
+    worksheet.merge_range('A7:P7',sheet_title_name,sheet_title_format)
+    worksheet.merge_range('A8:P8',sub_title_name,from_to_format)
+    for col,header in zip(range(len(headers)-3),headers[:-3]):
+        worksheet.merge_range(9,col,10,col,header,headers_format)
+    worksheet.merge_range('H10:J10',headers[-3],headers_format)
+    worksheet.merge_range('K10:M10',headers[-2],headers_format)
+    worksheet.merge_range('N10:P10',headers[-1],headers_format)
+    sum_start_row = table.shape[0]+12
+    worksheet.merge_range(
+        f'A{sum_start_row}:G{sum_start_row}',
+        'Tổng',
+        headers_format
+    )
+    footer_start_row = sum_start_row+2
+    worksheet.merge_range(
+        f'N{footer_start_row}:P{footer_start_row}',
+        f'Ngày     tháng     năm        ',
+        footer_dmy_format
+    )
+    worksheet.merge_range(
+        f'N{footer_start_row+1}:P{footer_start_row+1}',
+        'Người duyệt',
+        footer_text_format
+    )
+    worksheet.merge_range(
+        f'C{footer_start_row+1}:E{footer_start_row+1}',
+        'Người lập',
+        footer_text_format
+    )
+    # write row & column
+    worksheet.write_row('H11',sub_headers*3,headers_format)
+    worksheet.write_row('A4',['']*(len(headers)+len(sub_headers)+3),empty_row_format)
+    worksheet.write_column('A12',np.arange(table.shape[0])+1,text_center_format)
+    worksheet.write_column('B12',table['trade_date'],date_format)
+    worksheet.write_column('C12',table['pay_date'],date_format)
+    worksheet.write_column('D12',table['account_code'],text_center_format)
+    worksheet.write_column('E12',table.index,text_center_format)
+    worksheet.write_column('F12',table['customer_name'].str.title(),text_left_format)
+    worksheet.write_column('G12',table['type_of_order'],text_center_format)
+    worksheet.write_column('H12',table['value_order'],money_format)
+    worksheet.write_column('I12',table['fee_order'],money_format)
+    worksheet.write_column('J12',table['tax_order'],money_format)
+    worksheet.write_column('K12',table['value_cash'],money_format)
+    worksheet.write_column('L12',table['fee_cash'],money_format)
+    worksheet.write_column('M12',table['tax_cash'],money_format)
+    worksheet.write_column('N12',table['diff_value'],money_format)
+    worksheet.write_column('O12',table['diff_fee'],money_format)
+    worksheet.write_column('P12',table['diff_tax'],money_format)
+    worksheet.write(f'D{footer_start_row+1}','Người lập',footer_text_format)
+    worksheet.write(f'H{sum_start_row}',table['value_order'].sum(),sum_money_format)
+    worksheet.write(f'I{sum_start_row}',table['fee_order'].sum(),sum_money_format)
+    worksheet.write(f'J{sum_start_row}',table['tax_order'].sum(),sum_money_format)
+    worksheet.write(f'K{sum_start_row}',table['value_cash'].sum(),sum_money_format)
+    worksheet.write(f'L{sum_start_row}',table['fee_cash'].sum(),sum_money_format)
+    worksheet.write(f'M{sum_start_row}',table['tax_cash'].sum(),sum_money_format)
+    worksheet.write(f'N{sum_start_row}',table['diff_value'].sum(),sum_money_format)
+    worksheet.write(f'O{sum_start_row}',table['diff_fee'].sum(),sum_money_format)
+    worksheet.write(f'P{sum_start_row}',table['diff_tax'].sum(),sum_money_format)
 
-  ###########################################################################
-  ###########################################################################
-  ###########################################################################
+    ###########################################################################
+    ###########################################################################
+    ###########################################################################
 
-  writer.close()
-  if __name__ == '__main__':
-    print(f"{__file__.split('/')[-1].replace('.py','')}::: Finished")
-  else:
-    print(f"{__name__.split('.')[-1]} ::: Finished")
-  print(f'Total Run Time ::: {np.round(time.time()-start,1)}s')
+    writer.close()
+    if __name__=='__main__':
+        print(f"{__file__.split('/')[-1].replace('.py','')}::: Finished")
+    else:
+        print(f"{__name__.split('.')[-1]} ::: Finished")
+    print(f'Total Run Time ::: {np.round(time.time()-start,1)}s')

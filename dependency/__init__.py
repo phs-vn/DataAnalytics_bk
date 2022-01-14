@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 
 pd.set_option('display.max_rows',None,'display.max_columns',None,'display.width',None)
+
 import bottleneck as bn
 import numexpr as ne
 import openpyxl
