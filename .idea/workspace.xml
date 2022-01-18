@@ -5,10 +5,67 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="Hiep Dang 28/10/2021">
-      <change afterPath="$PROJECT_DIR$/News Filter Project/tinnhanhCK_scrape_news.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/LE.DAT" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/archive/Vietnamese - Vietnamese.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/financial dictionary/viet_dict.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-stopwords-master/.github/FUNDING.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-stopwords-master/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-stopwords-master/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-stopwords-master/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-stopwords-master/test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-stopwords-master/vietnamese-stopwords-dash.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-stopwords-master/vietnamese-stopwords.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-wordlist-master/README.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-wordlist-master/Viet11K.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-wordlist-master/Viet22K.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-wordlist-master/Viet39K.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-wordlist-master/Viet74K.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/a.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/b.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/c.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/d.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/e.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/f.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/g.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/h.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/i.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/j.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/k.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/l.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/m.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/n.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/notes.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/o.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/p.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/q.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/r.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/s.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/t.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/u.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/v.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/w.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/x.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/y.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/z.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/â.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/ê.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/ô.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/ă.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/đ.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/ơ.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/ư.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/count_word.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/file/note.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_data/tinnhanhchungkhoan_2/tinnhanhCK_chung-khoan_data_2.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_data/tinnhanhchungkhoan_2/tinnhanhCK_doanh-nghiep_data_2.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/read_dat.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/News Filter Project/Intranet list_07.01.2022 final.xlsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/News Filter Project/cafef_scrape_news.py" beforeDir="false" afterPath="$PROJECT_DIR$/News Filter Project/cafef_scrape_news.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/News Filter Project/ndh_scrape_news.py" beforeDir="false" afterPath="$PROJECT_DIR$/News Filter Project/ndh_scrape_news.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/News Filter Project/note.txt" beforeDir="false" afterPath="$PROJECT_DIR$/News Filter Project/note.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/News Filter Project/tinnhanhCK_scrape_news.py" beforeDir="false" afterPath="$PROJECT_DIR$/News Filter Project/tinnhanhCK_scrape_news.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/News Filter Project/vietstock_scrape_news.py" beforeDir="false" afterPath="$PROJECT_DIR$/News Filter Project/vietstock_scrape_news.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/phs/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/phs/__init__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -75,20 +132,17 @@
       <recent name="C:\Users\hiepdang\PycharmProjects\datadriven-project\reporting_tool\trading_service\data_validation" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.vietstock_scrape_news">
-    <configuration name="BaoCaoReviewKHVip - 10" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.ndh_scrape_news">
+    <configuration name="cafef_scrape_news" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/News Filter Project" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoReviewKHVip - 10.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/News Filter Project/cafef_scrape_news.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -97,19 +151,16 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="BaoCaoUngTienROS - 2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="ndh_scrape_news" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/News Filter Project" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/BaoCaoUngTienROS - 2.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/News Filter Project/ndh_scrape_news.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -118,7 +169,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="DuLieuXuLyGuiKiemToan - 11" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="read_dat" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -126,11 +177,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/News Filter Project" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting_tool/trading_service/thanhtoanbutru/DuLieuXuLyGuiKiemToan - 11.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/News Filter Project/read_dat.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -139,7 +190,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="streamlit_i" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="tinnhanhCK_scrape_news" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -147,11 +198,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting_tool/trading_service/taichinh" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/News Filter Project" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="D:\DataAnalytics\reporting_tool\trading_service\taichinh\streamlit_i.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/News Filter Project/tinnhanhCK_scrape_news.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -182,19 +233,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.BaoCaoReviewKHVip - 10" />
-      <item itemvalue="Python.streamlit_i" />
-      <item itemvalue="Python.BaoCaoUngTienROS - 2" />
-      <item itemvalue="Python.DuLieuXuLyGuiKiemToan - 11" />
       <item itemvalue="Python.vietstock_scrape_news" />
+      <item itemvalue="Python.tinnhanhCK_scrape_news" />
+      <item itemvalue="Python.cafef_scrape_news" />
+      <item itemvalue="Python.read_dat" />
+      <item itemvalue="Python.ndh_scrape_news" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.ndh_scrape_news" />
+        <item itemvalue="Python.cafef_scrape_news" />
+        <item itemvalue="Python.read_dat" />
+        <item itemvalue="Python.tinnhanhCK_scrape_news" />
         <item itemvalue="Python.vietstock_scrape_news" />
-        <item itemvalue="Python.DuLieuXuLyGuiKiemToan - 11" />
-        <item itemvalue="Python.BaoCaoUngTienROS - 2" />
-        <item itemvalue="Python.streamlit_i" />
-        <item itemvalue="Python.BaoCaoReviewKHVip - 10" />
       </list>
     </recent_temporary>
   </component>

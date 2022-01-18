@@ -2,6 +2,7 @@
 	cafef.vn
 	vietstock.vn
 	ndh.vn
+	tinnhanhchungkhoan.vn
 -------------------------------------------- SCRAPY -------------------------------------------- 
 2. Scrapy
 2.1 Câu lệnh thường dùng
@@ -29,3 +30,5 @@
 	https://stackoverflow.com/questions/53955988/how-to-move-to-the-next-page-on-python-selenium
 4. Hide/Remove ads with selenium python
 	https://stackoverflow.com/questions/41460265/hide-remove-ads-with-selenium-python
+5. Waits
+	https://selenium-python.readthedocs.io/waits.html
