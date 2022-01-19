@@ -12,9 +12,9 @@ ignored_exceptions = (
 
 
 def run(  # this function can't go headless
-    run_date: str,
-) \
-        -> pd.DataFrame:
+    run_date:str,
+) -> pd.DataFrame:
+
     day = run_date[-2:]
     month = run_date[5:7]
     year = run_date[:4]

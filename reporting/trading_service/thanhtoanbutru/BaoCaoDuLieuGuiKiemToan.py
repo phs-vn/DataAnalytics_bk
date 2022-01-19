@@ -48,6 +48,10 @@ def run(
                 [relationship].[account_code],
                 [account].[customer_name]
             FROM [relationship]
+            RIGHT JOIN
+                [vcf0051]
+            ON [relationship].[sub_account] = [vcf0051].[sub_account]
+                AND [relationship].[date] = [vcf0051].[date]
             LEFT JOIN 
                 [branch] 
             ON [relationship].[branch_id] = [branch].[branch_id]
@@ -55,6 +59,7 @@ def run(
                 [account] 
             ON [relationship].[account_code] = [account].[account_code]
             WHERE [relationship].[date] = '{t0_date}'
+                AND [vcf0051].[status] IN ('A','B')
         ),
         [b] AS (
             SELECT
@@ -134,17 +139,18 @@ def run(
                  END [total_outs_plus_int], -- data của FLEX đang sai ở 022C062345 (-9đ), phải lên 0đ
                 50 [rai]
             FROM [i]
-            RIGHT JOIN [b] ON [b].[sub_account] = [i].[sub_account]
+            INNER JOIN [b] ON [b].[sub_account] = [i].[sub_account]
             LEFT JOIN [p] ON [p].[sub_account] = [i].[sub_account]
             LEFT JOIN [c] ON [c].[sub_account] = [i].[sub_account]
             LEFT JOIN [r] ON [r].[sub_account] = [i].[sub_account]
             LEFT JOIN [s] ON [s].[sub_account] = [i].[sub_account]
         ) [all]
-        WHERE [all].[rtt] <> 0 
+        WHERE ([all].[rtt] <> 0 
             OR [all].[remain_pia] <> 0
             OR [all].[buying_power] <> 0
             OR [all].[total_outstanding] <> 0
-            OR [all].[total_asset] <> 0
+            OR [all].[total_asset] <> 0)
+            
     """,
         connect_DWH_CoSo
     )

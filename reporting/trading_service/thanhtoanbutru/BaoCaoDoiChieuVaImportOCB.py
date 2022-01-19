@@ -128,7 +128,7 @@ def run(
         file_path,
         usecols=['TÀI KHOẢN','TÊN KHÁCH HÀNG','SỐ DƯ'],
         dtype={'TÀI KHOẢN':object},
-    )
+    ).drop_duplicates() # ngân hàng có lúc copy paste 2 lần ra 2 dòng trùng nhau
     sent_data.rename(
         {
             'TÀI KHOẢN':'bank_account',
@@ -195,30 +195,57 @@ def run(
                 [imported_bank_balance].[effective_date] = '{t0_date}'
                 AND [imported_bank_balance].[bank_code] = 'OCB'
         )
-        SELECT
-            'OCB' [bank]
-            , [import].[bank_account]
-            , [import].[account_name]
-            , ISNULL([import].[o_balance],0) [o_balance]
-            , ISNULL([c].[increase],0) [increase]
-            , ISNULL([c].[decrease],0) [decrease]
-            , ISNULL([in].[deposit],0) [deposit]
-            , ISNULL([out].[withdraw],0) [withdraw]
-            , ISNULL([import].[o_balance],0) 
-                + ISNULL([c].[increase],0) 
-                - ISNULL([c].[decrease],0) 
-                + ISNULL([in].[deposit],0) 
-                - ISNULL([out].[withdraw],0) 
-                [e_balance]
+        , [table] AS (
+            SELECT
+                'OCB' [bank]
+                , COALESCE (
+                    [import].[bank_account],
+                    [c].[bank_account],
+                    [in].[bank_account],
+                    [out].[bank_account]
+                    ) [bank_account]
+                , [import].[account_name]
+                , ISNULL([import].[o_balance],0) [o_balance]
+                , ISNULL([c].[increase],0) [increase]
+                , ISNULL([c].[decrease],0) [decrease]
+                , ISNULL([in].[deposit],0) [deposit]
+                , ISNULL([out].[withdraw],0) [withdraw]
+                , ISNULL([import].[o_balance],0) 
+                    + ISNULL([c].[increase],0) 
+                    - ISNULL([c].[decrease],0) 
+                    + ISNULL([in].[deposit],0) 
+                    - ISNULL([out].[withdraw],0) 
+                    [e_balance]
+            FROM
+                [import]
+            FULL JOIN [c] ON [c].[bank_account] = [import].[bank_account]
+            FULL JOIN [in] ON [in].[bank_account] = [import].[bank_account]
+            FULL JOIN [out] ON [out].[bank_account] = [import].[bank_account]
+        )
+        SELECT 
+            [table].[bank]
+            , [table].[bank_account]
+            , [table].[account_name]
+            , SUM([table].[o_balance]) [o_balance]
+            , SUM([table].[increase]) [increase]
+            , SUM([table].[decrease]) [decrease]
+            , SUM([table].[deposit]) [deposit]
+            , SUM([table].[withdraw]) [withdraw]
+            , SUM([table].[e_balance]) [e_balance]
         FROM
-            [import]
-        FULL JOIN [c] ON [c].[bank_account] = [import].[bank_account]
-        FULL JOIN [in] ON [in].[bank_account] = [import].[bank_account]
-        FULL JOIN [out] ON [out].[bank_account] = [import].[bank_account]
+            [table]
+        GROUP BY
+            [bank], [bank_account], [account_name]
+        -- Do bị NULL trên cột KEY của các bảng -> phải làm COALESCE -> phải thêm bước GROUP BY
         """,
         connect_DWH_CoSo,
         index_col=['bank','bank_account']
     )
+    # fill sent date
+    output = output.join(sent_data['s_balance'],how='outer')
+    output.loc[:,'o_balance':] = output.loc[:,'o_balance':].fillna(0)
+    output['diff'] = output['e_balance']-output['s_balance']
+
     # try to fill missing names using bank files
     output.loc[output['account_name'].isna(),'account_name'] = sent_data['account_name']
 
@@ -229,11 +256,7 @@ def run(
         else:
             x = unidecode.unidecode(x)
         return x
-
     output['account_name'] = output['account_name'].map(name_converter)
-    # fill sent date
-    output = output.join(sent_data['s_balance'],how='outer').fillna(0)
-    output['diff'] = output['e_balance']-output['s_balance']
     output.reset_index(inplace=True)
 
     # tách dataframe làm hai cho hai mục đích: đối chiếu và import

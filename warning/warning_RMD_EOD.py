@@ -2,9 +2,9 @@ from request.stock import *
 
 
 def run(
-    mlist: bool = True,
-    exchange: str = 'HOSE',
-    segment: str = 'all'
+    mlist:bool=True,
+    exchange:str='HOSE',
+    segment:str='all'
 ) \
         -> pd.DataFrame:
     """

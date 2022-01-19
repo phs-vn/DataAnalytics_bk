@@ -147,7 +147,7 @@ def run(
     # --------------------- Viet File Excel ---------------------
     # Write file BÁO CÁO ĐỐI CHIẾU SỐ DƯ TIỀN TÀI KHOẢN KHÁCH HÀNG
     eod = dt.datetime.strptime(t0_date,"%Y-%m-%d").strftime("%d.%m.%Y")
-    file_name = f'Đối chiếu số dư tiền TKKH {eod}.xlsx'
+    file_name = f'Báo cáo Đối chiếu số dư tiền TKKH {eod}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder,folder_name,period,file_name),
         engine='xlsxwriter',

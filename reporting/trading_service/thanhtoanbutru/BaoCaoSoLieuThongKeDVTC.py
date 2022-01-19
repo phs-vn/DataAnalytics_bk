@@ -326,34 +326,6 @@ def run(
     outstandings = outstandings.join(bad_loan_g,'type','outer').fillna(0)
     outstandings.rename({'principal':'bad_loan'},axis=1,inplace=True)
 
-    # Lấy Dư nợ gửi SSC
-    def get_ssc_outs(t):
-        folder_path \
-            = r"\\192.168.10.101\phs-storge-2018\RiskManagementDept\RMD_Data" \
-              r"\Luu tru van ban\SSC Report\Daily SSC before 8AM"
-        if t=='c':
-            d = end_date
-        elif t=='o':
-            d = start_date
-        else:
-            raise ValueError('Invalid Input')
-        path = join(
-            folder_path,
-            f'{d[:4]}',
-            f'{d[5:7]}.{d[:4]}',
-            f'180426_SCMS_Bao cao ngay truoc 8AM {d[-2:]}{d[5:7]}{d[:4]}.xlsx',
-        )
-        ssc_outs = pd.read_excel(
-            path,
-            sheet_name='1.f_thgdkq_06692',
-            skiprows=2,
-            skipfooter=1,
-            usecols=[2],
-        ).sum().squeeze()*1e6
-        return ssc_outs
-
-    ssc_o_outs,ssc_c_outs = get_ssc_outs('o'),get_ssc_outs('c')
-
     ###################################################
     ###################################################
     ###################################################
@@ -484,7 +456,7 @@ def run(
     worksheet.write('B8','TỔNG',header_format)
     worksheet.write_row('C8',outstandings.iloc[:,1:].sum(),num_bold_format)
     worksheet.write('A9','Dư nợ báo cáo SSC',text_left_format)
-    worksheet.write_row('C9',[ssc_o_outs,ssc_c_outs-ssc_o_outs,ssc_c_outs],num_format)
+    worksheet.write_row('C9',[0,'=E9-C9',0],num_format)
 
     worksheet.write('A10','Tổng số lượng TK Margin\n(Active & Block)',text_left_format)
     worksheet.write('B10','',text_left_format)

@@ -1,5 +1,6 @@
 from request.stock import *
 
+
 PATH = join(dirname(dirname(realpath(__file__))),'dependency','chromedriver')
 ignored_exceptions = (
     ValueError,
@@ -10,11 +11,10 @@ ignored_exceptions = (
     ElementNotInteractableException
 )
 
-
 def run(
     hide_window=True  # rất dễ lỗi khi hide_window = True
-) \
-        -> pd.DataFrame:
+) -> pd.DataFrame:
+
     options = Options()
     if hide_window:
         options.headless = True

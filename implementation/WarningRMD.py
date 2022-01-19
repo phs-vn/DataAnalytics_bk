@@ -1,5 +1,5 @@
 from request.stock import *
-from warning import warning_list_RMD
+from warning import warning_RMD_EOD
 
 now = dt.datetime.now()
 destination_dir = r'\\192.168.10.101\phs-storge-2018' \
@@ -11,7 +11,7 @@ file_path = fr'{destination_dir}\{file_name}'
 
 
 def get_html(func):
-    def inner():
+    def wrapper():
         table = func()
         # Generate HTML table in Email:
         mask = table['Consecutive Floor Days']>0
@@ -22,11 +22,11 @@ def get_html(func):
         html_str = html_str.replace('border="1"','border="1" style="border-collapse:collapse"')  # make thinner borders
         return html_str
 
-    return inner
+    return wrapper
 
 
 def send_mail(func):
-    def inner():
+    def wrapper():
         table = func()
         outlook = Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
@@ -53,15 +53,15 @@ def send_mail(func):
         mail.Attachments.Add(file_path)
         mail.Send()
 
-    return inner
+    return wrapper
 
 
 @send_mail
 @get_html
 def run():
     # consecutively scan on 2 exchanges
-    hose_table = warning_list_RMD.run(True,'HOSE','all')
-    hnx_table = warning_list_RMD.run(True,'HNX','all')
+    hose_table = warning_RMD_EOD.run(True,'HOSE','all')
+    hnx_table = warning_RMD_EOD.run(True,'HNX','all')
 
     # export to excel
     result = pd.concat([hose_table,hnx_table]).sort_values(

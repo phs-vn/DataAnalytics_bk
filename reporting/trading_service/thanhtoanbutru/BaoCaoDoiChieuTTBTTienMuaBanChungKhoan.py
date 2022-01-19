@@ -219,7 +219,7 @@ def run(
     # --------------------- Viet File Excel ---------------------
     # Write file BÁO CÁO ĐỐI CHIẾU THANH TOÁN BÙ TRỪ TIỀN MUA BÁN CHỨNG KHOÁN
     report_date = dt.datetime.strptime(t0_date,'%Y-%m-%d').strftime('%d.%m.%Y')
-    file_name = f'Đối chiếu TTBT tiền mua bán chứng khoán {report_date}.xlsx'
+    file_name = f'Báo cáo Đối chiếu TTBT tiền mua bán chứng khoán {report_date}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder,folder_name,period,file_name),
         engine='xlsxwriter',

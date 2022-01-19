@@ -14,7 +14,7 @@ connect_RMD = pyodbc.connect(
     f'uid={user_id};'
     f'pwd={password}'
 )
-TableNames_DWH_CoSo = pd.read_sql(
+TableNames_RMD = pd.read_sql(
     'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES',
     connect_RMD,
 )
@@ -31,7 +31,7 @@ connect_DWH_CoSo = pyodbc.connect(
     f'uid={user_id};'
     f'pwd={password}'
 )
-TableNames_RMD = pd.read_sql(
+TableNames_DWH_CoSo = pd.read_sql(
     'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES',
     connect_DWH_CoSo
 )

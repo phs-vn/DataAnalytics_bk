@@ -51,16 +51,18 @@ def run(
                 ON [sub_account].[account_code] = [account].[account_code]
             )
             SELECT 
-                CAST('{period}' AS datetime) [date],
+                MAX([vrm6631].[date]) [date],
                 [r].[account_code],
-                [r].[customer_name],
-                [vrm6631].[cash_balance_at_bank],
+                MAX([r].[customer_name]) [customer_name],
+                SUM([vrm6631].[cash_balance_at_bank]) [cash_balance_at_bank],
                 '' [email]
             FROM [vrm6631]
             LEFT JOIN [r]
                 ON [r].[sub_account] = [vrm6631].[sub_account]
             WHERE {sql_condition}
                 AND [vrm6631].[date] = '{t0_date}'
+            GROUP BY
+                [r].[account_code]
             """,
             connect_DWH_CoSo
         )

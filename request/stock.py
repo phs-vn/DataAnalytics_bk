@@ -935,7 +935,7 @@ class ta:
         pd.options.mode.chained_assignment = None
         if fromdate is not None and todate is not None:
             if dt.datetime.strptime(todate,'%Y-%m-%d') \
-                    -dt.datetime.strptime(fromdate,'%Y-%m-%d')>timedelta(days=60):
+                    -dt.datetime.strptime(fromdate,'%Y-%m-%d')>dt.timedelta(days=60):
                 raise Exception('Can\'t extract more than 60 days')
             else:
                 try:
@@ -955,8 +955,8 @@ class ta:
                         'Date Format Required: yyyy-mm-dd, yyyy/mm/dd')
         else:
             try:
-                fromdate = (dt.datetime.now()-timedelta(days=60)).strftime("%Y-%m-%d")
-                todate = (dt.datetime.now()-timedelta(days=0)).strftime("%Y-%m-%d")
+                fromdate = (dt.datetime.now()-dt.timedelta(days=60)).strftime("%Y-%m-%d")
+                todate = (dt.datetime.now()-dt.timedelta(days=0)).strftime("%Y-%m-%d")
                 r = requests.post(self.address_intra,
                                   data=json.dumps(
                                       {'symbol':ticker,
@@ -1030,7 +1030,7 @@ class ta:
             date_ = dt.datetime(year=int(date.split('-')[0]),
                                 month=int(date.split('-')[1]),
                                 day=int(date.split('-')[2]))
-            one_day = timedelta(days=1)
+            one_day = dt.timedelta(days=1)
             while date_.weekday() in holidays.WEEKEND or date_ in holidays.VN():
                 date_ = date_+one_day
 
@@ -1097,7 +1097,7 @@ class ta:
             date_ = dt.datetime(year=int(date.split('-')[0]),
                                 month=int(date.split('-')[1]),
                                 day=int(date.split('-')[2]))
-            one_day = timedelta(days=1)
+            one_day = dt.timedelta(days=1)
             while date_.weekday() in holidays.WEEKEND or date_ in holidays.VN():
                 date_ = date_+one_day
 

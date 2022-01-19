@@ -21,47 +21,60 @@ def run(
     ###################################################
 
     # --------------------- Viết Query và xử lý dataframe ---------------------
-    group_file_path = r"\\192.168.10.101\phs-storge-2018\RiskManagementDept\RMD_Data\Luu tru van ban\Daily Report\04. High Risk & Liquidity\Group.Deal"
-    file = f'{end_date[:4]}.xlsx'
-    file_path = join(group_file_path,file)
-    group_table = pd.read_excel(file_path,names=['account_code','ticker','group'])
-    group_table['group'] = group_table['group'].str.replace("'s deal",'').str.replace("'s group",'')
-    ros_group = group_table.loc[group_table['group']=='ROS&FLC&GAB','account_code'].drop_duplicates()
+    ros_group = [
+        '022C015598',
+        '022C015559',
+        '022C015959',
+        '022C017264',
+        '022C017940',
+        '022C017289',
+        '022C017482',
+        '022C017535',
+        '022C018358',
+        '022C019357',
+        '022C696969',
+        '022C040921',
+        '022C040945',
+        '022C041906',
+        '022C042028',
+        '022C016567',
+        '022C016608',
+    ]
     table = pd.read_sql(
         f"""
-    WITH 
-      [ros_group] AS (
-      SELECT 
-        [sub_account].[sub_account], 
-        [sub_account].[account_code], 
-        [account].[customer_name]
-      FROM [sub_account]
-      LEFT JOIN [account]
-      ON [account].[account_code] = [sub_account].[account_code]
-      WHERE [sub_account].[account_code] IN {iterable_to_sqlstring(ros_group)}
-      ),
-      [uttb] AS (
-      SELECT 
-        [payment_in_advance].[sub_account], 
-        [payment_in_advance].[fee_at_phs] 
-      FROM [payment_in_advance]
-      WHERE [payment_in_advance].[date] BETWEEN '{start_date}' AND '{end_date}'
-      )
-    SELECT 
-      [ros_group].[account_code],
-      [ros_group].[customer_name],
-      SUM([uttb].[fee_at_phs]) AS [fee_phs]
-    FROM 
-      [ros_group]
-    LEFT JOIN
-      [uttb]
-    ON 
-      [ros_group].[sub_account] = [uttb].[sub_account]
-    GROUP BY 
-      [ros_group].[account_code],
-      [ros_group].[customer_name]
-    ORDER BY [account_code]
-    """,
+        WITH 
+        [ros_group] AS (
+        SELECT 
+            [sub_account].[sub_account], 
+            [sub_account].[account_code], 
+            [account].[customer_name]
+        FROM [sub_account]
+        LEFT JOIN [account]
+        ON [account].[account_code] = [sub_account].[account_code]
+        WHERE [sub_account].[account_code] IN {iterable_to_sqlstring(ros_group)}
+        ),
+        [uttb] AS (
+        SELECT 
+            [payment_in_advance].[sub_account], 
+            [payment_in_advance].[fee_at_phs] 
+        FROM [payment_in_advance]
+        WHERE [payment_in_advance].[date] BETWEEN '{start_date}' AND '{end_date}'
+        )
+        SELECT 
+            [ros_group].[account_code],
+            [ros_group].[customer_name],
+            SUM([uttb].[fee_at_phs]) AS [fee_phs]
+        FROM 
+            [ros_group]
+        LEFT JOIN
+            [uttb]
+        ON 
+            [ros_group].[sub_account] = [uttb].[sub_account]
+        GROUP BY 
+            [ros_group].[account_code],
+            [ros_group].[customer_name]
+        ORDER BY [account_code]
+        """,
         connect_DWH_CoSo,
         index_col='account_code'
     ).fillna(0)
@@ -197,7 +210,7 @@ def run(
     worksheet = workbook.add_worksheet('worksheet')
     worksheet.hide_gridlines(option=2)
 
-    sum_start_row = table.shape[0]+5
+    sum_start_row = table.shape[0]+6
     total_doanh_thu = table['fee_phs'].sum()
 
     # Set Column Width and Row Height
@@ -212,7 +225,7 @@ def run(
     worksheet.write('B5','SỐ TKCK',STK_ten_format)
     worksheet.write('C5','TÊN',STK_ten_format)
     worksheet.write('D5','DOANH THU UTTB',fee_phs_format)
-    worksheet.write_column('A6',[int(i) for i in np.arange(table.shape[0])+1],stt_col_format)
+    worksheet.write_column('A6',np.arange(table.shape[0])+1,stt_col_format)
     worksheet.write_column('B6',table.index,text_center_format)
     worksheet.write_column('C6',table['customer_name'],text_left_format)
     worksheet.write_column('D6',table['fee_phs'],money_format)
