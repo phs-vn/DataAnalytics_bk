@@ -1,6 +1,6 @@
 from request_phs.stock import *
 
-PATH = join(dirname(dirname(realpath(__file__))),'phs','chromedriver')
+PATH = join(dirname(dirname(realpath(__file__))),'chromedriver_win32', 'chromedriver.exe')
 ignored_exceptions = (
     ValueError,
     IndexError,

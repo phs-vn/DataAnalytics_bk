@@ -9,7 +9,7 @@ class PageFailToLoad(Exception):
     pass
 
 
-PATH = r'D:\DataAnalytics\News Filter Project\chromedriver_win32\chromedriver.exe'
+PATH = r'D:\DataAnalytics\chromedriver_win32\chromedriver.exe'
 ignored_exceptions = (
     ValueError,
     IndexError,

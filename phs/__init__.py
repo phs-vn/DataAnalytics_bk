@@ -39,6 +39,7 @@ from PIL import Image
 import csv
 import itertools
 import codecs
+import pickle
 
 ###############################################################################
 

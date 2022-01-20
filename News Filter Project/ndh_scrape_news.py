@@ -24,7 +24,7 @@ ignored_exceptions = (
     PageFailToLoad,
 )
 
-PATH = r'D:\DataAnalytics\News Filter Project\chromedriver_win32\chromedriver.exe'
+PATH = r'D:\DataAnalytics\chromedriver_win32\chromedriver.exe'
 margin_list = internal.mlist()
 
 
@@ -34,7 +34,7 @@ def run():
     chrome_options.add_argument("--headless")
 
     driver = webdriver.Chrome(options=chrome_options, service=Service(PATH))
-    driver.get('https://ndh.vn/doanh-nghiep')
+    driver.get('https://ndh.vn/tai-chinh')
 
     screen_height = driver.execute_script("return window.screen.height;")
 
@@ -55,7 +55,7 @@ def run():
 
         if screen_height * i > scroll_height:
             driver.find_element(By.XPATH, '//*[@id="btnLoadmore"]/a').click()
-        if len(elements) >= 250:
+        if len(elements) >= 150:
             break
         i += 1
 
@@ -80,7 +80,7 @@ def run():
                 print('URL:', next_url, '+', 'Length:', len(content))
         except ignored_exceptions:
             pass
-        if len(content) >= 130:
+        if len(content) >= 40:
             break
         time.sleep(t)
 
@@ -92,4 +92,4 @@ def run():
     }
     df = pd.DataFrame(dictionary)
 
-    df.to_pickle(r"D:\DataAnalytics\News Filter Project\output_data\ndh_doanh-nghiep_data_2.pickle")
+    df.to_pickle(r"D:\DataAnalytics\News Filter Project\output_data\ndh_tai-chinh_data_2.pickle")

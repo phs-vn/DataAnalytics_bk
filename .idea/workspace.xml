@@ -5,68 +5,97 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="Hiep Dang 28/10/2021">
-      <change afterPath="$PROJECT_DIR$/News Filter Project/LE.DAT" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/archive/Vietnamese - Vietnamese.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/financial dictionary/viet_dict.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-stopwords-master/.github/FUNDING.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-stopwords-master/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-stopwords-master/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-stopwords-master/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-stopwords-master/test.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-stopwords-master/vietnamese-stopwords-dash.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-stopwords-master/vietnamese-stopwords.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-wordlist-master/README.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-wordlist-master/Viet11K.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-wordlist-master/Viet22K.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-wordlist-master/Viet39K.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/vietnamese-wordlist-master/Viet74K.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/a.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/b.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/c.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/d.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/e.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/f.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/g.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/h.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/i.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/j.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/k.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/l.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/m.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/n.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/notes.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/o.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/p.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/q.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/r.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/s.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/t.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/u.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/v.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/w.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/x.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/y.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/z.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/â.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/ê.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/ô.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/ă.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/đ.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/ơ.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/words-vi-master/ư.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/count_word.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/file/note.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/output_data/tinnhanhchungkhoan_2/tinnhanhCK_chung-khoan_data_2.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/output_data/tinnhanhchungkhoan_2/tinnhanhCK_doanh-nghiep_data_2.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/News Filter Project/read_dat.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/list_stock.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/AAA.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/AAM.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/AAT.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/ABS.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/ABT.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/ACB.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/ACC.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/ACL.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/ADG.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/ADS.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/AGG.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/AGM.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/AGR.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/AMD.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/ANV.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/APC.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/APG.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/APH.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/ASG.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/ASM.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/ASP.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/AST.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BAF.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BBC.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BCE.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BCG.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BCM.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BFC.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BHN.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BIC.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BID.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BKG.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BMC.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BMI.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BMP.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BRC.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BSI.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BTP.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data/BTT.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/AAA.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/AAM.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/AAT.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/ABS.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/ABT.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/ACB.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/ACC.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/ACL.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/ADG.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/ADS.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/AGG.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/AGM.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/ANV.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/APC.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/APH.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BAF.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BBC.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BCE.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BCG.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BCM.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BFC.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BHN.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BIC.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BID.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BKG.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BMC.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BMI.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BMP.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BRC.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BSI.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BTP.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BTT.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BVH.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/BWE.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/C32.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/output_stock_data_backup/C47.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/News Filter Project/scrape_vietstock_tkgd.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chromedriver_win32/chromedriver.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/News Filter Project/Intranet list_07.01.2022 final.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/financial dictionary/viet_dict.txt" beforeDir="false" afterPath="$PROJECT_DIR$/News Filter Project/Vietnamese vocab/financial dictionary/viet_dict.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/News Filter Project/cafef_scrape_news.py" beforeDir="false" afterPath="$PROJECT_DIR$/News Filter Project/cafef_scrape_news.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/News Filter Project/chromedriver_win32/chromedriver.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/News Filter Project/file/note.txt" beforeDir="false" afterPath="$PROJECT_DIR$/News Filter Project/file/note.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/News Filter Project/ndh_scrape_news.py" beforeDir="false" afterPath="$PROJECT_DIR$/News Filter Project/ndh_scrape_news.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/News Filter Project/note.txt" beforeDir="false" afterPath="$PROJECT_DIR$/News Filter Project/note.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/News Filter Project/note.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/News Filter Project/read_dat.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/News Filter Project/tinnhanhCK_scrape_news.py" beforeDir="false" afterPath="$PROJECT_DIR$/News Filter Project/tinnhanhCK_scrape_news.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/News Filter Project/vietstock_scrape_news.py" beforeDir="false" afterPath="$PROJECT_DIR$/News Filter Project/vietstock_scrape_news.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/phs/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/phs/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/text_mining/scrape_ticker_by_exchange.py" beforeDir="false" afterPath="$PROJECT_DIR$/text_mining/scrape_ticker_by_exchange.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/text_mining/scrape_vietstock_trading_price.py" beforeDir="false" afterPath="$PROJECT_DIR$/text_mining/scrape_vietstock_trading_price.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,11 +161,14 @@
       <recent name="C:\Users\hiepdang\PycharmProjects\datadriven-project\reporting_tool\trading_service\data_validation" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.ndh_scrape_news">
+  <component name="RunManager" selected="Python.scrape_ticker_by_exchange">
     <configuration name="cafef_scrape_news" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/News Filter Project" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -155,6 +187,9 @@
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/News Filter Project" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -190,6 +225,24 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="scrape_ticker_by_exchange" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DataAnalytics" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/text_mining" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/text_mining/scrape_ticker_by_exchange.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="tinnhanhCK_scrape_news" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -211,41 +264,20 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="vietstock_scrape_news" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="DataAnalytics" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/News Filter Project" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/News Filter Project/vietstock_scrape_news.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <list>
-      <item itemvalue="Python.vietstock_scrape_news" />
       <item itemvalue="Python.tinnhanhCK_scrape_news" />
       <item itemvalue="Python.cafef_scrape_news" />
       <item itemvalue="Python.read_dat" />
       <item itemvalue="Python.ndh_scrape_news" />
+      <item itemvalue="Python.scrape_ticker_by_exchange" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.scrape_ticker_by_exchange" />
         <item itemvalue="Python.ndh_scrape_news" />
         <item itemvalue="Python.cafef_scrape_news" />
         <item itemvalue="Python.read_dat" />
         <item itemvalue="Python.tinnhanhCK_scrape_news" />
-        <item itemvalue="Python.vietstock_scrape_news" />
       </list>
     </recent_temporary>
   </component>

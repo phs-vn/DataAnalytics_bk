@@ -9,7 +9,7 @@ class PageFailToLoad(Exception):
     pass
 
 
-PATH = r'D:\DataAnalytics\News Filter Project\chromedriver_win32\chromedriver.exe'
+PATH = r'D:\DataAnalytics\chromedriver_win32\chromedriver.exe'
 ignored_exceptions = (
         ValueError,
         IndexError,
@@ -36,7 +36,6 @@ def run():
     url_save = []
     content = []
     time_save = []
-    df = pd.DataFrame()
     wait = WebDriverWait(driver, 10, ignored_exceptions=ignored_exceptions)
     wait_2 = WebDriverWait(driver, 10, ignored_exceptions=ignored_exceptions)
 

@@ -6,14 +6,20 @@ BRICS
 bác bỏ
 bán
 bán chui
+Ban kiểm soát
 bán ra
 bán ròng
 bán tháo
 báo cáo tài chính
 bảo hiểm
 bảo lãnh
+bảo vệ
 bất chấp
 bất động sản
+bất kỳ
+bất thành
+bất thường
+bắt giam
 bền vững
 bèo bọt
 bí mật
@@ -28,18 +34,23 @@ biểu đồ
 bình phục
 bình quân
 bổ nhiệm
+Bộ Tư pháp
 bù trừ
 bùng nổ
 bước đệm
 bộ trưởng bộ tài chính
 cá nhân
 cạnh tranh
+cận biên
 cân đối
 cao nhất
+cân nhắc
 cầu
 cắt giảm
+chấm dứt
 chào bán
 chấp hành
+chất lượng
 chất xúc tác
 chặt chẽ
 chênh lệch
@@ -57,12 +68,17 @@ chìm
 chính sách
 chính sách cổ tức
 cho vay
+chống
 chốt
 chu kỳ
 chủ chốt
 chủ quyền
+chú trọng
 chuyên gia tư vấn
+chuyển động
 chuyển khoản
+chuyển nhượng
+chứng chỉ
 chứng khoán
 chững lại
 chứng từ
@@ -79,6 +95,7 @@ cổ phiếu vốn hóa lớn
 cổ tức
 công bố
 công chúng
+công chứng
 công nghệ thông tin
 công ty
 công ty cổ phần
@@ -88,8 +105,11 @@ Công ty tư nhân
 Công ty xuyên quốc gia
 cốt lõi
 cơ bản
+cơ cấu
+cơ quan
 cơ sở
 cơn sốt
+cụ thể
 cung
 dài hạn
 danh mục
@@ -101,23 +121,30 @@ doanh nghiệp vừa và nhỏ
 doanh số
 doanh thu
 doanh thu thuần
+dồi dào
 dở dang
+dòng vốn
+duy nhất
 duy trì
 dự án
 dự kiến
 đà tăng trưởng
 đánh giá
 đáo hạn
+đầu kỳ
 đầu tư
 đẩy mạnh
 đắc địa
 đăng ký
 đè nặng
 địa ốc
+địa phương
 điểm hòa vốn
+điều lệ
 điều tra
 đỉnh cao
 đình chỉ
+định chế tài chính
 định giá
 định hình
 đình trệ
@@ -129,9 +156,14 @@ dự kiến
 đơn vị
 đóng cửa
 đóng góp
+động thái
+đưa
+đứng giá
 GDP
 gánh nặng
 gánh nặng tài chính
+gấp đôi
+gấp ba
 ghi nhận
 giá sàn
 giá trị
@@ -148,19 +180,24 @@ Giám đốc Tài Chính
 giảm lãi suất
 giảm phát
 giằng co
+giữa kỳ
 góp mặt
 hạ nhiệt
 hạ tầng
+hạ tỷ trọng
 hành động
 hệ quả
 hiện hữu
 hình thức cho vay
 hóa đơn
 hoãn
+hoán đổi
 hoàn thiện
 hoàn vốn
+hộ gia đình
 hồ sơ
 hỗ trợ
+hoàn thành
 hồi phục
 hoạt động kinh doanh
 hợp đồng cho thuê
@@ -170,6 +207,8 @@ hợp tác
 huy động
 hưng phấn
 hữu hình
+kế hoạch
+kê khai
 kết quả
 khả quan
 khai trương
@@ -182,9 +221,11 @@ không chấp thuận
 không đáng kể
 không mấy khả quan
 không nổi bật
+khởi tố
 khớp lệnh
 khủng hoảng
 khủng hoảng tài chính
+khuyến cáo
 khuyến nghị
 kiểm soát
 kinh tế
@@ -192,6 +233,7 @@ kinh tế quốc dân
 kinh tế vi mô
 kinh tế vĩ mô
 kỹ năng quản lý
+kỹ thuật
 kỳ hạn
 kỷ lục
 ký quỹ
@@ -206,9 +248,12 @@ lạm phát
 lạm phát gia tăng
 lao dốc
 lao động
+lăng kính
 linh động
 lĩnh vực
 lỗ
+lộ trình
+loại bỏ
 lợi nhuận
 lợi nhuận ròng
 lợi nhuận vốn
@@ -220,6 +265,7 @@ lừa đảo
 lực lượng
 lực lượng lao động
 lưu hành
+lưu ký
 lưu ý
 mã chi nhánh
 mã chứng khoán
@@ -228,17 +274,22 @@ mã trần
 mạnh
 mạnh mẽ
 máy rút tiền tự động
+miễn
 mô hình
 mô hình đầu tư
 mờ nhạt
 mới
+mới nổi
 mua vào
 mục tiêu
+muốn
 mức biến động
 nắm giữ
+nâng
 năng suất
 nền kinh tế
 nền tảng
+ngang hàng
 ngân hàng
 ngân hàng thương mại
 ngân sách
@@ -251,6 +302,7 @@ nhà đầu tư
 nhà đầu tư nội
 nhà nước
 nhà tài phiệt
+nhận định
 nhiều rủi ro
 nhiễu
 nhỏ
@@ -262,6 +314,7 @@ nợ xấu
 ngân hàng
 ngân sách
 Nghị định
+nghi ngờ
 nghỉ việc
 nghiệm thu
 nghiên cứu
@@ -269,6 +322,7 @@ ngoại tệ
 người nhậm thác
 người ủy thác
 nguồn vốn
+nước ngoài
 ồ ạt
 ổn định
 phá sản
@@ -276,6 +330,7 @@ phái sinh
 phạm tội
 phản ánh
 phân tích
+pháp luật
 pháp lý
 phát hành
 phát triển
@@ -287,11 +342,18 @@ phiên điều trần
 phiên giao dịch
 phiên họp
 phòng ngừa
+phục hồi
 phương thức
 phương thức thanh toán
 quản lý thanh khoản
+quán tính
 quan trọng
+quốc tế
 quý
+quy định
+quy mô
+quỹ đầu tư
+quỹ ngoại
 quỹ tương hỗ
 quyền thừa kế
 quyết liệt
@@ -321,10 +383,12 @@ sự điều tiết
 sự định giá
 sự đổi mới
 sự khác biệt
+sự khai gian
 sự kiện
 sự minh bạch
 sự mở cửa
 sự mua bán
+sự ổn định
 sự phân hóa
 sự suy thoái
 sự ước lượng
@@ -345,10 +409,14 @@ tài sản
 tài trợ
 tâm điểm
 tấn phong
+tần suất
+tập trung
 tăng
 tăng trưởng
 tăng trưởng lợi nhuận
+tăng vọt
 thảm họa
+tham vọng
 thận trọng
 thành công
 thanh khoản
@@ -359,19 +427,28 @@ thanh tra
 thao túng
 thận trọng
 thất nghiệp
+thất thu
 thâu tóm
+thay đổi
 thặng dư
 thăng hoa
 thắt chặt
 thế chấp
+thể chế
 thế giới
 theo pháp luật
+thị giá
 thị trường
+thị trường cận biên
 thị trường chứng khoán
+thị trường mới nổi
 thị trường tài chính
 thị trường tiền tệ
 thị trường vàng
+thiết lập
+thiệt thòi
 thỏa thuận
+thoái
 thông tin
 thống kê
 thời điểm
@@ -387,21 +464,31 @@ thúc đẩy
 thuê
 thuế
 thuê mua
+thư ngỏ
+thử thách
 thưa thớt
 thực tế
 thương mại
 tích cực
+tiêu chuẩn
 tiêu cực
 tiêu dùng
+tiềm ẩn
 tiền
 tiền điện tử
 tiến độ
+tiền đề
 tiết kiệm
 tiền lãi
 tiền mặt
 tiền tệ
+tiếp tục
 tín dụng
 tín dụng xấu
+tin đồn
+tín hiệu
+tín nhiệm
+tình hình
 tình trạng đình đốn
 tình trạng khủng hoảng
 tình trạng suy thoái
@@ -409,6 +496,7 @@ tình trạng thất nghiệp
 toàn bộ
 tổ chức
 tổ chức tài chính
+tốc độ
 tối đa
 tội phạm
 tồi tệ
@@ -420,12 +508,17 @@ trái phiếu
 tranh chấp
 triển vọng
 trộm cắp
+trốn thuế
 trụ cột
 trục lợi
+trục trặc
+trung bình
 trung tâm
 trước thuế
+từ chối
 tư vấn
 tương đối
+tương đương
 tương lai
 tỷ giá
 tỷ lệ
@@ -440,6 +533,9 @@ tỷ trọng
 ưu đãi
 vận dụng
 vấn đề
+vận hành
+vật liệu
+vật liệu xây dựng
 vi mô
 vĩ mô
 vi phạm
@@ -447,13 +543,16 @@ vi phạm hành chính
 vị trí
 vô hình
 vốn
+vốn đầu tư
 vốn điều lệ
 vỡ nợ
 vùi dập
 vững chắc
+xếp hạng
 xiết nợ
 xu hướng
 xuất khẩu
 xử lý
 xử phạt
+yêu cầu
 yếu tố

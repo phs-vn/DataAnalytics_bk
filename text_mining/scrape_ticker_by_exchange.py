@@ -1,6 +1,6 @@
 from request_phs.stock import *
 
-PATH = join(dirname(dirname(realpath(__file__))),'phs','chromedriver')
+PATH = join(dirname(dirname(realpath(__file__))),'chromedriver_win32', 'chromedriver.exe')
 ignored_exceptions = (
     ValueError,
     IndexError,
@@ -21,7 +21,7 @@ def run(
 
     # HOSE
     url_hose = 'https://iboard.ssi.com.vn/bang-gia/hose'
-    driver = webdriver.Chrome(executable_path=PATH,options=options)
+    driver = webdriver.Chrome(service=Service(PATH),options=options)
     wait = WebDriverWait(driver,10,ignored_exceptions=ignored_exceptions)
     driver.get(url_hose)
     print('Getting tickers in HOSE')
@@ -35,7 +35,7 @@ def run(
 
     # HNX
     url_hnx = 'https://iboard.ssi.com.vn/bang-gia/hnx'
-    driver = webdriver.Chrome(executable_path=PATH,options=options)
+    driver = webdriver.Chrome(service=Service(PATH),options=options)
     wait = WebDriverWait(driver,10,ignored_exceptions=ignored_exceptions)
     driver.get(url_hnx)
     print('Getting tickers in HNX')
@@ -49,7 +49,7 @@ def run(
 
     # UPCOM
     url_upcom = 'https://iboard.ssi.com.vn/bang-gia/upcom'
-    driver = webdriver.Chrome(executable_path=PATH,options=options)
+    driver = webdriver.Chrome(service=Service(PATH),options=options)
     wait = WebDriverWait(driver,10,ignored_exceptions=ignored_exceptions)
     driver.get(url_upcom)
     print('Getting tickers in UPCOM')
@@ -62,5 +62,5 @@ def run(
     driver.quit()
 
     result = pd.concat([table_hose,table_hnx,table_upcom])
-
+    result.to_pickle(r'D:\DataAnalytics\News Filter Project\list_stock.pickle')
     return result
