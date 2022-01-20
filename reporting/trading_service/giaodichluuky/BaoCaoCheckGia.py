@@ -68,6 +68,14 @@ def run(
     price_vietstock['exchange'].replace('UPCoM','UPCOM',inplace=True)
     original_price_vietstock = price_vietstock['price'].copy()
 
+    # bỏ đi trước những thằng trùng
+    ticker_idx = price_exchange.index.union(price_vietstock.index)
+    price_exchange = price_exchange.reindex(ticker_idx)
+    price_vietstock = price_vietstock.reindex(ticker_idx)
+    diff = price_vietstock['price']!=price_exchange['price']
+    price_exchange = price_exchange.loc[diff.index[diff]]
+    price_vietstock = price_vietstock.loc[diff.index[diff]]
+
     def modified_round(price):  # theo rule lam tron cua DVKH
         if price%100==50:  # 11850 -> 11900, 125550 -> 125600
             result = price+50
@@ -77,11 +85,6 @@ def run(
 
     price_vietstock.loc[price_vietstock['exchange'].isin(['HOSE','HNX']),'price'] = np.round(price_vietstock['price'],0)
     price_vietstock.loc[price_vietstock['exchange']=='UPCOM','price'] = price_vietstock['price'].map(modified_round)
-
-    # take union ticker index
-    ticker_idx = price_exchange.index.union(price_vietstock.index)
-    price_exchange = price_exchange.reindex(ticker_idx)
-    price_vietstock = price_vietstock.reindex(ticker_idx)
 
     result = price_exchange['price'].compare(price_vietstock['price'],keep_equal=True)
     result.rename({'self':'sogiaodich','other':'vietstock'},axis=1,inplace=True)
