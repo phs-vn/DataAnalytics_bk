@@ -15,7 +15,7 @@ def Error_Handler(func):
             popupRoot.mainloop()
 
         except (Exception,):
-            err = f"The error of {func.__name__} is error!!!"
+            err = f"The function {func.__name__} is error!!!"
             # Gửi lỗi qua Mail
             outlook = Dispatch('outlook.application')
             mail = outlook.CreateItem(0)
