@@ -1,3 +1,5 @@
+import time
+
 from request_phs.stock import *
 
 
@@ -25,6 +27,13 @@ ignored_exceptions = (
 )
 
 file_stock = pd.read_pickle(r'D:\DataAnalytics\News Filter Project\list_stock.pickle').reset_index()
+stock_not_use = ['CACB', 'CFPT', 'CHDB', 'CHPG', 'CKDH', 'CMBB', 'CMSN', 'CMWG',
+                 'CNVL', 'CPDR', 'CPNJ', 'CSTB', 'CTCB', 'CTPB', 'CVHM', 'CVIC',
+                 'CVJC', 'CVNM', 'CVPB', 'CVRE', 'CII12', 'CTG1210', 'GLH121',
+                 'HDG121001', 'KBC12', 'MML121021', 'MSN11906', 'MSN120', 'MSN121',
+                 'MSR11808', 'NPM', 'SBT121002', 'SHT', 'TNG119007', 'VHM12102',
+                 'VJC11912', 'VRE12007', 'GEG121022']
+file_stock = file_stock.loc[~(file_stock['ticker'].str.contains('|'.join(stock_not_use)))]
 stocks = file_stock['ticker'].tolist()
 
 t = 1
@@ -44,6 +53,7 @@ for stock in stocks:
         url = 'https://finance.vietstock.vn/' + stock + '/thong-ke-giao-dich.htm'
         driver = webdriver.Chrome(options=chrome_options, service=Service(PATH))
         driver.get(url)
+        wait = WebDriverWait(driver, 10, ignored_exceptions=ignored_exceptions)
 
         # Đăng nhập
         login_element = driver.find_element(By.XPATH, '/html/body/div[2]/div[6]/div/div[2]/div[2]/a[3]')
@@ -56,9 +66,8 @@ for stock in stocks:
         password_element.send_keys('123456789')
         login_element = driver.find_element(By.XPATH, '//*[@id="btnLoginAccount"]')
         login_element.click()
-        time.sleep(1)
+        time.sleep(t)
 
-        wait = WebDriverWait(driver, 10, ignored_exceptions=ignored_exceptions)
         print(stock)
         press = 1
         while True:
@@ -113,12 +122,14 @@ for stock in stocks:
                     By.XPATH,
                     '//*[@id="deal-content"]/div/div/div[2]/div/table/tbody/tr/td[5]'
                 )))
+                # có 1 vài mã cổ phiếu sau khi thống kê giao dịch xong sẽ ko có giá trị ở cột tỷ trọng, thay vào đó là
+                # dấu '-' nên có trường hợp if ... else này
                 if '-' in [ty_trong.text for ty_trong in get_ty_trong]:
                     tt_lst = [int(ty_trong.text.replace('-', '0')) for ty_trong in get_ty_trong]
                 else:
                     tt_lst = [round(float(ty_trong.text.replace('%', '')), 2) for ty_trong in get_ty_trong]
                 ty_trong_lst = ty_trong_lst + tt_lst
-
+                time.sleep(0.2)
                 while True:
                     next_button = wait.until(EC.presence_of_element_located((
                         By.XPATH,
@@ -126,20 +137,21 @@ for stock in stocks:
                     )))
                     try:
                         next_button.click()
-                        time.sleep(0.1)
                         break
                     except ignored_exceptions:
                         continue
+                press += 1
+                page = int(driver.find_element(
+                    By.XPATH,
+                    '//*[@id="deal-content"]/div/div/div[2]/div/div/div/span[1]/span[2]'
+                ).text)
+                print(press)
+                time.sleep(t)
+                if press > page:
+                    break
             except ignored_exceptions:
                 continue
-            press += 1
-            page = int(driver.find_element(
-                By.XPATH,
-                '//*[@id="deal-content"]/div/div/div[2]/div/div/div/span[1]/span[2]'
-            ).text)
-            print(press)
-            if press > page:
-                break
+
         time.sleep(t)
         driver.quit()
 
@@ -155,7 +167,7 @@ for stock in stocks:
             'Tỷ trọng': ty_trong_lst
         }
         df = pd.DataFrame(dictionary)
-        check = df.duplicated().all(axis=0)
+        check = df.duplicated().any()
         if check:
             df.to_pickle(fr"D:\DataAnalytics\News Filter Project\output_stock_data\{stock}-duplicated.pickle")
         else:
@@ -164,5 +176,5 @@ for stock in stocks:
     except ignored_exceptions:
         pass
 
-# check = pd.read_pickle(r'D:\DataAnalytics\News Filter Project\output_stock_data\CII.pickle')
+# check = pd.read_pickle(r'D:\DataAnalytics\News Filter Project\output_stock_data\AGG.pickle')
 # check = pd.read_pickle(r'D:\DataAnalytics\News Filter Project\output_stock_data\AGG-duplicated.pickle')
