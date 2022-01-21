@@ -1007,3 +1007,23 @@ def run( # BC này không chạy lùi ngày được (do scrape bảng điện t
     else:
         print(f"{__name__.split('.')[-1]} ::: Finished")
     print(f'Total Run Time ::: {np.round(time.time()-start,1)}s')
+
+
+
+
+
+    #####################
+
+
+
+
+    insert_to_tmp_tbl_stmt = "INSERT INTO de083 VALUES (?,?)"
+    cursor = connect_DWH_CoSo.cursor()
+    cursor.fast_executemany = True
+    cursor.executemany(insert_to_tmp_tbl_stmt,a[['date',13]].values.tolist())
+    cursor.commit()
+    cursor.close()
+
+
+
+    #####################

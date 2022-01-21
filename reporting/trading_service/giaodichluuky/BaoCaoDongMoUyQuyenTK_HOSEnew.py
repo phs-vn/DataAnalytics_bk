@@ -380,7 +380,7 @@ def run(
     sheet_tonghop.merge_range('A4:F4',CompanyEmail,company_info_format)
     sup_title = r'BÁO CÁO TÌNH HÌNH ĐÓNG/MỞ TÀI KHOẢN'
     sheet_tonghop.merge_range('A6:F6',sup_title,sup_title_format)
-    note_title = '(Tháng 06 năm 2021)'
+    note_title = f'(Tháng {convert_int(month)} năm {year})'
     sheet_tonghop.merge_range('A7:F7',note_title,sup_note_format)
     kinhgui_content = 'Kính gửi: Sở Giao dịch Chứng khoán Thành phố Hồ Chí Minh'
     sheet_tonghop.merge_range('A8:F8',kinhgui_content,kinhgui_format)

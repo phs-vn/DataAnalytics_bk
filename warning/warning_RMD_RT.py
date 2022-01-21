@@ -97,9 +97,8 @@ def __SendMailRetry__(func): # Decorator
 
             outlook = Dispatch('outlook.application')
             mail = outlook.CreateItem(0)
-            mail.To = 'hiepdang@phs.vn'
-            # mail.To = 'vando@phs.vn; anhnguyenthu@phs.vn; huyhuynh@phs.vn;'
-            # mail.CC = 'hiepdang@phs.vn'
+            mail.To = 'vando@phs.vn; anhnguyenthu@phs.vn; huyhuynh@phs.vn;'
+            mail.CC = 'hiepdang@phs.vn'
             mail.Subject = f"Market Alert {now.strftime('%H:%M:%S %d.%m.%Y')}"
             mail.HTMLBody = html_str
             mail.Send()
@@ -118,7 +117,7 @@ def __SendMailRetry__(func): # Decorator
                 break
             if now.time()<dt.time(9,0,0):
                 break
-            # time.sleep(5*60)  # nghỉ 5 phút
+            time.sleep(8*60)  # nghỉ 8 phút
 
     return wrapper
 

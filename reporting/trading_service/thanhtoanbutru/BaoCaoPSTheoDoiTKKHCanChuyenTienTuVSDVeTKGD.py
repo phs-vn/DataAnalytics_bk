@@ -23,13 +23,16 @@ def run(
             [b].[branch_name],
             [t].[account_code],
             [a].[customer_name],
-            [t].[cash_at_phs],
-            [t].[cash_at_vsd],
+            [c].[cash_balance_at_phs] [cash_at_phs],
+            [c].[cash_balance_at_vsd] [cash_at_vsd],
             [t].[total_fee_tax],
             [t].[total_overdue_amount],
             [t].[nav]
         FROM
             [320200_tradingaccount] [t]
+        LEFT JOIN
+            [rdt0121] [c]
+            ON [c].[account_code] = [t].[account_code] and [c].[date] = [t].[date]
         LEFT JOIN
             [relationship] [r]
             ON [r].[account_code] = [t].[account_code] AND [r].[date] = [t].[date]
@@ -40,13 +43,12 @@ def run(
             [account] [a]
             ON [a].[account_code] = [r].[account_code]
         WHERE [t].[date] = '{t0_date}'
-            AND (
-                [t].[cash_at_phs] <> 0
-                OR [t].[cash_at_vsd] <> 0
+            AND ( [c].[cash_balance_at_phs] <> 0
+                OR [c].[cash_balance_at_vsd] <> 0
                 OR [t].[total_fee_tax] <> 0
                 OR [t].[total_overdue_amount] <> 0
                 OR [t].[nav] <> 0
-            )
+                )
         """,
         connect_DWH_PhaiSinh
     )
