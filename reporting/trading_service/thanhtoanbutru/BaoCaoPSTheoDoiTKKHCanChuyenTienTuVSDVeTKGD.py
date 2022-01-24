@@ -19,20 +19,18 @@ def run(
 
     table = pd.read_sql(
         f"""
+        SELECT * FROM (
         SELECT
             [b].[branch_name],
             [t].[account_code],
             [a].[customer_name],
-            [c].[cash_balance_at_phs] [cash_at_phs],
-            [c].[cash_balance_at_vsd] [cash_at_vsd],
-            [t].[total_fee_tax],
-            [t].[total_overdue_amount],
-            [t].[nav]
+            ISNULL([c].[cash_balance_at_phs],0) [cash_at_phs],
+            ISNULL([c].[cash_balance_at_vsd],0) [cash_at_vsd],
+            ISNULL([t].[total_fee_tax],0) [total_fee_tax],
+            ISNULL([d].[deferred_payment_amount_closing]+[d].[deferred_payment_fee_closing],0) [deferred_amount],
+            ISNULL([t].[nav],0) [nav]
         FROM
             [320200_tradingaccount] [t]
-        LEFT JOIN
-            [rdt0121] [c]
-            ON [c].[account_code] = [t].[account_code] and [c].[date] = [t].[date]
         LEFT JOIN
             [relationship] [r]
             ON [r].[account_code] = [t].[account_code] AND [r].[date] = [t].[date]
@@ -42,13 +40,19 @@ def run(
         LEFT JOIN
             [account] [a]
             ON [a].[account_code] = [r].[account_code]
+        LEFT JOIN
+            [rdt0121] [c]
+            ON [c].[account_code] = [t].[account_code] AND [c].[date] = [t].[date]
+        LEFT JOIN
+            [rdt0141] [d]
+            ON [d].[sub_account] = [r].[sub_account] AND [d].[date] = [t].[date]
         WHERE [t].[date] = '{t0_date}'
-            AND ( [c].[cash_balance_at_phs] <> 0
-                OR [c].[cash_balance_at_vsd] <> 0
-                OR [t].[total_fee_tax] <> 0
-                OR [t].[total_overdue_amount] <> 0
-                OR [t].[nav] <> 0
-                )
+        ) [table]
+        WHERE [cash_at_phs] <> 0
+            OR [cash_at_vsd] <> 0
+            OR [total_fee_tax] <> 0
+            OR [deferred_amount] <> 0
+            OR [nav] <> 0
         """,
         connect_DWH_PhaiSinh
     )
@@ -218,13 +222,16 @@ def run(
     worksheet.write_column('D10',table['customer_name'],text_left_format)
     worksheet.write_column('E10',table['cash_at_phs'],num_format)
     worksheet.write_column('F10',table['cash_at_vsd'],num_format)
-    worksheet.write_column('G10',table['total_overdue_amount'],num_format)
+    worksheet.write_column('G10',table['deferred_amount'],num_format)
     worksheet.write_column('H10',table['total_fee_tax'],num_format)
     worksheet.write_column('I10',table['nav'],num_format)
 
-    sum_row = table.shape[0]+11
+    sum_row = table.shape[0]+10
     worksheet.merge_range(f'A{sum_row}:D{sum_row}','Tổng',headers_format)
-    worksheet.write_row(f'E{sum_row}',table.loc[:,'cash_at_phs':].sum(),num_bold_format)
+
+    for col in 'EFGHI':
+        worksheet.write(f'{col}{sum_row}',f'=SUBTOTAL(9,{col}10:{col}{sum_row-1})',num_bold_format)
+
     worksheet.merge_range(f'A{sum_row+4}:D{sum_row+4}','Người lập',footer_text_format)
     worksheet.merge_range(
         f'H{sum_row+3}:I{sum_row+3}',

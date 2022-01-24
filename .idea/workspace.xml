@@ -5,15 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/implementation/task_scheduler/WarningRMD_RT.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/datawarehouse/CheckSync.py" beforeDir="false" afterPath="$PROJECT_DIR$/datawarehouse/CheckSync.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/implementation/WarningRMD_RT.py" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/WarningRMD_RT.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/implementation/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/implementation/task_scheduler/BaoCaoDoiChieuVaImportEIB.xml" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/task_scheduler/BaoCaoDoiChieuVaImportEIB.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/implementation/task_scheduler/BaoCaoDoiChieuVaImportOCB.xml" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/task_scheduler/BaoCaoDoiChieuVaImportOCB.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/implementation/task_scheduler/CheckSyncDWH-CoSo.xml" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/task_scheduler/CheckSyncDWH-CoSo.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/implementation/task_scheduler/CheckSyncDWH-PhaiSinh.xml" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/task_scheduler/CheckSyncDWH-PhaiSinh.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HNX.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HNX.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HOSEnew.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HOSEnew.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/implementation/task_scheduler/NewsCollectorRMD.xml" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/task_scheduler/NewsCollectorRMD.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoHoatDongLuuKyNDTNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoHoatDongLuuKyNDTNN.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoPSTheoDoiTKKHCanChuyenTienTuVSDVeTKGD.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoPSTheoDoiTKKHCanChuyenTienTuVSDVeTKGD.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/warning/warning_RMD_RT.py" beforeDir="false" afterPath="$PROJECT_DIR$/warning/warning_RMD_RT.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,20 +92,17 @@
       <recent name="C:\Users\hiepdang\PycharmProjects\DataAnalytics\database" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.BaoCaoHoatDongLuuKyNDTNN">
-    <configuration name="BaoCaoCheckGia" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.BaoCaoDoiChieuUTTB">
+    <configuration name="BaoCaoDoiChieuUTTB" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting/trading_service/giaodichluuky" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoCheckGia.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -112,19 +111,16 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="BaoCaoDoiChieuVaImportOCB" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="BaoCaoDoiChieuVaImportEIB" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportOCB.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportEIB.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -169,19 +165,16 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="warning_RMD_RT" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="WarningRMD_RT" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/warning" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/implementation" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/warning/warning_RMD_RT.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/implementation/WarningRMD_RT.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -191,19 +184,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.warning_RMD_RT" />
-      <item itemvalue="Python.BaoCaoDoiChieuVaImportOCB" />
-      <item itemvalue="Python.BaoCaoCheckGia" />
       <item itemvalue="Python.BaoCaoPSTheoDoiTKKHCanChuyenTienTuVSDVeTKGD" />
       <item itemvalue="Python.BaoCaoHoatDongLuuKyNDTNN" />
+      <item itemvalue="Python.WarningRMD_RT" />
+      <item itemvalue="Python.BaoCaoDoiChieuVaImportEIB" />
+      <item itemvalue="Python.BaoCaoDoiChieuUTTB" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.BaoCaoHoatDongLuuKyNDTNN" />
+        <item itemvalue="Python.BaoCaoDoiChieuUTTB" />
         <item itemvalue="Python.BaoCaoPSTheoDoiTKKHCanChuyenTienTuVSDVeTKGD" />
-        <item itemvalue="Python.BaoCaoCheckGia" />
-        <item itemvalue="Python.warning_RMD_RT" />
-        <item itemvalue="Python.BaoCaoDoiChieuVaImportOCB" />
+        <item itemvalue="Python.BaoCaoDoiChieuVaImportEIB" />
+        <item itemvalue="Python.WarningRMD_RT" />
+        <item itemvalue="Python.BaoCaoHoatDongLuuKyNDTNN" />
       </list>
     </recent_temporary>
   </component>
@@ -457,7 +450,14 @@
       <option name="project" value="LOCAL" />
       <updated>1642670868147</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="Push 2022-01-18">
+      <created>1642761715709</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1642761715709</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="UnknownFeatures">

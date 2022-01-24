@@ -198,7 +198,7 @@ def run(
             FROM 
                 [c]
             WHERE
-                [c].[transaction_id] = '1153' AND [c].[remark] LIKE N'Phí%GD {t2_wildcard}%'
+                [c].[transaction_id] = '1153' AND [c].[remark] LIKE N'%UTTB%GD {t2_wildcard}%'
             GROUP BY
                 [c].[sub_account]
         ) [d_t2]
@@ -213,7 +213,7 @@ def run(
             FROM 
                 [c]
             WHERE
-                [c].[transaction_id] = '1153' AND [c].[remark] LIKE N'Phí%GD {t1_wildcard}%'
+                [c].[transaction_id] = '1153' AND [c].[remark] LIKE N'%UTTB%GD {t1_wildcard}%'
             GROUP BY
                 [c].[sub_account]
         ) [d_t1]
@@ -228,7 +228,7 @@ def run(
             FROM
                 [c]
             WHERE
-                [c].[transaction_id] = '1153' AND [c].[remark] LIKE N'Phí%GD {t0_wildcard}%'
+                [c].[transaction_id] = '1153' AND [c].[remark] LIKE N'%UTTB%GD {t0_wildcard}%'
             GROUP BY
                 [c].[sub_account]
         ) [d_t0]
@@ -243,8 +243,7 @@ def run(
     able_to_advance_t0 = table['value_t0']-table['fee_t0']-table['sell_tax_t0']-table['dividend_tax_t0']
     table['available_to_advance'] = able_to_advance_t1+able_to_advance_t0
 
-    advanced_amount = table['advanced_amount_t1']+table['advanced_fee_t1']+table['advanced_amount_t0']+table[
-        'advanced_fee_t0']
+    advanced_amount = table[['advanced_amount_t1','advanced_fee_t1','advanced_amount_t0','advanced_fee_t0']].sum(axis=1)
     table['remaining_advance'] = table['available_to_advance']-advanced_amount
 
     able_to_advance_t2 = table['value_t2']-table['fee_t2']-table['sell_tax_t2']-table['dividend_tax_t2']
@@ -436,7 +435,7 @@ def run(
     worksheet.merge_range('B10:B11','Số tài khoản',headers_format)
     worksheet.merge_range('C10:C11','Số tiểu khoản',headers_format)
     worksheet.merge_range('D10:D11','Tên khách hàng',headers_format)
-    worksheet.merge_range('E10:H11','Giá trị tiền bán T-2',headers_format)
+    worksheet.merge_range('E10:H10','Giá trị tiền bán T-2',headers_format)
     worksheet.merge_range('I10:L10','Giá trị tiền bán T-1',headers_format)
     worksheet.merge_range('M10:P10','Giá trị tiền bán T0',headers_format)
     worksheet.merge_range('Q10:Q11','Tiền Hoàn trả UTTB T0',headers_format)
@@ -486,7 +485,7 @@ def run(
         '(5a)','(5b)','(5c)','(5d)',
         '(6a)','(6b)','(6c)','(6d)',
         '(7a)','(7b)','(7c)','(7d)',
-        '(8)','(9)',
+        '(8)','(9)=(6a)+(7a)-(6b)-(6c)-(6d)-(7b)-(7c)-(7d)',
         '(10a)','(10b)','(10c)','(10d)','(10e)','(10f)',
         '(11)','(12)',
     ]
@@ -500,7 +499,8 @@ def run(
         else:
             fmt = money_format
         worksheet.write_column(12,col+1,table[col_name],fmt)
-    worksheet.write_row(f'E{sum_start_row}',table.iloc[:,3:-1].sum(),sum_money_format)
+    for col in 'EFGHIJKLMNOPQRSTUVWXYZ':
+        worksheet.write(f'{col}{sum_start_row}',f'=SUBTOTAL(9,{col}13:{col}{sum_start_row-1})',sum_money_format)
     worksheet.write(f'Z{sum_start_row}',count_abonormal,sum_money_format)
 
     ###########################################################################
