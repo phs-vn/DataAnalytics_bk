@@ -1,51 +1,52 @@
 from blackscholes import *
 
-def run():
 
-    folder = join(dirname(realpath(__file__)), 'backtest_result')
-    file_names = [name for name in listdir(folder) if name.endswith('.xlsx') and name.startswith('C') and '_edited' not in name]
+def run():
+    folder = join(dirname(realpath(__file__)),'backtest_result')
+    file_names = [name for name in listdir(folder) if
+                  name.endswith('.xlsx') and name.startswith('C') and '_edited' not in name]
 
     for file in file_names:
 
-        df = pd.read_excel(join(folder,file), index_col=0)
+        df = pd.read_excel(join(folder,file),index_col=0)
         df['Date'] = df['Date'].dt.strftime('%Y-%m-%d')
-        writer = pd.ExcelWriter(join(folder,file), engine='xlsxwriter')
-        df.to_excel(writer, sheet_name='Sheet1', index=False)
+        writer = pd.ExcelWriter(join(folder,file),engine='xlsxwriter')
+        df.to_excel(writer,sheet_name='Sheet1',index=False)
         workbook = writer.book
         worksheet = writer.sheets['Sheet1']
 
         # Themes
         title = workbook.add_format({
-            'bold': True,
-            'align': 'center',
-            'fg_color': '#2F4F4F',
-            'font_color': 'white',
-            'border': 1
+            'bold':True,
+            'align':'center',
+            'fg_color':'#2F4F4F',
+            'font_color':'white',
+            'border':1
         })
         text_left = workbook.add_format({
-            'align': 'left',
-            'valign': 'top',
-            'border': 1,
+            'align':'left',
+            'valign':'top',
+            'border':1,
         })
         number = workbook.add_format({
-            'align': 'right',
-            'valign': 'top',
-            'border': 1,
-            'num_format': '0'
+            'align':'right',
+            'valign':'top',
+            'border':1,
+            'num_format':'0'
         })
         number_decimals = workbook.add_format({
-            'align': 'right',
-            'valign': 'top',
-            'border': 1,
-            'num_format': '0.000000'
+            'align':'right',
+            'valign':'top',
+            'border':1,
+            'num_format':'0.000000'
         })
         text_right = workbook.add_format({
-            'align': 'right',
-            'valign': 'top',
-            'border': 1,
+            'align':'right',
+            'valign':'top',
+            'border':1,
         })
 
-        #Format
+        # Format
         for col in range(0,df.shape[1]):
             worksheet.write(0,col,df.columns[col],title)
 
@@ -77,4 +78,3 @@ def run():
         worksheet.set_column(15,15,23)
 
         writer.close()
-

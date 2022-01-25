@@ -1,6 +1,6 @@
-from request_phs.stock import *
+from request.stock import *
 
-PATH = join(dirname(dirname(realpath(__file__))),'phs','chromedriver')
+PATH = join(dirname(dirname(realpath(__file__))),'dependency','chromedriver')
 ignored_exceptions = (
     ValueError,
     IndexError,
@@ -10,13 +10,13 @@ ignored_exceptions = (
     ElementNotInteractableException
 )
 
+
 def run(
-        hide_window=True
+    hide_window=True
 ) \
         -> pd.DataFrame:
-
     """
-    This function returns a DataFrame and export an excel file containing date/price of issuancepublished in 
+    This function returns a DataFrame and export an excel file containing date/price of issuancepublished in
     'https://finance.vietstock.vn/chung-khoan-phai-sinh/chung-quyen.htm'
 
     """
@@ -47,10 +47,11 @@ def run(
                     break
                 except (Exception,):
                     continue
-            if status != 'Bình thường':
+            if status!='Bình thường':
                 break
             else:
                 status_list.append(status)
+
                 def f():
                     cw_element = wait.until(
                         EC.presence_of_element_located(
@@ -58,6 +59,7 @@ def run(
                         )
                     )
                     return cw_element
+
                 cw_name = ''
                 cw_url = ''
                 d = ''
@@ -126,16 +128,16 @@ def run(
 
     output_table = pd.DataFrame(
         {
-            'ISSUANCE_DATE': cw_dates_of_issuance,
-            'ISSUANCE_PRICE': cw_prices_of_issuance,
-            'FIRST_TRADING_DATE': first_trading_dates,
-            'STATUS': status_list,
+            'ISSUANCE_DATE':cw_dates_of_issuance,
+            'ISSUANCE_PRICE':cw_prices_of_issuance,
+            'FIRST_TRADING_DATE':first_trading_dates,
+            'STATUS':status_list,
         },
         index=pd.Index(cw_names,name='CW')
     )
     output_table.drop_duplicates(inplace=True)
     output_table.to_excel("date_price_of_issuance.xlsx")
 
-    print(f'Finished ::: Total execution time: {int(time.time() - start_time)}s\n')
+    print(f'Finished ::: Total execution time: {int(time.time()-start_time)}s\n')
 
     return output_table

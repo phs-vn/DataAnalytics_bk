@@ -1,0 +1,49 @@
+1. Nguồn dùng để crawl data
+	cafef.vn
+	vietstock.vn
+	ndh.vn
+	tinnhanhchungkhoan.vn
+-------------------------------------------- SCRAPY -------------------------------------------- 
+2. Scrapy
+2.1 Câu lệnh thường dùng
+	a. How to run our spider
+					scrapy crawl 'name_of_spiders'
+	b. The best way to learn how to extract data with Scrapy is trying selectors using the Scrapy shell. 
+	Let’s open up scrapy shell and play a bit to find out how to extract the data we want:	
+					scrapy shell 'link'
+3. Link tutorial Scrapy
+	1. https://www.datacamp.com/community/tutorials/making-web-crawlers-scrapy-python
+	2. Xây dựng crawler cho các trang tin tức vn với scrapy
+		https://phann123.medium.com/x%C3%A2y-d%E1%BB%B1ng-crawler-cho-c%C3%A1c-trang-tin-t%E1%BB%A9c-vn-v%E1%BB%9Bi-scrapy-fa0834b727dc
+	3. Scrapy http status code is not handled or not allowed
+		https://stackoverflow.com/questions/46746701/scrapy-http-status-code-is-not-handled-or-not-allowed
+	4. Scrapy crawl with next page
+		https://stackoverflow.com/questions/32624033/scrapy-crawl-with-next-page
+-------------------------------------------- SELENIUM --------------------------------------------
+1. Python Selenium how to wait before clicking on link
+	https://stackoverflow.com/questions/27600906/python-selenium-how-to-wait-before-clicking-on-link
+2. Infinite scrolling with Selenium
+	https://medium.com/analytics-vidhya/using-python-and-selenium-to-scrape-infinite-scroll-web-pages-825d12c24ec7
+	https://www.youtube.com/watch?v=qhJ_gMB772U
+	https://botproxy.net/docs/how-to/stop-the-scroll-in-dynamic-page-with-selenium-in-python/
+3. How to move to the next page on Python Selenium?
+	https://stackoverflow.com/questions/53955988/how-to-move-to-the-next-page-on-python-selenium
+4. Hide/Remove ads with selenium python
+	https://stackoverflow.com/questions/41460265/hide-remove-ads-with-selenium-python
+5. Waits
+	https://selenium-python.readthedocs.io/waits.html
+6. How to Maximize window in chrome using webDriver (python)
+	https://stackoverflow.com/questions/12211781/how-to-maximize-window-in-chrome-using-webdriver-python
+-------------------------------------------- GET CAPTCHA--------------------------------------------
+1. Link để lấy mẫu: 
+	https://www.bidv.vn/iBank/MainEB.html
+2. Thư mục cài đặt Pytesseract 
+	C:\Users\namtran\AppData\Local\Programs\Tesseract-OCR
+3. Pytesseract tutorial
+	https://medium.com/@marioruizgonzalez.mx/how-install-tesseract-orc-and-pytesseract-on-windows-68f011ad8b9b
+4. Github install Tesseract
+	https://github.com/UB-Mannheim/tesseract/wiki
+5. Install easyocr
+	https://pypi.org/project/easyocr/
+6. How to process this captcha image for Pytesseract?
+	https://stackoverflow.com/questions/65930463/how-to-process-this-captcha-image-for-pytesseract

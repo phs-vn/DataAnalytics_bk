@@ -1,6 +1,6 @@
-from request_phs.stock import *
+from request.stock import *
 
-PATH = join(dirname(dirname(realpath(__file__))),'phs','chromedriver')
+PATH = join(dirname(dirname(realpath(__file__))),'dependency','chromedriver')
 ignored_exceptions = (
     ValueError,
     IndexError,
@@ -10,11 +10,11 @@ ignored_exceptions = (
     ElementNotInteractableException
 )
 
-def run(
-        hide_window=True
-) \
-    -> pd.DataFrame:
 
+def run(
+    hide_window=True
+) \
+        -> pd.DataFrame:
     options = Options()
     if hide_window:
         options.headless = True
@@ -29,7 +29,7 @@ def run(
             (By.XPATH,'//*[@id!=""]/td[2]/a')
         )
     )
-    tickers = list(map(lambda x: x.text, ticker_elems))
+    tickers = list(map(lambda x:x.text,ticker_elems))
     driver.quit()
 
     return tickers
