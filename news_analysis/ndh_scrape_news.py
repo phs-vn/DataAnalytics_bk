@@ -23,8 +23,8 @@ ignored_exceptions = (
     ElementNotInteractableException,
     PageFailToLoad,
 )
+PATH = join(dirname(dirname(realpath(__file__))), 'dependency', 'chromedriver')
 
-PATH = r'D:\DataAnalytics\chromedriver_win32\chromedriver.exe'
 margin_list = internal.mlist()
 
 

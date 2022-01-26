@@ -9,7 +9,7 @@ class PageFailToLoad(Exception):
     pass
 
 
-PATH = r'D:\DataAnalytics\chromedriver_win32\chromedriver.exe'
+PATH = join(dirname(dirname(realpath(__file__))), 'dependency', 'chromedriver')
 ignored_exceptions = (
     ValueError,
     IndexError,

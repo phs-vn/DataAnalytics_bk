@@ -1,4 +1,4 @@
-from request.stock import *
+from request import *
 
 
 def run():
