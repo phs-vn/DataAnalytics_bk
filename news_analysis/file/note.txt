@@ -34,6 +34,10 @@
 	https://selenium-python.readthedocs.io/waits.html
 6. How to Maximize window in chrome using webDriver (python)
 	https://stackoverflow.com/questions/12211781/how-to-maximize-window-in-chrome-using-webdriver-python
+7. How to select a drop-down menu value with Selenium using Python?
+	https://stackoverflow.com/questions/7867537/how-to-select-a-drop-down-menu-value-with-selenium-using-python
+8. What is the correct way to select an <option> using Selenium's Python WebDriver
+	https://sqa.stackexchange.com/questions/1355/what-is-the-correct-way-to-select-an-option-using-seleniums-python-webdriver
 -------------------------------------------- GET CAPTCHA--------------------------------------------
 1. Link để lấy mẫu: 
 	https://www.bidv.vn/iBank/MainEB.html

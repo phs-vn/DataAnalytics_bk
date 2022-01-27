@@ -5,15 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="Hiep Dang 28/10/2021">
-      <change afterPath="$PROJECT_DIR$/news_analysis/scrape_vietstock_ckps.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_analysis/cafef_scrape_news.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_analysis/cafef_scrape_news.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_analysis/count_word.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_analysis/count_word.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_analysis/get_captcha.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_analysis/get_captcha.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_analysis/ndh_scrape_news.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_analysis/ndh_scrape_news.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_analysis/scrape_vietstock_tkgd.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_analysis/scrape_vietstock_tkgd.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_analysis/tinnhanhCK_scrape_news.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_analysis/tinnhanhCK_scrape_news.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_analysis/vietstock_scrape_news.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_analysis/vietstock_scrape_news.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/file/note.txt" beforeDir="false" afterPath="$PROJECT_DIR$/news_analysis/file/note.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB-15-4.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB-15-4.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/__init__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,8 +75,8 @@
       <recent name="C:\Users\hiepdang\PycharmProjects\datadriven-project\reporting_tool\trading_service\data_validation" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.scrape_vietstock_ckps">
-    <configuration name="cafef_scrape_news" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.BaoCaoDoiChieuUTTB">
+    <configuration name="BaoCaoDoiChieuUTTB-15-4" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -88,11 +84,29 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/News Filter Project" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/News Filter Project/cafef_scrape_news.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB-15-4.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="BaoCaoDoiChieuUTTB" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DataAnalytics" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -114,27 +128,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/News Filter Project/ndh_scrape_news.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="read_dat" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="DataAnalytics" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/News Filter Project" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/News Filter Project/read_dat.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -168,6 +161,9 @@
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/news_analysis" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -183,19 +179,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.cafef_scrape_news" />
-      <item itemvalue="Python.read_dat" />
       <item itemvalue="Python.ndh_scrape_news" />
       <item itemvalue="Python.scrape_ticker_by_exchange" />
       <item itemvalue="Python.scrape_vietstock_ckps" />
+      <item itemvalue="Python.BaoCaoDoiChieuUTTB-15-4" />
+      <item itemvalue="Python.BaoCaoDoiChieuUTTB" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.BaoCaoDoiChieuUTTB" />
+        <item itemvalue="Python.BaoCaoDoiChieuUTTB-15-4" />
         <item itemvalue="Python.scrape_vietstock_ckps" />
         <item itemvalue="Python.scrape_ticker_by_exchange" />
         <item itemvalue="Python.ndh_scrape_news" />
-        <item itemvalue="Python.cafef_scrape_news" />
-        <item itemvalue="Python.read_dat" />
       </list>
     </recent_temporary>
   </component>

@@ -160,10 +160,13 @@ def run(
         date_lst.append(i[-1])
     dates_list = [dt.datetime.strptime(date, "%d.%m.%Y").strftime("%Y/%m/%d") for date in date_lst]
     tien_da_ung_table['date_loc'] = dates_list
-
-    # Số tiền UTTB KH đã nhận và Phí UTTB ngày T-2
+    # lọc ra ngày T-2 theo cột date trước
     tien_da_ung_T2 = tien_da_ung_table.loc[
-        tien_da_ung_table['date_loc'] == start_date,
+        tien_da_ung_table['date'] == start_date
+    ].copy()
+    # Số tiền UTTB KH đã nhận và Phí UTTB ngày T-2
+    tien_da_ung_T2 = tien_da_ung_T2.loc[
+        tien_da_ung_T2['date_loc'] == start_date,
         [
             'sub_account',
             'increase',
@@ -173,14 +176,17 @@ def run(
     ].copy()
     tien_da_ung_T2 = tien_da_ung_T2.groupby(['sub_account']).sum()
     tien_da_ung_T2 = tien_da_ung_T2.add_suffix('_T2')
-    # Số tiền UTTB KH đã nhận ngày T-2 - Phí UTTB ngày T-2
-    tien_da_ung_T2['increase_T2'] = tien_da_ung_T2['increase_T2'] - tien_da_ung_T2['decrease_T2']
 
-    # Số tiền UTTB KH đã nhận và Phí UTTB ngày T-1
+    # tính ngày T-1
     t1_date = bdate(end_date, -1)
     t1_date = dt.datetime.strptime(t1_date, "%Y-%m-%d").strftime("%Y/%m/%d")
+
+    # lọc ra ngày T-1 theo cột date trước
     tien_da_ung_T1 = tien_da_ung_table.loc[
-        tien_da_ung_table['date_loc'] == t1_date,
+        tien_da_ung_table['date'] == t1_date
+    ].copy()
+    tien_da_ung_T1 = tien_da_ung_T1.loc[
+        tien_da_ung_T1['date_loc'] == t1_date,
         [
             'sub_account',
             'increase',
@@ -190,12 +196,14 @@ def run(
     ].copy()
     tien_da_ung_T1 = tien_da_ung_T1.groupby(['sub_account']).sum()
     tien_da_ung_T1 = tien_da_ung_T1.add_suffix('_T1')
-    # Số tiền UTTB KH đã nhận ngày T-1 - Phí UTTB ngày T-1
-    tien_da_ung_T1['increase_T1'] = tien_da_ung_T1['increase_T1'] - tien_da_ung_T1['decrease_T1']
 
-    # Số tiền UTTB KH đã nhận và Phí UTTB ngày T0
+    # lọc ra ngày T0 theo cột date trước
     tien_da_ung_T0 = tien_da_ung_table.loc[
-        tien_da_ung_table['date_loc'] == end_date,
+        tien_da_ung_table['date'] == end_date
+        ].copy()
+    # Số tiền UTTB KH đã nhận và Phí UTTB ngày T0
+    tien_da_ung_T0 = tien_da_ung_T0.loc[
+        tien_da_ung_T0['date_loc'] == end_date,
         [
             'sub_account',
             'increase',
@@ -205,8 +213,6 @@ def run(
     ].copy()
     tien_da_ung_T0 = tien_da_ung_T0.groupby(['sub_account']).sum()
     tien_da_ung_T0 = tien_da_ung_T0.add_suffix('_T0')
-    # Số tiền UTTB KH đã nhận ngày T0 - Phí UTTB ngày T0
-    tien_da_ung_T0['increase_T0'] = tien_da_ung_T0['increase_T0'] - tien_da_ung_T0['decrease_T0']
 
     final_table = pd.concat([
         value_T2,
@@ -455,13 +461,13 @@ def run(
     sheet_bao_cao_can_lam.set_column('K:K', 11.43)
     sheet_bao_cao_can_lam.set_column('L:L', 13.14)
     sheet_bao_cao_can_lam.set_column('M:M', 11.71)
-    sheet_bao_cao_can_lam.set_column('N:Q', 8.43)
+    sheet_bao_cao_can_lam.set_column('N:Q', 11)
     sheet_bao_cao_can_lam.set_column('R:R', 16.29)
     sheet_bao_cao_can_lam.set_column('S:S', 14.86)
     sheet_bao_cao_can_lam.set_column('T:T', 8.43)
     sheet_bao_cao_can_lam.set_column('U:U', 13.86)
     sheet_bao_cao_can_lam.set_column('V:V', 8.43)
-    sheet_bao_cao_can_lam.set_column('W:W', 8.43)
+    sheet_bao_cao_can_lam.set_column('W:W', 11)
     sheet_bao_cao_can_lam.set_column('X:X', 8.43)
     sheet_bao_cao_can_lam.set_column('Y:Y', 16.29)
     sheet_bao_cao_can_lam.set_column('Z:Z', 8.43)
@@ -559,7 +565,7 @@ def run(
     )
     sheet_bao_cao_can_lam.write_column(
         'A14',
-        [f'{i}' for i in np.arange(final_table.shape[0]) + 1],
+        [int(f'{i}') for i in np.arange(final_table.shape[0]) + 1],
         stt_col_format
     )
     sheet_bao_cao_can_lam.write_column(
