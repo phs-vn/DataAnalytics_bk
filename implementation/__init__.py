@@ -18,14 +18,14 @@ def TaskMonitor(func):
             func(*args,**kwargs)
             outlook = Dispatch('outlook.application')
             mail = outlook.CreateItem(0)
-            mail.To = 'hiepdang@phs.com'
+            mail.To = 'hiepdang@phs.vn'
             mail.Subject = f"{func.__module__} Run Successfully"
             mail.HTMLBody = signature
             mail.Send()
         except (Exception,):
             outlook = Dispatch('outlook.application')
             mail = outlook.CreateItem(0)
-            mail.To = 'hiepdang@phs.com'
+            mail.To = 'hiepdang@phs.vn'
             mail.Subject = f"{func.__module__} Got Error"
             mail.HTMLBody = signature
             mail.Send()

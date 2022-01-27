@@ -1,7 +1,9 @@
+from implementation import TaskMonitor
 from request.stock import *
 from news_collector import newsrmd
 
 
+@TaskMonitor
 def run():
     """
     This method runs all functions in module news_collector.newsrmd (try till success)

@@ -1,9 +1,11 @@
+from implementation import TaskMonitor
 from request.stock import *
 
 
+@TaskMonitor
 def run(
-    standard: str = 'bics',
-    level: int = 1
+    standard:str='bics',
+    level:int=1
 ):
     destination_path = r'\\192.168.10.28\images\creditrating'
     chart_path = os.path.join(destination_path,'charts')

@@ -171,6 +171,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\breakeven_price\result_table\25.1.2022.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\breakeven_price\result_table\25.1.2022_0.02.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\breakeven_price\result_table\25.11.2021.csv">
           <value>
             <Attribute>
@@ -333,6 +347,13 @@
           </value>
         </entry>
         <entry key="\credit_rating\result\component_table_sec.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\credit_rating\result\component_talbe_gen.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

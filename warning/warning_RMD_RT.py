@@ -33,7 +33,9 @@ def __SendMailRetry__(func): # Decorator
             (vẫn quét 1 lần nếu chạy ngoài giờ giao dịch)
             """
             currentWarningsHOSE, lastWarningFile = func('HOSE',*args,**kwargs) # quét HOSE trước
+            print(currentWarningsHOSE)
             currentWarningsHNX, lastWarningFile = func('HNX',*args,**kwargs) # quét HNX sau
+            print(currentWarningsHNX)
             currentWarnings = pd.concat([currentWarningsHOSE,currentWarningsHNX])
 
             # Lưu file tạm để đọc ở lần quét sau
@@ -41,7 +43,8 @@ def __SendMailRetry__(func): # Decorator
 
             if currentWarnings.empty: # Khi không có Warnings
                 print(f"No warnings at {now.strftime('%H:%M:%S %d.%m.%Y')}")
-                return
+                time.sleep(8*60) # sleep 8 phút
+                continue
 
             # Khi có Warnings
             if isfile(join(dirname(__file__),'TempFiles',lastWarningFile)):
@@ -173,13 +176,14 @@ def run(
     warnings = pd.DataFrame(columns=['Message'],index=pd.Index(mlist,name='Ticker'))
     for ticker in warnings.index:
         tickerElement = wait.until(EC.presence_of_element_located((By.XPATH,f'//tbody/*[@id="{ticker}"]')))
-        Floor = __formatPrice__(tickerElement.find_element_by_class_name('floor').text)
-        MatchPrice = __formatPrice__(tickerElement.find_element_by_class_name('matchedPrice').text)
-        SellVolume1 = __formatVolume__(tickerElement.find_element_by_class_name('best1OfferVol').text)
-        SellVolume2 = __formatVolume__(tickerElement.find_element_by_class_name('best2OfferVol').text)
-        SellVolume3 = __formatVolume__(tickerElement.find_element_by_class_name('best3OfferVol').text)
-        FrgBuy = __formatVolume__(tickerElement.find_element_by_class_name('buyForeignQtty').text)
-        FrgSell = __formatVolume__(tickerElement.find_element_by_class_name('sellForeignQtty').text)
+        sub_wait = WebDriverWait(tickerElement,60,ignored_exceptions=ignored_exceptions)
+        Floor = __formatPrice__(sub_wait.until(EC.presence_of_element_located((By.CLASS_NAME,'floor'))).text)
+        MatchPrice = __formatPrice__(sub_wait.until(EC.presence_of_element_located((By.CLASS_NAME,'matchedPrice'))).text)
+        SellVolume1 = __formatVolume__(sub_wait.until(EC.presence_of_element_located((By.CLASS_NAME,'best1OfferVol'))).text)
+        SellVolume2 = __formatVolume__(sub_wait.until(EC.presence_of_element_located((By.CLASS_NAME,'best2OfferVol'))).text) 
+        SellVolume3 = __formatVolume__(sub_wait.until(EC.presence_of_element_located((By.CLASS_NAME,'best3OfferVol'))).text)
+        FrgBuy = __formatVolume__(sub_wait.until(EC.presence_of_element_located((By.CLASS_NAME,'buyForeignQtty'))).text)
+        FrgSell = __formatVolume__(sub_wait.until(EC.presence_of_element_located((By.CLASS_NAME,'sellForeignQtty'))).text)
         if MatchPrice==Floor:
             # Điều kiện 1:
             if SellVolume1 + SellVolume2 + SellVolume3 >= 0.2 * avgVolume.loc[ticker]:

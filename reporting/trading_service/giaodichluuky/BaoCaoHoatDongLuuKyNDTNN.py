@@ -1,10 +1,17 @@
+import pandas as pd
+import unidecode
+
 from reporting.trading_service.giaodichluuky import *
 from request.stock import ta
 from news_collector import scrape_ticker_by_exchange
 
+"""
+BC này không chạy lùi ngày được (do scrape bảng điện thời điểm hiện tại), 
+tuy nhiên ko ảnh hưởng quá nhiều
+"""
 
 # cần phải bổ sung phần phát sinh theo GDLK yêu cầu thêm
-def run( # BC này không chạy lùi ngày được (do scrape bảng điện thời điểm hiện tại)
+def run(
     run_time=None,
 ):
 
@@ -32,37 +39,46 @@ def run( # BC này không chạy lùi ngày được (do scrape bảng điện t
     foreign_investor_holding = pd.read_sql(
         f"""
         SELECT 
-        holding.date,
-        holding.account_code,
-        account.account_type,
-        account.nationality,
-        account.foreign_trading_code,
-        holding.ticker,
-        holding.asset_type,
-        holding.volume
-        FROM holding
-        LEFT JOIN account ON holding.account_code = account.account_code
-        WHERE (account.account_type LIKE N'%ngoài') 
-        AND holding.date IN ('{start_date}','{end_date}')
+            [de083].[date],
+            [de083].[account_code],
+            [account].[account_type],
+            [account].[nationality],
+            [account].[foreign_trading_code],
+            [de083].[ticker],
+            [securities_list].[asset_type],
+            [de083].[volume]
+        FROM [de083]
+        LEFT JOIN [account] ON [de083].[account_code] = [account].[account_code]
+        LEFT JOIN [securities_list] ON [securities_list].[ticker] = [de083].[ticker]
+        WHERE ([account].[account_type] LIKE N'%ngoài') 
+        AND [de083].[date] IN ('{start_date}','{end_date}')
         """,
         connect_DWH_CoSo,
         index_col='date',
     )
+    foreign_investor_holding['asset_type'] = foreign_investor_holding['asset_type'].map({
+        'Cổ phiếu thường': 'Co phieu niem yet',
+        'Quyền chọn': 'Quyen chon',
+        'Chứng chỉ quỹ': 'Chung chi quy',
+        'Trái phiếu': 'Trai phieu',
+        'Chứng quyền': 'Chung quyen',
+        'Trái phiếu doanh nghiệp': 'Trai phieu doanh nghiep',
+        'Trái phiếu chuyển đổi': 'Trai phieu chuyen doi',
+    })
     foreign_investor_holding.loc[foreign_investor_holding.index.min(),'period'] = 'opening'
     foreign_investor_holding.loc[foreign_investor_holding.index.max(),'period'] = 'closing'
     foreign_investor_holding.reset_index(drop=True,inplace=True)
-    foreign_investor_holding = foreign_investor_holding.loc[foreign_investor_holding['ticker']!='Tien']
 
     cash_balance = pd.read_sql(
         f"""
         SELECT 
-        sub_account.account_code, 
-        sub_account_deposit.date, 
-        sub_account_deposit.closing_balance AS balance 
-        FROM sub_account_deposit 
-        LEFT JOIN sub_account 
-        ON sub_account_deposit.sub_account = sub_account.sub_account 
-        WHERE sub_account_deposit.date IN ('{start_date}','{end_date}')
+            [sub_account].[account_code],
+            [sub_account_deposit].[date],
+            [sub_account_deposit].[closing_balance] AS [balance]
+        FROM [sub_account_deposit]
+        LEFT JOIN [sub_account]
+        ON [sub_account_deposit].[sub_account] = [sub_account].[sub_account]
+        WHERE [sub_account_deposit].[date] IN ('{start_date}','{end_date}')
         """,
         connect_DWH_CoSo,
         index_col='date'
@@ -78,17 +94,61 @@ def run( # BC này không chạy lùi ngày được (do scrape bảng điện t
     # lay san giao dich, xep loai lai co phieu
     exchange = scrape_ticker_by_exchange.run(False)
     foreign_investor_holding['exchange'] = foreign_investor_holding['ticker'].map(exchange.squeeze())
-    foreign_investor_holding.fillna('OTC',inplace=True)
-    cophieuupcom_mask = (foreign_investor_holding['exchange']=='UPCOM')&(
-            foreign_investor_holding['asset_type']=='Co phieu niem yet')
+    foreign_investor_holding['exchange'].fillna('OTC',inplace=True)
+    cophieuupcom_mask = (foreign_investor_holding['exchange']=='UPCOM')&(foreign_investor_holding['asset_type']=='Co phieu niem yet')
     foreign_investor_holding.loc[cophieuupcom_mask,'asset_type'] = 'Co phieu upcom'
-    loainkhac_mask = (foreign_investor_holding['exchange']=='OTC')&(
-            foreign_investor_holding['asset_type']=='Co phieu niem yet')
+    loainkhac_mask = (foreign_investor_holding['exchange']=='OTC')&(foreign_investor_holding['asset_type']=='Co phieu niem yet')
     foreign_investor_holding.loc[loainkhac_mask,'asset_type'] = 'Loai khac'
+
+    # Phái sinh
+    derivatives = pd.read_sql(
+        f"""
+        WITH
+        [o] AS (
+            SELECT 
+                [rdo0009].[ticker],
+                SUM([rdo0009].[o_long_volume] + [rdo0009].[o_short_volume]) [volume]
+            FROM [rdo0009]
+            WHERE [rdo0009].[date] = '{start_date}' AND [rdo0009].[account_code] LIKE '022F%'
+            GROUP BY [rdo0009].[ticker]
+        ),
+        [c] AS (
+            SELECT 
+                [rdo0009].[ticker],
+                SUM([rdo0009].[o_long_volume] + [rdo0009].[o_short_volume]) [volume]
+            FROM [rdo0009]
+            WHERE [rdo0009].[date] = '{end_date}' AND [rdo0009].[account_code] LIKE '022F%'
+            GROUP BY [rdo0009].[ticker]
+        )
+        SELECT 
+            COALESCE([o].[ticker],[c].[ticker]) [ticker],
+            ISNULL([c].[volume],0) [closing],
+            ISNULL([o].[volume],0) [opening],
+            ISNULL([c].[volume],0) - ISNULL([o].[volume],0) [change]
+        FROM [o]
+        FULL JOIN [c] ON [c].[ticker] = [o].[ticker]
+        """,
+        connect_DWH_PhaiSinh,
+    )
+    derivatives.index = pd.Index(
+        ['Chung khoan phai sinh']*derivatives.shape[0],
+        name='asset_type'
+    )
+
+    # =========================================================================
+    # Du lieu sheet I
+    table_sheetI = foreign_investor_holding.groupby(['asset_type','ticker','period'])['volume'].sum()
+    table_sheetI = table_sheetI.unstack(level=2,fill_value=0)
+    table_sheetI['change'] = table_sheetI['closing']-table_sheetI['opening']
+    table_sheetI.reset_index(level=1,inplace=True)
+
+    # Merger Cơ Sở và Phái Sinh
+    table_sheetI = pd.concat([table_sheetI,derivatives])
 
     # lay gia
     price = pd.DataFrame(
-        index=foreign_investor_holding.loc[foreign_investor_holding['exchange']!='OTC','ticker'].unique())
+        index=table_sheetI.loc[table_sheetI.index!='Loai khac','ticker'].unique()
+    )
     cw_list = price.loc[(price.index.str.startswith('C'))&(price.index.str.len()==8)].index.to_list()
     cw_price = pd.read_sql(
         f"EXEC [dbo].[spCoveredWarrantIntraday] " \
@@ -98,24 +158,27 @@ def run( # BC này không chạy lùi ngày được (do scrape bảng điện t
         index_col='SYMBOL',
     )
     cw_price = cw_price.loc[cw_list,'CLOSE']
+    derivatives_list = price.index[price.index.str.startswith('VN30F')].to_list()
+    """
+    Thêm bước lấy giá, kết quả là: derivatives_price = pd.Series(Prices,index=[tickers])
+    """
+    # Test, give dummy price, xóa sau khi lấy giá đúng
+    derivatives_price = pd.Series(10000000,index=derivatives_list)
 
     def price_mapper(x):
-        if x not in cw_list:
-            price = ta.hist(x,start_date,end_date).tail(1)['close'].squeeze()*1000
-        else:
+        if x in cw_list:
             price = cw_price.loc[x]*1000
+        elif x in derivatives_list:
+            price = derivatives_price.loc[x]*100000 # giá * hệ số nhân HĐ
+        else:  # co phieu thuong
+            price = ta.hist(x,start_date,end_date).tail(1)['close'].squeeze()*1000
         return price
 
     price['last_price'] = price.index.map(price_mapper)
     for x in price.index:
         price.loc[x,'last_price'] = price_mapper(x)
 
-    # =========================================================================
-    # Du lieu sheet I
-    table_sheetI = foreign_investor_holding.groupby(['asset_type','ticker','period'])['volume'].sum()
-    table_sheetI = table_sheetI.unstack(level=2,fill_value=0)
-    table_sheetI['change'] = table_sheetI['closing']-table_sheetI['opening']
-    table_sheetI.reset_index(level=1,inplace=True)
+    # Reformat bảng
     full_type = pd.Index([
         'Tong tin phieu',
         'Tin phieu',
@@ -183,14 +246,19 @@ def run( # BC này không chạy lùi ngày được (do scrape bảng điện t
     sub_level = ['Tong co phieu niem yet','Tong co phieu upcom','Tong gia tri von gop mua co phan va co phieu khac']
     sum_series = table_sheetI.loc[sub_level,['closing','opening','change']].sum()
     table_sheetI.loc['Tong co phieu',['closing','opening','change']] = sum_series
+    # Tong chung khoan phai sinh
+    sum_series = derivatives[['closing','opening','change']].sum()
+    table_sheetI.loc['Tong chung khoan phai sinh',['closing','opening','change']] = sum_series
+    # Tính Cash
     table_sheetI = table_sheetI.loc[full_type]
     table_sheetI.loc['Tong tien','ticker'] = ''
     table_sheetI.loc['Tong tien',['closing','opening']] = cash_balance.groupby('period')['balance'].sum()
-    table_sheetI.loc['Tong tien','change'] = table_sheetI.loc['Tong tien','closing']-table_sheetI.loc[
-        'Tong tien','opening']
+    table_sheetI.loc['Tong tien','change'] = table_sheetI.loc['Tong tien','closing']-table_sheetI.loc['Tong tien','opening']
+    # Tính Value
     table_sheetI.loc['Tong cong','ticker'] = ''
     volume = table_sheetI.loc[table_sheetI['ticker']!='',['ticker','closing']].set_index('ticker')
     value = volume['closing']*price['last_price']
+    # Tính Tổng Cộng
     table_sheetI.loc['Tong cong','closing'] = table_sheetI.loc['Tong tien','closing']+value.sum()
     table_sheetI.fillna(0,inplace=True)
     table_sheetI.rename(
@@ -232,15 +300,13 @@ def run( # BC này không chạy lùi ngày được (do scrape bảng điện t
     )
     cash_balance['account_type'] = cash_balance['account_code'].map(account_type)
     cash_balance = cash_balance.loc[cash_balance['period']=='closing']
-    cash_balance_tochuc = cash_balance.loc[
-        cash_balance['account_type']=='Tổ chức nước ngoài',['account_code','balance']]
+    cash_balance_tochuc = cash_balance.loc[cash_balance['account_type']=='Tổ chức nước ngoài',['account_code','balance']]
     cash_balance_tochuc = cash_balance_tochuc.set_index('account_code').squeeze()
     cash_balance_canhan = cash_balance.loc[cash_balance['account_type']=='Cá nhân nước ngoài','balance'].sum()
 
     tochuc_sheetII = foreign_investor_holding.loc[
-        (foreign_investor_holding['account_type'].str.endswith('nước ngoài'))&(
-                foreign_investor_holding['period']=='closing')
-        ].copy()
+        (foreign_investor_holding['account_type'].str.endswith('nước ngoài'))&(foreign_investor_holding['period']=='closing')
+    ].copy()
     tochuc_sheetII.insert(6,'value',tochuc_sheetII['ticker'].map(price.squeeze())*tochuc_sheetII['volume'])
     tochuc_sheetII = tochuc_sheetII.groupby(
         ['account_type','account_code','nationality','foreign_trading_code','asset_type']
@@ -265,12 +331,9 @@ def run( # BC này không chạy lùi ngày được (do scrape bảng điện t
     }
     canhan_sheetII.rename(full_type,axis=0,inplace=True)
     canhan_sheetII = canhan_sheetII.reindex(full_type.values())
-    canhan_sheetII.loc['Gia tri co phieu niem yet va chung chi quy'] = canhan_sheetII.loc['Gia tri co phieu niem yet']+ \
-                                                                       canhan_sheetII.loc['Gia tri chung chi quy']
+    canhan_sheetII.loc['Gia tri co phieu niem yet va chung chi quy'] = canhan_sheetII.loc['Gia tri co phieu niem yet' ] + canhan_sheetII.loc['Gia tri chung chi quy']
     canhan_sheetII.drop(['Gia tri co phieu niem yet','Gia tri chung chi quy'],inplace=True)
-    canhan_sheetII.loc['Gia tri von gop mua co phan va chung khoan khac'] = canhan_sheetII.loc[
-                                                                                'Gia tri von gop mua co phan va co phieu khac']+ \
-                                                                            canhan_sheetII.loc['Gia tri loai khac']
+    canhan_sheetII.loc['Gia tri von gop mua co phan va chung khoan khac'] = canhan_sheetII.loc['Gia tri von gop mua co phan va co phieu khac']+canhan_sheetII.loc['Gia tri loai khac']
     canhan_sheetII.drop(['Gia tri von gop mua co phan va co phieu khac','Gia tri loai khac'],inplace=True)
     canhan_sheetII.loc['Gia tri tien'] = cash_balance_canhan
     canhan_sheetII.loc['Tong gia tri danh muc'] = canhan_sheetII.sum()
@@ -302,28 +365,23 @@ def run( # BC này không chạy lùi ngày được (do scrape bảng điện t
     ]] = np.nan
 
     # Co phieu niem yet va chung chi quy
-    asset_type_sum = original_tochuc_sheetII.loc[
-        original_tochuc_sheetII['asset_type'].isin(['Co phieu niem yet','Chung chi quy']),'value']
+    asset_type_sum = original_tochuc_sheetII.loc[original_tochuc_sheetII['asset_type'].isin(['Co phieu niem yet','Chung chi quy']),'value']
     asset_type_sum = asset_type_sum.groupby('account_code').sum()
     tochuc_sheetII['Gia tri co phieu niem yet va chung chi quy'] = asset_type_sum
     cpccq_sum = tochuc_sheetII['Gia tri co phieu niem yet va chung chi quy'].sum()
-    tochuc_sheetII['Ty le co phieu niem yet va chung chi quy'] = tochuc_sheetII[
-                                                                     'Gia tri co phieu niem yet va chung chi quy']/cpccq_sum
+    tochuc_sheetII['Ty le co phieu niem yet va chung chi quy'] = tochuc_sheetII['Gia tri co phieu niem yet va chung chi quy']/cpccq_sum
 
     # Co phieu upcom
-    tochuc_sheetII['Gia tri co phieu upcom'] = original_tochuc_sheetII.loc[
-        original_tochuc_sheetII['asset_type']=='Co phieu upcom','value']
+    tochuc_sheetII['Gia tri co phieu upcom'] = original_tochuc_sheetII.loc[original_tochuc_sheetII['asset_type']=='Co phieu upcom','value']
     cophieuupcom_sum = tochuc_sheetII['Gia tri co phieu upcom'].sum()
     tochuc_sheetII['Ty le co phieu upcom'] = tochuc_sheetII['Gia tri co phieu upcom']/cophieuupcom_sum
 
     # Gia tri von gop mua co phan va chung khoan khac
-    asset_type_sum = original_tochuc_sheetII.loc[original_tochuc_sheetII['asset_type'].isin(
-        ['Gia tri von gop mua co phan va co phieu khac','Loai khac']),'value']
+    asset_type_sum = original_tochuc_sheetII.loc[original_tochuc_sheetII['asset_type'].isin(['Gia tri von gop mua co phan va co phieu khac','Loai khac']),'value']
     asset_type_sum = asset_type_sum.groupby('account_code').sum()
     tochuc_sheetII['Gia tri von gop mua co phan va chung khoan khac'] = asset_type_sum
     value_sum = tochuc_sheetII['Gia tri von gop mua co phan va chung khoan khac'].sum()
-    tochuc_sheetII['Ty le von gop mua co phan va chung khoan khac'] = tochuc_sheetII[
-                                                                          'Gia tri von gop mua co phan va chung khoan khac']/value_sum
+    tochuc_sheetII['Ty le von gop mua co phan va chung khoan khac'] = tochuc_sheetII['Gia tri von gop mua co phan va chung khoan khac']/value_sum
 
     # Tien
     tochuc_sheetII['Gia tri tien'] = cash_balance_tochuc
@@ -338,11 +396,9 @@ def run( # BC này không chạy lùi ngày được (do scrape bảng điện t
     tochuc_sheetII.loc['Tổng (1)'] = np.nan
     for col in tochuc_sheetII.columns:
         if col.startswith('Gia tri') or col=='Tong gia tri danh muc':
-            tochuc_sheetII.loc['Tổng (1)',col] = tochuc_sheetII.loc[tochuc_sheetII.index[:-1],col].fillna(0).sum(
-                skipna=False)
+            tochuc_sheetII.loc['Tổng (1)',col] = tochuc_sheetII.loc[tochuc_sheetII.index[:-1],col].fillna(0).sum(skipna=False)
         elif col.startswith('Ty le'):
-            tochuc_sheetII.loc['Tổng (1)',col] = tochuc_sheetII.loc[tochuc_sheetII.index[:-1],col].fillna(0).mean(
-                skipna=False)
+            tochuc_sheetII.loc['Tổng (1)',col] = tochuc_sheetII.loc[tochuc_sheetII.index[:-1],col].fillna(0).mean(skipna=False)
 
     first_row_sheetII = pd.DataFrame(columns=tochuc_sheetII.columns,index=['A-Tổ chức'])
     tong_row_sheetII = pd.DataFrame(columns=tochuc_sheetII.columns,index=['Tổng = (1) + (2)'])
@@ -352,8 +408,7 @@ def run( # BC này không chạy lùi ngày được (do scrape bảng điện t
         canhan_sheetII,
         tong_row_sheetII,
     ])
-    fill_with_zero_col = [col.startswith('Gia tri') or col.startswith('Ty le') or col.startswith('Tong gia tri') for col
-                          in table_sheetII.columns]
+    fill_with_zero_col = [col.startswith('Gia tri') or col.startswith('Ty le') or col.startswith('Tong gia tri') for col in table_sheetII.columns]
     fill_with_zero_empty = [col for col in tochuc_sheetII.columns if col not in fill_with_zero_col]
     table_sheetII.loc[:,fill_with_zero_col] = table_sheetII.loc[:,fill_with_zero_col].fillna(0)
     table_sheetII.loc[:,fill_with_zero_empty] = table_sheetII.loc[:,fill_with_zero_empty].fillna('')

@@ -1147,7 +1147,7 @@ class ta:
         :return: dict[period]
         """
 
-        folder = 'price';
+        folder = 'price'
         file = 'prhighlow.csv'
         table = pd.read_csv(join(database_path,folder,file),
                             index_col=[0])

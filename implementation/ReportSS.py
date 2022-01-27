@@ -3,10 +3,11 @@ This module simply brings functions from reporting package to implementation pac
 to ensure consistent workflow among projects.
 """
 
+from implementation import TaskMonitor
 from request.stock import *
 
 from reporting.trading_service.giaodichluuky import BaoCaoCheckGia
-from reporting.trading_service.giaodichluuky import BaoCaoDanhSachChungKhoanSSI
+from reporting.trading_service.giaodichluuk``y import BaoCaoDanhSachChungKhoanSSI
 from reporting.trading_service.giaodichluuky import BaoCaoDongMoUyQuyenTK_HNX
 from reporting.trading_service.giaodichluuky import BaoCaoDongMoUyQuyenTK_HOSEnew
 from reporting.trading_service.giaodichluuky import BaoCaoDongMoUyQuyenTK_HOSEold
@@ -37,9 +38,133 @@ from reporting.trading_service.thanhtoanbutru import BaoCaoUngTienROS
 from reporting.trading_service.thanhtoanbutru import BaoCaoXacNhanNopRutEIBOCB
 from reporting.trading_service.thanhtoanbutru import DanhSachKHVIPCoSo
 from reporting.trading_service.thanhtoanbutru import DanhSachKHVIPPhaiSinh
-from reporting.trading_service.thanhtoanbutru import BaoCaoSoDuTienKyQuyPhaiSinh
+
+@TaskMonitor
+def imp_BaoCaoCheckGia():
+    BaoCaoCheckGia.run()
+
+@TaskMonitor
+def imp_BaoCaoDanhSachChungKhoanSSI():
+    BaoCaoDanhSachChungKhoanSSI.run()
+
+@TaskMonitor
+def imp_BaoCaoDongMoUyQuyenTK_HNX():
+    BaoCaoDongMoUyQuyenTK_HNX.run()
+
+@TaskMonitor
+def imp_BaoCaoDongMoUyQuyenTK_HOSEnew():
+    BaoCaoDongMoUyQuyenTK_HOSEnew.run()
+
+@TaskMonitor
+def imp_BaoCaoDongMoUyQuyenTK_HOSEold():
+    BaoCaoDongMoUyQuyenTK_HOSEold.run()
+
+@TaskMonitor
+def imp_BaoCaoHoatDongLuuKyNDTNN():
+    BaoCaoHoatDongLuuKyNDTNN.run()
+
+@TaskMonitor
+def imp_BaoCaoTamTinhPhiChuyenKhoan():
+    BaoCaoTamTinhPhiChuyenKhoan.run()
+
+@TaskMonitor
+def imp_BaoCaoTamTinhPhiGiaoDich():
+    BaoCaoTamTinhPhiGiaoDich.run()
+
+@TaskMonitor
+def imp_BaoCaoTamTinhPhiLuuKy():
+    BaoCaoTamTinhPhiLuuKy.run()
+
+@TaskMonitor
+def imp_BaoCaoTienGuiSSC():
+    BaoCaoTienGuiSSC.run()
+
+@TaskMonitor
+def imp_BaoCaoTinhHinhHDKD():
+    BaoCaoTinhHinhHDKD.run()
+
+@TaskMonitor
+def imp_BaoCaoDoiChieuLaiTienGuiPhatSinh_p1():
+    BaoCaoDoiChieuLaiTienGuiPhatSinh_p1.run(dt.datetime.now()-dt.timedelta(days=1))
+
+@TaskMonitor
+def imp_BaoCaoDoiChieuLaiTienGuiPhatSinh_p2():
+    BaoCaoDoiChieuLaiTienGuiPhatSinh_p2.run()
+
+@TaskMonitor
+def imp_BaoCaoDoiChieuSoDuTaiKhoanKhachHang():
+    BaoCaoDoiChieuSoDuTaiKhoanKhachHang.run()
+
+@TaskMonitor
+def imp_BaoCaoDoiChieuTTBTTienMuaBanChungKhoan():
+    BaoCaoDoiChieuTTBTTienMuaBanChungKhoan.run()
+
+@TaskMonitor
+def imp_BaoCaoDoiChieuUTTB():
+    BaoCaoDoiChieuUTTB.run()
+
+@TaskMonitor
+def imp_BaoCaoDoiChieuVaImportEIB():
+    BaoCaoDoiChieuVaImportEIB.run()
+
+@TaskMonitor
+def imp_BaoCaoDoiChieuVaImportOCB():
+    BaoCaoDoiChieuVaImportOCB.run()
+
+@TaskMonitor
+def imp_BaoCaoDuLieuGuiKiemToan():
+    BaoCaoDuLieuGuiKiemToan.run()
+
+@TaskMonitor
+def imp_BaoCaoFileGhiAmGuiKSNB():
+    BaoCaoFileGhiAmGuiKSNB.run()
+
+@TaskMonitor
+def imp_BaoCaoFileImportTKNganHangBuoiSang():
+    BaoCaoFileImportTKNganHangBuoiSang.run()
+
+@TaskMonitor
+def imp_BaoCaoKHNNCoSoDuNho():
+    BaoCaoKHNNCoSoDuNho.run()
+
+@TaskMonitor
+def imp_BaoCaoPhatSinhGiaoDichTien():
+    BaoCaoPhatSinhGiaoDichTien.run()
+
+@TaskMonitor
+def imp_BaoCaoPSTheoDoiTKKHCanChuyenTienTuVSDVeTKGD():
+    BaoCaoPSTheoDoiTKKHCanChuyenTienTuVSDVeTKGD.run()
+
+@TaskMonitor
+def imp_BaoCaoReviewKHVIPCoSo():
+    BaoCaoReviewKHVIPCoSo.run()
+
+@TaskMonitor
+def imp_BaoCaoSoDuTienKyQuyPhaiSinh():
+    BaoCaoSoDuTienKyQuyPhaiSinh.run()
+
+@TaskMonitor
+def imp_BaoCaoSoLieuThongKeDVTC():
+    BaoCaoSoLieuThongKeDVTC.run()
+
+@TaskMonitor
+def imp_BaoCaoUngTienROS():
+    BaoCaoUngTienROS.run()
+
+@TaskMonitor
+def imp_BaoCaoXacNhanNopRutEIBOCB():
+    BaoCaoXacNhanNopRutEIBOCB.run()
+
+@TaskMonitor
+def imp_DanhSachKHVIPCoSo():
+    DanhSachKHVIPCoSo.run()
+
+@TaskMonitor
+def imp_DanhSachKHVIPPhaiSinh():
+    DanhSachKHVIPPhaiSinh.run()
+
 
 """
-Cần viết tool gửi mail đá lỗi, giao diện GUI retry + email báo có chênh lệch trong các BC đối chiếu 
+Cần viết tool email báo có chênh lệch trong các BC đối chiếu 
 (as decorators that wrap functions from reporting package)
 """
