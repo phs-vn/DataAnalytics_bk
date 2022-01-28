@@ -28,8 +28,7 @@ def run(
     start = time.time()
     info = get_info('daily', run_time)
     period = info['period']
-    # t0_date = info['end_date'].replace('/','-')
-    t0_date = '2022-01-25'
+    t0_date = info['end_date'].replace('/','-')
     t1_date = bdate(t0_date, -1)
     t2_date = bdate(t0_date, -2)
     folder_name = info['folder_name']
@@ -247,15 +246,17 @@ def run(
     able_to_advance_t0 = table['value_t0'] - table['fee_t0'] - table['sell_tax_t0'] - table['dividend_tax_t0']
     table['available_to_advance'] = able_to_advance_t1 + able_to_advance_t0
 
-    advanced_amount = table['advanced_amount_t1'] + table['advanced_fee_t1'] + table['advanced_amount_t0'] + table[
-        'advanced_fee_t0']
+    # advanced_amount = table['advanced_amount_t1'] + table['advanced_fee_t1'] + table['advanced_amount_t0'] + table[
+    #     'advanced_fee_t0']
+    advanced_amount = table['advanced_amount_t1'] + table['advanced_amount_t0']
     table['remaining_advance'] = table['available_to_advance'] - advanced_amount
 
     able_to_advance_t2 = table['value_t2'] - table['fee_t2'] - table['sell_tax_t2'] - table['dividend_tax_t2']
     check_1 = table['payback_uttb_t0'] > able_to_advance_t2
     check_2 = advanced_amount > table['available_to_advance']
     check_3 = table['remaining_advance'] < 0
-    total_check = check_1 | check_2 | check_3
+    check_4 = (table.select_dtypes(include=np.number) < 0).values.any()
+    total_check = check_1 | check_2 | check_3 | check_4
     table.loc[total_check, 'check'] = 'Bất thường'
     table.sort_values('check', ascending=False, inplace=True)
     table['check'].fillna('Bình thường', inplace=True)
@@ -491,9 +492,9 @@ def run(
         '(5a)', '(5b)', '(5c)', '(5d)',
         '(6a)', '(6b)', '(6c)', '(6d)',
         '(7a)', '(7b)', '(7c)', '(7d)',
-        '(8)', '(9)',
+        '(8)', '(9) = (6a) - (6b) - (6c) -(6d) + (7a) - (7b) - (7c) - (7d)',
         '(10a)', '(10b)', '(10c)', '(10d)', '(10e)', '(10f)',
-        '(11)', '(12)',
+        '(11) = (9) - [(10c) + (10e)]', '(12)',
     ]
     worksheet.write_row('A12', stt_headers, headers_format)
     worksheet.write_column('A13', np.arange(table.shape[0]) + 1, text_center_format)

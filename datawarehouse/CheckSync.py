@@ -16,6 +16,7 @@ class Check:
         'ExcludeDays',
         'ExecTaskLog',
         'bank_account_list',
+        'de083',
     ]
 
     def __init__(self, db):

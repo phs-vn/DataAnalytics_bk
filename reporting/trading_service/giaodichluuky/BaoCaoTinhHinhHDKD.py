@@ -1,11 +1,11 @@
-from reporting_tool.trading_service.giaodichluuky import *
+from reporting.trading_service.giaodichluuky import *
+
 
 def run(
-        periodicity:str,
-        run_time=None,
+    run_time=None,
 ):
     start = time.time()
-    info = get_info(periodicity, run_time)
+    info = get_info('monthly',run_time)
     start_date = info['start_date']
     begin_of_year = f'{start_date[:4]}/01/01'
     end_date = info['end_date']
@@ -13,48 +13,81 @@ def run(
     folder_name = info['folder_name']
 
     # create folder
-    if not os.path.isdir(join(dept_folder, folder_name, period)):  # dept_folder from import
-        os.mkdir(join(dept_folder, folder_name, period))
+    if not os.path.isdir(join(dept_folder,folder_name,period)):  # dept_folder from import
+        os.mkdir(join(dept_folder,folder_name,period))
 
     ytd_trading_record = pd.read_sql(
-        "SELECT sub_account, exchange, type_of_account, type_of_asset, type_of_order, value "
-        "FROM trading_record "
-        f"WHERE date BETWEEN '{begin_of_year}' AND '{end_date}' "
-        f"AND settlement_period IN (1,2);",
+        f"""
+        SELECT 
+        [trading_record].[sub_account],
+        [trading_record].[exchange],
+        [account].[account_type],
+        [trading_record].[type_of_asset],
+        [trading_record].[type_of_order],
+        [trading_record].[value]
+        FROM [trading_record]
+        LEFT JOIN [relationship]
+	    ON [relationship].[sub_account] = [trading_record].[sub_account]
+        LEFT JOIN [account]
+	    ON [account].[account_code] = [relationship].[account_code]
+	    where
+	    [relationship].[date] = '{end_date}'
+        AND
+        [trading_record].[date] BETWEEN '{begin_of_year}' AND '{end_date}'
+        AND [trading_record].[settlement_period] IN (1,2);
+        """,
         connect_DWH_CoSo,
         index_col='sub_account',
     )
     period_trading_record = pd.read_sql(
-        "SELECT sub_account, exchange, type_of_account, type_of_asset, type_of_order, value "
-        "FROM trading_record "
-        f"WHERE date BETWEEN '{start_date}' AND '{end_date}' "
-        f"AND settlement_period IN (1,2);",
+        f"""
+        SELECT 
+        [trading_record].[sub_account],
+        [trading_record].[exchange],
+        [account].[account_type],
+        [trading_record].[type_of_asset],
+        [trading_record].[type_of_order],
+        [trading_record].[value]
+        FROM [trading_record]
+        LEFT JOIN [relationship]
+        ON [relationship].[sub_account] = [trading_record].[sub_account]
+        LEFT JOIN [account]
+        ON [account].[account_code] = [relationship].[account_code]
+        where
+        [relationship].[date] = '{end_date}'
+        AND
+        [trading_record].[date] BETWEEN '{start_date}' AND '{end_date}'
+        AND [trading_record].[settlement_period] IN (1,2);
+        """,
         connect_DWH_CoSo,
         index_col='sub_account',
     )
 
     def f(df,ttype):
         df['exchange'].replace('UPCOM','HNX',inplace=True)
-        df['exchange'].replace('HOSE','HSX', inplace=True)
-        df['type_of_account'].fillna('Tự doanh',inplace=True) # cho IT fill luon tren DB thi bo dong nay di
-        domestic = df['type_of_account'].str.endswith('trong nước')
-        foreign = df['type_of_account'].str.endswith('nước ngoài')
-        tudoanh = df['type_of_account'].str.endswith('Tự doanh')
-        df.loc[domestic,'type_of_account'] = 'domestic'
-        df.loc[foreign,'type_of_account'] = 'foreign'
-        df.loc[tudoanh,'type_of_account'] = 'dealing'
+        df['exchange'].replace('HOSE','HSX',inplace=True)
+        domestic = df['account_type'].str.endswith('trong nước')
+        foreign = df['account_type'].str.endswith('nước ngoài')
+        tudoanh = df['account_type']=='Tự doanh'
+        df.loc[domestic,'account_type'] = 'domestic'
+        df.loc[foreign,'account_type'] = 'foreign'
+        df.loc[tudoanh,'account_type'] = 'dealing'
         df['type_of_asset'] = df['type_of_asset'].map(
             {
-                'Cổ phiếu thường': 'stock',
-                'Chứng chỉ quỹ': 'fund_certificate',
-                'Chứng quyền': 'cw',
-                'Trái phiếu': 'bond',
+                'Cổ phiếu thường':'stock',
+                'Chứng chỉ quỹ':'fund_certificate',
+                'Chứng quyền':'cw',
+                'Trái phiếu doanh nghiệp':'bond',
+                'Trái phiếu chính phủ':'bond',
             }
         )
-        result = df.groupby(['type_of_order','exchange','type_of_asset','type_of_account']).sum()
-        if ttype == 'ytd':  result.columns = pd.Index(['value_ytd'],name='type_of_period')
-        elif ttype == 'period': result.columns = pd.Index(['value_period'],name='type_of_period')
-        else: raise TypeError("ttpe only accepts 'ytd' or 'period'")
+        result = df.groupby(['type_of_order','exchange','type_of_asset','account_type']).sum()
+        if ttype=='ytd':
+            result.columns = pd.Index(['value_ytd'],name='type_of_period')
+        elif ttype=='period':
+            result.columns = pd.Index(['value_period'],name='type_of_period')
+        else:
+            raise TypeError("ttype only accepts 'ytd' or 'period'")
         return result
 
     ytd_table = f(ytd_trading_record,'ytd')
@@ -71,12 +104,13 @@ def run(
         ('stock','dealing'),
         ('bond','dealing'),
         ('fund_certificate','dealing'),
-    ], names=['type_of_asset','type_of_account'])
-    result = pd.DataFrame(data=0,columns=result.columns,index=needed_idx).add(result,fill_value=0) # ensure complete index
-    result[('T','value_period','HSX')] = result[('B','value_period','HSX')] + result[('S','value_period','HSX')]
-    result[('T','value_period','HNX')] = result[('B','value_period','HNX')] + result[('S','value_period','HNX')]
-    result[('T','value_ytd','HSX')] = result[('B','value_ytd','HSX')] + result[('S','value_ytd','HSX')]
-    result[('T','value_ytd','HNX')] = result[('B','value_ytd','HNX')] + result[('S','value_ytd','HNX')]
+    ],names=['type_of_asset','account_type'])
+    result = pd.DataFrame(data=0,columns=result.columns,index=needed_idx).add(result,
+                                                                              fill_value=0)  # ensure complete index
+    result[('T','value_period','HSX')] = result[('B','value_period','HSX')]+result[('S','value_period','HSX')]
+    result[('T','value_period','HNX')] = result[('B','value_period','HNX')]+result[('S','value_period','HNX')]
+    result[('T','value_ytd','HSX')] = result[('B','value_ytd','HSX')]+result[('S','value_ytd','HSX')]
+    result[('T','value_ytd','HNX')] = result[('B','value_ytd','HNX')]+result[('S','value_ytd','HNX')]
     cols = [
         ('B','value_period','HNX'),
         ('B','value_period','HSX'),
@@ -91,7 +125,7 @@ def run(
         ('T','value_ytd','HNX'),
         ('T','value_ytd','HSX'),
     ]
-    result = result[cols] # ensure column order matched with excel output
+    result = result[cols]  # ensure column order matched with excel output
 
     # Write to Báo cáo phí chuyển khoản
     file_name = f'Báo cáo tình hình HĐKD (Biểu II.6) {period}.xlsx'
@@ -106,75 +140,84 @@ def run(
     # set column width
     worksheet.set_column('A:A',8)
     worksheet.set_column('B:B',16)
-    worksheet.set_column('C:N',11.5)
+    worksheet.set_column('C:N',12)
     worksheet.set_row(7,47)
     worksheet.set_row(8,47)
     worksheet.set_row(9,47)
     worksheet.set_row(10,47)
     title_format = workbook.add_format(
         {
-            'bold': True,
-            'font_name': 'Arial',
-            'align': 'center',
+            'bold':True,
+            'font_name':'Times New Roman',
+            'font_size':13,
+            'align':'center',
         }
     )
     dvt_format = workbook.add_format(
         {
-            'font_name': 'Times New Roman',
-            'italic': True,
-            'align': 'right',
+            'font_name':'Times New Roman',
+            'font_size':12,
+            'italic':True,
+            'align':'right',
         }
     )
     supheader_format = workbook.add_format(
         {
-            'font_name': 'Times New Roman',
-            'bold': True,
-            'align': 'center',
-            'valign': 'vcenter',
-            'border': 1,
+            'font_name':'Times New Roman',
+            'font_size':12,
+            'bold':True,
+            'align':'center',
+            'valign':'vcenter',
+            'border':1,
         }
     )
     header_format = workbook.add_format(
         {
-            'font_name': 'Times New Roman',
-            'align': 'center',
-            'valign': 'vcenter',
-            'border': 1,
+            'font_name':'Times New Roman',
+            'font_size':12,
+            'align':'center',
+            'valign':'vcenter',
+            'border':1,
         }
     )
     stt_format = workbook.add_format(
         {
-            'font_name': 'Times New Roman',
-            'align': 'center',
-            'valign': 'top',
-            'border': 1,
+            'font_name':'Times New Roman',
+            'font_size':12,
+            'align':'center',
+            'valign':'vcenter',
+            'border':1,
         }
     )
     index_format = workbook.add_format(
         {
-            'font_name': 'Times New Roman',
-            'text_wrap': True,
-            'valign': 'top',
-            'border': 1
+            'font_name':'Times New Roman',
+            'font_size':12,
+            'text_wrap':True,
+            'valign':'top',
+            'border':1
         }
     )
     supindex_format = workbook.add_format(
         {
-            'font_name': 'Times New Roman',
-            'bold': True,
-            'text_wrap': True,
-            'valign': 'top',
-            'border': 1
+            'font_name':'Times New Roman',
+            'font_size':12,
+            'bold':True,
+            'text_wrap':True,
+            'valign':'top',
+            'border':1
         }
     )
     value_format = workbook.add_format(
         {
-            'font_name': 'Times New Roman',
-            'num_format': '_(* #,##0_);_(* (#,##0);_(* "-"??_);_(@_)',
-            'border': 1
+            'font_name':'Times New Roman',
+            'font_size':12,
+            'num_format':'_(* #,##0_);_(* (#,##0);_(* "-"??_);_(@_)',
+            'valign':'vcenter',
+            'border':1
         }
     )
-    worksheet.merge_range('A1:N1',f'Báo cáo tình hình HĐKD - Biểu II.6 - {period}',title_format)
+    worksheet.merge_range('A1:N1',f'Báo Cáo Tình Hình HĐKD - Biểu II.6 - {period}',title_format)
     worksheet.merge_range('A3:A5','STT',header_format)
     worksheet.merge_range('B3:B5','Loại chứng khoán',header_format)
     worksheet.merge_range('C3:F3','Tổng mua',supheader_format)
@@ -200,7 +243,7 @@ def run(
         '2. Trái phiếu',
         '3. Chứng chỉ quỹ',
     ]
-    for row, idx in enumerate(idx_list):
+    for row,idx in enumerate(idx_list):
         if idx in ['A. Nhà đầu tư','B. Tự doanh']:
             fmt = supindex_format
         else:
@@ -209,22 +252,31 @@ def run(
     worksheet.write_row('C7',[None]*12,value_format)
     worksheet.write_row('C12',[None]*12,value_format)
     dvt = 'mil'
-    if dvt=='bil': div = 1e9 ; dvt_text = 'Đơn vị tính: tỷ đồng'
-    elif dvt=='mil': div = 1e6 ; dvt_text = 'Đơn vị tính: triệu đồng'
-    elif dvt=='k': div = 1e3 ; dvt_text = 'Đơn vị tính: nghìn đồng'
-    elif dvt=='unit': div = 1 ; dvt_text = 'Đơn vị tính: đồng'
-    else: raise ValueError("dvt must be either 'bil', 'mil', 'k', 'unit'")
+    if dvt=='bil':
+        div = 1e9;
+        dvt_text = 'Đơn vị tính: tỷ đồng'
+    elif dvt=='mil':
+        div = 1e6;
+        dvt_text = 'Đơn vị tính: triệu đồng'
+    elif dvt=='k':
+        div = 1e3;
+        dvt_text = 'Đơn vị tính: nghìn đồng'
+    elif dvt=='unit':
+        div = 1;
+        dvt_text = 'Đơn vị tính: đồng'
+    else:
+        raise ValueError("dvt must be either 'bil', 'mil', 'k', 'unit'")
     worksheet.merge_range('L2:N2',dvt_text,dvt_format)
-    worksheet.write_row('C8',result.loc[('stock','domestic')]/div, value_format)
-    worksheet.write_row('C9',result.loc[('stock','foreign')]/div, value_format)
-    worksheet.write_row('C10',result.loc[('fund_certificate','domestic')]/div, value_format)
-    worksheet.write_row('C11',result.loc[('fund_certificate','foreign')]/div, value_format)
-    worksheet.write_row('C13',result.loc[('stock','dealing')]/div, value_format)
-    worksheet.write_row('C14',result.loc[('bond','dealing')]/div, value_format)
-    worksheet.write_row('C15',result.loc[('fund_certificate','dealing')]/div, value_format)
+    worksheet.write_row('C8',result.loc[('stock','domestic')]/div,value_format)
+    worksheet.write_row('C9',result.loc[('stock','foreign')]/div,value_format)
+    worksheet.write_row('C10',result.loc[('fund_certificate','domestic')]/div,value_format)
+    worksheet.write_row('C11',result.loc[('fund_certificate','foreign')]/div,value_format)
+    worksheet.write_row('C13',result.loc[('stock','dealing')]/div,value_format)
+    worksheet.write_row('C14',result.loc[('bond','dealing')]/div,value_format)
+    worksheet.write_row('C15',result.loc[('fund_certificate','dealing')]/div,value_format)
     writer.close()
 
-    if __name__ == '__main__':
+    if __name__=='__main__':
         print(f"{__file__.split('/')[-1].replace('.py','')}::: Finished")
     else:
         print(f"{__name__.split('.')[-1]} ::: Finished")

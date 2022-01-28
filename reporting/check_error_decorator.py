@@ -1,5 +1,4 @@
-from reporting_tool.trading_service.thanhtoanbutru import *
-from tkinter import *
+from reporting import *
 
 
 def Error_Handler(func):

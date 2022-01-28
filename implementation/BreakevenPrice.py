@@ -1,7 +1,9 @@
 from request.stock import *
 from breakeven_price import monte_carlo_test
+from implementation import TaskMonitor
 
 
+@TaskMonitor
 def run_5pct(  # run on Wed and Fri weekly
     tickers: list = None,
     exchanges: list = None,
@@ -73,6 +75,7 @@ def run_5pct(  # run on Wed and Fri weekly
     print("Total execution time is: %s seconds"%(time.time()-start_time))
 
 
+@TaskMonitor
 def run_2pct(  # weekly run as requested by RMD
     tickers: list = None,
     exchanges: list = None,

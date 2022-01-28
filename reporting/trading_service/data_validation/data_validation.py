@@ -1,16 +1,17 @@
-from reporting_tool.trading_service.data_validation import *
+from reporting.trading_service.data_validation import *
+
 
 ###############################################################################
 
 
 def branch():
     DWH_branch = pd.read_sql(
-        'SELECT * FROM branch', connect, index_col='branch_id'
+        'SELECT * FROM branch',connect,index_col='branch_id'
     )
     DWH_branch.sort_index(inplace=True)
     FLEX_branch = pd.read_excel(
         join(realpath(dirname(__file__)),'flex_data','010002.xls'),
-        dtype={'Mã chi nhánh': str},
+        dtype={'Mã chi nhánh':str},
         usecols=['Mã chi nhánh','Tên chi nhánh/đại lý','Trạng thái']
     )
     FLEX_branch.columns = ['branch_id','branch_name','status']
@@ -25,11 +26,14 @@ def branch():
         wrong_at = DWH_branch.compare(FLEX_branch)
         return wrong_at
 
+
 def broker():
     print("Table 'broker' has no validating data from FLEX")
 
+
 def account():
     print("Table 'account' has no validating data from FLEX")
+
 
 def sub_account():
     DWH_sub_account = pd.read_sql(
@@ -48,7 +52,7 @@ def sub_account():
             sheet=sheet,
             usecols='A:B',
             names=['account_code','sub_account'],
-            dtype={'sub_account': str},
+            dtype={'sub_account':str},
         )
         FLEX_sub_account = pd.concat(
             [FLEX_sub_account,frame],
@@ -66,6 +70,7 @@ def sub_account():
         print('Wrong at:')
         wrong_at = DWH_sub_account.compare(FLEX_sub_account)
         return wrong_at
+
 
 def trading_record():
     FLEX_excel = pd.ExcelFile(
@@ -111,7 +116,7 @@ def trading_record():
     idx = FLEX_trading_record['type_of_order'].isin(['Mua','Bán'])
     FLEX_trading_record = FLEX_trading_record.loc[idx]
     FLEX_trading_record['type_of_order'] = FLEX_trading_record['type_of_order'].map(
-        {'Bán':'S', 'Mua':'B'}
+        {'Bán':'S','Mua':'B'}
     )
     FLEX_volume = FLEX_trading_record[['buy_volume','sell_volume']].sum(axis=1)
     FLEX_price = FLEX_trading_record[['buy_price','sell_price']].sum(axis=1)
@@ -127,8 +132,8 @@ def trading_record():
         'sell_volume',
         'sell_price',
         'sell_value',
-    ], axis=1, inplace=True)
-    f = lambda x: x if isinstance(x,str) else f'0{str(int(x))}'
+    ],axis=1,inplace=True)
+    f = lambda x:x if isinstance(x,str) else f'0{str(int(x))}'
     FLEX_trading_record['sub_account'] = FLEX_trading_record['sub_account'].map(f)
     FLEX_trading_record = FLEX_trading_record.set_index('sub_account').sort_index()
     start_date = FLEX_trading_record['date'].min().strftime('%Y/%m/%d')
@@ -141,11 +146,12 @@ def trading_record():
     DWH_trading_record = DWH_trading_record.set_index('sub_account').sort_index()
     print(DWH_trading_record.columns)
     print(FLEX_trading_record.columns)
-    FLEX_trading_record = FLEX_trading_record.astype(DWH_trading_record.dtypes.to_dict()) # table trading_record da duoc them cot vao nen khong giong ROD0040 tren flex
+    FLEX_trading_record = FLEX_trading_record.astype(
+        DWH_trading_record.dtypes.to_dict())  # table trading_record da duoc them cot vao nen khong giong ROD0040 tren flex
     # difference of number of records due to file extraction timming
     DWH_records = DWH_trading_record.shape[0]
     FLEX_records = FLEX_trading_record.shape[0]
-    if np.abs(DWH_records/FLEX_records-1) < 0.01:
+    if np.abs(DWH_records/FLEX_records-1)<0.01:
         idx = DWH_trading_record.index.intersection(FLEX_trading_record.index)
         DWH_trading_record = DWH_trading_record.loc[idx]
         FLEX_trading_record = FLEX_trading_record.loc[idx]
@@ -161,8 +167,9 @@ def trading_record():
         wrong_at = DWH_trading_record.compare(FLEX_trading_record)
         return wrong_at
 
+
 def deposit_withdraw_stock():
-    FLEX_excel= pd.ExcelFile(
+    FLEX_excel = pd.ExcelFile(
         join(realpath(dirname(__file__)),'flex_data','RSE2009.xls'),
     )
     FLEX_deposit_withdraw_stock = pd.DataFrame()
@@ -176,7 +183,7 @@ def deposit_withdraw_stock():
             skipfooter=1,
         )
         FLEX_deposit_withdraw_stock = pd.concat(
-            [FLEX_deposit_withdraw_stock, frame],
+            [FLEX_deposit_withdraw_stock,frame],
             join='outer',
             ignore_index=True,
             axis=0,
@@ -191,7 +198,7 @@ def deposit_withdraw_stock():
         'creator'
     ]
     FLEX_deposit_withdraw_stock = FLEX_deposit_withdraw_stock.astype(
-        {'type': str, 'volume': float}
+        {'type':str,'volume':float}
     )
     FLEX_deposit_withdraw_stock = FLEX_deposit_withdraw_stock.set_index(
         ['date','account_code']
@@ -209,7 +216,7 @@ def deposit_withdraw_stock():
     # difference of number of records due to file extraction timming
     DWH_records = DWH_deposit_withdraw_stock.shape[0]
     FLEX_records = FLEX_deposit_withdraw_stock.shape[0]
-    if np.abs(DWH_records/FLEX_records-1) < 0.01:
+    if np.abs(DWH_records/FLEX_records-1)<0.01:
         idx = DWH_deposit_withdraw_stock.index.intersection(
             FLEX_deposit_withdraw_stock.index
         )
@@ -226,6 +233,7 @@ def deposit_withdraw_stock():
         print('Wrong at:')
         wrong_at = DWH_deposit_withdraw_stock.compare(FLEX_deposit_withdraw_stock)
         return wrong_at
+
 
 def sub_account_deposit():
     FLEX_excel = pd.ExcelFile(
@@ -280,7 +288,7 @@ def sub_account_deposit():
     )
     DWH_records = DWH_aggregate.shape[0]
     FLEX_records = FLEX_sub_account_deposit.shape[0]
-    if np.abs(DWH_records/FLEX_records-1) < 0.01:
+    if np.abs(DWH_records/FLEX_records-1)<0.01:
         idx = DWH_aggregate.index.intersection(FLEX_sub_account_deposit.index)
         DWH_aggregate = DWH_aggregate.loc[idx]
         FLEX_sub_account_deposit = FLEX_sub_account_deposit.loc[idx]
@@ -297,6 +305,7 @@ def sub_account_deposit():
         print('Wrong at:')
         wrong_at = DWH_aggregate.compare(FLEX_sub_account_deposit)
         return wrong_at
+
 
 def new_sub_account():
     FLEX_excel = pd.ExcelFile(
@@ -318,7 +327,7 @@ def new_sub_account():
                 'account_code',
                 'sub_account_type'
             ],
-            dtype={'sub_account': object},
+            dtype={'sub_account':object},
         )
         FLEX_new_sub_account = pd.concat(
             [FLEX_new_sub_account,frame]
@@ -332,7 +341,7 @@ def new_sub_account():
     end_date = f'{end_date[-4:]}/{end_date[3:5]}/{end_date[:2]}'
     FLEX_new_sub_account.set_index(['sub_account','sub_account_type'],inplace=True)
     FLEX_new_sub_account['open_date'] = FLEX_new_sub_account['open_date'].map(
-        lambda x: dt.datetime.strptime(x,'%d/%m/%Y')
+        lambda x:dt.datetime.strptime(x,'%d/%m/%Y')
     )
     DWH_new_sub_account = pd.read_sql(
         "SELECT * FROM new_sub_account "
@@ -343,7 +352,7 @@ def new_sub_account():
     FLEX_new_sub_account = FLEX_new_sub_account[DWH_new_sub_account.columns]
     DWH_records = DWH_new_sub_account.shape[0]
     FLEX_records = FLEX_new_sub_account.shape[0]
-    if np.abs(DWH_records/FLEX_records-1) < 0.01:
+    if np.abs(DWH_records/FLEX_records-1)<0.01:
         idx = DWH_new_sub_account.index.intersection(FLEX_new_sub_account.index)
         DWH_new_sub_account = DWH_new_sub_account.loc[idx]
         FLEX_new_sub_account = FLEX_new_sub_account.loc[idx]
@@ -358,6 +367,7 @@ def new_sub_account():
         print('Wrong at:')
         wrong_at = DWH_new_sub_account.compare(FLEX_new_sub_account)
         return wrong_at
+
 
 def cashflow_bidv():
     FLEX_excel_RRM0068 = pd.ExcelFile(
@@ -390,7 +400,7 @@ def cashflow_bidv():
     FLEX_RRM0069 = pd.DataFrame()
     sheets = FLEX_excel_RRM0069.sheet_names
     for sheet in sheets:
-        frame= FLEX_excel_RRM0069.parse(
+        frame = FLEX_excel_RRM0069.parse(
             sheet,
             header=None,
             usecols='C,E:G',
@@ -436,7 +446,7 @@ def cashflow_bidv():
     ).reset_index(drop=True)
     DWH_records = DWH_cashflow_bidv.shape[0]
     FLEX_records = FLEX_cashflow_bidv.shape[0]
-    if np.abs(DWH_records/FLEX_records-1) < 0.01:
+    if np.abs(DWH_records/FLEX_records-1)<0.01:
         idx = DWH_cashflow_bidv.index.intersection(FLEX_cashflow_bidv.index)
         DWH_cashflow_bidv = DWH_cashflow_bidv.loc[idx]
         FLEX_cashflow_bidv = FLEX_cashflow_bidv.loc[idx]
@@ -451,6 +461,7 @@ def cashflow_bidv():
         print('Wrong at:')
         wrong_at = DWH_cashflow_bidv.compare(FLEX_cashflow_bidv)
         return wrong_at
+
 
 def depository_fee():
     FLEX_excel = pd.ExcelFile(
@@ -485,7 +496,7 @@ def depository_fee():
     DWH_depository_fee = DWH_depository_fee.groupby('sub_account').sum()
     DWH_records = DWH_depository_fee.shape[0]
     FLEX_records = FLEX_depository_fee.shape[0]
-    if np.abs(DWH_records/FLEX_records-1) < 0.01:
+    if np.abs(DWH_records/FLEX_records-1)<0.01:
         idx = DWH_depository_fee.index.intersection(FLEX_depository_fee.index)
         DWH_depository_fee = DWH_depository_fee.loc[idx]
         FLEX_depository_fee = FLEX_depository_fee.loc[idx]
@@ -500,6 +511,7 @@ def depository_fee():
         print('Wrong at:')
         wrong_at = DWH_depository_fee.compare(FLEX_depository_fee)
         return wrong_at
+
 
 def money_in_out_transfer():
     FLEX_excel = pd.ExcelFile(
@@ -524,10 +536,10 @@ def money_in_out_transfer():
                 'status'
             ],
             dtype={
-                'amount': float ,
-                'sub_account': object,
-                'bank_account': object,
-                'transaction_id': object,
+                'amount':float,
+                'sub_account':object,
+                'bank_account':object,
+                'transaction_id':object,
 
             },
             skipfooter=3

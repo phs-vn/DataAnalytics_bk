@@ -1,4 +1,4 @@
-from reporting_tool.trading_service import *
+from reporting.trading_service import *
 
 driver = '{SQL Server}'
 server = 'SRV-RPT'
@@ -15,5 +15,5 @@ connect = pyodbc.connect(
 )
 
 TableNames = pd.read_sql(
-    'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES', connect
+    'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES',connect
 )

@@ -1,37 +1,46 @@
-from reporting_tool.trading_service.giaodichluuky import *
+from reporting.trading_service.giaodichluuky import *
+
 
 def run(
-        periodicity:str,
-        run_time=None,
+    run_time=None,
 ):
+
     start = time.time()
-    info = get_info(periodicity, run_time)
+    info = get_info('monthly',run_time)
     run_time = info['run_time']
     start_date = info['start_date']
     end_date = info['end_date']
     period = info['period']
     folder_name = info['folder_name']
 
+    month = int(period.split('.')[0])
+    year = int(period.split('.')[1])
+
     # create folder
     if not os.path.isdir(join(dept_folder,folder_name,period)):  # dept_folder from import
         os.mkdir(join(dept_folder,folder_name,period))
 
+    # chờ batch cuối ngày xong
+    # listen_batch_job('end')
+
     period_account = pd.read_sql(
         f"""
         SELECT
-        account_type,
-        account_code,
-        customer_name,
-        nationality,
-        address,
-        customer_id_number,
-        date_of_issue,
-        place_of_issue,
-        date_of_open,
-        date_of_close
-        FROM account
-        WHERE (date_of_open BETWEEN '{start_date}' AND '{end_date}')
-        OR (date_of_close BETWEEN '{start_date}' AND '{end_date}')
+            [account].[account_type],
+            [account].[account_code],
+            [account].[customer_name],
+            [account].[nationality],
+            [account].[address],
+            [account].[customer_id_number],
+            [account].[date_of_issue],
+            [account].[place_of_issue],
+            [account].[date_of_open],
+            [account].[date_of_close]
+        FROM [account]
+        WHERE 
+            ([account].[date_of_open] BETWEEN '{start_date}' AND '{end_date}')
+        OR 
+            ([account].[date_of_close] BETWEEN '{start_date}' AND '{end_date}')
         """,
         connect_DWH_CoSo,
         index_col='account_code',
@@ -39,71 +48,105 @@ def run(
     contract_type = pd.read_sql(
         """
         SELECT
-        customer_information.sub_account,
-        sub_account.account_code,
-        customer_information.contract_code,
-        customer_information.contract_type
-        FROM customer_information
-        LEFT JOIN sub_account ON customer_information.sub_account = sub_account.sub_account
+            [customer_information].[sub_account],
+            [sub_account].[account_code],
+            [customer_information].[contract_code],
+            [customer_information].[contract_type]
+        FROM 
+            [customer_information]
+        LEFT JOIN 
+            [sub_account] 
+        ON 
+            [customer_information].[sub_account] = [sub_account].[sub_account]
         """,
         connect_DWH_CoSo,
         index_col='sub_account',
     )
     customer_information_change = pd.read_sql(
         f"""
-        SELECT *
-        FROM customer_information_change
-        WHERE change_date BETWEEN '{start_date}' AND '{end_date}'
-        """,
-        connect_DWH_CoSo,
-        index_col='account_code',
-    )
-    authorization = pd.read_sql(
-        f"""
-        SELECT * 
-        FROM [authorization] 
-        WHERE date_of_authorization BETWEEN '{start_date}' AND '{end_date}'
-        AND authorized_person_id = '155/GCNTVLK'
-        AND scope_of_authorization IS NOT NULL
-        AND scope_of_authorization <> 'I,IV,V'
-        """,
-        connect_DWH_CoSo,
-        index_col='account_code',
-    )
-    # Loai cac uy quyen duoc mo moi chi de dang ky uy quyen them (rule ben DVKH)
-    drop_account = pd.read_sql(
-        f"""
-        SELECT account_code
-        FROM authorization_change
-        WHERE date_of_change BETWEEN '{start_date}' AND '{end_date}'
-        AND new_end_date IS NOT NULL
+        SELECT 
+            [rcf0005].[account_code],
+            [account].[customer_name],
+            [rcf0005].[date_of_change],
+            [rcf0005].[old_id_number],
+            [rcf0005].[new_id_number],
+            [rcf0005].[old_date_of_issue],
+            [rcf0005].[new_date_of_issue],
+            [rcf0005].[old_place_of_issue],
+            [rcf0005].[new_place_of_issue],
+            [rcf0005].[old_address],
+            [rcf0005].[new_address],
+            [rcf0005].[old_nationality],
+            [rcf0005].[new_nationality]
+        FROM 
+            [rcf0005]
+        LEFT JOIN
+            [account]
+        ON
+            [account].[account_code] = [rcf0005].[account_code]
+        WHERE 
+            [rcf0005].[date_of_change] BETWEEN '{start_date}' AND '{end_date}'
+        ORDER BY
+            [rcf0005].[account_code],
+            [rcf0005].[date_of_change]
         """,
         connect_DWH_CoSo,
         index_col='account_code'
+    ).drop_duplicates()  # RCF0005 có duplicated data
+    authorization = pd.read_sql(
+        f"""
+        SELECT * 
+        FROM 
+            [authorization] 
+        WHERE 
+            [authorization].[date_of_authorization] BETWEEN '{start_date}' AND '{end_date}'
+        AND 
+            [authorization].[scope_of_authorization] IS NOT NULL
+        AND 
+            [authorization].[scope_of_authorization] <> 'I,IV,V'
+        """,
+        connect_DWH_CoSo,
+        index_col='account_code',
+    )
+    # Highlight cac uy quyen duoc mo moi chi de dang ky uy quyen them (rule ben DVKH)
+    highlight_account = pd.read_sql(
+        f"""
+        SELECT
+            [authorization_change].[account_code]
+        FROM 
+            [authorization_change]
+        WHERE 
+            [authorization_change].[new_end_date] BETWEEN '{start_date}' AND '{end_date}'
+        """,
+        connect_DWH_CoSo,
     )
     authorization_change = pd.read_sql(
         f"""
         SELECT *
-        FROM authorization_change
-        WHERE date_of_change BETWEEN '{start_date}' AND '{end_date}'
+        FROM 
+            [authorization_change]
+        WHERE 
+            [authorization_change].[date_of_change] BETWEEN '{start_date}' AND '{end_date}'
         """,
         connect_DWH_CoSo,
         index_col='account_code'
     )
-    authorization = authorization.loc[~authorization.index.isin(drop_account.index)]
     authorization['scope_of_authorization'] = 'I,II,IV,V,VII,IX,X'
-    authorization.loc[authorization['authorized_person_name'] == 'CTY CP CHỨNG KHOÁN PHÚ HƯNG','authorized_person_address'] = CompanyAddress
-    mapper = lambda x: 'Thường' if x.startswith('Thường') else 'Ký Quỹ'
+    authorization.loc[authorization[
+                          'authorized_person_name']=='CTY CP CHỨNG KHOÁN PHÚ HƯNG','authorized_person_address'] = CompanyAddress
+    mapper = lambda x:'Thường' if x.startswith('Thường') else 'Ký Quỹ'
     contract_type['contract_type'] = contract_type['contract_type'].map(mapper)
 
     margin_account = contract_type.loc[contract_type['contract_type']=='Ký Quỹ','account_code']
     period_account.loc[period_account.index.isin(margin_account),'remark'] = 'TKKQ'
     period_account['remark'].fillna('',inplace=True)
-    period_account.dropna(subset=['account_type'],inplace=True) # bỏ tài khoản quỹ
+    period_account.dropna(subset=['account_type'],inplace=True)  # bỏ tài khoản quỹ
     period_account.loc[period_account['account_type'].str.startswith('Cá nhân'),'entity_type'] = 'CN'
     period_account.loc[period_account['account_type'].str.startswith('Tổ chức'),'entity_type'] = 'TC'
-    account_open = period_account.loc[period_account['date_of_close'].isnull()]
-    account_close = period_account.loc[period_account['date_of_close'].notnull()]
+    open_mask = (period_account['date_of_open'].dt.month==month)&(period_account['date_of_open'].dt.year==year)
+    account_open = period_account.loc[open_mask]
+    close_mask = (period_account['date_of_close'].dt.month==month)&(period_account['date_of_close'].dt.year==year)
+    account_close = period_account.loc[close_mask]
 
     ###########################################################################
     ###########################################################################
@@ -113,7 +156,7 @@ def run(
     ###########################################################################
     ###########################################################################
 
-    file_name = f'HOSE - Danh sách KH đóng mở ủy quyền tài khoản PHS (old) {period}.xlsx'
+    file_name = f'Danh sách KH đóng mở ủy quyền tài khoản PHS (old) HOSE {period}.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder,folder_name,period,file_name),
         engine='xlsxwriter',
@@ -128,63 +171,63 @@ def run(
     ## Write sheet MO TAi KHOAN
     headline_format = workbook.add_format(
         {
-            'bold': True,
-            'text_wrap': True,
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 9
+            'bold':True,
+            'text_wrap':True,
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':9
         }
     )
     sup_title_format = workbook.add_format(
         {
-            'bold': True,
-            'align': 'center',
-            'valign': 'top',
-            'font_name': 'Times New Roman',
-            'font_size': 11
+            'bold':True,
+            'align':'center',
+            'valign':'top',
+            'font_name':'Times New Roman',
+            'font_size':11
         }
     )
     header_format = workbook.add_format(
         {
-            'border': 1,
-            'bold': True,
-            'bg_color': '#99CCFF',
-            'align': 'center',
-            'valign': 'vcenter',
-            'text_wrap': True,
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'bold':True,
+            'bg_color':'#99CCFF',
+            'align':'center',
+            'valign':'vcenter',
+            'text_wrap':True,
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     text_left_format = workbook.add_format(
         {
-            'border': 1,
-            'text_wrap': True,
-            'align': 'left',
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'text_wrap':True,
+            'align':'left',
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     text_center_format = workbook.add_format(
         {
-            'border': 1,
-            'text_wrap': True,
-            'align': 'center',
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'text_wrap':True,
+            'align':'center',
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     date_format = workbook.add_format(
         {
-            'border': 1,
-            'text_wrap': True,
-            'align': 'center',
-            'valign': 'vcenter',
-            'num_format': 'dd\/mm\/yyyy',
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'text_wrap':True,
+            'align':'center',
+            'valign':'vcenter',
+            'num_format':'dd\/mm\/yyyy',
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     sheet_motaikhoan = workbook.add_worksheet('Mở TK')
@@ -200,7 +243,7 @@ def run(
     sheet_motaikhoan.set_column('I:I',13)
     sheet_motaikhoan.set_column('J:J',11.6)
     sheet_motaikhoan.set_column('K:K',5)
-    sheet_motaikhoan.set_default_row(27) # set all row height = 27
+    sheet_motaikhoan.set_default_row(27)  # set all row height = 27
     sheet_motaikhoan.set_row(0,15)
     sheet_motaikhoan.set_row(1,15)
     sheet_motaikhoan.set_row(2,15)
@@ -248,63 +291,63 @@ def run(
 
     headline_format = workbook.add_format(
         {
-            'bold': True,
-            'text_wrap': True,
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 9
+            'bold':True,
+            'text_wrap':True,
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':9
         }
     )
     sup_title_format = workbook.add_format(
         {
-            'bold': True,
-            'align': 'center',
-            'valign': 'top',
-            'font_name': 'Times New Roman',
-            'font_size': 11
+            'bold':True,
+            'align':'center',
+            'valign':'top',
+            'font_name':'Times New Roman',
+            'font_size':11
         }
     )
     header_format = workbook.add_format(
         {
-            'border': 1,
-            'bold': True,
-            'bg_color': '#99CCFF',
-            'align': 'center',
-            'valign': 'vcenter',
-            'text_wrap': True,
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'bold':True,
+            'bg_color':'#99CCFF',
+            'align':'center',
+            'valign':'vcenter',
+            'text_wrap':True,
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     text_left_format = workbook.add_format(
         {
-            'border': 1,
-            'text_wrap': True,
-            'align': 'left',
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'text_wrap':True,
+            'align':'left',
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     text_center_format = workbook.add_format(
         {
-            'border': 1,
-            'text_wrap': True,
-            'align': 'center',
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'text_wrap':True,
+            'align':'center',
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     date_format = workbook.add_format(
         {
-            'border': 1,
-            'text_wrap': True,
-            'align': 'center',
-            'valign': 'vcenter',
-            'num_format': 'dd\/mm\/yyyy',
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'text_wrap':True,
+            'align':'center',
+            'valign':'vcenter',
+            'num_format':'dd\/mm\/yyyy',
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     sheet_dongtaikhoan = workbook.add_worksheet('Đóng TK')
@@ -320,7 +363,7 @@ def run(
     sheet_dongtaikhoan.set_column('I:I',13)
     sheet_dongtaikhoan.set_column('J:K',12)
     sheet_dongtaikhoan.set_column('L:L',5)
-    sheet_dongtaikhoan.set_default_row(27) # set all row height = 27
+    sheet_dongtaikhoan.set_default_row(27)  # set all row height = 27
     sheet_dongtaikhoan.set_row(0,15)
     sheet_dongtaikhoan.set_row(1,15)
     sheet_dongtaikhoan.set_row(2,15)
@@ -361,7 +404,7 @@ def run(
     sheet_dongtaikhoan.write_column('I7',account_close['date_of_open'].map(convertNaTtoSpaceString),date_format)
     sheet_dongtaikhoan.write_column('J7',account_close['date_of_close'].map(convertNaTtoSpaceString),date_format)
     sheet_dongtaikhoan.write_column('K7',account_close['nationality'],text_center_format)
-    sheet_dongtaikhoan.write_column('L7',account_close['remark'],text_center_format)
+    sheet_dongtaikhoan.write_column('L7',account_close.shape[0]*[''],text_center_format)
 
     ###########################################################################
     ###########################################################################
@@ -370,62 +413,62 @@ def run(
     # Write sheet THAY DOI THONG TIN
     headline_format = workbook.add_format(
         {
-            'bold': True,
-            'text_wrap': True,
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 9
+            'bold':True,
+            'text_wrap':True,
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':9
         }
     )
     sup_title_format = workbook.add_format(
         {
-            'bold': True,
-            'align': 'center',
-            'valign': 'top',
-            'font_name': 'Times New Roman',
-            'font_size': 11
+            'bold':True,
+            'align':'center',
+            'valign':'top',
+            'font_name':'Times New Roman',
+            'font_size':11
         }
     )
     header_format = workbook.add_format(
         {
-            'border': 1,
-            'bold': True,
-            'bg_color': '#C0C0C0',
-            'align': 'center',
-            'valign': 'vcenter',
-            'text_wrap': True,
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'bold':True,
+            'bg_color':'#C0C0C0',
+            'align':'center',
+            'valign':'vcenter',
+            'text_wrap':True,
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     text_left_format = workbook.add_format(
         {
-            'border': 1,
-            'text_wrap': True,
-            'align': 'left',
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'text_wrap':True,
+            'align':'left',
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     text_center_format = workbook.add_format(
         {
-            'border': 1,
-            'text_wrap': True,
-            'align': 'center',
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'text_wrap':True,
+            'align':'center',
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     date_format = workbook.add_format(
         {
-            'border': 1,
-            'align': 'center',
-            'valign': 'vcenter',
-            'num_format': 'dd\/mm\/yyyy',
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'align':'center',
+            'valign':'vcenter',
+            'num_format':'dd\/mm\/yyyy',
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     sheet_thaydoithongtin = workbook.add_worksheet('Thay đổi thông tin')
@@ -449,7 +492,8 @@ def run(
     sheet_thaydoithongtin.merge_range('A3:P3',CompanyPhoneNumber,headline_format)
     month = end_date[5:7]
     year = end_date[:4]
-    sheet_thaydoithongtin.merge_range('A4:P4',f'DANH SÁCH KHÁCH HÀNG THAY ĐỖI THÔNG TIN THÁNG {month}.{year}',sup_title_format)
+    sheet_thaydoithongtin.merge_range('A4:P4',f'DANH SÁCH KHÁCH HÀNG THAY ĐỖI THÔNG TIN THÁNG {month}.{year}',
+                                      sup_title_format)
     sheet_thaydoithongtin.merge_range('A5:P5',f'Kính gửi : SỞ GIAO DỊCH CHỨNG KHOÁN TP.HCM',sup_title_format)
     sheet_thaydoithongtin.merge_range('A6:A7','STT',header_format)
     sheet_thaydoithongtin.merge_range('B6:B7','Tên khách hàng',header_format)
@@ -481,17 +525,17 @@ def run(
     )
     sheet_thaydoithongtin.write_column(
         'B8',
-        customer_information_change['old_customer_name'],
+        customer_information_change['customer_name'],
         text_left_format,
     )
     sheet_thaydoithongtin.write_column(
         'C8',
-        customer_information_change['old_id_number'],
+        customer_information_change.index,
         text_center_format,
     )
     sheet_thaydoithongtin.write_column(
         'D8',
-        customer_information_change['change_date'].map(convertNaTtoSpaceString),
+        customer_information_change['date_of_change'].map(convertNaTtoSpaceString),
         date_format,
     )
     sheet_thaydoithongtin.write_column(
@@ -561,63 +605,96 @@ def run(
     ## Write sheet UY QUYEN
     headline_format = workbook.add_format(
         {
-            'bold': True,
-            'text_wrap': True,
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 9
+            'bold':True,
+            'text_wrap':True,
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':9
         }
     )
     sup_title_format = workbook.add_format(
         {
-            'bold': True,
-            'align': 'center',
-            'valign': 'top',
-            'font_name': 'Times New Roman',
-            'font_size': 11
+            'bold':True,
+            'align':'center',
+            'valign':'top',
+            'font_name':'Times New Roman',
+            'font_size':11
         }
     )
     header_format = workbook.add_format(
         {
-            'border': 1,
-            'bold': True,
-            'bg_color': '#C0C0C0',
-            'align': 'center',
-            'valign': 'vcenter',
-            'text_wrap': True,
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'bold':True,
+            'bg_color':'#C0C0C0',
+            'align':'center',
+            'valign':'vcenter',
+            'text_wrap':True,
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     text_left_format = workbook.add_format(
         {
-            'border': 1,
-            'text_wrap': True,
-            'align': 'left',
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'text_wrap':True,
+            'align':'left',
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':10
+        }
+    )
+    text_highlight_left_format = workbook.add_format(
+        {
+            'border':1,
+            'text_wrap':True,
+            'align':'left',
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':10,
+            'bg_color':'#FFFF00'
         }
     )
     text_center_format = workbook.add_format(
         {
-            'border': 1,
-            'text_wrap': True,
-            'align': 'center',
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'text_wrap':True,
+            'align':'center',
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':10
+        }
+    )
+    text_highlight_center_format = workbook.add_format(
+        {
+            'border':1,
+            'text_wrap':True,
+            'align':'center',
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':10,
+            'bg_color':'#FFFF00'
         }
     )
     date_format = workbook.add_format(
         {
-            'border': 1,
-            'text_wrap': True,
-            'align': 'center',
-            'valign': 'vcenter',
-            'num_format': 'dd\/mm\/yyyy',
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'text_wrap':True,
+            'align':'center',
+            'valign':'vcenter',
+            'num_format':'dd\/mm\/yyyy',
+            'font_name':'Times New Roman',
+            'font_size':10
+        }
+    )
+    date_highlight_format = workbook.add_format(
+        {
+            'border':1,
+            'align':'center',
+            'valign':'vcenter',
+            'num_format':'dd\/mm\/yyyy',
+            'font_name':'Times New Roman',
+            'font_size':10,
+            'bg_color':'#FFFF00'
         }
     )
     sheet_uyquyen = workbook.add_worksheet('Ủy Quyền')
@@ -633,7 +710,7 @@ def run(
     sheet_uyquyen.set_column('H:H',14)
     sheet_uyquyen.set_column('I:I',28)
     sheet_uyquyen.set_column('J:J',14)
-    sheet_uyquyen.set_default_row(39) # set all row height = 39
+    sheet_uyquyen.set_default_row(39)  # set all row height = 39
     sheet_uyquyen.set_row(0,15)
     sheet_uyquyen.set_row(1,15)
     sheet_uyquyen.set_row(2,15)
@@ -655,21 +732,37 @@ def run(
         'ĐỊA CHỈ',
         'NGÀY ỦY QUYỀN',
         'TÊN NGƯỜI ỦY QUYỀN',
-        'CMND/HỘ CHIẾU/GP ĐKKD' ,
+        'CMND/HỘ CHIẾU/GP ĐKKD',
         'ĐỊA CHỈ',
         'PV.UQ',
     ]
+    authorization['date_of_authorization'] = authorization['date_of_authorization'].map(convertNaTtoSpaceString)
     sheet_uyquyen.write_row('A6',headers,header_format)
-    sheet_uyquyen.write_column('A7',np.arange(authorization.shape[0])+1,text_center_format)
-    sheet_uyquyen.write_column('B7',authorization['authorizing_person_name'],text_left_format)
-    sheet_uyquyen.write_column('C7',authorization.index,text_center_format)
-    sheet_uyquyen.write_column('D7',authorization['authorizing_person_id'],text_center_format)
-    sheet_uyquyen.write_column('E7',authorization['authorizing_person_address'],text_left_format)
-    sheet_uyquyen.write_column('F7',authorization['date_of_authorization'].map(convertNaTtoSpaceString),date_format)
-    sheet_uyquyen.write_column('G7',authorization['authorized_person_name'],text_center_format)
-    sheet_uyquyen.write_column('H7',authorization['authorized_person_id'],text_center_format)
-    sheet_uyquyen.write_column('I7',authorization['authorized_person_address'],text_left_format)
-    sheet_uyquyen.write_column('J7', authorization['scope_of_authorization'],text_center_format)
+    for row in range(authorization.shape[0]):
+        ticker = authorization.index[row]
+        if ticker in highlight_account.values:
+            fmt1 = text_highlight_center_format
+            fmt2 = text_highlight_left_format
+            fmt3 = date_highlight_format
+        else:
+            fmt1 = text_center_format
+            fmt2 = text_left_format
+            fmt3 = date_format
+        sheet_uyquyen.write(row+6,0,row+1,fmt1)
+        sheet_uyquyen.write(row+6,1,authorization.iloc[row,authorization.columns.get_loc('authorizing_person_name')],
+                            fmt2)
+        sheet_uyquyen.write(row+6,2,authorization.index[row],fmt1)
+        sheet_uyquyen.write(row+6,3,authorization.iloc[row,authorization.columns.get_loc('authorizing_person_id')],fmt1)
+        sheet_uyquyen.write(row+6,4,authorization.iloc[row,authorization.columns.get_loc('authorizing_person_address')],
+                            fmt2)
+        sheet_uyquyen.write(row+6,5,authorization.iloc[row,authorization.columns.get_loc('date_of_authorization')],fmt3)
+        sheet_uyquyen.write(row+6,6,authorization.iloc[row,authorization.columns.get_loc('authorized_person_name')],
+                            fmt1)
+        sheet_uyquyen.write(row+6,7,authorization.iloc[row,authorization.columns.get_loc('authorized_person_id')],fmt1)
+        sheet_uyquyen.write(row+6,8,authorization.iloc[row,authorization.columns.get_loc('authorized_person_address')],
+                            fmt2)
+        sheet_uyquyen.write(row+6,9,authorization.iloc[row,authorization.columns.get_loc('scope_of_authorization')],
+                            fmt1)
 
     ###########################################################################
     ###########################################################################
@@ -678,71 +771,71 @@ def run(
 
     headline_format = workbook.add_format(
         {
-            'bold': True,
-            'text_wrap': True,
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 9
+            'bold':True,
+            'text_wrap':True,
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':9
         }
     )
     sup_title_format = workbook.add_format(
         {
-            'bold': True,
-            'align': 'center',
-            'valign': 'top',
-            'font_name': 'Times New Roman',
-            'font_size': 11
+            'bold':True,
+            'align':'center',
+            'valign':'top',
+            'font_name':'Times New Roman',
+            'font_size':11
         }
     )
     header_format = workbook.add_format(
         {
-            'border': 1,
-            'bold': True,
-            'bg_color': '#C0C0C0',
-            'align': 'center',
-            'valign': 'vcenter',
-            'text_wrap': True,
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'bold':True,
+            'bg_color':'#C0C0C0',
+            'align':'center',
+            'valign':'vcenter',
+            'text_wrap':True,
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     signature_format = workbook.add_format(
         {
-            'align': 'center',
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 12
+            'align':'center',
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':12
         }
     )
     text_left_format = workbook.add_format(
         {
-            'border': 1,
-            'text_wrap': True,
-            'align': 'left',
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'text_wrap':True,
+            'align':'left',
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     text_center_format = workbook.add_format(
         {
-            'border': 1,
-            'text_wrap': True,
-            'align': 'center',
-            'valign': 'vcenter',
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'text_wrap':True,
+            'align':'center',
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     date_format = workbook.add_format(
         {
-            'border': 1,
-            'text_wrap': True,
-            'align': 'center',
-            'valign': 'vcenter',
-            'num_format': 'dd\/mm\/yyyy',
-            'font_name': 'Times New Roman',
-            'font_size': 10
+            'border':1,
+            'text_wrap':True,
+            'align':'center',
+            'valign':'vcenter',
+            'num_format':'dd\/mm\/yyyy',
+            'font_name':'Times New Roman',
+            'font_size':10
         }
     )
     sheet_thaydoiuyquyen = workbook.add_worksheet('Thay Đổi Ủy Quyền')
@@ -769,7 +862,8 @@ def run(
     sheet_thaydoiuyquyen.merge_range('A3:P3',CompanyPhoneNumber,headline_format)
     month = end_date[5:7]
     year = end_date[:4]
-    sheet_thaydoiuyquyen.merge_range('A4:P4',f'DANH SÁCH KHÁCH HÀNG THAY ĐÔI ỦY QUYỀN GIAO DỊCH THÁNG {month}.{year}',sup_title_format)
+    sheet_thaydoiuyquyen.merge_range('A4:P4',f'DANH SÁCH KHÁCH HÀNG THAY ĐÔI ỦY QUYỀN GIAO DỊCH THÁNG {month}.{year}',
+                                     sup_title_format)
     sheet_thaydoiuyquyen.merge_range('A5:P5',f'Kính gửi : SỞ GIAO DỊCH CHỨNG KHOÁN TP.HCM',sup_title_format)
     sheet_thaydoiuyquyen.merge_range('A6:A7','STT',header_format)
     sheet_thaydoiuyquyen.merge_range('B6:B7','Tên khách hàng uỷ quyền',header_format)
@@ -799,26 +893,34 @@ def run(
     sheet_thaydoiuyquyen.write_column('B9',authorization_change['authorizing_person_name'],text_left_format)
     sheet_thaydoiuyquyen.write_column('C9',authorization_change.index,text_center_format)
     sheet_thaydoiuyquyen.write_column('D9',authorization_change['authorizing_person_id'],text_left_format)
-    sheet_thaydoiuyquyen.write_column('E9',authorization_change['date_of_authorization'].map(convertNaTtoSpaceString),date_format)
+    sheet_thaydoiuyquyen.write_column('E9',authorization_change['date_of_authorization'].map(convertNaTtoSpaceString),
+                                      date_format)
     sheet_thaydoiuyquyen.write_column('F9',authorization_change['authorized_person_name'],text_center_format)
-    sheet_thaydoiuyquyen.write_column('G9',authorization_change['date_of_termination'].map(convertNaTtoSpaceString),text_center_format)
-    sheet_thaydoiuyquyen.write_column('H9',authorization_change['date_of_change'].map(convertNaTtoSpaceString),text_center_format)
+    sheet_thaydoiuyquyen.write_column('G9',authorization_change['date_of_termination'].map(convertNaTtoSpaceString),
+                                      text_center_format)
+    sheet_thaydoiuyquyen.write_column('H9',authorization_change['date_of_change'].map(convertNaTtoSpaceString),
+                                      date_format)
     sheet_thaydoiuyquyen.write_column('I9',authorization_change['old_authorized_person_id'],text_center_format)
     sheet_thaydoiuyquyen.write_column('J9',authorization_change['new_authorized_person_id'],text_center_format)
     sheet_thaydoiuyquyen.write_column('K9',authorization_change['old_authorized_person_address'],text_center_format)
     sheet_thaydoiuyquyen.write_column('L9',authorization_change['new_authorized_person_address'],text_center_format)
     sheet_thaydoiuyquyen.write_column('M9',authorization_change['old_scope_of_authorization'],text_center_format)
     sheet_thaydoiuyquyen.write_column('N9',authorization_change['new_scope_of_authorization'],text_center_format)
-    sheet_thaydoiuyquyen.write_column('O9',authorization_change['old_end_date'].map(convertNaTtoSpaceString),text_center_format)
-    sheet_thaydoiuyquyen.write_column('P9',authorization_change['new_end_date'].map(convertNaTtoSpaceString),text_center_format)
+    sheet_thaydoiuyquyen.write_column('O9',authorization_change['old_end_date'].map(convertNaTtoSpaceString),
+                                      date_format)
+    sheet_thaydoiuyquyen.write_column('P9',authorization_change['new_end_date'].map(convertNaTtoSpaceString),
+                                      date_format)
 
-    row_of_signature = 7 + authorization_change.shape[0] + 2
+    row_of_signature = 7+authorization_change.shape[0]+2
     run_day = convert_int(run_time.day)
     run_month = convert_int(run_time.month)
     run_year = convert_int(run_time.year)
-    sheet_thaydoiuyquyen.merge_range(row_of_signature,10,row_of_signature,15,f'TP.HCM, ngày {run_day} tháng {run_month} năm {run_year}',signature_format)
-    sheet_thaydoiuyquyen.merge_range(row_of_signature+1,10,row_of_signature+1,15,'ĐIỀN CHỨC DANH VÀO Ô',signature_format)
-    sheet_thaydoiuyquyen.merge_range(row_of_signature+2,10,row_of_signature+2,15,'(Ký, ghi rõ họ tên, đóng dấu)',signature_format)
+    sheet_thaydoiuyquyen.merge_range(row_of_signature,10,row_of_signature,15,
+                                     f'TP.HCM, ngày {run_day} tháng {run_month} năm {run_year}',signature_format)
+    sheet_thaydoiuyquyen.merge_range(row_of_signature+1,10,row_of_signature+1,15,'ĐIỀN CHỨC DANH VÀO Ô',
+                                     signature_format)
+    sheet_thaydoiuyquyen.merge_range(row_of_signature+2,10,row_of_signature+2,15,'(Ký, ghi rõ họ tên, đóng dấu)',
+                                     signature_format)
     sheet_thaydoiuyquyen.merge_range(row_of_signature+8,10,row_of_signature+8,15,'ĐIỀN HỌ TÊN VÀO Ô',signature_format)
 
     ###########################################################################
@@ -826,7 +928,7 @@ def run(
     ###########################################################################
 
     writer.close()
-    if __name__ == '__main__':
+    if __name__=='__main__':
         print(f"{__file__.split('/')[-1].replace('.py','')}::: Finished")
     else:
         print(f"{__name__.split('.')[-1]} ::: Finished")
