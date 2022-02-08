@@ -28,7 +28,8 @@ def run(
     start = time.time()
     info = get_info('daily', run_time)
     period = info['period']
-    t0_date = info['end_date'].replace('/','-')
+    # t0_date = info['end_date'].replace('/','-')
+    t0_date = '2022-02-07'
     t1_date = bdate(t0_date, -1)
     t2_date = bdate(t0_date, -2)
     folder_name = info['folder_name']
@@ -231,7 +232,8 @@ def run(
             FROM
                 [c]
             WHERE
-                [c].[transaction_id] = '1153' AND [c].[date] = 't0' AND [c].[remark] LIKE N'%UTTB%GD {t0_wildcard}%'
+                [c].[transaction_id] = '1153' AND [c].[date] = 't0' 
+                AND ([c].[remark] LIKE N'%UTTB%GD {t0_wildcard}%' OR [c].[remark] LIKE N'%UTTB%GD {t1_wildcard}%')
             GROUP BY
                 [c].[sub_account]
         ) [d_t0]
@@ -442,7 +444,7 @@ def run(
     worksheet.merge_range('B10:B11', 'Số tài khoản', headers_format)
     worksheet.merge_range('C10:C11', 'Số tiểu khoản', headers_format)
     worksheet.merge_range('D10:D11', 'Tên khách hàng', headers_format)
-    worksheet.merge_range('E10:H11', 'Giá trị tiền bán T-2', headers_format)
+    worksheet.merge_range('E10:H10', 'Giá trị tiền bán T-2', headers_format)
     worksheet.merge_range('I10:L10', 'Giá trị tiền bán T-1', headers_format)
     worksheet.merge_range('M10:P10', 'Giá trị tiền bán T0', headers_format)
     worksheet.merge_range('Q10:Q11', 'Tiền Hoàn trả UTTB T0', headers_format)
@@ -457,12 +459,12 @@ def run(
         'Thuế Cổ Tức'
     ]
     sub_headers_2 = [
-        'Số tiền UTTB KH đã nhận ngày T-2',
-        'Phí UTTB ngày T-2',
-        'Số tiền UTTB KH đã nhận ngày T-1',
-        'Phí UTTB ngày T-1',
-        'Số tiền UTTB KH đã nhận ngày T0',
-        'Phí UTTB ngày T0'
+        'Số tiền UTTB KH đã nhận của ngày T-2',
+        'Phí UTTB của ngày T-2',
+        'Số tiền UTTB KH đã nhận của ngày T-1',
+        'Phí UTTB của ngày T-1',
+        'Số tiền UTTB KH đã nhận của ngày T0 và T-1',
+        'Phí UTTB của ngày T0 và T-1'
     ]
     worksheet.write_row('E11', sub_headers_1 * 3, headers_format)
     worksheet.write_row('S11', sub_headers_2, headers_format)
@@ -506,7 +508,9 @@ def run(
         else:
             fmt = money_format
         worksheet.write_column(12, col + 1, table[col_name], fmt)
-    worksheet.write_row(f'E{sum_start_row}', table.iloc[:, 3:-1].sum(), sum_money_format)
+    # worksheet.write_row(f'E{sum_start_row}', table.iloc[:, 3:-1].sum(), sum_money_format)
+    for col in 'EFGHIJKLMNOPQRSTUVWXY':
+        worksheet.write(f'{col}{sum_start_row}',f'=SUBTOTAL(9,{col}13:{col}{sum_start_row-1})', sum_money_format)
     worksheet.write(f'Z{sum_start_row}', count_abonormal, sum_money_format)
 
     ###########################################################################

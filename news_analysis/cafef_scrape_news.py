@@ -19,7 +19,7 @@ ignored_exceptions = (
     ElementNotInteractableException,
     PageFailToLoad,
 )
-t = 2
+t = 1
 margin_list = internal.mlist()
 
 
@@ -43,7 +43,7 @@ def run():
     """
     i = 1
     while True:
-        url = 'https://cafef.vn/timeline/34/trang-' + str(i) + '.chn'
+        url = 'https://cafef.vn/timeline/31/trang-' + str(i) + '.chn'
         driver.get(url)
 
         elements = wait.until(
@@ -76,7 +76,7 @@ def run():
         i = i + 1
         time.sleep(t)
 
-        if len(content) >= 40:
+        if len(content) >= 1000:
             break
 
     dictionary = {
@@ -87,4 +87,4 @@ def run():
     }
     df = pd.DataFrame(dictionary)
 
-    df.to_pickle(r"D:\DataAnalytics\News Filter Project\output_data\cafef_tai-chinh-ngan-hang_data_2.pickle")
+    df.to_pickle(r"D:\DataAnalytics\news_analysis\output_data\cafef_data_3\cafef_thi-truong-chung-khoan_data_3.pickle")
