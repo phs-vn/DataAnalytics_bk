@@ -1,9 +1,7 @@
-import pandas as pd
-import unidecode
-
 from automation.trading_service.giaodichluuky import *
 from request.stock import ta
 from news_collector import scrape_ticker_by_exchange
+from news_collector import scrape_derivatives_price
 
 """
 BC này không chạy lùi ngày được (do scrape bảng điện thời điểm hiện tại), 
@@ -51,7 +49,7 @@ def run(
         LEFT JOIN [account] ON [de083].[account_code] = [account].[account_code]
         LEFT JOIN [securities_list] ON [securities_list].[ticker] = [de083].[ticker]
         WHERE ([account].[account_type] LIKE N'%ngoài') 
-        AND [de083].[date] IN ('{start_date}','{end_date}')
+        AND [de083].[date] BETWEEN '{start_date}' AND '{end_date}'
         """,
         connect_DWH_CoSo,
         index_col='date',
@@ -64,9 +62,11 @@ def run(
         'Chứng quyền': 'Chung quyen',
         'Trái phiếu doanh nghiệp': 'Trai phieu doanh nghiep',
         'Trái phiếu chuyển đổi': 'Trai phieu chuyen doi',
+        'Chứng khoán phái sinh': 'Chung khoan phai sinh',
     })
     foreign_investor_holding.loc[foreign_investor_holding.index.min(),'period'] = 'opening'
     foreign_investor_holding.loc[foreign_investor_holding.index.max(),'period'] = 'closing'
+    foreign_investor_holding = foreign_investor_holding.dropna(subset=['period'])
     foreign_investor_holding.reset_index(drop=True,inplace=True)
 
     cash_balance = pd.read_sql(
@@ -103,47 +103,59 @@ def run(
     # Phái sinh
     derivatives = pd.read_sql(
         f"""
-        WITH
-        [o] AS (
-            SELECT 
-                [rdo0009].[ticker],
-                SUM([rdo0009].[o_long_volume] + [rdo0009].[o_short_volume]) [volume]
-            FROM [rdo0009]
-            WHERE [rdo0009].[date] = '{start_date}' AND [rdo0009].[account_code] LIKE '022F%'
-            GROUP BY [rdo0009].[ticker]
-        ),
-        [c] AS (
-            SELECT 
-                [rdo0009].[ticker],
-                SUM([rdo0009].[o_long_volume] + [rdo0009].[o_short_volume]) [volume]
-            FROM [rdo0009]
-            WHERE [rdo0009].[date] = '{end_date}' AND [rdo0009].[account_code] LIKE '022F%'
-            GROUP BY [rdo0009].[ticker]
-        )
         SELECT 
-            COALESCE([o].[ticker],[c].[ticker]) [ticker],
-            ISNULL([c].[volume],0) [closing],
-            ISNULL([o].[volume],0) [opening],
-            ISNULL([c].[volume],0) - ISNULL([o].[volume],0) [change]
-        FROM [o]
-        FULL JOIN [c] ON [c].[ticker] = [o].[ticker]
+			[t].[account_code],
+            [a].[account_type],
+            [a].[nationality],
+            [a].[foreign_trading_code],
+            [t].[ticker],
+            'Chung khoan phai sinh' [asset_type],
+            [t].[volume],
+            [t].[period],
+            '' [exchange]
+		FROM (
+            SELECT 
+                [rdo0009].[account_code],
+                [rdo0009].[ticker],
+                SUM([rdo0009].[o_long_volume] + [rdo0009].[o_short_volume]) [volume],
+                'opening' [period]
+            FROM [rdo0009]
+            WHERE 
+                [rdo0009].[date] = (
+                    SELECT MAX([rdo0009].[date]) FROM [rdo0009] WHERE [rdo0009].[date] <= '{start_date}'
+                )
+                AND [rdo0009].[account_code] LIKE '022F%'
+            GROUP BY [rdo0009].[account_code], [rdo0009].[ticker]
+
+		    UNION ALL
+            
+            SELECT 
+                [rdo0009].[account_code],
+                [rdo0009].[ticker],
+                SUM([rdo0009].[o_long_volume] + [rdo0009].[o_short_volume]) [volume],
+                'closing' [period]
+            FROM [rdo0009]
+            WHERE 
+                [rdo0009].[date] = (
+                    SELECT MAX([rdo0009].[date]) FROM [rdo0009] WHERE [rdo0009].[date] <= '{end_date}'
+                ) 
+                AND [rdo0009].[account_code] LIKE '022F%'
+            GROUP BY [rdo0009].[account_code], [rdo0009].[ticker]
+        ) [t]
+        LEFT JOIN [account] [a]
+            ON [a].[account_code] = [t].[account_code]
         """,
         connect_DWH_PhaiSinh,
     )
-    derivatives.index = pd.Index(
-        ['Chung khoan phai sinh']*derivatives.shape[0],
-        name='asset_type'
-    )
+    foreign_investor_holding = pd.concat([foreign_investor_holding,derivatives])
 
     # =========================================================================
     # Du lieu sheet I
     table_sheetI = foreign_investor_holding.groupby(['asset_type','ticker','period'])['volume'].sum()
     table_sheetI = table_sheetI.unstack(level=2,fill_value=0)
-    table_sheetI['change'] = table_sheetI['closing']-table_sheetI['opening']
+    table_sheetI = table_sheetI.reindex(['closing','opening','volume'],axis=1,fill_value=0)
+    table_sheetI['change'] = table_sheetI['closing'] - table_sheetI['opening']
     table_sheetI.reset_index(level=1,inplace=True)
-
-    # Merger Cơ Sở và Phái Sinh
-    table_sheetI = pd.concat([table_sheetI,derivatives])
 
     # lay gia
     price = pd.DataFrame(
@@ -159,11 +171,9 @@ def run(
     )
     cw_price = cw_price.loc[cw_list,'CLOSE']
     derivatives_list = price.index[price.index.str.startswith('VN30F')].to_list()
-    """
-    Thêm bước lấy giá, kết quả là: derivatives_price = pd.Series(Prices,index=[tickers])
-    """
-    # Test, give dummy price, xóa sau khi lấy giá đúng
-    derivatives_price = pd.Series(10000000,index=derivatives_list)
+    priceDate = bdate(end_date,1)
+    priceDateDT = dt.datetime(int(priceDate[:4]),int(priceDate[5:7]),int(priceDate[-2:]))
+    derivatives_price = scrape_derivatives_price.run(derivatives_list,priceDateDT)
 
     def price_mapper(x):
         if x in cw_list:
@@ -175,8 +185,6 @@ def run(
         return price
 
     price['last_price'] = price.index.map(price_mapper)
-    for x in price.index:
-        price.loc[x,'last_price'] = price_mapper(x)
 
     # Reformat bảng
     full_type = pd.Index([
@@ -247,7 +255,7 @@ def run(
     sum_series = table_sheetI.loc[sub_level,['closing','opening','change']].sum()
     table_sheetI.loc['Tong co phieu',['closing','opening','change']] = sum_series
     # Tong chung khoan phai sinh
-    sum_series = derivatives[['closing','opening','change']].sum()
+    sum_series = table_sheetI.loc['Chung khoan phai sinh',['closing','opening','change']].sum()
     table_sheetI.loc['Tong chung khoan phai sinh',['closing','opening','change']] = sum_series
     # Tính Cash
     table_sheetI = table_sheetI.loc[full_type]
@@ -304,9 +312,7 @@ def run(
     cash_balance_tochuc = cash_balance_tochuc.set_index('account_code').squeeze()
     cash_balance_canhan = cash_balance.loc[cash_balance['account_type']=='Cá nhân nước ngoài','balance'].sum()
 
-    tochuc_sheetII = foreign_investor_holding.loc[
-        (foreign_investor_holding['account_type'].str.endswith('nước ngoài'))&(foreign_investor_holding['period']=='closing')
-    ].copy()
+    tochuc_sheetII = foreign_investor_holding.loc[foreign_investor_holding['period']=='closing'].copy()
     tochuc_sheetII.insert(6,'value',tochuc_sheetII['ticker'].map(price.squeeze())*tochuc_sheetII['volume'])
     tochuc_sheetII = tochuc_sheetII.groupby(
         ['account_type','account_code','nationality','foreign_trading_code','asset_type']
@@ -326,14 +332,15 @@ def run(
         'Co phieu upcom':'Gia tri co phieu upcom',
         'Gia tri von gop mua co phan va co phieu khac':'Gia tri von gop mua co phan va co phieu khac',
         'Loai khac':'Gia tri loai khac',
+        'Chung khoan phai sinh': 'Chung khoan phai sinh',
         'Tien':'Gia tri tien',
         'Tong gia tri danh muc':'Tong gia tri danh muc',
     }
     canhan_sheetII.rename(full_type,axis=0,inplace=True)
     canhan_sheetII = canhan_sheetII.reindex(full_type.values())
-    canhan_sheetII.loc['Gia tri co phieu niem yet va chung chi quy'] = canhan_sheetII.loc['Gia tri co phieu niem yet' ] + canhan_sheetII.loc['Gia tri chung chi quy']
+    canhan_sheetII.loc['Gia tri co phieu niem yet va chung chi quy'] = canhan_sheetII.loc[['Gia tri co phieu niem yet','Gia tri chung chi quy']].sum()
     canhan_sheetII.drop(['Gia tri co phieu niem yet','Gia tri chung chi quy'],inplace=True)
-    canhan_sheetII.loc['Gia tri von gop mua co phan va chung khoan khac'] = canhan_sheetII.loc['Gia tri von gop mua co phan va co phieu khac']+canhan_sheetII.loc['Gia tri loai khac']
+    canhan_sheetII.loc['Gia tri von gop mua co phan va chung khoan khac'] = canhan_sheetII.loc[['Gia tri von gop mua co phan va co phieu khac','Gia tri loai khac','Chung khoan phai sinh']].sum()
     canhan_sheetII.drop(['Gia tri von gop mua co phan va co phieu khac','Gia tri loai khac'],inplace=True)
     canhan_sheetII.loc['Gia tri tien'] = cash_balance_canhan
     canhan_sheetII.loc['Tong gia tri danh muc'] = canhan_sheetII.sum()
@@ -349,10 +356,12 @@ def run(
     tochuc_sheetII.drop(['asset_type','value'],axis=1,inplace=True)
     tochuc_sheetII.drop_duplicates(inplace=True)
     # Tin phieu (ok)
-    tochuc_sheetII['Gia tri tin phieu'] = original_tochuc_sheetII.loc[
-        original_tochuc_sheetII['asset_type']=='Tin phieu','value']
+    tochuc_sheetII['Gia tri tin phieu'] = original_tochuc_sheetII.loc[original_tochuc_sheetII['asset_type']=='Tin phieu','value']
     tinphieu_sum = tochuc_sheetII['Gia tri tin phieu'].sum()
-    tochuc_sheetII['Ty le tin phieu'] = tochuc_sheetII['Gia tri tin phieu']/tinphieu_sum
+    if tinphieu_sum == 0:
+        tochuc_sheetII['Ty le tin phieu'] = 0
+    else:
+        tochuc_sheetII['Ty le tin phieu'] = tochuc_sheetII['Gia tri tin phieu']/tinphieu_sum
 
     # Trai phieu (khong phan duoc theo ky han nen mac dinh khong co gia tri -> mat tinh tong quat)
     tochuc_sheetII[[
@@ -369,23 +378,36 @@ def run(
     asset_type_sum = asset_type_sum.groupby('account_code').sum()
     tochuc_sheetII['Gia tri co phieu niem yet va chung chi quy'] = asset_type_sum
     cpccq_sum = tochuc_sheetII['Gia tri co phieu niem yet va chung chi quy'].sum()
-    tochuc_sheetII['Ty le co phieu niem yet va chung chi quy'] = tochuc_sheetII['Gia tri co phieu niem yet va chung chi quy']/cpccq_sum
+    if cpccq_sum == 0:
+        tochuc_sheetII['Ty le co phieu niem yet va chung chi quy'] = 0
+    else:
+        tochuc_sheetII['Ty le co phieu niem yet va chung chi quy'] = tochuc_sheetII['Gia tri co phieu niem yet va chung chi quy']/cpccq_sum
 
     # Co phieu upcom
     tochuc_sheetII['Gia tri co phieu upcom'] = original_tochuc_sheetII.loc[original_tochuc_sheetII['asset_type']=='Co phieu upcom','value']
     cophieuupcom_sum = tochuc_sheetII['Gia tri co phieu upcom'].sum()
-    tochuc_sheetII['Ty le co phieu upcom'] = tochuc_sheetII['Gia tri co phieu upcom']/cophieuupcom_sum
+    if cophieuupcom_sum == 0:
+        tochuc_sheetII['Ty le co phieu upcom'] = 0
+    else:
+        tochuc_sheetII['Ty le co phieu upcom'] = tochuc_sheetII['Gia tri co phieu upcom']/cophieuupcom_sum
 
     # Gia tri von gop mua co phan va chung khoan khac
-    asset_type_sum = original_tochuc_sheetII.loc[original_tochuc_sheetII['asset_type'].isin(['Gia tri von gop mua co phan va co phieu khac','Loai khac']),'value']
+    asset_type_sum = original_tochuc_sheetII.loc[original_tochuc_sheetII['asset_type'].isin(['Gia tri von gop mua co phan va co phieu khac','Chung khoan phai sinh','Loai khac']),'value']
     asset_type_sum = asset_type_sum.groupby('account_code').sum()
     tochuc_sheetII['Gia tri von gop mua co phan va chung khoan khac'] = asset_type_sum
     value_sum = tochuc_sheetII['Gia tri von gop mua co phan va chung khoan khac'].sum()
-    tochuc_sheetII['Ty le von gop mua co phan va chung khoan khac'] = tochuc_sheetII['Gia tri von gop mua co phan va chung khoan khac']/value_sum
+    if value_sum == 0:
+        tochuc_sheetII['Ty le von gop mua co phan va chung khoan khac'] = 0
+    else:
+        tochuc_sheetII['Ty le von gop mua co phan va chung khoan khac'] = tochuc_sheetII['Gia tri von gop mua co phan va chung khoan khac']/value_sum
 
     # Tien
     tochuc_sheetII['Gia tri tien'] = cash_balance_tochuc
-    tochuc_sheetII['Ty le tien'] = tochuc_sheetII['Gia tri tien']/tochuc_sheetII['Gia tri tien'].sum()
+    tien_sum = tochuc_sheetII['Gia tri tien'].sum()
+    if tien_sum == 0:
+        tochuc_sheetII['Ty le tien'] = 0
+    else:
+        tochuc_sheetII['Ty le tien'] = tochuc_sheetII['Gia tri tien']/tochuc_sheetII['Gia tri tien'].sum()
 
     # Tong gia tri danh muc
     tonggiatridanhmuc = tochuc_sheetII.loc[:,[col.startswith('Gia tri') for col in tochuc_sheetII.columns]].sum(axis=1)

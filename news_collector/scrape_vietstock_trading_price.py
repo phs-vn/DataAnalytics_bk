@@ -51,9 +51,14 @@ def run(  # this function can't go headless
         select_todate.clear()
         select_todate.send_keys(f'{day}/{month}/{year}')
         excel_export_element = wait.until(EC.presence_of_element_located(
-            (By.XPATH,'//*[@id="trading-result"]/div/div[1]/div[1]/div/div[2]/a')
+            (By.XPATH,'//*[@title="Export Excel"]')
         ))
-        excel_export_element.click()
+        while True:
+            try:
+                excel_export_element.click()
+                break
+            except (Exception,):
+                continue
 
     time.sleep(1)
     driver.quit()

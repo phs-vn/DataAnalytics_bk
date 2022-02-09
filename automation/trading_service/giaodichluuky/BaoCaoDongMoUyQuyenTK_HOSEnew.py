@@ -19,9 +19,6 @@ def run(
     if not os.path.isdir(join(dept_folder,folder_name,period)):  # dept_folder from import
         os.mkdir(join(dept_folder,folder_name,period))
 
-    # chờ batch cuối ngày xong
-    # listen_batch_job('end')
-
     # country code
     country_code = pd.read_excel(join(dirname(dirname(__file__)),'country_code.xlsx'),index_col=0,squeeze=True)
     split_at = int(country_code.shape[0]/2)+1

@@ -99,7 +99,7 @@ def run(
             AND 
                 [cash_balance].[transaction_id] IN ('1153','8851')
         )
-        SELECT 
+        SELECT
             [i].[sub_account],
             [i].[account_code],
             [i].[customer_name],
@@ -192,13 +192,14 @@ def run(
         
         FULL OUTER JOIN (
             SELECT
+                MAX([c].[date]) [date],
                 [c].[sub_account],
-                SUM(ISNULL([c].[increase],0)-ISNULL([c].[decrease],0)) [advanced_amount_t2],
+                SUM(ISNULL([c].[increase],0)) [advanced_amount_t2],
                 SUM([c].[decrease]) [advanced_fee_t2]
             FROM 
                 [c]
             WHERE
-                [c].[transaction_id] = '1153' AND [c].[remark] LIKE N'%UTTB%GD {t2_wildcard}%'
+                [c].[transaction_id] = '1153' AND [c].[date] = 't2' AND [c].[remark] LIKE N'%UTTB%GD {t2_wildcard}%'
             GROUP BY
                 [c].[sub_account]
         ) [d_t2]
@@ -207,13 +208,14 @@ def run(
         
         FULL OUTER JOIN (
             SELECT
+                MAX([c].[date]) [date],
                 [c].[sub_account],
-                SUM(ISNULL([c].[increase],0)-ISNULL([c].[decrease],0)) [advanced_amount_t1],
+                SUM(ISNULL([c].[increase],0)) [advanced_amount_t1],
                 SUM([c].[decrease]) [advanced_fee_t1]
             FROM 
                 [c]
             WHERE
-                [c].[transaction_id] = '1153' AND [c].[remark] LIKE N'%UTTB%GD {t1_wildcard}%'
+                [c].[transaction_id] = '1153' AND [c].[date] = 't1' AND [c].[remark] LIKE N'%UTTB%GD {t1_wildcard}%'
             GROUP BY
                 [c].[sub_account]
         ) [d_t1]
@@ -222,13 +224,14 @@ def run(
         
         FULL OUTER JOIN (
             SELECT
+                MAX([c].[date]) [date],
                 [c].[sub_account],
-                SUM(ISNULL([c].[increase],0)-ISNULL([c].[decrease],0)) [advanced_amount_t0],
+                SUM(ISNULL([c].[increase],0)) [advanced_amount_t0],
                 SUM([c].[decrease]) [advanced_fee_t0]
             FROM
                 [c]
             WHERE
-                [c].[transaction_id] = '1153' AND [c].[remark] LIKE N'%UTTB%GD {t0_wildcard}%'
+                [c].[transaction_id] = '1153' AND [c].[date] = 't0' AND [c].[remark] LIKE N'%UTTB%GD {t0_wildcard}%'
             GROUP BY
                 [c].[sub_account]
         ) [d_t0]
@@ -239,18 +242,21 @@ def run(
         index_col='sub_account',
     ).dropna(thresh=3).fillna(0)
 
-    able_to_advance_t1 = table['value_t1']-table['fee_t1']-table['sell_tax_t1']-table['dividend_tax_t1']
-    able_to_advance_t0 = table['value_t0']-table['fee_t0']-table['sell_tax_t0']-table['dividend_tax_t0']
-    table['available_to_advance'] = able_to_advance_t1+able_to_advance_t0
+    able_to_advance_t1 = table['value_t1'] - table['fee_t1'] - table['sell_tax_t1'] - table['dividend_tax_t1']
+    able_to_advance_t0 = table['value_t0'] - table['fee_t0'] - table['sell_tax_t0'] - table['dividend_tax_t0']
+    table['available_to_advance'] = able_to_advance_t1 + able_to_advance_t0
 
-    advanced_amount = table[['advanced_amount_t1','advanced_fee_t1','advanced_amount_t0','advanced_fee_t0']].sum(axis=1)
-    table['remaining_advance'] = table['available_to_advance']-advanced_amount
+    # advanced_amount = table['advanced_amount_t1'] + table['advanced_fee_t1'] + table['advanced_amount_t0'] + table[
+    #     'advanced_fee_t0']
+    advanced_amount = table['advanced_amount_t1'] + table['advanced_amount_t0']
+    table['remaining_advance'] = table['available_to_advance'] - advanced_amount
 
-    able_to_advance_t2 = table['value_t2']-table['fee_t2']-table['sell_tax_t2']-table['dividend_tax_t2']
-    check_1 = table['payback_uttb_t0']>able_to_advance_t2
-    check_2 = advanced_amount>table['available_to_advance']
-    check_3 = table['remaining_advance']<0
-    total_check = check_1|check_2|check_3
+    able_to_advance_t2 = table['value_t2'] - table['fee_t2'] - table['sell_tax_t2'] - table['dividend_tax_t2']
+    check_1 = table['payback_uttb_t0'] > able_to_advance_t2
+    check_2 = advanced_amount > table['available_to_advance']
+    check_3 = table['remaining_advance'] < 0
+    check_4 = (table.select_dtypes(include=np.number)<0).values.any()
+    total_check = check_1 | check_2 | check_3 | check_4
     table.loc[total_check,'check'] = 'Bất thường'
     table.sort_values('check',ascending=False,inplace=True)
     table['check'].fillna('Bình thường',inplace=True)
@@ -283,6 +289,7 @@ def run(
         'remaining_advance',
         'check',
     ]]
+    table = table.sort_values(by='account_code')
 
     ###################################################
     ###################################################

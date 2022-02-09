@@ -19,6 +19,23 @@ TableNames_RMD = pd.read_sql(
     connect_RMD,
 )
 
+# DWH-ThiTruong Database Information
+driver_DWH_ThiTruong = '{SQL Server}'
+server_DWH_ThiTruong = 'SRV-RPT'
+db_DWH_ThiTruong = 'DWH-ThiTruong'
+
+connect_DWH_ThiTruong = pyodbc.connect(
+    f'Driver={driver_DWH_ThiTruong};'
+    f'Server={server_DWH_ThiTruong};'
+    f'Database={db_DWH_ThiTruong};'
+    f'uid={user_id};'
+    f'pwd={password}'
+)
+TableNames_DWH_CoSo = pd.read_sql(
+    'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES',
+    connect_DWH_ThiTruong
+)
+
 # DWH-CoSo Database Information
 driver_DWH_CoSo = '{SQL Server}'
 server_DWH_CoSo = 'SRV-RPT'

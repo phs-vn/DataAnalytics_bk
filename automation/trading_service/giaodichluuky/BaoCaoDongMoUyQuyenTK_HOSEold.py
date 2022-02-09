@@ -19,10 +19,7 @@ def run(
     # create folder
     if not os.path.isdir(join(dept_folder,folder_name,period)):  # dept_folder from import
         os.mkdir(join(dept_folder,folder_name,period))
-
-    # chờ batch cuối ngày xong
-    # listen_batch_job('end')
-
+        
     period_account = pd.read_sql(
         f"""
         SELECT

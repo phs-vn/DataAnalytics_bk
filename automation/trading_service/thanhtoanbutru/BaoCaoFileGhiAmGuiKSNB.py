@@ -30,38 +30,40 @@ def run(  # BC thang
     # query KSNB hàng tháng
     ksnb_6692_6693_query = pd.read_sql(
         f"""
-    SELECT 
-      [money_in_out_transfer].[date], 
-      [money_in_out_transfer].[time], 
-      [money_in_out_transfer].[transaction_id],
-      [account].[account_code], 
-      [money_in_out_transfer].[bank], 
-      [account].[customer_name]
-    FROM 
-      [money_in_out_transfer]
-    LEFT JOIN 
-      [sub_account]
-    ON 
-      [money_in_out_transfer].[sub_account] = [sub_account].[sub_account]
-    LEFT JOIN 
-      [account]
-    ON 
-      [sub_account].[account_code] = [account].[account_code]
-    WHERE 
-      ([money_in_out_transfer].[bank] IN ('EIB','OCB') OR [money_in_out_transfer].[bank] IS NULL) -- cac TK ngat lien ket NH se bi NULL tren he thong
-    AND 
-      [money_in_out_transfer].[transaction_id] IN ('6692','6693')
-    AND 
-      [money_in_out_transfer].[date] BETWEEN '{start_date}' AND '{end_date}'
-    ORDER BY 
-      [money_in_out_transfer].[date], [money_in_out_transfer].[time] 
-      ASC
+        SELECT
+            [money_in_out_transfer].[sub_account], 
+            [money_in_out_transfer].[date], 
+            [money_in_out_transfer].[time], 
+            [money_in_out_transfer].[transaction_id],
+            [account].[account_code], 
+            [money_in_out_transfer].[bank], 
+            [account].[customer_name]
+        FROM 
+            [money_in_out_transfer]
+        LEFT JOIN 
+            [sub_account]
+        ON 
+            [money_in_out_transfer].[sub_account] = [sub_account].[sub_account]
+        LEFT JOIN 
+            [account]
+        ON 
+            [sub_account].[account_code] = [account].[account_code]
+        WHERE 
+            ([money_in_out_transfer].[bank] IN ('EIB','OCB') OR [money_in_out_transfer].[bank] IS NULL) -- cac TK ngat lien ket NH se bi NULL tren he thong
+        AND 
+            [money_in_out_transfer].[transaction_id] IN ('6692','6693')
+        AND 
+            [money_in_out_transfer].[date] BETWEEN '{start_date}' AND '{end_date}'
+        ORDER BY 
+            [money_in_out_transfer].[date], [money_in_out_transfer].[time] 
+            ASC
     """,
         connect_DWH_CoSo
     )
     ksnb_1187_query = pd.read_sql(
         f"""
         SELECT 
+            [money_in_out_transfer].[sub_account],
             [transactional_record].[date],
             [transactional_record].[time],
             [transactional_record].[transaction_id], 
@@ -102,6 +104,21 @@ def run(  # BC thang
         connect_DWH_CoSo
     )
     table = pd.concat([ksnb_6692_6693_query,ksnb_1187_query])
+
+    def fill_bank_name(sub_account):
+        return pd.read_sql(
+            f"""
+            SELECT TOP 1 [vcf0051].[bank_name] 
+            FROM [vcf0051] 
+            WHERE [vcf0051].[sub_account] = '{sub_account}'
+            AND [bank_name] <> N'---' 
+            ORDER BY [date] DESC
+            """,
+            connect_DWH_CoSo
+        ).squeeze()
+
+    table.loc[table['bank'].isna(),'bank'] = table.loc[table['bank'].isna(),'sub_account'].map(fill_bank_name)
+    table = table.drop('sub_account',axis=1)
 
     ###################################################
     ###################################################

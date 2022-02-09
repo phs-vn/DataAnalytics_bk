@@ -38,6 +38,8 @@ from PIL import Image
 import csv
 import re
 import unidecode
+import zeep
+from zeep import Client
 
 ###############################################################################
 

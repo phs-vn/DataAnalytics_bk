@@ -26,7 +26,7 @@ class Check:
             self.db_Tables = TableNames_DWH_CoSo.squeeze()
             self._prefix = '[DWH-CoSo]'
             self.description = 'RunCoSo'
-            self.since = dt.datetime.now()-dt.timedelta(minutes=45)
+            self.since = dt.datetime.now()-dt.timedelta(minutes=75)
 
         elif db == 'DWH-PhaiSinh':
             conn = connect_DWH_PhaiSinh
@@ -39,7 +39,7 @@ class Check:
 
         self.db_Tables = self.db_Tables.loc[~self.db_Tables.isin(self.ignored_Tables)]
 
-        # check xem 45p vừa rồi có chạy chưa
+        # check xem n phút vừa rồi có chạy chưa (n được quy định ở trên)
         run_check = pd.read_sql(
             f"""
             SELECT 
