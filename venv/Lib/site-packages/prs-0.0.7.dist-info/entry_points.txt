@@ -1,0 +1,3 @@
+[console_scripts]
+prs = prs.cli:main
+

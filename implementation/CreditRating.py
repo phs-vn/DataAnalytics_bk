@@ -3,7 +3,7 @@ from request.stock import *
 
 
 @TaskMonitor
-def run(
+def CreditRating(
     standard:str='bics',
     level:int=1
 ):

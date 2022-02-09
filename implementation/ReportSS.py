@@ -1,170 +1,168 @@
-"""
-This module simply brings functions from reporting package to implementation package
-to ensure consistent workflow among projects.
-"""
-
 from implementation import TaskMonitor
 from request.stock import *
 
-from reporting.trading_service.giaodichluuky import BaoCaoCheckGia
-from reporting.trading_service.giaodichluuk``y import BaoCaoDanhSachChungKhoanSSI
-from reporting.trading_service.giaodichluuky import BaoCaoDongMoUyQuyenTK_HNX
-from reporting.trading_service.giaodichluuky import BaoCaoDongMoUyQuyenTK_HOSEnew
-from reporting.trading_service.giaodichluuky import BaoCaoDongMoUyQuyenTK_HOSEold
-from reporting.trading_service.giaodichluuky import BaoCaoHoatDongLuuKyNDTNN
-from reporting.trading_service.giaodichluuky import BaoCaoTamTinhPhiChuyenKhoan
-from reporting.trading_service.giaodichluuky import BaoCaoTamTinhPhiGiaoDich
-from reporting.trading_service.giaodichluuky import BaoCaoTamTinhPhiLuuKy
-from reporting.trading_service.giaodichluuky import BaoCaoTienGuiSSC
-from reporting.trading_service.giaodichluuky import BaoCaoTinhHinhHDKD
-
-from reporting.trading_service.thanhtoanbutru import BaoCaoDoiChieuLaiTienGuiPhatSinh_p1
-from reporting.trading_service.thanhtoanbutru import BaoCaoDoiChieuLaiTienGuiPhatSinh_p2
-from reporting.trading_service.thanhtoanbutru import BaoCaoDoiChieuSoDuTaiKhoanKhachHang
-from reporting.trading_service.thanhtoanbutru import BaoCaoDoiChieuTTBTTienMuaBanChungKhoan
-from reporting.trading_service.thanhtoanbutru import BaoCaoDoiChieuUTTB
-from reporting.trading_service.thanhtoanbutru import BaoCaoDoiChieuVaImportEIB
-from reporting.trading_service.thanhtoanbutru import BaoCaoDoiChieuVaImportOCB
-from reporting.trading_service.thanhtoanbutru import BaoCaoDuLieuGuiKiemToan
-from reporting.trading_service.thanhtoanbutru import BaoCaoFileGhiAmGuiKSNB
-from reporting.trading_service.thanhtoanbutru import BaoCaoFileImportTKNganHangBuoiSang
-from reporting.trading_service.thanhtoanbutru import BaoCaoKHNNCoSoDuNho
-from reporting.trading_service.thanhtoanbutru import BaoCaoPhatSinhGiaoDichTien
-from reporting.trading_service.thanhtoanbutru import BaoCaoPSTheoDoiTKKHCanChuyenTienTuVSDVeTKGD
-from reporting.trading_service.thanhtoanbutru import BaoCaoReviewKHVIPCoSo
-from reporting.trading_service.thanhtoanbutru import BaoCaoSoDuTienKyQuyPhaiSinh
-from reporting.trading_service.thanhtoanbutru import BaoCaoSoLieuThongKeDVTC
-from reporting.trading_service.thanhtoanbutru import BaoCaoUngTienROS
-from reporting.trading_service.thanhtoanbutru import BaoCaoXacNhanNopRutEIBOCB
-from reporting.trading_service.thanhtoanbutru import DanhSachKHVIPCoSo
-from reporting.trading_service.thanhtoanbutru import DanhSachKHVIPPhaiSinh
-
 @TaskMonitor
-def imp_BaoCaoCheckGia():
+def SS_BaoCaoCheckGia():
+    from automation.trading_service.giaodichluuky import BaoCaoCheckGia
     BaoCaoCheckGia.run()
 
 @TaskMonitor
-def imp_BaoCaoDanhSachChungKhoanSSI():
+def SS_BaoCaoDanhSachChungKhoanSSI():
+    from automation.trading_service.giaodichluuky import BaoCaoDanhSachChungKhoanSSI
     BaoCaoDanhSachChungKhoanSSI.run()
 
 @TaskMonitor
-def imp_BaoCaoDongMoUyQuyenTK_HNX():
+def SS_BaoCaoDongMoUyQuyenTK_HNX():
+    from automation.trading_service.giaodichluuky import BaoCaoDongMoUyQuyenTK_HNX
     BaoCaoDongMoUyQuyenTK_HNX.run()
 
 @TaskMonitor
-def imp_BaoCaoDongMoUyQuyenTK_HOSEnew():
+def SS_BaoCaoDongMoUyQuyenTK_HOSEnew():
+    from automation.trading_service.giaodichluuky import BaoCaoDongMoUyQuyenTK_HOSEnew
     BaoCaoDongMoUyQuyenTK_HOSEnew.run()
 
 @TaskMonitor
-def imp_BaoCaoDongMoUyQuyenTK_HOSEold():
+def SS_BaoCaoDongMoUyQuyenTK_HOSEold():
+    from automation.trading_service.giaodichluuky import BaoCaoDongMoUyQuyenTK_HOSEold
     BaoCaoDongMoUyQuyenTK_HOSEold.run()
 
 @TaskMonitor
-def imp_BaoCaoHoatDongLuuKyNDTNN():
+def SS_BaoCaoHoatDongLuuKyNDTNN():
+    from automation.trading_service.giaodichluuky import BaoCaoHoatDongLuuKyNDTNN
     BaoCaoHoatDongLuuKyNDTNN.run()
 
 @TaskMonitor
-def imp_BaoCaoTamTinhPhiChuyenKhoan():
+def SS_BaoCaoTamTinhPhiChuyenKhoan():
+    from automation.trading_service.giaodichluuky import BaoCaoTamTinhPhiChuyenKhoan
     BaoCaoTamTinhPhiChuyenKhoan.run()
 
 @TaskMonitor
-def imp_BaoCaoTamTinhPhiGiaoDich():
+def SS_BaoCaoTamTinhPhiGiaoDich():
+    from automation.trading_service.giaodichluuky import BaoCaoTamTinhPhiGiaoDich
     BaoCaoTamTinhPhiGiaoDich.run()
 
 @TaskMonitor
-def imp_BaoCaoTamTinhPhiLuuKy():
+def SS_BaoCaoTamTinhPhiLuuKy():
+    from automation.trading_service.giaodichluuky import BaoCaoTamTinhPhiLuuKy
     BaoCaoTamTinhPhiLuuKy.run()
 
 @TaskMonitor
-def imp_BaoCaoTienGuiSSC():
+def SS_BaoCaoTienGuiSSC():
+    from automation.trading_service.giaodichluuky import BaoCaoTienGuiSSC
     BaoCaoTienGuiSSC.run()
 
 @TaskMonitor
-def imp_BaoCaoTinhHinhHDKD():
+def SS_BaoCaoTinhHinhHDKD():
+    from automation.trading_service.giaodichluuky import BaoCaoTinhHinhHDKD
     BaoCaoTinhHinhHDKD.run()
 
 @TaskMonitor
-def imp_BaoCaoDoiChieuLaiTienGuiPhatSinh_p1():
+def SS_BaoCaoDoiChieuLaiTienGuiPhatSinh_p1():
+    from automation.trading_service.thanhtoanbutru import BaoCaoDoiChieuLaiTienGuiPhatSinh_p1
     BaoCaoDoiChieuLaiTienGuiPhatSinh_p1.run(dt.datetime.now()-dt.timedelta(days=1))
 
 @TaskMonitor
-def imp_BaoCaoDoiChieuLaiTienGuiPhatSinh_p2():
-    BaoCaoDoiChieuLaiTienGuiPhatSinh_p2.run()
+def SS_BaoCaoDoiChieuLaiTienGuiPhatSinh_p2():
+    from automation.trading_service.thanhtoanbutru import BaoCaoDoiChieuLaiTienGuiPhatSinh_p2
+    BaoCaoDoiChieuLaiTienGuiPhatSinh_p2.run(dt.datetime.now()-dt.timedelta(days=1))
 
 @TaskMonitor
-def imp_BaoCaoDoiChieuSoDuTaiKhoanKhachHang():
-    BaoCaoDoiChieuSoDuTaiKhoanKhachHang.run()
+def SS_BaoCaoDoiChieuSoDuTaiKhoanKhachHang():
+    from automation.trading_service.thanhtoanbutru import BaoCaoDoiChieuSoDuTaiKhoanKhachHang
+    BaoCaoDoiChieuSoDuTaiKhoanKhachHang.run(dt.datetime.now()-dt.timedelta(days=1))
 
 @TaskMonitor
-def imp_BaoCaoDoiChieuTTBTTienMuaBanChungKhoan():
-    BaoCaoDoiChieuTTBTTienMuaBanChungKhoan.run()
+def SS_BaoCaoDoiChieuTTBTTienMuaBanChungKhoan():
+    from automation.trading_service.thanhtoanbutru import BaoCaoDoiChieuTTBTTienMuaBanChungKhoan
+    BaoCaoDoiChieuTTBTTienMuaBanChungKhoan.run(dt.datetime.now()-dt.timedelta(days=1))
 
 @TaskMonitor
-def imp_BaoCaoDoiChieuUTTB():
-    BaoCaoDoiChieuUTTB.run()
+def SS_BaoCaoDoiChieuUTTB():
+    from automation.trading_service.thanhtoanbutru import BaoCaoDoiChieuUTTB
+    BaoCaoDoiChieuUTTB.run(dt.datetime.now()-dt.timedelta(days=1))
 
 @TaskMonitor
-def imp_BaoCaoDoiChieuVaImportEIB():
+def SS_BaoCaoDoiChieuVaImportEIB():
+    from automation.trading_service.thanhtoanbutru import BaoCaoDoiChieuVaImportEIB
     BaoCaoDoiChieuVaImportEIB.run()
 
 @TaskMonitor
-def imp_BaoCaoDoiChieuVaImportOCB():
+def SS_BaoCaoDoiChieuVaImportOCB():
+    from automation.trading_service.thanhtoanbutru import BaoCaoDoiChieuVaImportOCB
     BaoCaoDoiChieuVaImportOCB.run()
 
 @TaskMonitor
-def imp_BaoCaoDuLieuGuiKiemToan():
+def SS_BaoCaoDuLieuGuiKiemToan():
+    from automation.trading_service.thanhtoanbutru import BaoCaoDuLieuGuiKiemToan
     BaoCaoDuLieuGuiKiemToan.run()
 
 @TaskMonitor
-def imp_BaoCaoFileGhiAmGuiKSNB():
+def SS_BaoCaoFileGhiAmGuiKSNB():
+    from automation.trading_service.thanhtoanbutru import BaoCaoFileGhiAmGuiKSNB
     BaoCaoFileGhiAmGuiKSNB.run()
 
 @TaskMonitor
-def imp_BaoCaoFileImportTKNganHangBuoiSang():
-    BaoCaoFileImportTKNganHangBuoiSang.run()
+def SS_BaoCaoFileImportTKNganHangBuoiSang():
+    from automation.trading_service.thanhtoanbutru import BaoCaoFileImportTKNganHangBuoiSang
+    BaoCaoFileImportTKNganHangBuoiSang.run(dt.datetime.now()-dt.timedelta(days=1))
 
 @TaskMonitor
-def imp_BaoCaoKHNNCoSoDuNho():
-    BaoCaoKHNNCoSoDuNho.run()
+def SS_BaoCaoKHNNCoSoDuNho():
+    from automation.trading_service.thanhtoanbutru import BaoCaoKHNNCoSoDuNho
+    BaoCaoKHNNCoSoDuNho.run(dt.datetime.now()-dt.timedelta(days=1))
 
 @TaskMonitor
-def imp_BaoCaoPhatSinhGiaoDichTien():
-    BaoCaoPhatSinhGiaoDichTien.run()
+def SS_BaoCaoPhatSinhGiaoDichTien():
+    from automation.trading_service.thanhtoanbutru import BaoCaoPhatSinhGiaoDichTien
+    BaoCaoPhatSinhGiaoDichTien.run(dt.datetime.now()-dt.timedelta(days=1))
 
 @TaskMonitor
-def imp_BaoCaoPSTheoDoiTKKHCanChuyenTienTuVSDVeTKGD():
-    BaoCaoPSTheoDoiTKKHCanChuyenTienTuVSDVeTKGD.run()
+def SS_BaoCaoPSTheoDoiTKKHCanChuyenTienTuVSDVeTKGD():
+    from automation.trading_service.thanhtoanbutru import BaoCaoPSTheoDoiTKKHCanChuyenTienTuVSDVeTKGD
+    BaoCaoPSTheoDoiTKKHCanChuyenTienTuVSDVeTKGD.run(dt.datetime.now()-dt.timedelta(days=1))
 
 @TaskMonitor
-def imp_BaoCaoReviewKHVIPCoSo():
+def SS_BaoCaoReviewKHVIPCoSo():
+    from automation.trading_service.thanhtoanbutru import BaoCaoReviewKHVIPCoSo
     BaoCaoReviewKHVIPCoSo.run()
 
 @TaskMonitor
-def imp_BaoCaoSoDuTienKyQuyPhaiSinh():
+def SS_BaoCaoSoDuTienKyQuyPhaiSinh():
+    from automation.trading_service.thanhtoanbutru import BaoCaoSoDuTienKyQuyPhaiSinh
     BaoCaoSoDuTienKyQuyPhaiSinh.run()
 
 @TaskMonitor
-def imp_BaoCaoSoLieuThongKeDVTC():
+def SS_BaoCaoSoLieuThongKeDVTC():
+    from automation.trading_service.thanhtoanbutru import BaoCaoSoLieuThongKeDVTC
     BaoCaoSoLieuThongKeDVTC.run()
 
 @TaskMonitor
-def imp_BaoCaoUngTienROS():
+def SS_BaoCaoUngTienROS():
+    from automation.trading_service.thanhtoanbutru import BaoCaoUngTienROS
     BaoCaoUngTienROS.run()
 
 @TaskMonitor
-def imp_BaoCaoXacNhanNopRutEIBOCB():
-    BaoCaoXacNhanNopRutEIBOCB.run()
+def SS_BaoCaoXacNhanNopRutEIBOCB_p1():
+    from automation.trading_service.thanhtoanbutru import BaoCaoXacNhanNopRutEIBOCB_p1
+    BaoCaoXacNhanNopRutEIBOCB_p1.run(dt.datetime.now()-dt.timedelta(days=1))
 
 @TaskMonitor
-def imp_DanhSachKHVIPCoSo():
-    DanhSachKHVIPCoSo.run()
+def SS_BaoCaoXacNhanNopRutEIBOCB_p2():
+    from automation.trading_service.thanhtoanbutru import BaoCaoXacNhanNopRutEIBOCB_p2
+    BaoCaoXacNhanNopRutEIBOCB_p2.run()
 
 @TaskMonitor
-def imp_DanhSachKHVIPPhaiSinh():
-    DanhSachKHVIPPhaiSinh.run()
+def SS_DanhSachKHVIPCoSo():
+    from automation.trading_service.thanhtoanbutru import DanhSachKHVIPCoSo
+    DanhSachKHVIPCoSo.run(dt.datetime.now()-dt.timedelta(days=1))
+
+@TaskMonitor
+def SS_DanhSachKHVIPPhaiSinh():
+    from automation.trading_service.thanhtoanbutru import DanhSachKHVIPPhaiSinh
+    DanhSachKHVIPPhaiSinh.run(dt.datetime.now()-dt.timedelta(days=1))
 
 
 """
 Cần viết tool email báo có chênh lệch trong các BC đối chiếu 
-(as decorators that wrap functions from reporting package)
+(as decorators that wrap functions from automation package)
 """

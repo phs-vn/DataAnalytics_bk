@@ -4,7 +4,7 @@ from implementation import TaskMonitor
 
 
 @TaskMonitor
-def run_5pct(  # run on Wed and Fri weekly
+def BreakevenPrice_5pct(  # run on Wed and Fri weekly
     tickers: list = None,
     exchanges: list = None,
 ) \
@@ -76,7 +76,7 @@ def run_5pct(  # run on Wed and Fri weekly
 
 
 @TaskMonitor
-def run_2pct(  # weekly run as requested by RMD
+def BreakevenPrice_2pct(  # weekly run as requested by RMD
     tickers: list = None,
     exchanges: list = None,
 ) \

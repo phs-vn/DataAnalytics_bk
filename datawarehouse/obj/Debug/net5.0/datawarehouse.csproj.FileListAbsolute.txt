@@ -1,0 +1,5 @@
+C:\Users\hiepdang\PycharmProjects\DataAnalytics\datawarehouse\obj\Debug\net5.0\datawarehouse.csprojAssemblyReference.cache
+C:\Users\hiepdang\PycharmProjects\DataAnalytics\datawarehouse\obj\Debug\net5.0\datawarehouse.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\hiepdang\PycharmProjects\DataAnalytics\datawarehouse\obj\Debug\net5.0\datawarehouse.AssemblyInfoInputs.cache
+C:\Users\hiepdang\PycharmProjects\DataAnalytics\datawarehouse\obj\Debug\net5.0\datawarehouse.AssemblyInfo.cs
+C:\Users\hiepdang\PycharmProjects\DataAnalytics\datawarehouse\obj\Debug\net5.0\datawarehouse.csproj.CoreCompileInputs.cache

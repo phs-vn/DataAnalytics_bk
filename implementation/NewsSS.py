@@ -4,7 +4,7 @@ from news_collector import newsts
 
 
 @TaskMonitor
-def run(num_hours: int = 48):
+def NewsSS(num_hours: int = 48):
     """
     This method runs all functions in module news_collector.newsts (try till success)
     and exports all resulted DataFrames to a single excel file in the specified folder

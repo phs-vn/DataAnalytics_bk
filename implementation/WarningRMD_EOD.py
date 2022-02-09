@@ -1,3 +1,4 @@
+from implementation import TaskMonitor
 from request.stock import *
 from warning import warning_RMD_EOD
 
@@ -55,10 +56,10 @@ def send_mail(func):
 
     return wrapper
 
-
+@TaskMonitor
 @send_mail
 @get_html
-def run():
+def WarningRMD_EOD():
     # consecutively scan on 2 exchanges
     hose_table = warning_RMD_EOD.run(True,'HOSE','all')
     hnx_table = warning_RMD_EOD.run(True,'HNX','all')

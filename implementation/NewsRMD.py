@@ -4,7 +4,7 @@ from news_collector import newsrmd
 
 
 @TaskMonitor
-def run():
+def NewsRMD():
     """
     This method runs all functions in module news_collector.newsrmd (try till success)
     and exports all resulted DataFrames to a single excel file in the specified folder
