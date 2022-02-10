@@ -47,7 +47,8 @@ def run(
         LEFT JOIN [account]
             ON [relationship].[account_code] = [account].[account_code]
         WHERE 
-            [money_in_out_transfer].[bank] IN ('EIB','OCB')
+            ([money_in_out_transfer].[bank] IN ('EIB','OCB') OR [money_in_out_transfer].[bank] IS NULL) 
+            -- cac TK ngat lien ket NH se bi NULL tren he thong
         AND
             [money_in_out_transfer].[transaction_id] IN ('6692','6693')
         AND 
@@ -58,6 +59,11 @@ def run(
         """,
         connect_DWH_CoSo
     )
+
+    # Tìm ngân hàng liên kết cuối cùng trước khi ngắt liên kết
+    missing_bank_mask = nop_rut_table['bank'].isna()
+    nop_rut_table.loc[missing_bank_mask,'bank'] = nop_rut_table.loc[missing_bank_mask,'account_code'].map(get_bank_name)
+
     # chia theo 2 bank
     nop_rut_eib = nop_rut_table.loc[nop_rut_table['bank']=='EIB'].copy()
     nop_rut_eib['NopTien'] = nop_rut_eib.loc[nop_rut_eib['transaction_id']=='6692','amount']

@@ -231,7 +231,8 @@ def run(
             FROM
                 [c]
             WHERE
-                [c].[transaction_id] = '1153' AND [c].[date] = 't0' AND [c].[remark] LIKE N'%UTTB%GD {t0_wildcard}%'
+                [c].[transaction_id] = '1153' AND [c].[date] = 't0' 
+                AND ([c].[remark] LIKE N'%UTTB%GD {t0_wildcard}%' OR [c].[remark] LIKE N'%UTTB%GD {t1_wildcard}%')
             GROUP BY
                 [c].[sub_account]
         ) [d_t0]
@@ -457,12 +458,12 @@ def run(
         'Thuế Cổ Tức'
     ]
     sub_headers_2 = [
-        'Số tiền UTTB KH đã nhận ngày T-2',
-        'Phí UTTB ngày T-2',
-        'Số tiền UTTB KH đã nhận ngày T-1',
-        'Phí UTTB ngày T-1',
-        'Số tiền UTTB KH đã nhận ngày T0',
-        'Phí UTTB ngày T0'
+        'Số tiền UTTB KH đã nhận của ngày T-2',
+        'Phí UTTB của ngày T-2',
+        'Số tiền UTTB KH đã nhận của ngày T-1',
+        'Phí UTTB của ngày T-1',
+        'Số tiền UTTB KH đã nhận của ngày T0 và T-1',
+        'Phí UTTB của ngày T0 và T-1'
     ]
     worksheet.write_row('E11',sub_headers_1*3,headers_format)
     worksheet.write_row('S11',sub_headers_2,headers_format)

@@ -268,6 +268,16 @@ def run(
             'text_wrap':True
         }
     )
+    sheet_subtitle_format = workbook.add_format(
+        {
+            'bold':True,
+            'align':'center',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman',
+            'text_wrap':True
+        }
+    )
     from_to_format = workbook.add_format(
         {
             'italic':True,
@@ -375,7 +385,8 @@ def run(
         'Phí',
         'Thuế',
     ]
-    sheet_title_name = 'BÁO CÁO ĐỐI CHIẾU THANH TOÁN BÙ TRỪ TIỀN MUA BÁN CHỨNG KHOÁN'
+    sheet_title_name = 'BÁO CÁO ĐỐI CHIẾU THANH TOÁN BÙ TRỪ TIỀN MUA BÁN CHỨNG KHOÁN TẠI PHS'
+    sheet_subtitle_name = '(KHÔNG BAO GỒM CÁC TK LƯU KÝ NƠI KHÁC)'
     sub_title_date = dt.datetime.strptime(t0_date,"%Y-%m-%d").strftime("%d/%m/%Y")
     sub_title_name = f'Từ ngày {sub_title_date} đến {sub_title_date}'
 
@@ -392,7 +403,8 @@ def run(
     worksheet.merge_range('C1:I1',CompanyName.upper(),company_name_format)
     worksheet.merge_range('C2:I2',CompanyAddress,company_info_format)
     worksheet.merge_range('C3:I3',CompanyPhoneNumber,company_info_format)
-    worksheet.merge_range('A7:P7',sheet_title_name,sheet_title_format)
+    worksheet.merge_range('A6:P6',sheet_title_name,sheet_title_format)
+    worksheet.merge_range('A7:P7',sheet_subtitle_name,sheet_subtitle_format)
     worksheet.merge_range('A8:P8',sub_title_name,from_to_format)
     for col,header in zip(range(len(headers)-3),headers[:-3]):
         worksheet.merge_range(9,col,10,col,header,headers_format)

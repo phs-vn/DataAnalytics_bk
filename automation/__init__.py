@@ -47,3 +47,46 @@ def listen_batch_job(
             break
         else:
             time.sleep(wait_time)
+
+
+def get_bank_name(x):
+
+    """
+    Tìm tên ngân hàng liên kết cuối cùng
+
+    :param x: là account_code hoặc sub_account
+    """
+
+    # xuất hiện chữ cái trong x -> là account_code, không thì sub_account
+    if any([x[i] in 'QWERTYUIOPASDFGHJKLZXCVBNM' for i in range(len(x))]):
+        result = pd.read_sql(
+            f"""
+            SELECT TOP 1 [vcf0051].[bank_name] 
+            FROM [vcf0051] 
+            WHERE [vcf0051].[sub_account] IN (
+                SELECT [sub_account] FROM [sub_account]
+                WHERE [sub_account].[account_code] = '{x}'
+            )
+            AND [bank_name] <> N'---' 
+            ORDER BY [date] DESC
+            """,
+            connect_DWH_CoSo
+        )
+    else:
+        result = pd.read_sql(
+            f"""
+            SELECT TOP 1 [vcf0051].[bank_name] 
+            FROM [vcf0051] 
+            WHERE [vcf0051].[sub_account] = '{x}'
+            AND [bank_name] <> N'---' 
+            ORDER BY [date] DESC
+            """,
+            connect_DWH_CoSo
+        )
+
+    if result.empty:
+        result = 'Không tìm thấy NH liên kết trên VCF0051'
+    else:
+        result = result.squeeze()
+
+    return result

@@ -60,7 +60,7 @@ def run(
         ),
         [interest_actu] AS (
             SELECT
-                [rcf0011].[date],
+	            MAX([rcf0011].[date]) [date],
                 [rcf0011].[sub_account],
                 SUM(ISNULL([rcf0011].[interest],0)) [interest_actu]
             FROM
@@ -68,11 +68,11 @@ def run(
             WHERE
                 [rcf0011].[date] BETWEEN '{start_date}' AND '{t0_date}'
             GROUP BY
-                [rcf0011].[date], [rcf0011].[sub_account]
+                [rcf0011].[sub_account]
         ),
         [interest_paid] AS (
             SELECT
-                [cash_balance].[date],
+	            MAX([cash_balance].[date]) [date],
                 [cash_balance].[sub_account],
                 SUM(ISNULL([cash_balance].[increase],0)) [interest_paid]
             FROM
@@ -82,7 +82,7 @@ def run(
             AND
                 [cash_balance].[date] BETWEEN '{start_date}' AND '{t0_date}'
             GROUP BY
-                [cash_balance].[date], [cash_balance].[sub_account]
+                [cash_balance].[sub_account]
         ),
         [balance] AS (
             SELECT

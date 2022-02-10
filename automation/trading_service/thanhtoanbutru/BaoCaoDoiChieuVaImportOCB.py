@@ -147,7 +147,8 @@ def run(
         WITH 
         [c] AS (
             SELECT
-                [cashflow_bank].[bank_account]
+                [cashflow_bank].[sub_account]
+                , [cashflow_bank].[bank_account]
                 , SUM([cashflow_bank].[outflow_amount]) [increase]
                 , SUM([cashflow_bank].[inflow_amount]) [decrease]
             FROM 
@@ -156,11 +157,13 @@ def run(
                 [cashflow_bank].[bank] = 'OCB'
                 AND [cashflow_bank].[date] = '{t0_date}'
             GROUP BY
+                [cashflow_bank].[sub_account], 
                 [cashflow_bank].[bank_account]
         )
         , [in] AS (
             SELECT
-                [money_in_out_transfer].[bank_account]
+                [money_in_out_transfer].[sub_account]
+                , [money_in_out_transfer].[bank_account]
                 , SUM([money_in_out_transfer].[amount]) [deposit]
             FROM 
                 [money_in_out_transfer]
@@ -168,12 +171,15 @@ def run(
                 [money_in_out_transfer].[transaction_id] = '6692'
                 AND [money_in_out_transfer].[date] = '{t0_date}'
                 AND [money_in_out_transfer].[bank] = 'OCB'
+                AND [money_in_out_transfer].[status] = N'Hoàn tất'
             GROUP BY
+                [money_in_out_transfer].[sub_account], 
                 [money_in_out_transfer].[bank_account]
         )
         , [out] AS (
             SELECT
-                [money_in_out_transfer].[bank_account]
+                [money_in_out_transfer].[sub_account]
+                , [money_in_out_transfer].[bank_account]
                 , SUM([money_in_out_transfer].[amount]) [withdraw]
             FROM 
                 [money_in_out_transfer]
@@ -182,22 +188,34 @@ def run(
                 AND [money_in_out_transfer].[date] = '{t0_date}'
                 AND [money_in_out_transfer].[bank] = 'OCB'
             GROUP BY
+                [money_in_out_transfer].[sub_account], 
                 [money_in_out_transfer].[bank_account]
         )
         , [import] AS (
             SELECT 
-                [imported_bank_balance].[bank_account]
+                [vcf0051].[sub_account]
+                , [imported_bank_balance].[bank_account]
                 , [imported_bank_balance].[account_name]
                 , [imported_bank_balance].[balance] [o_balance]
             FROM 
                 [imported_bank_balance]
+            LEFT JOIN [vcf0051]
+                ON [vcf0051].[date] = [imported_bank_balance].[date]
+                AND [vcf0051].[bank_account] = [imported_bank_balance].[bank_account]
             WHERE 
                 [imported_bank_balance].[effective_date] = '{t0_date}'
                 AND [imported_bank_balance].[bank_code] = 'OCB'
+                AND [imported_bank_balance].[status] = 1
         )
         , [table] AS (
             SELECT
-                'OCB' [bank]
+                COALESCE (
+                    [c].[sub_account],
+                    [in].[sub_account],
+                    [out].[sub_account],
+                    [import].[sub_account]
+                    ) [sub_account]
+                , 'OCB' [bank]
                 , COALESCE (
                     [import].[bank_account],
                     [c].[bank_account],
@@ -223,7 +241,8 @@ def run(
             FULL JOIN [out] ON [out].[bank_account] = [import].[bank_account]
         )
         SELECT 
-            [table].[bank]
+            [sub_account].[account_code]
+            , [table].[bank]
             , [table].[bank_account]
             , [table].[account_name]
             , SUM([table].[o_balance]) [o_balance]
@@ -234,8 +253,10 @@ def run(
             , SUM([table].[e_balance]) [e_balance]
         FROM
             [table]
+        LEFT JOIN [sub_account]
+            ON [table].[sub_account] = [sub_account].[sub_account]
         GROUP BY
-            [bank], [bank_account], [account_name]
+            [account_code], [bank], [bank_account], [account_name]
         -- Do bị NULL trên cột KEY của các bảng -> phải làm COALESCE -> phải thêm bước GROUP BY
         """,
         connect_DWH_CoSo,
@@ -346,6 +367,17 @@ def run(
             'text_wrap':True,
         }
     )
+    text_subtotal_format = workbook.add_format(
+        {
+            'bold':True,
+            'border':1,
+            'align':'center',
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':10,
+            'text_wrap':True,
+        }
+    )
     num_cell_format = workbook.add_format(
         {
             'border':1,
@@ -367,15 +399,29 @@ def run(
             'text_wrap':True,
         }
     )
+    num_subtotal_format = workbook.add_format(
+        {
+            'bold':True,
+            'border':1,
+            'valign':'vcenter',
+            'font_name':'Times New Roman',
+            'font_size':10,
+            'num_format':'_(* #,##0_);_(* (#,##0);_(* "-"??_);_(@_)',
+            'text_wrap':True,
+        }
+    )
     worksheet = workbook.add_worksheet('Chênh Lệch')
     worksheet.hide_gridlines(option=2)
-    worksheet.set_column('A:A',11)
-    worksheet.set_column('B:B',18)
-    worksheet.set_column('C:C',35)
-    worksheet.set_column('D:K',15)
+    worksheet.set_column('A:A',13)
+    worksheet.set_column('B:B',11)
+    worksheet.set_column('C:C',18)
+    worksheet.set_column('D:D',35)
+    worksheet.set_column('E:E',15)
+    worksheet.set_column('F:L',13)
     worksheet.write_row(
         'A1',
         [
+            'ACCOUNT CODE',
             'NGÂN HÀNG',
             'TÀI KHOẢN',
             'TÊN KHÁCH HÀNG',
@@ -390,17 +436,25 @@ def run(
         ],
         header_format
     )
-    worksheet.write_column('A2',file_check['bank'],text_cell_format)
-    worksheet.write_column('B2',file_check['bank_account'],text_cell_format)
-    worksheet.write_column('C2',file_check['account_name'],text_cell_format)
-    worksheet.write_column('D2',file_check['o_balance'],num_cell_format)
-    worksheet.write_column('E2',file_check['increase'],num_cell_format)
-    worksheet.write_column('F2',file_check['decrease'],num_cell_format)
-    worksheet.write_column('G2',file_check['deposit'],num_cell_format)
-    worksheet.write_column('H2',file_check['withdraw'],num_cell_format)
-    worksheet.write_column('I2',file_check['e_balance'],num_cell_format)
-    worksheet.write_column('J2',file_check['s_balance'],num_cell_format)
-    worksheet.write_column('K2',file_check['diff'],diff_cell_format)
+    worksheet.write_column('A2',file_check['account_code'],text_cell_format)
+    worksheet.write_column('B2',file_check['bank'],text_cell_format)
+    worksheet.write_column('C2',file_check['bank_account'],text_cell_format)
+    worksheet.write_column('D2',file_check['account_name'],text_cell_format)
+    worksheet.write_column('E2',file_check['o_balance'],num_cell_format)
+    worksheet.write_column('F2',file_check['increase'],num_cell_format)
+    worksheet.write_column('G2',file_check['decrease'],num_cell_format)
+    worksheet.write_column('H2',file_check['deposit'],num_cell_format)
+    worksheet.write_column('I2',file_check['withdraw'],num_cell_format)
+    worksheet.write_column('J2',file_check['e_balance'],num_cell_format)
+    worksheet.write_column('K2',file_check['s_balance'],num_cell_format)
+    worksheet.write_column('L2',file_check['diff'],diff_cell_format)
+
+    # Subtotal row
+    subtotal_row = file_check.shape[0]+2
+    worksheet.merge_range(f'A{subtotal_row}:D{subtotal_row}','Subtotal',text_subtotal_format)
+    for col in 'EFGHIJKL':
+        value = f'=SUBTOTAL(9,{col}2:{col}{subtotal_row-1})'
+        worksheet.write(f'{col}{subtotal_row}',value,num_subtotal_format)
 
     writer.close()
 
@@ -470,6 +524,17 @@ def run(
             'text_wrap':True,
         }
     )
+    num_subtotal_format = workbook.add_format(
+        {
+            'bold':True,
+            'align':'right',
+            'valign':'vcenter',
+            'font_name':'Calibri',
+            'font_size':11,
+            'num_format':'_-* #,##0_-;-* #,##0_-;_-* "-"??_-;_-@_-',
+            'text_wrap':True,
+        }
+    )
     worksheet = workbook.add_worksheet('Sheet 1')
     worksheet.hide_gridlines(option=2)
     worksheet.set_column('A:A',6)
@@ -477,18 +542,19 @@ def run(
     worksheet.set_column('E:E',18)
     worksheet.set_column('F:F',32)
     worksheet.set_column('G:G',20)
+    worksheet.write('G1',f'=SUBTOTAL(9,G3:G{file_import.shape[0]+2})',num_subtotal_format)
     worksheet.write_row(
-        'A1',
+        'A2',
         ['STT','TXDATE','BANK','BANKCODE','ACCOUNT','ACCOUNT NAME','BALANCE'],
         header_format
     )
-    worksheet.write_column('A2',file_import['STT'],text_center_format)
-    worksheet.write_column('B2',file_import['TXDATE'],date_format)
-    worksheet.write_column('C2',file_import['EFFECTIVEDATE'],date_format)
-    worksheet.write_column('D2',file_import['BANKCODE'],text_left_format)
-    worksheet.write_column('E2',file_import['ACCOUNT'],text_center_format)
-    worksheet.write_column('F2',file_import['ACCOUNT NAME'],text_left_format)
-    worksheet.write_column('G2',file_import['BALANCE'],num_cell_format)
+    worksheet.write_column('A3',file_import['STT'],text_center_format)
+    worksheet.write_column('B3',file_import['TXDATE'],date_format)
+    worksheet.write_column('C3',file_import['EFFECTIVEDATE'],date_format)
+    worksheet.write_column('D3',file_import['BANKCODE'],text_left_format)
+    worksheet.write_column('E3',file_import['ACCOUNT'],text_center_format)
+    worksheet.write_column('F3',file_import['ACCOUNT NAME'],text_left_format)
+    worksheet.write_column('G3',file_import['BALANCE'],num_cell_format)
 
     writer.close()
 

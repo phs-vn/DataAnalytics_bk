@@ -104,7 +104,7 @@ def SS_BaoCaoFileGhiAmGuiKSNB():
 @TaskMonitor
 def SS_BaoCaoFileImportTKNganHangBuoiSang():
     from automation.trading_service.thanhtoanbutru import BaoCaoFileImportTKNganHangBuoiSang
-    BaoCaoFileImportTKNganHangBuoiSang.run(dt.datetime.now()-dt.timedelta(days=1))
+    BaoCaoFileImportTKNganHangBuoiSang.run()
 
 @TaskMonitor
 def SS_BaoCaoKHNNCoSoDuNho():

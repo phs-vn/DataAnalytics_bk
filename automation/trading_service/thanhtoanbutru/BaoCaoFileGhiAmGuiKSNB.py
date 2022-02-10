@@ -105,19 +105,9 @@ def run(  # BC thang
     )
     table = pd.concat([ksnb_6692_6693_query,ksnb_1187_query])
 
-    def fill_bank_name(sub_account):
-        return pd.read_sql(
-            f"""
-            SELECT TOP 1 [vcf0051].[bank_name] 
-            FROM [vcf0051] 
-            WHERE [vcf0051].[sub_account] = '{sub_account}'
-            AND [bank_name] <> N'---' 
-            ORDER BY [date] DESC
-            """,
-            connect_DWH_CoSo
-        ).squeeze()
-
-    table.loc[table['bank'].isna(),'bank'] = table.loc[table['bank'].isna(),'sub_account'].map(fill_bank_name)
+    # Tìm ngân hàng liên kết cuối cùng trước khi ngắt liên kết
+    missing_bank_mask = table['bank'].isna()
+    table.loc[missing_bank_mask,'bank'] = table.loc[missing_bank_mask,'sub_account'].map(get_bank_name)
     table = table.drop('sub_account',axis=1)
 
     ###################################################
