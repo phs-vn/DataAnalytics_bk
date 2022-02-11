@@ -51,7 +51,7 @@
 
 """
 
-from automation.trading_service.thanhtoanbutru import *
+from reporting.trading_service.thanhtoanbutru import *
 
 
 # DONE
@@ -398,7 +398,7 @@ def run(
     worksheet.set_column('J:K',15)
     worksheet.set_column('L:L',9)
     worksheet.set_column('M:P',18)
-    worksheet.set_column('Q:Q',23)
+    worksheet.set_column('Q:Q',24)
     worksheet.set_column('R:R',19)
 
     worksheet.set_row(1,25.5)
@@ -446,7 +446,7 @@ def run(
     worksheet.write_column('N7',['']*table.shape[0],text_left_format)
     worksheet.write_column('O7',['']*table.shape[0],text_left_format)
     worksheet.write_column('P7',['']*table.shape[0],text_left_format)
-    worksheet.write_column('Q7',table['broker_name'],text_left_format)
+    worksheet.write_column('Q7',table['broker_name'],text_left_wrap_text_format)
     worksheet.write_column('R7',['']*table.shape[0],text_left_format)
     start_row = table.shape[0]+9
     footer = f'Effective: Promoted accounts be applied from ......./......./{year} ' \

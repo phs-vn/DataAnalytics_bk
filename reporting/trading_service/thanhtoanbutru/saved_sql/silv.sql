@@ -1,4 +1,13 @@
 WITH 
+[x] AS (
+	SELECT [sub_account].[sub_account] FROM (
+		SELECT [account_code] FROM [sub_account] [full]
+		JOIN [vcf0051] ON [full].[sub_account] = [vcf0051].[sub_account]
+		AND [vcf0051].[contract_type] LIKE '%SILV%'
+		AND [vcf0051].[date] = '2021-12-31'
+	) [acc]
+	JOIN [sub_account] ON [sub_account].[account_code] = [acc].[account_code]
+),
 [i] AS (
 	SELECT 
 		[relationship].[sub_account],
@@ -38,9 +47,11 @@ WITH
 	LEFT JOIN
 		[broker]
 		ON [relationship].[broker_id] = [broker].[broker_id]
+	RIGHT JOIN 
+		[x]
+		ON [x].[sub_account] = [relationship].[sub_account]
 	WHERE [relationship].[date] = '__input__[1]' 
 		AND [vcf0051].[status] IN ('A','B')
-		AND [vcf0051].[contract_type] LIKE '%SILV%'
 		AND DATEDIFF(day,[c].[approve_date],'__input__[1]') > 30
 ),
 [t] AS (
@@ -149,30 +160,32 @@ WITH
 	GROUP BY
 		[sum].[account_code]
 )
-SELECT 
-	[all].[account_code],
-	[all].[customer_name],
-	[all].[branch_name],
-	[all].[approve_date],
-	20000000 [criteria_fee],
-	[all].[fee],
-	[all].[fee] / 20000000 [pct_fee],
-	[all].[nav],
-	'SILV PHS' [level],
-	CASE 
-		WHEN [all].[fee] >= 40000000 THEN 'Promote GOLD PHS'
-		WHEN [all].[fee] < 40000000 AND [all].[fee] >= 20000000 THEN 'SILV PHS'
-		WHEN [all].[fee] < 20000000 AND [all].[fee] / 20000000 >= 0.8 AND [all].[nav] > 2000000000 THEN 'SILV PHS'
-	ELSE
-		'Demote DP'
-	END [after_review],
-	REPLACE([all].[contract_type],' ','') [rate],
-	[all].[broker_name]
-FROM (
-	SELECT
-		[silv].*,
-		[anav].[nav]
-	FROM [silv]
-	LEFT JOIN [anav] ON [anav].[account_code] = [silv].[account_code]
-) [all]
-
+SELECT * FROM (
+	SELECT 
+		[all].[account_code],
+		[all].[customer_name],
+		[all].[branch_name],
+		[all].[approve_date],
+		20000000 [criteria_fee],
+		[all].[fee],
+		[all].[fee] / 20000000 [pct_fee],
+		[all].[nav],
+		'SILV PHS' [level],
+		CASE 
+			WHEN [all].[fee] >= 40000000 THEN 'Promote GOLD PHS'
+			WHEN [all].[fee] < 40000000 AND [all].[fee] >= 20000000 THEN 'SILV PHS'
+			WHEN [all].[fee] < 20000000 AND [all].[fee] / 20000000 >= 0.8 AND [all].[nav] > 2000000000 THEN 'SILV PHS'
+		ELSE
+			'Demote DP'
+		END [after_review],
+		REPLACE([all].[contract_type],' ','') [rate],
+		[all].[broker_name]
+	FROM (
+		SELECT
+			[silv].*,
+			[anav].[nav]
+		FROM [silv]
+		LEFT JOIN [anav] ON [anav].[account_code] = [silv].[account_code]
+	) [all]
+) [final]
+WHERE [final].[rate] LIKE '%SILV%'
