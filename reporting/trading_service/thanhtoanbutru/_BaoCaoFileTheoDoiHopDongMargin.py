@@ -1,4 +1,4 @@
-from reporting.trading_service.thanhtoanbutru import *
+from automation.trading_service.thanhtoanbutru import *
 
 
 # con thieu doc data tu intranet, dang lech so, lay theo approve date khong phai open_date

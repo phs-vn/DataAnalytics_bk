@@ -211,7 +211,6 @@ def run(
     worksheet.hide_gridlines(option=2)
 
     sum_start_row = table.shape[0]+6
-    total_doanh_thu = table['fee_phs'].sum()
 
     # Set Column Width and Row Height
     worksheet.set_column('A:A',8)
@@ -230,7 +229,7 @@ def run(
     worksheet.write_column('C6',table['customer_name'],text_left_format)
     worksheet.write_column('D6',table['fee_phs'],money_format)
     worksheet.merge_range(f'A{sum_start_row}:C{sum_start_row}','Total',total_format)
-    worksheet.write(f'D{sum_start_row}',total_doanh_thu,total_money_format)
+    worksheet.write(f'D{sum_start_row}', f'=SUBTOTAL(9,D6:D{sum_start_row - 1})', total_money_format)
 
     ###########################################################################
     ###########################################################################

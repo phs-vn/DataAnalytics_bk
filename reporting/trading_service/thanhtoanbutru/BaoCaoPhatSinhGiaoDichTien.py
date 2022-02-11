@@ -288,14 +288,15 @@ def run(
     sum_row = table.shape[0]+12
     worksheet.merge_range(f'A{sum_row}:G{sum_row}','Cộng phát sinh',num_bold_format)
     worksheet.merge_range(f'A{sum_row+1}:G{sum_row+1}','Số dư tiền cuối kỳ',num_bold_format)
-    calc_increase_decrease = table['increase'].sum()-table['decrease'].sum()
+
+    for col in 'HI':
+        worksheet.write(f'{col}{sum_row}', f'=SUBTOTAL(9,{col}12:{col}{sum_row - 1})', num_bold_format)
+
     worksheet.merge_range(
         f'H{sum_row+1}:I{sum_row+1}',
-        opening_balance+calc_increase_decrease,
+        f'={opening_balance} + (SUBTOTAL(9,H12:H{sum_row - 1}) - SUBTOTAL(9,I12:I{sum_row - 1}))',
         num_bold_format
     )
-    worksheet.write(f'H{sum_row}',table['increase'].sum(),num_bold_format)
-    worksheet.write(f'I{sum_row}',table['decrease'].sum(),num_bold_format)
     worksheet.write(f'J{sum_row}','',empty_format)
     worksheet.write(f'K{sum_row}','',empty_format)
     worksheet.merge_range(f'J{sum_row+1}:K{sum_row+1}','',empty_format)

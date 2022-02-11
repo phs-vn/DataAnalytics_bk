@@ -268,6 +268,16 @@ def run(
             'text_wrap':True
         }
     )
+    sheet_subtitle_format = workbook.add_format(
+        {
+            'bold':True,
+            'align':'center',
+            'valign':'vcenter',
+            'font_size':10,
+            'font_name':'Times New Roman',
+            'text_wrap':True
+        }
+    )
     from_to_format = workbook.add_format(
         {
             'italic':True,
@@ -375,7 +385,8 @@ def run(
         'Phí',
         'Thuế',
     ]
-    sheet_title_name = 'BÁO CÁO ĐỐI CHIẾU THANH TOÁN BÙ TRỪ TIỀN MUA BÁN CHỨNG KHOÁN'
+    sheet_title_name = 'BÁO CÁO ĐỐI CHIẾU THANH TOÁN BÙ TRỪ TIỀN MUA BÁN CHỨNG KHOÁN TẠI PHS'
+    sheet_subtitle_name = '(KHÔNG BAO GỒM CÁC TK LƯU KÝ NƠI KHÁC)'
     sub_title_date = dt.datetime.strptime(t0_date,"%Y-%m-%d").strftime("%d/%m/%Y")
     sub_title_name = f'Từ ngày {sub_title_date} đến {sub_title_date}'
 
@@ -392,7 +403,8 @@ def run(
     worksheet.merge_range('C1:I1',CompanyName.upper(),company_name_format)
     worksheet.merge_range('C2:I2',CompanyAddress,company_info_format)
     worksheet.merge_range('C3:I3',CompanyPhoneNumber,company_info_format)
-    worksheet.merge_range('A7:P7',sheet_title_name,sheet_title_format)
+    worksheet.merge_range('A6:P6',sheet_title_name,sheet_title_format)
+    worksheet.merge_range('A7:P7',sheet_subtitle_name,sheet_subtitle_format)
     worksheet.merge_range('A8:P8',sub_title_name,from_to_format)
     for col,header in zip(range(len(headers)-3),headers[:-3]):
         worksheet.merge_range(9,col,10,col,header,headers_format)
@@ -441,15 +453,8 @@ def run(
     worksheet.write_column('O12',table['diff_fee'],money_format)
     worksheet.write_column('P12',table['diff_tax'],money_format)
     worksheet.write(f'D{footer_start_row+1}','Người lập',footer_text_format)
-    worksheet.write(f'H{sum_start_row}',table['value_order'].sum(),sum_money_format)
-    worksheet.write(f'I{sum_start_row}',table['fee_order'].sum(),sum_money_format)
-    worksheet.write(f'J{sum_start_row}',table['tax_order'].sum(),sum_money_format)
-    worksheet.write(f'K{sum_start_row}',table['value_cash'].sum(),sum_money_format)
-    worksheet.write(f'L{sum_start_row}',table['fee_cash'].sum(),sum_money_format)
-    worksheet.write(f'M{sum_start_row}',table['tax_cash'].sum(),sum_money_format)
-    worksheet.write(f'N{sum_start_row}',table['diff_value'].sum(),sum_money_format)
-    worksheet.write(f'O{sum_start_row}',table['diff_fee'].sum(),sum_money_format)
-    worksheet.write(f'P{sum_start_row}',table['diff_tax'].sum(),sum_money_format)
+    for col in 'HIJKLMNOP':
+        worksheet.write(f'{col}{sum_start_row}',f'=SUBTOTAL(9,{col}12:{col}{sum_start_row-1})',sum_money_format)
 
     ###########################################################################
     ###########################################################################

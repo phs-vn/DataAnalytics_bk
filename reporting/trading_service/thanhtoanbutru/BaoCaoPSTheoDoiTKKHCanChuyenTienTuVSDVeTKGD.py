@@ -1,4 +1,4 @@
-from reporting.trading_service.thanhtoanbutru import *
+from automation.trading_service.thanhtoanbutru import *
 
 
 def run(

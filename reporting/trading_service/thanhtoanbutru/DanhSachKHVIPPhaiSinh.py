@@ -71,27 +71,27 @@ def run(
                 [rdc0003].[approved_date]
             FROM [rdc0003] 
             WHERE [rdc0003].[field_name] = N'Loại hình'
-				AND [rdc0003].[date] <= '{t0_date}'
+            AND [rdc0003].[date] <= '{t0_date}'
         ) [rdc0003]
         ON
             [relationship].[account_code] = [rdc0003].[account_code]
-		LEFT JOIN (
-			SELECT
-				[320100_information].[sub_account],
-				[320100_information].[status_of_sub_account]
-			FROM
-				[320100_information]
-			WHERE
-				[320100_information].[date] = '{t0_date}'
-		) [i]
-		ON [t].[sub_account] = [i].[sub_account]
+        LEFT JOIN (
+            SELECT
+                [320100_information].[sub_account],
+                [320100_information].[status_of_sub_account]
+            FROM
+                [320100_information]
+            WHERE
+                [320100_information].[date] = '{t0_date}'
+        ) [i]
+        ON [t].[sub_account] = [i].[sub_account]
         WHERE (
             [t].[type] LIKE N'%GOLD%' 
             OR [t].[type] LIKE N'%SILV%' 
             OR [t].[type] LIKE N'%VIP%'
         )
-		AND [i].[status_of_sub_account] IN (N'Đang giao dịch',N'Phong tỏa tài khoản')
-		AND
+        AND [i].[status_of_sub_account] IN (N'Đang giao dịch',N'Phong tỏa tài khoản')
+        AND
             [t].[date] = '{t0_date}'
         ORDER BY
             [birth_month], [date_of_birth]
@@ -450,22 +450,10 @@ def run(
     branch_groupby_sheet.write_column('F2',note_col,note_format,)
     start_sum_row = branch_groupby_table.shape[0]+2
     branch_groupby_sheet.write(f'A{start_sum_row}','SUM',sum_title_format)
-    branch_groupby_sheet.write(
-        f'B{start_sum_row}',
-        branch_groupby_table['GOLD PHS'].sum(),
-        sum_format
-    )
-    branch_groupby_sheet.write(
-        f'C{start_sum_row}',
-        branch_groupby_table['SILV PHS'].sum(),
-        sum_format
-    )
-    branch_groupby_sheet.write(
-        f'D{start_sum_row}',
-        branch_groupby_table['VIP Branch'].sum(),
-        sum_format
-    )
-    branch_groupby_sheet.write(f'E{start_sum_row}',sum_row.values.sum(),sum_format)
+
+    for col in 'BCDE':
+        branch_groupby_sheet.write(f'{col}{start_sum_row}',f'=SUBTOTAL(9,{col}2:{col}{start_sum_row-1})',sum_format)
+
     branch_groupby_sheet.write(f'F{start_sum_row}','',sum_format)
 
     ###########################################################################

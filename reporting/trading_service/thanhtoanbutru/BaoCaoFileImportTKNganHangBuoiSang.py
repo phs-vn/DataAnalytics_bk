@@ -1,5 +1,4 @@
 from reporting.trading_service.thanhtoanbutru import *
-import reporting
 
 
 # DONE
@@ -17,7 +16,7 @@ def run(
     if not os.path.isdir(join(dept_folder,folder_name,period)):  # dept_folder from import
         os.mkdir(join(dept_folder,folder_name,period))
 
-    folder_path = r"C:\Users\hiepdang\Shared Folder\Trading Service\Report\ThanhToanBuTru\FileFromBanks"
+    folder_path = r"C:\Users\namtran\Share Folder\Trading Service\Report\ThanhToanBuTru\FileFromBanks"
     t1_date_str = t1_date.replace('-','.')
     eib_folder = join(folder_path,t1_date_str,'EIB')
     ocb_folder = join(folder_path,t1_date_str,'OCB')
@@ -77,7 +76,9 @@ def run(
         FROM 
             [imported_bank_balance] 
         WHERE 
-            [imported_bank_balance].[date] = '{t1_date}'
+            [imported_bank_balance].[effective_date] = '{t0_date}'
+        AND 
+            [imported_bank_balance].[status] = 1
         """,
         connect_DWH_CoSo,
         index_col=['bank','bank_account']
@@ -99,7 +100,7 @@ def run(
 
     table[['date','effective_date']] = table[['date','effective_date']].fillna(method='ffill')
     table[['flex_balance','bank_balance']] = table[['flex_balance','bank_balance']].fillna(0)
-    table['diff'] = table['flex_balance']-table['bank_balance']
+    table['diff'] = table['flex_balance'] - table['bank_balance']
     table.reset_index(inplace=True)
 
     # ----------------- Write file Import -----------------
