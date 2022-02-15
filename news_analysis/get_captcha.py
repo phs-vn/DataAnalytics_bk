@@ -8,6 +8,7 @@ class NoNewsFound(Exception):
 class PageFailToLoad(Exception):
     pass
 
+
 ignored_exceptions = (
     ValueError,
     IndexError,
@@ -40,6 +41,7 @@ def read_image(path):
 # img = r'D:\DataAnalytics\news_analysis\captcha_data\training_dataset_2\captcha_38.png'
 # read_image(img)
 
+
 # test get captcha, loc it based on condition and put it in the input box on web
 def run():
     i = 1
@@ -54,7 +56,7 @@ def run():
         check_1 = any(word in tool_ocr_result for word in error_word)
         check_2 = any(str(num) in tool_ocr_result for num in error_num)
         check_3 = any(char in tool_ocr_result for char in error_char)
-        check_4 = len(tool_ocr_result) > 6
+        check_4 = len(tool_ocr_result) != 6
         if check_1 | check_2 | check_3 | check_4:
             refr_btn = driver.find_element(
                 By.XPATH, '//*[@id="authform"]/div[2]/div[3]/div/button'
@@ -91,6 +93,3 @@ def crawl_captcha():
             break
 
     driver.close()
-
-
-
