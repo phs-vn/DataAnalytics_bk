@@ -5,8 +5,236 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="Hiep Dang 28/10/2021">
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/test_dataset/captcha_1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/test_dataset/captcha_2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/test_dataset/captcha_3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_10.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_100.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_101.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_102.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_103.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_104.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_11.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_12.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_13.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_14.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_15.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_16.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_17.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_18.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_19.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_20.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_21.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_22.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_23.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_24.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_25.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_26.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_27.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_28.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_29.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_3.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_30.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_31.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_32.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_33.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_34.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_35.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_36.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_37.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_38.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_39.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_4.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_40.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_41.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_42.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_43.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_44.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_45.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_46.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_47.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_48.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_49.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_5.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_50.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_51.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_52.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_53.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_54.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_55.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_56.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_57.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_58.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_59.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_6.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_60.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_61.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_62.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_63.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_64.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_65.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_66.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_67.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_68.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_69.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_7.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_70.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_71.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_72.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_73.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_74.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_75.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_76.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_77.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_78.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_79.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_8.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_80.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_81.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_82.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_83.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_84.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_85.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_86.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_87.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_88.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_89.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_9.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_90.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_91.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_92.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_93.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_94.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_95.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_96.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_97.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_98.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset/captcha_99.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_10.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_100.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_11.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_12.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_13.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_14.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_15.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_16.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_17.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_18.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_19.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_20.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_21.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_22.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_23.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_24.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_25.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_26.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_27.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_28.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_29.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_30.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_31.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_32.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_33.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_34.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_35.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_36.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_37.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_38.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_39.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_40.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_41.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_42.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_43.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_44.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_45.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_46.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_47.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_48.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_49.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_50.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_51.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_52.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_53.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_54.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_55.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_56.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_57.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_58.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_59.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_6.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_60.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_61.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_62.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_63.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_64.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_65.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_66.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_67.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_68.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_69.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_7.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_70.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_71.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_72.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_73.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_74.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_75.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_76.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_77.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_78.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_79.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_8.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_80.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_81.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_82.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_83.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_84.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_85.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_86.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_87.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_88.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_89.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_90.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_91.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_92.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_93.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_94.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_95.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_96.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_97.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_98.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/news_analysis/captcha_data/training_dataset_2/captcha_99.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoReviewKHVIPCoSo.py" beforeDir="false" afterPath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoReviewKHVIPCoSo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependency/chromedriver.exe" beforeDir="false" afterPath="$PROJECT_DIR$/dependency/chromedriver.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_10.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_11.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_12.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_13.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_14.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_15.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_16.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_17.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_18.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_19.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_20.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_6.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_7.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_8.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/captcha data/captcha_9.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/get_captcha.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_analysis/get_captcha.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/saved_sql/gold.sql" beforeDir="false" afterPath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/saved_sql/gold.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/saved_sql/silv.sql" beforeDir="false" afterPath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/saved_sql/silv.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/saved_sql/vipcn.sql" beforeDir="false" afterPath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/saved_sql/vipcn.sql" afterDir="false" />
@@ -80,7 +308,7 @@
       <recent name="C:\Users\hiepdang\PycharmProjects\datadriven-project\reporting_tool\trading_service\data_validation" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.BaoCaoReviewKHVIPCoSo">
+  <component name="RunManager" selected="Python.get_captcha">
     <configuration name="BaoCaoPhatSinhGiaoDichTien" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -106,24 +334,6 @@
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoReviewKHVIPCoSo.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="BaoCaoUngTienROS" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="DataAnalytics" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
@@ -132,7 +342,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoUngTienROS.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoReviewKHVIPCoSo.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -183,20 +393,38 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="get_captcha" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DataAnalytics" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/news_analysis" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/news_analysis/get_captcha.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.BaoCaoPhatSinhGiaoDichTien" />
-      <item itemvalue="Python.BaoCaoUngTienROS" />
       <item itemvalue="Python.DanhSachKHVIPCoSo" />
       <item itemvalue="Python.DanhSachKHVIPPhaiSinh" />
       <item itemvalue="Python.BaoCaoReviewKHVIPCoSo" />
+      <item itemvalue="Python.get_captcha" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.get_captcha" />
         <item itemvalue="Python.BaoCaoReviewKHVIPCoSo" />
         <item itemvalue="Python.BaoCaoPhatSinhGiaoDichTien" />
         <item itemvalue="Python.DanhSachKHVIPPhaiSinh" />
         <item itemvalue="Python.DanhSachKHVIPCoSo" />
-        <item itemvalue="Python.BaoCaoUngTienROS" />
       </list>
     </recent_temporary>
   </component>
@@ -397,16 +625,5 @@
     <MESSAGE value="Hiep Dang 08/10/2021" />
     <MESSAGE value="Hiep Dang 28/10/2021" />
     <option name="LAST_COMMIT_MESSAGE" value="Hiep Dang 28/10/2021" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/DanhSachKHVIPCoSo.py</url>
-          <line>79</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

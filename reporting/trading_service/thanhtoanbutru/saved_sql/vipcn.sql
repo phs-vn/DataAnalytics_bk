@@ -4,7 +4,7 @@ WITH
 		SELECT [account_code] FROM [sub_account] [full]
 		JOIN [vcf0051] ON [full].[sub_account] = [vcf0051].[sub_account]
 		AND [vcf0051].[contract_type] LIKE '%VIPCN%'
-		AND [vcf0051].[date] = '2021-12-31'
+		AND [vcf0051].[date] = '__input__[1]'
 	) [acc]
 	JOIN [sub_account] ON [sub_account].[account_code] = [acc].[account_code]
 ),
@@ -34,6 +34,7 @@ WITH
 		FROM [customer_information_change]
 		WHERE
 		    [customer_information_change].[date_of_approval] <= '__input__[1]'
+			AND [customer_information_change].[change_content] = 'Loai hinh hop dong'
 		GROUP BY
 			[customer_information_change].[account_code]
 	) [c]
