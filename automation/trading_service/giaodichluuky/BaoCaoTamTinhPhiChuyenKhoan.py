@@ -19,10 +19,14 @@ def run(
     # Phi chuyen khoan sang cong ty chung khoan khac xuat theo ngay mac dinh
     transfer_fee_CTCK = pd.read_sql(
         f"""
-        SELECT date, account_code, volume, creator
-        FROM deposit_withdraw_stock
-        WHERE date BETWEEN '{start_date}' AND '{end_date}'
-        AND creator NOT IN ('User Online trading')
+        SELECT 
+            [date], 
+            [account_code], 
+            [volume], 
+            [creator]
+        FROM [deposit_withdraw_stock]
+        WHERE [date] BETWEEN '{start_date}' AND '{end_date}'
+        AND [creator] NOT IN ('User Online trading')
         AND [transaction] = 'Chuyen CK'
         """,
         connect_DWH_CoSo,
@@ -38,17 +42,25 @@ def run(
             result = bdate(x,-2)
         return result
 
-    adj_start_date,adj_end_date = adjust_time(start_date),adjust_time(end_date)
+    """
+    Chỗ này rule lấy ngày ở GDLK không thực sự rõ ràng, có khả năng sai.
+    Tháng nào lấy ngày sai thì hardcode ngày đúng tại dòng ngay dưới
+    """
+
+    adj_start_date,adj_end_date = adjust_time(start_date),adjust_time(end_date) # thay đổi tại đây
     transfer_fee_TTBT = pd.read_sql(
         f"""
-        SELECT date, sub_account, ticker, volume
-        FROM trading_record
-        WHERE date BETWEEN '{adj_start_date}' AND '{adj_end_date}' 
-        AND type_of_order = 'S' 
-        AND depository_place = 'Tai PHS'
+        SELECT 
+            [date], 
+            [sub_account], 
+            [ticker], 
+            [volume]
+        FROM [trading_record]
+        WHERE [date] BETWEEN '{adj_start_date}' AND '{adj_end_date}' 
+        AND [type_of_order] = 'S' 
+        AND [depository_place] = 'Tai PHS'
         """,
         connect_DWH_CoSo,
-        index_col=['date','sub_account'],
     )
     relationship = pd.read_sql(
         f"""
@@ -86,7 +98,7 @@ def run(
     transfer_fee_CTCK = transfer_fee_CTCK.groupby('branch_id',as_index=True).sum()
     transfer_fee_CTCK = transfer_fee_CTCK.reindex(branch_name_mapper.keys()).fillna(0)
     # calculate transfer fee on TTBT
-    sum_volume = transfer_fee_TTBT.groupby(['date','ticker']).sum().squeeze().sort_index()
+    sum_volume = transfer_fee_TTBT.groupby(['date','ticker'])['volume'].sum().squeeze().sort_index()
     transfer_fee_TTBT = transfer_fee_TTBT.reset_index().set_index(['date','ticker'])
     transfer_fee_TTBT['sum_volume'] = sum_volume
     transfer_fee_TTBT.reset_index(inplace=True)
@@ -196,7 +208,14 @@ def run(
             'border':1,
         }
     )
+    datenote_format = workbook.add_format(
+        {
+            'font_name':'Times New Roman',
+            'italic': True,
+        }
+    )
     worksheet.merge_range('A1:D1',table_title,title_format)
+    worksheet.write('E1',f'Dữ liệu từ {adj_start_date} đến {adj_end_date}',datenote_format)
     worksheet.write_row(2,0,transfer_fee.columns,header_format)
     worksheet.write_column(3,0,transfer_fee['STT'],stt_format)
     worksheet.write_column(3,1,transfer_fee['Tên Chi Nhánh'],tenchinhanh_format)
@@ -213,21 +232,14 @@ def run(
         index=pd.MultiIndex.from_frame(transfer_fee[['Mã Chi Nhánh','Tên Chi Nhánh']]),
         columns=pd.MultiIndex.from_arrays([lv1_col,lv2_col])
     )
-    summary[('Chuyển khoản thanh toán bù trừ','Số lượng')] = summary.index.get_level_values(0).map(
-        transfer_fee_TTBT['volume'])
+    summary[('Chuyển khoản thanh toán bù trừ','Số lượng')] = summary.index.get_level_values(0).map(transfer_fee_TTBT['volume'])
     summary[('Chuyển khoản thanh toán bù trừ','Phí')] = summary.index.get_level_values(0).map(transfer_fee_TTBT['fee'])
-    summary[('Chuyển khoản thanh toán bù trừ','Phí làm tròn')] = np.round(
-        summary.loc[:,('Chuyển khoản thanh toán bù trừ','Phí')],0)
-    summary[('Chuyển khoản chứng khoán sang CTCK khác','Số lượng')] = summary.index.get_level_values(0).map(
-        transfer_fee_CTCK['volume'])
-    summary[('Chuyển khoản chứng khoán sang CTCK khác','Phí')] = summary.index.get_level_values(0).map(
-        transfer_fee_CTCK['fee'])
-    summary[('Chuyển khoản chứng khoán sang CTCK khác','Phí làm tròn')] = np.round(
-        summary[('Chuyển khoản chứng khoán sang CTCK khác','Phí')],0)
-    summary[('Tổng cộng','Số lượng')] = summary[('Chuyển khoản thanh toán bù trừ','Số lượng')]+summary[
-        ('Chuyển khoản chứng khoán sang CTCK khác','Số lượng')]
-    summary[('Tổng cộng','Phí')] = summary[('Chuyển khoản thanh toán bù trừ','Phí làm tròn')]+summary[
-        ('Chuyển khoản chứng khoán sang CTCK khác','Phí làm tròn')]
+    summary[('Chuyển khoản thanh toán bù trừ','Phí làm tròn')] = np.round(summary.loc[:,('Chuyển khoản thanh toán bù trừ','Phí')],0)
+    summary[('Chuyển khoản chứng khoán sang CTCK khác','Số lượng')] = summary.index.get_level_values(0).map(transfer_fee_CTCK['volume'])
+    summary[('Chuyển khoản chứng khoán sang CTCK khác','Phí')] = summary.index.get_level_values(0).map(transfer_fee_CTCK['fee'])
+    summary[('Chuyển khoản chứng khoán sang CTCK khác','Phí làm tròn')] = np.round(summary[('Chuyển khoản chứng khoán sang CTCK khác','Phí')],0)
+    summary[('Tổng cộng','Số lượng')] = summary[('Chuyển khoản thanh toán bù trừ','Số lượng')]+summary[('Chuyển khoản chứng khoán sang CTCK khác','Số lượng')]
+    summary[('Tổng cộng','Phí')] = summary[('Chuyển khoản thanh toán bù trừ','Phí làm tròn')]+summary[('Chuyển khoản chứng khoán sang CTCK khác','Phí làm tròn')]
     summary.fillna(0,inplace=True)
 
     # Write to Báo cáo phí chuyển khoản tổng hợp
@@ -302,6 +314,12 @@ def run(
             'border':1
         }
     )
+    datenote_format = workbook.add_format(
+        {
+            'font_name':'Times New Roman',
+            'italic': True,
+        }
+    )
     column_0 = summary.index.names[0]
     column_1 = summary.index.names[1]
     column_0_24 = summary.columns.get_level_values(0).drop_duplicates()[0]
@@ -328,6 +346,7 @@ def run(
     worksheet.merge_range(sum_row,0,sum_row,1,'Tổng cộng',tongcong_format)
     sum_values = summary.values.sum(axis=0)
     worksheet.write_row(sum_row,2,sum_values,column_sum_format)
+    worksheet.write(f'A{sum_row+3}',f'Dữ liệu từ {adj_start_date} đến {adj_end_date}',datenote_format)
     writer.close()
 
     if __name__=='__main__':

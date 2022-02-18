@@ -84,12 +84,12 @@ def run(  # chạy hàng ngày
           
             SELECT 
                 [final].*,
-                [final].[interest_actu] - ROUND([final].[interest_calc],2) [diff]
+                ROUND([final].[interest_actu],2) - ROUND([final].[interest_calc],2) [diff]
               
             FROM (
                 SELECT
                 [info].[account_code],
-                info.account_type,
+                [info].[account_type],
                 [info].[sub_account],
                 [info].[customer_name],
                 [info].[branch_name],
@@ -102,20 +102,13 @@ def run(  # chạy hàng ngày
                     WHEN [info].[account_type] LIKE N'%trong nước%'
                         THEN ISNULL([balance].[closing_balance],0)*0.1/100/360
                 END [interest_calc]
-            FROM
-                [info]
-            LEFT JOIN
-                [interest_actu]
-            ON
-                [info].[sub_account] = [interest_actu].[sub_account]
-            LEFT JOIN
-                [interest_paid]
-            ON
-                [info].[sub_account] = [interest_paid].[sub_account]
-            LEFT JOIN
-                [balance]
-            ON
-                [info].[sub_account] = [balance].[sub_account]
+            FROM [info]
+            LEFT JOIN [interest_actu]
+                ON [info].[sub_account] = [interest_actu].[sub_account]
+            LEFT JOIN [interest_paid]
+                ON [info].[sub_account] = [interest_paid].[sub_account]
+            LEFT JOIN [balance]
+                ON [info].[sub_account] = [balance].[sub_account]
             ) [final]
               
         WHERE

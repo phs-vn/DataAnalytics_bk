@@ -5,296 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.vscode/tasks.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/country_code.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/data_validation/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/data_validation/data_validation.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/data_validation/flex_data/010002.xls" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/data_validation/flex_data/RCF0001.xls" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/data_validation/flex_data/RCI0001.xls" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/data_validation/flex_data/RCI1025.xls" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/data_validation/flex_data/RMR0035.xls" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/data_validation/flex_data/ROD0040.xls" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/data_validation/flex_data/RRM0068.xls" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/data_validation/flex_data/RRM0069.xls" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/data_validation/flex_data/RSE2009.xls" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/data_validation/flex_data/RSE9992.xls" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/data_validation/flex_data/VCF0051.xls" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/foreign_business_type.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoCheckGia.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoDanhSachChungKhoanSSI.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HNX.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HOSEnew.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HOSEold.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoHoatDongLuuKyNDTNN.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoTamTinhPhiChuyenKhoan.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoTamTinhPhiGiaoDich.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoTamTinhPhiLuuKy.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoTienGuiSSC.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoTinhHinhHDKD.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/guidance_margin_settlement.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/guidance_trading_depository.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/machitieu.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuLaiTienGuiPhatSinh_p1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuLaiTienGuiPhatSinh_p2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuSoDuTaiKhoanKhachHang.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuTTBTTienMuaBanChungKhoan.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportEIB.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportOCB.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDuLieuGuiKiemToan.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoFileGhiAmGuiKSNB.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoFileImportTKNganHangBuoiSang.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoKHNNCoSoDuNho.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoPSTheoDoiTKKHCanChuyenTienTuVSDVeTKGD.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoPhatSinhGiaoDichTien.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoReviewKHVIPCoSo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoSoDuTienKyQuyPhaiSinh.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoSoLieuThongKeDVTC.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoUngTienROS.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoXacNhanNopRutEIBOCB.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/DanhSachKHVIPCoSo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/DanhSachKHVIPPhaiSinh.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/_BaoCaoFileTheoDoiHopDongMargin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/db.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220107/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220107/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220110/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220110/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220111/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220111/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220112/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220112/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220113/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220113/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220114/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220114/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220117/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220117/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220118/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220118/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220119/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220119/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220120/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220120/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220121/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220121/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220124/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220124/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220125/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220125/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220126/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220126/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220127/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220127/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/img/ocb_logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/img/phs_logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/log.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/saved_sql/gold.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/saved_sql/normal.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/saved_sql/silv.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/saved_sql/vipcn.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220112.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220113.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220114.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220117.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220118.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220119.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220120.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220121.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220124.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220125.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220126.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220127.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/soluongtaikhoankhachvip/2021.10.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/soluongtaikhoankhachvip/2021.11.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/soluongtaikhoankhachvip/2021.12.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/VietStock.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/obj/Debug/net5.0/.NETCoreApp,Version=v5.0.AssemblyAttributes.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/obj/Debug/net5.0/datawarehouse.AssemblyInfo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/obj/Debug/net5.0/datawarehouse.AssemblyInfoInputs.cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/obj/Debug/net5.0/datawarehouse.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/obj/Debug/net5.0/datawarehouse.assets.cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/obj/Debug/net5.0/datawarehouse.csproj.CoreCompileInputs.cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/obj/Debug/net5.0/datawarehouse.csproj.FileListAbsolute.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/obj/Debug/net5.0/datawarehouse.csprojAssemblyReference.cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/obj/datawarehouse.csproj.nuget.dgspec.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/obj/datawarehouse.csproj.nuget.g.props" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/obj/datawarehouse.csproj.nuget.g.targets" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/obj/project.assets.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/obj/project.nuget.cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/Python.Runtime.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/cached_property-1.5.2.dist-info/AUTHORS.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/cached_property-1.5.2.dist-info/INSTALLER" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/cached_property-1.5.2.dist-info/LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/cached_property-1.5.2.dist-info/METADATA" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/cached_property-1.5.2.dist-info/RECORD" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/cached_property-1.5.2.dist-info/WHEEL" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/cached_property-1.5.2.dist-info/top_level.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/cached_property.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/clr.pyd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate-0.6.1.dist-info/INSTALLER" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate-0.6.1.dist-info/METADATA" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate-0.6.1.dist-info/RECORD" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate-0.6.1.dist-info/WHEEL" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate-0.6.1.dist-info/top_level.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/duration.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/isodates.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/isodatetime.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/isoduration.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/isoerror.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/isostrf.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/isotime.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/isotzinfo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/tests/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/tests/test_date.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/tests/test_datetime.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/tests/test_duration.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/tests/test_pickle.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/tests/test_strf.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/tests/test_time.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/isodate/tzinfo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/prs-0.0.7.dist-info/INSTALLER" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/prs-0.0.7.dist-info/METADATA" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/prs-0.0.7.dist-info/RECORD" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/prs-0.0.7.dist-info/REQUESTED" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/prs-0.0.7.dist-info/WHEEL" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/prs-0.0.7.dist-info/entry_points.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/prs-0.0.7.dist-info/top_level.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/prs/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/prs/cli.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pythonnet-2.5.2.dist-info/INSTALLER" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pythonnet-2.5.2.dist-info/METADATA" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pythonnet-2.5.2.dist-info/RECORD" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pythonnet-2.5.2.dist-info/REQUESTED" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pythonnet-2.5.2.dist-info/WHEEL" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pythonnet-2.5.2.dist-info/direct_url.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pythonnet-2.5.2.dist-info/top_level.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_file-1.5.1.dist-info/INSTALLER" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_file-1.5.1.dist-info/LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_file-1.5.1.dist-info/METADATA" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_file-1.5.1.dist-info/RECORD" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_file-1.5.1.dist-info/WHEEL" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_file-1.5.1.dist-info/top_level.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_file.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt-0.9.1.dist-info/AUTHORS.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt-0.9.1.dist-info/INSTALLER" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt-0.9.1.dist-info/LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt-0.9.1.dist-info/METADATA" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt-0.9.1.dist-info/RECORD" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt-0.9.1.dist-info/WHEEL" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt-0.9.1.dist-info/top_level.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/_compat.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/adapters/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/adapters/appengine.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/adapters/fingerprint.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/adapters/host_header_ssl.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/adapters/socket_options.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/adapters/source.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/adapters/ssl.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/adapters/x509.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/auth/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/auth/_digest_auth_compat.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/auth/guess.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/auth/handler.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/auth/http_proxy_digest.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/cookies/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/cookies/forgetful.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/downloadutils/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/downloadutils/stream.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/downloadutils/tee.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/exceptions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/multipart/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/multipart/decoder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/multipart/encoder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/sessions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/streaming_iterator.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/threaded/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/threaded/pool.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/threaded/thread.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/utils/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/utils/deprecated.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/utils/dump.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/utils/formdata.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/requests_toolbelt/utils/user_agent.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep-4.1.0.dist-info/INSTALLER" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep-4.1.0.dist-info/LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep-4.1.0.dist-info/METADATA" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep-4.1.0.dist-info/RECORD" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep-4.1.0.dist-info/REQUESTED" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep-4.1.0.dist-info/WHEEL" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep-4.1.0.dist-info/top_level.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/__main__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/cache.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/client.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/exceptions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/helpers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/loader.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/ns.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/plugins.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/proxy.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/py.typed" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/settings.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/transports.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsa.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsdl/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsdl/attachments.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsdl/bindings/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsdl/bindings/http.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsdl/bindings/soap.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsdl/definitions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsdl/messages/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsdl/messages/base.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsdl/messages/http.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsdl/messages/mime.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsdl/messages/multiref.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsdl/messages/soap.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsdl/messages/xop.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsdl/parse.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsdl/utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsdl/wsdl.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsse/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsse/compose.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsse/signature.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsse/username.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/wsse/utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/const.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/context.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/elements/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/elements/any.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/elements/attribute.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/elements/base.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/elements/builtins.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/elements/element.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/elements/indicators.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/elements/references.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/printer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/schema.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/types/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/types/any.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/types/base.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/types/builtins.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/types/collection.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/types/complex.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/types/simple.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/types/unresolved.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/valueobjects.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/zeep/xsd/visitor.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Scripts/prs.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/warning/TempFiles/2022.01.28.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/warning/TempFiles/HNX_AvgPrice_2022.01.28" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/warning/TempFiles/HOSE_AvgPrice_2022.01.28" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/automation/risk/img/ocb_logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/automation/risk/img/phs_logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/automation/risk/rating.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/automation/risk/vmr9004_20220217.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220218/EIB.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220218/OCB.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220217.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/breakeven_price/result_table/18.2.2022.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/breakeven_price/result_table/18.2.2022_0.02.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/warning/TempFiles/HNX_AvgPrice_2022.02.18" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/warning/TempFiles/HOSE_AvgPrice_2022.02.18" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/automation/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/automation/trading_service/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoTamTinhPhiChuyenKhoan.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoTamTinhPhiChuyenKhoan.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoTamTinhPhiLuuKy.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoTamTinhPhiLuuKy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuLaiTienGuiPhatSinh_p1.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuLaiTienGuiPhatSinh_p1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuLaiTienGuiPhatSinh_p2.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuLaiTienGuiPhatSinh_p2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportEIB.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportEIB.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportOCB.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportOCB.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/DanhSachKHVIPCoSo.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/DanhSachKHVIPCoSo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AAA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AAA.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AAM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AAM.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AAT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AAT.png" afterDir="false" />
@@ -1048,150 +779,12 @@
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/X20.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/X20.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/YBM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/YBM.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/YEG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/YEG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/datawarehouse/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/datawarehouse/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/datawarehouse/CheckSync.py" beforeDir="false" afterPath="$PROJECT_DIR$/datawarehouse/CheckSync.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dependency/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/dependency/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoCheckGia.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoCheckGia.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDanhSachChungKhoanSSI.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDanhSachChungKhoanSSI.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDoiChieuLaiTienGuiPhatSinh_p1.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDoiChieuLaiTienGuiPhatSinh_p1.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDoiChieuLaiTienGuiPhatSinh_p2.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDoiChieuLaiTienGuiPhatSinh_p2.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDoiChieuSoDuTaiKhoanKhachHang.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDoiChieuSoDuTaiKhoanKhachHang.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDoiChieuTTBTTienMuaBanChungKhoan.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDoiChieuTTBTTienMuaBanChungKhoan.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDoiChieuUTTB.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDoiChieuUTTB.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDoiChieuVaImportEIB.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDoiChieuVaImportEIB.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDoiChieuVaImportOCB.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDoiChieuVaImportOCB.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDongMoUyQuyenTK_HNX.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDongMoUyQuyenTK_HNX.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDongMoUyQuyenTK_HOSEnew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDongMoUyQuyenTK_HOSEnew.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDongMoUyQuyenTK_HOSEold.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDongMoUyQuyenTK_HOSEold.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDuLieuGuiKiemToan.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoDuLieuGuiKiemToan.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoFileGhiAmGuiKSNB.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoFileGhiAmGuiKSNB.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoFileImportTKNganHangBuoiSang.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoFileImportTKNganHangBuoiSang.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoHoatDongLuuKyNDTNN.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoHoatDongLuuKyNDTNN.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoKHNNCoSoDuNho.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoKHNNCoSoDuNho.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoPSTheoDoiTKKHCanChuyenTienTuVSDVeTKGD.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoPSTheoDoiTKKHCanChuyenTienTuVSDVeTKGD.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoPhatSinhGiaoDichTien.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoPhatSinhGiaoDichTien.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoReviewKHVIPCoSo.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoReviewKHVIPCoSo.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoSoDuTienKyQuyPhaiSinh.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoSoDuTienKyQuyPhaiSinh.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoSoLieuThongKeDVTC.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoSoLieuThongKeDVTC.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoTamTinhPhiChuyenKhoan.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoTamTinhPhiChuyenKhoan.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoTamTinhPhiGiaoDich.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoTamTinhPhiGiaoDich.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoTamTinhPhiLuuKy.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoTamTinhPhiLuuKy.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoTienGuiSSC.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoTienGuiSSC.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoTinhHinhHDKD.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoTinhHinhHDKD.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoUngTienROS.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoUngTienROS.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_BaoCaoXacNhanNopRutEIBOCB.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_BaoCaoXacNhanNopRutEIBOCB.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_DanhSachKHVIPCoSo.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_DanhSachKHVIPCoSo.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_DanhSachKHVIPPhaiSinh.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_DanhSachKHVIPPhaiSinh.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_WarningRMD_RT.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_WarningRMD_RT.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/ReportSS.py" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/ReportSS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/WarningRMD_EOD.py" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/WarningRMD_EOD.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/WarningRMD_RT.py" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/WarningRMD_RT.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_collector/scrape_vietstock_trading_price.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_collector/scrape_vietstock_trading_price.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/country_code.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/data_validation/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/data_validation/data_validation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/data_validation/flex_data/010002.xls" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/data_validation/flex_data/RCF0001.xls" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/data_validation/flex_data/RCI0001.xls" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/data_validation/flex_data/RCI1025.xls" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/data_validation/flex_data/RMR0035.xls" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/data_validation/flex_data/ROD0040.xls" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/data_validation/flex_data/RRM0068.xls" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/data_validation/flex_data/RRM0069.xls" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/data_validation/flex_data/RSE2009.xls" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/data_validation/flex_data/RSE9992.xls" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/data_validation/flex_data/VCF0051.xls" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/foreign_business_type.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoCheckGia.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoDanhSachChungKhoanSSI.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HNX.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HOSEnew.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HOSEold.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoHoatDongLuuKyNDTNN.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoTamTinhPhiChuyenKhoan.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoTamTinhPhiGiaoDich.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoTamTinhPhiLuuKy.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoTienGuiSSC.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/BaoCaoTinhHinhHDKD.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/giaodichluuky/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/guidance_margin_settlement.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/guidance_trading_depository.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/machitieu.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuLaiTienGuiPhatSinh_p1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuLaiTienGuiPhatSinh_p2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuSoDuTaiKhoanKhachHang.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuTTBTTienMuaBanChungKhoan.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportEIB.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportOCB.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoDuLieuGuiKiemToan.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoFileGhiAmGuiKSNB.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoFileImportTKNganHangBuoiSang.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoKHNNCoSoDuNho.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoPSTheoDoiTKKHCanChuyenTienTuVSDVeTKGD.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoPhatSinhGiaoDichTien.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoReviewKHVIPCoSo.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoSoDuTienKyQuyPhaiSinh.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoSoLieuThongKeDVTC.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoUngTienROS.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/BaoCaoXacNhanNopRutEIBOCB.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/DanhSachKHVIPCoSo.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/DanhSachKHVIPPhaiSinh.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/_BaoCaoFileTheoDoiHopDongMargin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/db.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220107/EIB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220107/OCB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220110/EIB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220110/OCB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220111/EIB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220111/OCB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220112/EIB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220112/OCB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220113/EIB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220113/OCB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220114/EIB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220114/OCB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220117/EIB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220117/OCB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220118/EIB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220118/OCB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220119/EIB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220119/OCB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220120/EIB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220120/OCB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220121/EIB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220121/OCB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220124/EIB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220124/OCB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220125/EIB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220125/OCB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220126/EIB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/fileimportsodunganhang/20220126/OCB.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/img/ocb_logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/img/phs_logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/log.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/saved_sql/gold.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/saved_sql/normal.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/saved_sql/silv.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/saved_sql/vipcn.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220112.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220113.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220114.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220117.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220118.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220119.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220120.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220121.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220124.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220125.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220126.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/soluongtaikhoankhachvip/2021.10.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/soluongtaikhoankhachvip/2021.11.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reporting/trading_service/thanhtoanbutru/soluongtaikhoankhachvip/2021.12.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/warning/TempFiles/2022.02.10.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HNX_AvgPrice_2022.02.10" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HOSE_AvgPrice_2022.02.10" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/warning/warning_RMD_RT.py" beforeDir="false" afterPath="$PROJECT_DIR$/warning/warning_RMD_RT.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1240,9 +833,9 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/implementation" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/automation/risk" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Console Font" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -1255,11 +848,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\hiepdang\PycharmProjects\DataAnalytics\automation\risk" />
       <recent name="C:\Users\hiepdang\PycharmProjects\DataAnalytics\implementation" />
       <recent name="C:\Users\hiepdang\PycharmProjects\DataAnalytics\implementation\task_scheduler" />
       <recent name="C:\Users\hiepdang\PycharmProjects\DataAnalytics\post_phs" />
       <recent name="C:\Users\hiepdang\PycharmProjects\DataAnalytics\reporting_tool\trading_service\thanhtoanbutru" />
-      <recent name="C:\Users\hiepdang\PycharmProjects\DataAnalytics\breakeven_price" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\hiepdang\PycharmProjects\DataAnalytics" />
@@ -1269,17 +862,17 @@
       <recent name="C:\Users\hiepdang\PycharmProjects\DataAnalytics\database" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.VietStock">
-    <configuration name="VietStock" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.BaoCaoGiaHoaVonDanhMuc">
+    <configuration name="BaoCaoGiaHoaVonDanhMuc" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/datawarehouse" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/automation/risk" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/datawarehouse/VietStock.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/automation/risk/BaoCaoGiaHoaVonDanhMuc.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -1288,7 +881,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="WarningRMD_EOD" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="VietStock" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -1296,11 +889,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/implementation" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/datawarehouse" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/implementation/WarningRMD_EOD.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/datawarehouse/VietStock.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -1373,19 +966,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.WarningRMD_EOD" />
+      <item itemvalue="Python.VietStock" />
       <item itemvalue="Python.__init__" />
       <item itemvalue="Python.chiNhan" />
       <item itemvalue="Python.warning_RMD_RT" />
-      <item itemvalue="Python.VietStock" />
+      <item itemvalue="Python.BaoCaoGiaHoaVonDanhMuc" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.BaoCaoGiaHoaVonDanhMuc" />
         <item itemvalue="Python.VietStock" />
         <item itemvalue="Python.chiNhan" />
         <item itemvalue="Python.warning_RMD_RT" />
         <item itemvalue="Python.__init__" />
-        <item itemvalue="Python.WarningRMD_EOD" />
       </list>
     </recent_temporary>
   </component>

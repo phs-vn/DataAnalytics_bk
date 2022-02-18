@@ -26,14 +26,14 @@ class Check:
             self.db_Tables = TableNames_DWH_CoSo.squeeze()
             self._prefix = '[DWH-CoSo]'
             self.description = 'RunCoSo'
-            self.since = dt.datetime.now()-dt.timedelta(minutes=75)
+            self.since = dt.datetime.now()-dt.timedelta(minutes=120)
 
         elif db == 'DWH-PhaiSinh':
             conn = connect_DWH_PhaiSinh
             self.db_Tables = TableNames_DWH_PhaiSinh.squeeze()
             self._prefix = '[DWH-PhaiSinh]'
             self.description = 'RunPhaiSinh'
-            self.since = dt.datetime.now()-dt.timedelta(minutes=90)
+            self.since = dt.datetime.now()-dt.timedelta(minutes=120)
         else:
             raise ValueError('The module currently checks DWH-CoSo or DWH-PhaiSinh only')
 

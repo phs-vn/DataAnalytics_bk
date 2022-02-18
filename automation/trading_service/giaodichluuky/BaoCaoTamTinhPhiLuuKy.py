@@ -17,9 +17,12 @@ def run(
 
     depository_fee = pd.read_sql(
         f"""
-        SELECT date, sub_account, fee_amount
-        FROM depository_fee
-        WHERE date BETWEEN '{start_date}' AND '{end_date}'
+        SELECT 
+            [date], 
+            [sub_account], 
+            [fee_amount]
+        FROM [depository_fee]
+        WHERE [date] BETWEEN '{start_date}' AND '{end_date}'
         """,
         connect_DWH_CoSo,
         index_col=['date','sub_account'],

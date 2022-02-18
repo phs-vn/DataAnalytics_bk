@@ -32,13 +32,12 @@ def run(
         f"""
         WITH [info] AS (
             SELECT 
-                [relationship].[date],
-                MAX([relationship].[account_code]) [account_code],
+                [relationship].[account_code],
                 [relationship].[sub_account],
-                MAX([account].[customer_name]) [customer_name],
-                MAX([account].[account_type]) [account_type],
-                MAX([branch].[branch_name]) [branch_name],
-                MAX([broker].[broker_name]) [broker_name]
+                [account].[customer_name],
+                [account].[account_type],
+                [branch].[branch_name],
+                [broker].[broker_name]
             FROM
                 [relationship]
             LEFT JOIN
@@ -54,13 +53,10 @@ def run(
             ON
                 [relationship].[branch_id] = [branch].[branch_id]
             WHERE
-                [relationship].[date] BETWEEN '{start_date}' AND '{t0_date}'
-            GROUP BY
-                [relationship].[date], [relationship].[sub_account]
+                [relationship].[date] = '{t0_date}'
         ),
         [interest_actu] AS (
             SELECT
-	            MAX([rcf0011].[date]) [date],
                 [rcf0011].[sub_account],
                 SUM(ISNULL([rcf0011].[interest],0)) [interest_actu]
             FROM
@@ -72,7 +68,6 @@ def run(
         ),
         [interest_paid] AS (
             SELECT
-	            MAX([cash_balance].[date]) [date],
                 [cash_balance].[sub_account],
                 SUM(ISNULL([cash_balance].[increase],0)) [interest_paid]
             FROM
@@ -86,24 +81,24 @@ def run(
         ),
         [balance] AS (
             SELECT
-                [sub_account_deposit].[date],
                 [sub_account_deposit].[sub_account],
-                [sub_account_deposit].[closing_balance]
+                SUM(ISNULL([sub_account_deposit].[closing_balance],0)) [closing_balance]
             FROM
                 [sub_account_deposit]
             WHERE
                 [sub_account_deposit].[date] BETWEEN '{start_date}' AND '{t0_date}'
+            GROUP BY
+                [sub_account_deposit].[sub_account]
         )
         
         SELECT 
             [final].*,
-            [final].[interest_actu] - ROUND([final].[interest_calc],2) [diff]
+            ROUND([final].[interest_actu],2) - ROUND([final].[interest_calc],2) [diff]
             
         FROM (
             SELECT 
-                [info].[date],
                 [info].[account_code],
-                info.account_type,
+                [info].[account_type],
                 [info].[sub_account],
                 [info].[customer_name],
                 [info].[branch_name],
@@ -116,20 +111,13 @@ def run(
                     WHEN [info].[account_type] LIKE N'%trong nước%'
                         THEN ISNULL([balance].[closing_balance],0)*0.1/100/360
                 END [interest_calc]
-            FROM
-                [info]
-            LEFT JOIN
-                [interest_actu]
-            ON
-                [info].[date] = [interest_actu].[date] AND [info].[sub_account] = [interest_actu].[sub_account]
-            LEFT JOIN
-                [interest_paid]
-            ON
-                [info].[date] = [interest_paid].[date] AND [info].[sub_account] = [interest_paid].[sub_account]
-            LEFT JOIN
-                [balance]
-            ON
-                [info].[date] = [balance].[date] AND [info].[sub_account] = [balance].[sub_account]
+            FROM [info]
+            LEFT JOIN [interest_actu]
+                ON [info].[sub_account] = [interest_actu].[sub_account]
+            LEFT JOIN [interest_paid]
+                ON [info].[sub_account] = [interest_paid].[sub_account]
+            LEFT JOIN [balance]
+                ON [info].[sub_account] = [balance].[sub_account]
             ) [final]
             
         WHERE

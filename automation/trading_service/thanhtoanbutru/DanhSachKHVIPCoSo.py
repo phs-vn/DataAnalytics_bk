@@ -28,128 +28,134 @@ def run(
 
     vip_phs = pd.read_sql(
         f"""
+        WITH 
+        [contract_code] AS (
+            SELECT
+                [account_type].[type],
+                CASE
+                    WHEN [account_type].[type_name] LIKE N'%NOR%' THEN 'NORM'
+                    WHEN [account_type].[type_name] LIKE N'%SILV%' THEN 'SILV'
+                    WHEN [account_type].[type_name] LIKE N'%GOLD%' THEN 'GOLD'
+                    WHEN [account_type].[type_name] LIKE N'%VIPCN%' THEN 'VIP'
+                    ELSE N'Tiểu khoản thường'
+                END [contract_type],
+                [account_type].[type_name]
+            FROM
+                [account_type]
+        )
+        , [full] AS (
+            SELECT 
+                [t].*
+            FROM (
+                SELECT 
+                    [customer_information_change].[account_code],
+                    [customer_information_change].[date_of_change],
+                    [customer_information_change].[date_of_approval],
+                    [contract_code].[type],
+                    [contract_code].[contract_type],
+                    [contract_code].[type_name],
+                    MAX(CASE WHEN [contract_type] = 'NORM' THEN [customer_information_change].[date_of_change] END) 
+                        OVER (PARTITION BY [customer_information_change].[account_code]) [norm_end], -- ngày cuối cùng là normal
+                    [customer_information_change].[time_of_change],
+                    MAX([date_of_change])
+                        OVER (PARTITION BY [customer_information_change].[account_code]) [last_change_date] -- ngày thay đổi cuối cùng
+                FROM [customer_information_change]
+                LEFT JOIN [contract_code] ON [customer_information_change].[after] = [contract_code].[type]
+                WHERE
+                    [customer_information_change].[date_of_change] <= '{t0_date}'
+                    AND [customer_information_change].[change_content] = 'Loai hinh hop dong'
+                    AND [contract_code].[contract_type] <> N'Tiểu khoản thường' -- Bỏ qua thay đổi loại hình tiểu khoản thường
+            ) [t]
+            WHERE [t].[date_of_change] >= [t].[norm_end] OR [t].[norm_end] IS NULL -- Bỏ qua các thay đổi trước ngày cuối cùng là normal
+        )
+        , [processing] AS (
+            SELECT
+                [full].*,
+                MIN([date_of_change]) OVER (PARTITION BY [full].[account_code]) [effective_date], -- Ngày hiệu lực đầu tiên
+                MAX(CASE WHEN [full].[date_of_change] = [full].[last_change_date] THEN [full].[contract_type] END)
+                    OVER (PARTITION BY [full].[account_code]) [last_type], -- loại hình hợp đồng tại thời điểm gần nhất
+                LAG(contract_type) OVER (PARTITION BY [full].[account_code] ORDER BY [full].[date_of_change]) [previous_type] -- loại hình hợp đồng trước đó
+            FROM 
+                [full]
+        )
+        , [final] AS (
+        SELECT DISTINCT
+            [processing].[account_code],
+            [processing].[effective_date],
+            MAX(CASE WHEN [processing].[contract_type] = [processing].[last_type] THEN [processing].[date_of_approval] END)
+                OVER (PARTITION BY [processing].[account_code]) [approve_date] -- Tính approve date dựa vào ngày thay đổi đầu tiên trong cùng một loại hình
+        FROM 
+            [processing]
+        WHERE ([processing].[contract_type] <> [processing].[previous_type] OR [processing].[previous_type] IS NULL) -- Chỉ lấy ngày thay đổi đầu tiên trong cùng một loại hình
+        )
+
         SELECT DISTINCT -- do một số KH thay đổi 2 tiểu khoản cùng lúc. VD: '022C002768' ngày 29/10/2021
             CONCAT(N'Tháng ',FORMAT(MONTH([account].[date_of_birth]),'00')) [birth_month],
-            [account].[account_code], 
-            [account].[customer_name], 
-            [branch].[branch_name], 
-            [account].[date_of_birth], 
-            CASE 
+            [account].[account_code],
+            [account].[customer_name],
+            [branch].[branch_name],
+            [account].[date_of_birth],
+            CASE
                 WHEN [account].[gender] = '001' THEN 'Male'
                 WHEN [account].[gender] = '002' THEN 'Female'
-            ELSE
-                ''
+                ELSE ''
             END [gender],
-            [vcf0051].[contract_type],
-            [c].[date_of_change],
-            [c].[time_of_change],
-            [c].[date_of_approval],
-            [c].[time_of_approval],
+            CASE
+                WHEN [vcf0051].[contract_type] LIKE N'%GOLD%' THEN 'GOLD PHS'
+                WHEN [vcf0051].[contract_type] LIKE N'%SILV%' THEN 'SILV PHS'
+                WHEN [vcf0051].[contract_type] LIKE N'%VIP%' THEN 'VIP Branch'
+            END [contract_type],
+            CASE
+                WHEN [account].[account_code] = '022C108142' THEN DATETIMEFROMPARTS(2017,11,28,0,0,0,0) -- Dữ liệu xảy ra trước ngày DWH là 2018-01-01
+                WHEN [account].[account_code] = '022C103838' THEN DATETIMEFROMPARTS(2017,9,13,0,0,0,0) -- Dữ liệu xảy ra trước ngày DWH là 2018-01-01
+                ELSE [final].[effective_date]
+            END [effective_date],
+            CASE
+                WHEN [account].[account_code] = '022C108142' THEN DATETIMEFROMPARTS(2017,11,28,0,0,0,0) -- Dữ liệu xảy ra trước ngày DWH là 2018-01-01
+                WHEN [account].[account_code] = '022C103838' THEN DATETIMEFROMPARTS(2017,9,13,0,0,0,0) -- Dữ liệu xảy ra trước ngày DWH là 2018-01-01
+                ELSE [final].[approve_date]
+            END [approve_date],
+            CASE
+                WHEN [vcf0051].[contract_type] LIKE N'%GOLD%' OR [vcf0051].[contract_type] LIKE N'%SILV%' THEN 
+                    CASE
+                        WHEN DATEPART(MONTH,'{t0_date}') < 6 THEN DATETIMEFROMPARTS(DATEPART(YEAR,'{t0_date}'),6,30,0,0,0,0)
+                        WHEN DATEPART(MONTH,'{t0_date}') < 12 THEN DATETIMEFROMPARTS(DATEPART(YEAR,'{t0_date}'),12,31,0,0,0,0)
+                        ELSE DATETIMEFROMPARTS(DATEPART(YEAR,'{t0_date}')+1,6,30,0,0,0,0) 
+                    END
+                WHEN [vcf0051].[contract_type] LIKE N'%VIP%' THEN
+                    CASE
+                        WHEN DATEPART(MONTH,'{t0_date}') < 3 THEN DATETIMEFROMPARTS(DATEPART(YEAR,'{t0_date}'),3,31,0,0,0,0)
+                        WHEN DATEPART(MONTH,'{t0_date}') < 6 THEN DATETIMEFROMPARTS(DATEPART(YEAR,'{t0_date}'),6,30,0,0,0,0)
+                        WHEN DATEPART(MONTH,'{t0_date}') < 9 THEN DATETIMEFROMPARTS(DATEPART(YEAR,'{t0_date}'),9,30,0,0,0,0)
+                        WHEN DATEPART(MONTH,'{t0_date}') < 12 THEN DATETIMEFROMPARTS(DATEPART(YEAR,'{t0_date}'),12,31,0,0,0,0)
+                        ELSE  DATETIMEFROMPARTS(DATEPART(YEAR,'{t0_date}')+1,3,31,0,0,0,0) 
+                    END
+            END [review_date],
             [broker].[broker_id],
             [broker].[broker_name]
-        FROM 
-            [vcf0051]
-        LEFT JOIN (
-            SELECT * FROM [relationship] WHERE [relationship].[date] = '{t0_date}'
-            ) [relationship]
-        ON 
-            [vcf0051].[sub_account] = [relationship].[sub_account]
-        LEFT JOIN 
-            [account]
-        ON 
-            [relationship].[account_code] = [account].[account_code]
-        LEFT JOIN 
-            [broker]
-        ON 
-            [relationship].[broker_id] = [broker].[broker_id]
-        LEFT JOIN
-            [branch]
-        ON
-            [relationship].[branch_id] = [branch].[branch_id]
-        LEFT JOIN (
-            SELECT 
-                [customer_information_change].[account_code],
-                [customer_information_change].[date_of_change],
-                [customer_information_change].[time_of_change],
-                [customer_information_change].[date_of_approval],
-                [customer_information_change].[time_of_approval]
-            FROM
-                [customer_information_change]
-            WHERE
-                [customer_information_change].[date_of_change] <= '{t0_date}'
-                AND [customer_information_change].[change_content] = 'Loai hinh hop dong'
-            ) [c]
-        ON
-            [c].[account_code] = [relationship].[account_code]
+        FROM [vcf0051] 
+        LEFT JOIN [relationship]
+            ON [vcf0051].[sub_account] = [relationship].[sub_account]
+            AND [vcf0051].[date] = [relationship].[date]
+        LEFT JOIN [account]
+            ON [relationship].[account_code] = [account].[account_code]
+        LEFT JOIN [broker]
+            ON [relationship].[broker_id] = [broker].[broker_id]
+        LEFT JOIN [branch]
+            ON [relationship].[branch_id] = [branch].[branch_id]
+        LEFT JOIN [final]
+            ON [final].[account_code] = [relationship].[account_code]
         WHERE (
             [vcf0051].[contract_type] LIKE N'%GOLD%' 
             OR [vcf0051].[contract_type] LIKE N'%SILV%' 
             OR [vcf0051].[contract_type] LIKE N'%VIP%'
         )
-        AND
-            [vcf0051].[status] IN ('A','B')
-        AND
-            [vcf0051].[date] = '{t0_date}'
-        ORDER BY
-            [birth_month], [date_of_birth]
+        AND [vcf0051].[status] IN ('A','B')
+        AND [vcf0051].[date] = '{t0_date}'
+        ORDER BY [birth_month], [date_of_birth]
         """,
         connect_DWH_CoSo,
-        index_col='account_code'
     )
-    # Groupby and condition
-    vip_phs['effective_date'] = vip_phs.groupby('account_code')['date_of_change'].min()
-    vip_phs['approved_date'] = vip_phs.groupby('account_code')['date_of_approval'].max()
-    condition_1 = vip_phs['date_of_change']==vip_phs['effective_date']
-    condition_2 = vip_phs['date_of_approval']==vip_phs['approved_date']
-    vip_phs = vip_phs.loc[(condition_1|condition_2)]
-
-    vip_phs = vip_phs[[
-        'birth_month',
-        'customer_name',
-        'branch_name',
-        'date_of_birth',
-        'gender',
-        'contract_type',
-        'broker_id',
-        'broker_name',
-        'effective_date',
-        'approved_date',
-    ]]
-
-    # convert cột contract_type
-    def mapper(x):
-        if 'SILV' in x:
-            result = 'SILV PHS'
-        elif 'GOLD' in x:
-            result = 'GOLD PHS'
-        else:
-            result = 'VIP Branch'
-        return result
-
-    vip_phs['contract_type'] = vip_phs['contract_type'].map(mapper)
-    vip_phs.drop_duplicates(keep='last',inplace=True)
-
-    # điều kiện phân biệt giữa SILV, GOLD và VIP Branch
-    for idx in vip_phs.index:
-        contract_type = vip_phs.loc[idx,'contract_type']
-        if contract_type in ('SILV PHS','GOLD PHS'):
-            if run_time.month<6:
-                vip_phs.loc[idx,'review_date'] = dt.datetime(run_time.year,6,30)
-            elif run_time.month<12:
-                vip_phs.loc[idx,'review_date'] = dt.datetime(run_time.year,12,31)
-            else:
-                vip_phs.loc[idx,'review_date'] = dt.datetime(run_time.year+1,6,30)
-        elif contract_type=='VIP Branch':
-            if run_time.month<3:
-                vip_phs.loc[idx,'review_date'] = dt.datetime(run_time.year,3,31)
-            elif run_time.month<6:
-                vip_phs.loc[idx,'review_date'] = dt.datetime(run_time.year,6,30)
-            elif run_time.month<9:
-                vip_phs.loc[idx,'review_date'] = dt.datetime(run_time.year,9,30)
-            elif run_time.month<12:
-                vip_phs.loc[idx,'review_date'] = dt.datetime(run_time.year,12,31)
-            else:
-                vip_phs.loc[idx,'review_date'] = dt.datetime(run_time.year+1,3,31)
 
     branch_groupby_table = vip_phs.groupby(['branch_name','contract_type'])['customer_name'].count().unstack()
     branch_groupby_table.fillna(0,inplace=True)
@@ -375,14 +381,14 @@ def run(
     vip_phs_sheet.write('I4','Ngày hiệu lực đầu tiên',ngay_hieu_luc_format)
     vip_phs_sheet.write_column('A5',np.arange(vip_phs.shape[0])+1,num_center_format)
     vip_phs_sheet.write_column('B5',vip_phs['birth_month'],text_center_format)
-    vip_phs_sheet.write_column('C5',vip_phs.index,num_left_format)
+    vip_phs_sheet.write_column('C5',vip_phs['account_code'],num_left_format)
     vip_phs_sheet.write_column('D5',vip_phs['customer_name'],text_left_format)
     vip_phs_sheet.write_column('E5',vip_phs['branch_name'],text_left_format)
     vip_phs_sheet.write_column('F5',vip_phs['date_of_birth'],date_format)
     vip_phs_sheet.write_column('G5',vip_phs['gender'],text_center_format)
     vip_phs_sheet.write_column('H5',vip_phs['contract_type'],list_customer_vip_col_format)
     vip_phs_sheet.write_column('I5',vip_phs['effective_date'],date_format)
-    vip_phs_sheet.write_column('J5',vip_phs['approved_date'],date_format)
+    vip_phs_sheet.write_column('J5',vip_phs['approve_date'],date_format)
     vip_phs_sheet.write_column('K5',vip_phs['review_date'],date_format)
     vip_phs_sheet.write_column('L5',vip_phs['broker_id'],text_center_format)
     vip_phs_sheet.write_column('M5',vip_phs['broker_name'],text_left_format)

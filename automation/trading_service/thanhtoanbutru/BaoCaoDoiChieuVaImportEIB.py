@@ -188,6 +188,7 @@ def run(
                 [money_in_out_transfer].[transaction_id] = '6693'
                 AND [money_in_out_transfer].[date] = '{t0_date}'
                 AND [money_in_out_transfer].[bank] = 'EIB'
+                AND [money_in_out_transfer].[status] = N'Hoàn tất'
             GROUP BY
                 [money_in_out_transfer].[sub_account], 
                 [money_in_out_transfer].[bank_account]
@@ -206,7 +207,6 @@ def run(
             WHERE 
                 [imported_bank_balance].[effective_date] = '{t0_date}'
                 AND [imported_bank_balance].[bank_code] = 'EIB'
-                AND [imported_bank_balance].[status] = 1
         )
         , [table] AS (
             SELECT

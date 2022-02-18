@@ -101,10 +101,3 @@ def get_info(
     }
 
     return result_as_dict
-
-
-def convert_int(x: int):
-    x = str(x)
-    if len(x)==1:
-        x = '0'+x
-    return x
