@@ -306,10 +306,8 @@ def run(  # chạy hàng ngày
     worksheet.write_column('I11',table['branch_name'],text_left_format)
     worksheet.write_column('J11',table['broker_name'].str.title(),text_left_format)
     worksheet.merge_range(f'A{sum_start_row}:D{sum_start_row}',sum_name,headers_format)
-    worksheet.write(f'E{sum_start_row}',table['interest_actu'].sum(),sum_money_format)
-    worksheet.write(f'F{sum_start_row}',table['interest_paid'].sum(),sum_money_format)
-    worksheet.write(f'G{sum_start_row}',table['interest_calc'].sum(),sum_money_format)
-    worksheet.write(f'H{sum_start_row}',table['diff'].sum(),sum_money_format)
+    for col in 'EFGH':
+        worksheet.write(f'{col}{sum_start_row}',f'=SUBTOTAL(9,{col}11:{col}{sum_start_row-1})',sum_money_format)
     worksheet.merge_range(f'I{sum_start_row}:J{sum_start_row}','',text_center_format)
 
     ###########################################################################

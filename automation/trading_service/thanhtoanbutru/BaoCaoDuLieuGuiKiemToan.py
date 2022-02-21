@@ -308,8 +308,8 @@ def run(
 
     sum_row = table.shape[0]+7
     worksheet.merge_range(f'A{sum_row}:E{sum_row}','TỔNG',sum_name_format)
-    bottom_line = table.loc[:,'credit_line':]
-    worksheet.write_row(f'F{sum_row}',bottom_line.sum(),sum_num_format)
+    for col in 'FGHIJKLMNOP':
+        worksheet.write(f'{col}{sum_row}',f'=SUBTOTAL(9,{col}7:{col}{sum_row-1})',sum_num_format)
 
     ###########################################################################
     ###########################################################################

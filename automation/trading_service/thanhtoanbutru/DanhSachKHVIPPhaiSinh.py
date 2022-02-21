@@ -450,22 +450,10 @@ def run(
     branch_groupby_sheet.write_column('F2',note_col,note_format,)
     start_sum_row = branch_groupby_table.shape[0]+2
     branch_groupby_sheet.write(f'A{start_sum_row}','SUM',sum_title_format)
-    branch_groupby_sheet.write(
-        f'B{start_sum_row}',
-        branch_groupby_table['GOLD PHS'].sum(),
-        sum_format
-    )
-    branch_groupby_sheet.write(
-        f'C{start_sum_row}',
-        branch_groupby_table['SILV PHS'].sum(),
-        sum_format
-    )
-    branch_groupby_sheet.write(
-        f'D{start_sum_row}',
-        branch_groupby_table['VIP Branch'].sum(),
-        sum_format
-    )
-    branch_groupby_sheet.write(f'E{start_sum_row}',sum_row.values.sum(),sum_format)
+
+    for col in 'BCDE':
+        branch_groupby_sheet.write(f'{col}{start_sum_row}',f'=SUBTOTAL(9,{col}2:{col}{start_sum_row-1})',sum_format)
+
     branch_groupby_sheet.write(f'F{start_sum_row}','',sum_format)
 
     ###########################################################################

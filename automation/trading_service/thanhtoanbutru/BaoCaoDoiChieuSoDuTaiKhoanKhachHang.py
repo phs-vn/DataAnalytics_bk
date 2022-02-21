@@ -341,11 +341,8 @@ def run(
     worksheet.write_column('J12',table['check'],text_center_format)
     worksheet.write_column('K12',table['branch_name'],text_left_format)
     worksheet.write_column('L12',table['broker_name'].str.title(),text_left_format)
-    worksheet.write(f'E{sum_start_row}',table['opening_balance_t1'].sum(),sum_money_format)
-    worksheet.write(f'F{sum_start_row}',table['closing_balance_t1'].sum(),sum_money_format)
-    worksheet.write(f'G{sum_start_row}',table['opening_balance_t0'].sum(),sum_money_format)
-    worksheet.write(f'H{sum_start_row}',table['opening_balance_t1_ref'].sum(),sum_money_format)
-    worksheet.write(f'I{sum_start_row}',table['closing_balance_t1_ref'].sum(),sum_money_format)
+    for col in 'EFGHI':
+        worksheet.write(f'{col}{sum_start_row}',f'=SUBTOTAL(9,{col}12:{col}{sum_start_row-1})',sum_money_format)
 
     writer.close()
 

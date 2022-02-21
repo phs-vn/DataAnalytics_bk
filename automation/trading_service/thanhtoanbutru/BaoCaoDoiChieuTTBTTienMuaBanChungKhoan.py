@@ -453,15 +453,8 @@ def run(
     worksheet.write_column('O12',table['diff_fee'],money_format)
     worksheet.write_column('P12',table['diff_tax'],money_format)
     worksheet.write(f'D{footer_start_row+1}','Người lập',footer_text_format)
-    worksheet.write(f'H{sum_start_row}',table['value_order'].sum(),sum_money_format)
-    worksheet.write(f'I{sum_start_row}',table['fee_order'].sum(),sum_money_format)
-    worksheet.write(f'J{sum_start_row}',table['tax_order'].sum(),sum_money_format)
-    worksheet.write(f'K{sum_start_row}',table['value_cash'].sum(),sum_money_format)
-    worksheet.write(f'L{sum_start_row}',table['fee_cash'].sum(),sum_money_format)
-    worksheet.write(f'M{sum_start_row}',table['tax_cash'].sum(),sum_money_format)
-    worksheet.write(f'N{sum_start_row}',table['diff_value'].sum(),sum_money_format)
-    worksheet.write(f'O{sum_start_row}',table['diff_fee'].sum(),sum_money_format)
-    worksheet.write(f'P{sum_start_row}',table['diff_tax'].sum(),sum_money_format)
+    for col in 'HIJKLMNOP':
+        worksheet.write(f'{col}{sum_start_row}',f'=SUBTOTAL(9,{col}12:{col}{sum_start_row-1})',sum_money_format)
 
     ###########################################################################
     ###########################################################################
