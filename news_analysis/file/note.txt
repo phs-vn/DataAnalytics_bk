@@ -44,6 +44,10 @@
 	https://stackoverflow.com/questions/27600906/python-selenium-how-to-wait-before-clicking-on-link
 11. Python Selenium: How to wait until href attribute contains a specific string?
 	https://stackoverflow.com/questions/62711044/python-selenium-how-to-wait-until-href-attribute-contains-a-specific-string
+12. How to measure page load time of a website using Selenium-Python
+	https://www.edureka.co/community/52561/how-measure-page-load-time-of-website-using-selenium-python
+13. Python Selenium Webdriver - Try except loop
+	https://stackoverflow.com/questions/22741591/python-selenium-webdriver-try-except-loop
 -------------------------------------------- GET CAPTCHA--------------------------------------------
 1. Link để lấy mẫu: 
 	https://www.bidv.vn/iBank/MainEB.html

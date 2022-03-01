@@ -43,7 +43,7 @@ def run():
     """
     i = 1
     while True:
-        url = 'https://cafef.vn/timeline/31/trang-' + str(i) + '.chn'
+        url = 'https://cafef.vn/timeline/36/trang-' + str(i) + '.chn'
         driver.get(url)
 
         elements = wait.until(
@@ -51,14 +51,13 @@ def run():
         )
 
         for ele in elements:
+            title = (ele.text.split('\n'))[0]
+            description = (ele.text.split('\n'))[2]
+
+            next_url = ele.find_element(By.TAG_NAME, 'a').get_attribute('href')
+            next_driver = webdriver.Chrome(options=chrome_options, service=Service(PATH))
             try:
-                title = (ele.text.split('\n'))[0]
-                description = (ele.text.split('\n'))[2]
-
-                next_url = ele.find_element(By.TAG_NAME, 'a').get_attribute('href')
-                next_driver = webdriver.Chrome(options=chrome_options, service=Service(PATH))
                 next_driver.get(next_url)
-
                 next_elements = next_driver.find_elements(By.XPATH, '//*[@id="mainContent"]/p')
                 paragraphs = [each_next_tag.text for each_next_tag in next_elements]
                 para_listToStr = ' '.join([str(elem) for elem in paragraphs])
@@ -69,14 +68,14 @@ def run():
                     title_save.append(title)
                     desc_save.append(description)
                     content.append(para_listToStr)
-                    print('URL:', next_url, '+', 'Length:', len(content))
+                    print('URL:', next_url, '\n', 'Length:', len(content))
                 time.sleep(t)
             except ignored_exceptions:
                 pass
         i = i + 1
         time.sleep(t)
 
-        if len(content) >= 1000:
+        if len(content) >= 150:
             break
 
     dictionary = {
@@ -87,4 +86,5 @@ def run():
     }
     df = pd.DataFrame(dictionary)
 
-    df.to_pickle(r"D:\DataAnalytics\news_analysis\output_data\cafef_data_3\cafef_thi-truong-chung-khoan_data_3.pickle")
+    df.to_pickle(r"D:\DataAnalytics\news_analysis\output_data\cafef"
+                 r"\cafef_data_4\cafef_doanh-nghiep_data_4.pickle")
