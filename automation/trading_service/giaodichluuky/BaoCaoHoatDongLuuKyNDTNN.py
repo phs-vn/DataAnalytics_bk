@@ -2,13 +2,13 @@ from automation.trading_service.giaodichluuky import *
 from request.stock import ta
 from news_collector import scrape_ticker_by_exchange
 from news_collector import scrape_derivatives_price
+from datawarehouse.DWH_CoSo.de083 import monthly_update
 
 """
 BC này không chạy lùi ngày được (do scrape bảng điện thời điểm hiện tại), 
 tuy nhiên ko ảnh hưởng quá nhiều
 """
 
-# cần phải bổ sung phần phát sinh theo GDLK yêu cầu thêm
 def run(
     run_time=None,
 ):
@@ -27,6 +27,11 @@ def run(
     # create folder
     if not os.path.isdir(join(dept_folder,folder_name,period)):  # dept_folder from import
         os.mkdir(join(dept_folder,folder_name,period))
+
+    # update dữ liệu từ file VSD lên data warehouse mới chạy được BC
+    year = int(period.split('.')[1])
+    month = int(period.split('.')[0])
+    monthly_update(year,month)
 
     account_type = pd.read_sql(
         """SELECT account_code, account_type FROM account""",
@@ -466,7 +471,7 @@ def run(
 
     # =========================================================================
     # Write to Báo cáo hoạt động lưu ký nhà đầu tư nước ngoài
-    file_name = f'Báo cáo hoạt động lưu ký nhà đầu tư nước ngoài {period}.xlsx'
+    file_name = f'Báo cáo hoạt động lưu ký nhà đầu tư nước ngoài {period} bk.xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder,folder_name,period,file_name),
         engine='xlsxwriter',

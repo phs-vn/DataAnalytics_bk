@@ -55,15 +55,15 @@ def run(
             [t].[c_outs]
         FROM (
             SELECT
-                CASE [closing].[type]
+                CASE COALESCE([closing].[type], [opening].[type])
                     WHEN N'Ứng trước cổ tức' THEN 'UTCT'
                     WHEN N'Trả chậm' THEN 'DP'
                     WHEN N'Margin' THEN 'MR'
                     WHEN N'Bảo lãnh' THEN 'BL'
                     ELSE [closing].[type]
                 END [type],
-                [opening].[o_outs],
-                [closing].[c_outs]
+                ISNULL([opening].[o_outs],0) [o_outs],
+                ISNULL([closing].[c_outs],0) [c_outs]
             FROM [opening]
             FULL JOIN [closing]
                 ON [opening].[type] = [closing].[type]) [t]
@@ -514,8 +514,7 @@ def run(
     worksheet.write_column('H3',outstandings_inb01,num_format)
     worksheet.write('H8',outstandings_inb01.sum(),num_bold_format)
     worksheet.write('H10',margin_accounts_inb01,num_format)
-    for row in range(3,9):
-        worksheet.write(f'I{row}',f'=H{row}/E{row}',percent_format)
+    worksheet.write(f'I5',f'=H5/E5',percent_format)
     worksheet.write('I10','=H10/E10',percent_format)
 
     worksheet.merge_range('A23:E23','DANH SÁCH KH NỢ XẤU',bad_loan_header_format)

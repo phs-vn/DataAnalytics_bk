@@ -1,6 +1,11 @@
-"""
-This module simply brings functions from datawarehouse package to implementation package
-to ensure consistent workflow among projects.
-"""
+from implementation import TaskMonitor
 
-from datawarehouse import CheckSync
+# @TaskMonitor
+def DWH_CoSoCheckSyncUpdate():
+    from datawarehouse import CheckSyncUpdate as CoSoPhaiSinhCheckSyncUpdate
+    CoSoPhaiSinhCheckSyncUpdate.DB('DWH-CoSo').SendMailAndExec()
+
+@TaskMonitor
+def DWH_PhaiSinhCheckSyncUpdate():
+    from datawarehouse import CheckSyncUpdate as CoSoPhaiSinhCheckSyncUpdate
+    CoSoPhaiSinhCheckSyncUpdate.DB('DWH-PhaiSinh').SendMailAndExec()

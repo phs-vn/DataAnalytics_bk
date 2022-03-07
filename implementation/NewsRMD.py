@@ -31,63 +31,58 @@ def NewsRMD():
 
     while True:
         try:
-            try:
-                vsd_TCPH = newsrmd.vsd.tinTCPH()
-                break
-            except newsrmd.ignored_exceptions:
-                vsd_TCPH = pd.DataFrame()
-                continue
+            vsd_TCPH = newsrmd.vsd.tinTCPH()
+            break
+        except newsrmd.ignored_exceptions:
+            vsd_TCPH = pd.DataFrame()
+            continue
         except newsrmd.NoNewsFound:
             vsd_TCPH = pd.DataFrame()
             break
 
     while True:
         try:
-            try:
-                vsd_TVBT = newsrmd.vsd.tinTVBT()
-                break
-            except newsrmd.ignored_exceptions:
-                vsd_TVBT = pd.DataFrame()
-                continue
+            vsd_TVBT = newsrmd.vsd.tinTVBT()
+            break
+        except newsrmd.ignored_exceptions:
+            vsd_TVBT = pd.DataFrame()
+            continue
         except newsrmd.NoNewsFound:
             vsd_TVBT = pd.DataFrame()
             break
 
     while True:
         try:
-            try:
-                hnx_TCPH = newsrmd.hnx.tinTCPH()
-                break
-            except newsrmd.ignored_exceptions:
-                hnx_TCPH = pd.DataFrame()
-                continue
+            hnx_TCPH = newsrmd.hnx.tinTCPH()
+            break
+        except newsrmd.ignored_exceptions:
+            hnx_TCPH = pd.DataFrame()
+            continue
         except newsrmd.NoNewsFound:
             hnx_TCPH = pd.DataFrame()
             break
 
     while True:
         try:
-            try:
-                hnx_tintuso = newsrmd.hnx.tintuso()
-                break
-            except newsrmd.ignored_exceptions:
-                hnx_tintuso = pd.DataFrame()
-                continue
+            hnx_tintuso = newsrmd.hnx.tintuso()
+            break
+        except newsrmd.ignored_exceptions:
+            hnx_tintuso = pd.DataFrame()
+            continue
         except newsrmd.NoNewsFound:
             hnx_tintuso = pd.DataFrame()
             break
 
     while True:
         try:
-            try:
-                hose_tintonghop = newsrmd.hose.tintonghop()
-                break
-            except newsrmd.ignored_exceptions:
-                hose_tintonghop = pd.DataFrame()
-                continue
+            hose_tintonghop = newsrmd.hose.tintonghop()
+            break
+        except newsrmd.ignored_exceptions:
+            hose_tintonghop = pd.DataFrame()
+            continue
         except newsrmd.NoNewsFound:
             hose_tintonghop = pd.DataFrame()
-        break
+            break
 
     writer = pd.ExcelWriter(file_path,engine='xlsxwriter')
     workbook = writer.book

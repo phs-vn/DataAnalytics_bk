@@ -43,15 +43,30 @@ def run(
     check_tpcp = 'Trái phiếu chính phủ' in result.index.get_level_values(2)
     check_tpdn = 'Trái phiếu doanh nghiệp' in result.index.get_level_values(2)
     if check_cp:
-        result.loc[pd.IndexSlice[:,'HOSE','Cổ phiếu thường'],'service_fee'] = result['value']*0.027/100
+        try:
+            result.loc[pd.IndexSlice[:,'HOSE','Cổ phiếu thường'],'service_fee'] = result['value']*0.027/100
+        except (Exception,):
+            pass
     if check_cw:
-        result.loc[pd.IndexSlice[:,'HOSE','Chứng quyền'],'service_fee'] = result['value']*0.018/100
+        try:
+            result.loc[pd.IndexSlice[:,'HOSE','Chứng quyền'],'service_fee'] = result['value']*0.018/100
+        except (Exception,):
+            pass
     if check_ccq:
-        result.loc[pd.IndexSlice[:,'HOSE','Chứng chỉ quỹ'],'service_fee'] = result['value']*0.018/100
+        try:
+            result.loc[pd.IndexSlice[:,'HOSE','Chứng chỉ quỹ'],'service_fee'] = result['value']*0.018/100
+        except (Exception,):
+            pass
     if check_tpcp:
-        result.loc[pd.IndexSlice[:,'HOSE','Trái phiếu chính phủ'],'service_fee'] = result['value']*0.0054/100
+        try:
+            result.loc[pd.IndexSlice[:,'HOSE','Trái phiếu chính phủ'],'service_fee'] = result['value']*0.0054/100
+        except (Exception,):
+            pass
     if check_tpdn:
-        result.loc[pd.IndexSlice[:,'HOSE','Trái phiếu doanh nghiệp'],'service_fee'] = result['value']*0.0054/100
+        try:
+            result.loc[pd.IndexSlice[:,'HOSE','Trái phiếu doanh nghiệp'],'service_fee'] = result['value']*0.0054/100
+        except (Exception,):
+            pass
 
     branch_name_mapper = {
         '0001':'HQ',

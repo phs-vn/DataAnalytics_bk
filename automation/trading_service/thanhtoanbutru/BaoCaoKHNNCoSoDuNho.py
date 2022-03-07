@@ -1,5 +1,5 @@
 from automation.trading_service.thanhtoanbutru import *
-
+from datawarehouse import EXEC
 
 # DONE
 def run(
@@ -13,7 +13,7 @@ def run(
     folder_name = 'BaoCaoThang'
 
     def convert(x):
-        month = convert_int(int(x[5:7])-1)
+        month = convert_int(int(x[5:7]))
         if month=='00':
             month = 12
             year = int(x[:4])-1
@@ -29,6 +29,11 @@ def run(
     ###################################################
     ###################################################
 
+    if run_time is None or run_time.date() == dt.datetime.now().date(): # chạy vào hiện tại
+        # Update data:
+        EXEC(connect_DWH_CoSo,'spvrm6631',FrDate=t0_date,ToDate=t0_date)
+
+    # Query
     def get_full_list(account_type):
         if account_type=='institutional':
             sql_condition = "[vrm6631].[cash_balance_at_bank] <= 33000 AND [r].[account_type] = N'Tổ chức nước ngoài'"

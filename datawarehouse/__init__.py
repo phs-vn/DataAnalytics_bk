@@ -10,7 +10,7 @@ def INSERT(
     This function INSERT a pd.DataFrame to a particular [db].[table].
     Must make sure the order / data type of pd.DataFrame align with [db].[table]
 
-    :param conn: connect object of the Database
+    :param conn: connection object of the Database
     :param table: name of the table in the Database
     :param df: inserted pd.DataFrame
 
@@ -19,7 +19,6 @@ def INSERT(
 
     sqlStatement = f"INSERT INTO [{table}] VALUES ({','.join(['?']*df.shape[1])})"
     cursor = conn.cursor()
-    cursor.fast_executemany = True
     cursor.executemany(sqlStatement,df.values.tolist())
     cursor.commit()
     cursor.close()
@@ -34,7 +33,7 @@ def DELETE(
     This function DELETE entire rows from a [db].[table] given a paticular WHERE clause.
     If WHERE = '', it completely clears all data from the [db].[table]
 
-    :param conn: connect object of the Database
+    :param conn: connection object of the Database
     :param table: name of the table in the Database
     :param where: WHERE clause in DELETE statement
     """
@@ -45,8 +44,98 @@ def DELETE(
             where = 'WHERE ' + where
     sqlStatement = f"DELETE FROM [{table}] {where}"
     cursor = conn.cursor()
-    cursor.fast_executemany = True
     cursor.execute(sqlStatement)
     cursor.commit()
     cursor.close()
 
+
+def DROP_DUPLICATES(
+    conn,
+    table:str,
+    *columns:str,
+):
+    """
+    This function DELETE duplicates values from a [db].[table] given a list of columns
+    on which we check for duplicates
+
+    :param conn: connection object of the Database
+    :param table: name of the table in the Database
+    :param columns: columns to check for duplicates
+    """
+
+    tableList = '[' + '],['.join(columns) + ']'
+    sqlStatement = f"""
+        WITH [tempTable] AS (
+            SELECT *, ROW_NUMBER() OVER (PARTITION BY {tableList} ORDER BY {tableList}) [rowNum]
+            FROM [{table}]
+        )
+        DELETE FROM [tempTable]
+        WHERE [rowNum] > 1
+    """
+    cursor = conn.cursor()
+    cursor.execute(sqlStatement)
+    cursor.commit()
+    cursor.close()
+
+
+def EXEC(
+    conn,
+    sp:str,
+    **params,
+):
+
+    """
+    This function EXEC the specified stored procedure in SQL
+
+    :param conn: connection object of the Database
+    :param sp: name of the stored procedure in the Database
+    :param params: parameters passed to the stored procedure
+
+    Example: EXEC(connect_DWH_CoSo, 'spvrm6631', FrDate='2022-03-01', ToDate='2022-03-01')
+    """
+
+    sqlStatement = f'EXEC {sp}'
+    for k,v in params.items():
+        sqlStatement += f" @{k} = '{v}',"
+
+    sqlStatement = sqlStatement.rstrip(',')
+    print(sqlStatement)
+
+    cursor = conn.cursor()
+    cursor.execute(sqlStatement)
+    cursor.commit()
+    cursor.close()
+
+
+def UPDATE(db,*tables):
+
+    """
+    This function EXEC the corresponding stored procedures to update
+    the specified tables
+
+    :param db: name of database (DWH-CoSo or DWH-PhaiSinh)
+    :param tables: names of tables
+    """
+
+    if db == 'DWH-CoSo':
+        conn = connect_DWH_CoSo
+        sqlAllStatement = 'EXEC spRunCoso'
+    elif db == 'DWH-PhaiSinh':
+        conn = connect_DWH_PhaiSinh
+        sqlAllStatement = 'EXEC spRunPhaiSinh'
+    else:
+        raise ValueError("db must be either 'DWH-CoSo' or 'DWH-PhaiSinh'")
+
+    cursor = conn.cursor()
+    cursor.fast_executemany = True
+    if tables != ('all',):
+        today = dt.datetime.now().strftime('%Y-%m-%d')
+        for table in tables:
+            sqlStatement = f"EXEC sp{table} @FrDate = '{today}', @ToDate = '{today}'"
+            cursor.execute(sqlStatement)
+            cursor.commit()
+    else:
+        cursor.execute(sqlAllStatement)
+        cursor.commit()
+
+    cursor.close()

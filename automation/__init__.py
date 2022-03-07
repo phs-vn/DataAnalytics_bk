@@ -57,6 +57,9 @@ def get_bank_name(x):
     :param x: là account_code hoặc sub_account
     """
 
+    if x is None:
+        return 'Không tìm thấy NH liên kết trên VCF0051'
+
     # xuất hiện chữ cái trong x -> là account_code, không thì sub_account
     if any([x[i] in 'QWERTYUIOPASDFGHJKLZXCVBNM' for i in range(len(x))]):
         result = pd.read_sql(

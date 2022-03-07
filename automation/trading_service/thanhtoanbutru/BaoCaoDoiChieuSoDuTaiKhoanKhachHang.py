@@ -34,6 +34,7 @@ def initiate(
     )
     table.to_pickle(join(dirname(__file__),'sodutientaikhoankhachhang',f'{end_date.replace("/","")}.pickle'))
 
+
 def run(
     run_time=None,
 ):
@@ -135,7 +136,8 @@ def run(
     check_1 = table['opening_balance_t0']==table['closing_balance_t1']
     check_2 = table['opening_balance_t1']==table['opening_balance_t1_ref']
     check_3 = table['closing_balance_t1']==table['closing_balance_t1_ref']
-    table['check'] = check_1&check_2&check_3
+    check_4 = (table[['opening_balance_t0','opening_balance_t1','closing_balance_t1']] >= 0).all(axis=1)
+    table['check'] = check_1 & check_2 & check_3 & check_4
     table['check'] = table['check'].replace(True,'Khớp')
     table['check'] = table['check'].replace(False,'Bất thường')
     table.sort_values('check',inplace=True)

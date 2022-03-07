@@ -3,12 +3,12 @@ from breakeven_price import monte_carlo_test
 from implementation import TaskMonitor
 
 
-@TaskMonitor
+# @TaskMonitor
 def BreakevenPrice_5pct(  # run on Wed and Fri weekly
     tickers: list = None,
     exchanges: list = None,
-) \
-        -> pd.DataFrame:
+) -> pd.DataFrame:
+
     start_time = time.time()
 
     destination_dir_github = join(dirname(dirname(realpath(__file__))),'breakeven_price','result_table')
@@ -50,8 +50,7 @@ def BreakevenPrice_5pct(  # run on Wed and Fri weekly
 
     for ticker in tickers:
         try:
-            lv0_price,lv1_price,lv2_price,lv3_price,breakeven_price,group = monte_carlo_test.run(ticker=ticker,
-                                                                                                 alpha=0.05)
+            lv0_price,lv1_price,lv2_price,lv3_price,breakeven_price,group = monte_carlo_test.run(ticker=ticker,alpha=0.05)
             with open(github_table_path,mode='a',newline='') as github_file:
                 github_writer = csv.writer(github_file,delimiter=',')
                 github_writer.writerow([ticker,lv0_price,lv1_price,lv2_price,lv3_price,group,breakeven_price])

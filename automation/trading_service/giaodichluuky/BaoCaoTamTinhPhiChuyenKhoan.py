@@ -47,7 +47,7 @@ def run(
     Tháng nào lấy ngày sai thì hardcode ngày đúng tại dòng ngay dưới
     """
 
-    adj_start_date,adj_end_date = adjust_time(start_date),adjust_time(end_date) # thay đổi tại đây
+    adj_start_date,adj_end_date = '2022-01-27','2022-02-24' # adjust_time(start_date),adjust_time(end_date) # thay đổi tại đây
     transfer_fee_TTBT = pd.read_sql(
         f"""
         SELECT 
@@ -95,7 +95,9 @@ def run(
     branch_id_mapper = branch_id_mapper.loc[~branch_id_mapper.index.duplicated()]  # select unique index
     transfer_fee_CTCK['branch_id'] = transfer_fee_CTCK.index.map(branch_id_mapper)
     transfer_fee_CTCK.reset_index(drop=True,inplace=True)
-    transfer_fee_CTCK = transfer_fee_CTCK.groupby('branch_id',as_index=True).sum()
+    transfer_fee_CTCK = transfer_fee_CTCK.groupby('branch_id',as_index=True)[['volume','fee']].sum()
+    if transfer_fee_CTCK.empty: # group by compress empty dataframe by default
+        transfer_fee_CTCK[['volume','fee']] = np.nan
     transfer_fee_CTCK = transfer_fee_CTCK.reindex(branch_name_mapper.keys()).fillna(0)
     # calculate transfer fee on TTBT
     sum_volume = transfer_fee_TTBT.groupby(['date','ticker'])['volume'].sum().squeeze().sort_index()
@@ -113,7 +115,9 @@ def run(
     transfer_fee_TTBT.set_index(['date','sub_account'],inplace=True)
     transfer_fee_TTBT['branch_id'] = relationship[['date','sub_account','branch_id']].set_index(['date','sub_account'])
     transfer_fee_TTBT.reset_index(drop=True,inplace=True)
-    transfer_fee_TTBT = transfer_fee_TTBT.groupby('branch_id',as_index=True).sum()
+    transfer_fee_TTBT = transfer_fee_TTBT.groupby('branch_id',as_index=True)[['volume','fee']].sum()
+    if transfer_fee_TTBT.empty: # group by compress empty dataframe by default
+        transfer_fee_TTBT[['volume','fee']] = np.nan
     transfer_fee_TTBT = transfer_fee_TTBT.reindex(branch_name_mapper.keys()).fillna(0)
 
     transfer_fee = pd.DataFrame(

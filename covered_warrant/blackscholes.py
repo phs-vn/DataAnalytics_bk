@@ -71,7 +71,7 @@ class issuance:
             year_days += 1
             start = bdate(start,1)
 
-        # Compute daily risk-free rate
+        # Compute daily risk_management-free rate
         self.r = np.log(1+r)/year_days
 
         remaining_days = 0

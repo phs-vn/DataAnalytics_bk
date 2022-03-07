@@ -863,10 +863,10 @@ class ta:
         """
 
         if fromdate is None:
-            start = '2015-01-01'
+            start = '2018-01-01'
         else:
-            if dt.datetime.strptime(fromdate,'%Y-%m-%d')<dt.datetime(year=2015,month=1,day=1):
-                raise Exception('Only data since 2015-01-01 is reliable')
+            if dt.datetime.strptime(fromdate,'%Y-%m-%d')<dt.datetime(year=2018,month=1,day=1):
+                raise Exception('Only data since 2018-01-01 is reliable')
             else:
                 start = fromdate
 
@@ -898,13 +898,14 @@ class ta:
                 int_ = '0'+int_
             return int_
 
-        def converter(date_str: str):
+        def converter(date_str:str):
             month,day,year = date_str.split('/')
             day = addzero(day)
             month = addzero(month)
             return f'{year}-{month}-{day}'
 
         history['trading_date'] = history['trading_date'].str.split().str.get(0).map(converter)
+        history = history.sort_values('trading_date').reset_index(drop=True)
 
         history.loc[history['open']==0,'open'] = history['ref']
         history.loc[history['close']==0,'close'] = history['ref']

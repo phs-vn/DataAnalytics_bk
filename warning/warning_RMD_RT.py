@@ -2,7 +2,47 @@
 Cú pháp: run(True) hoặc run(False)  |  True: Ẩn browser window, False Không ẩn browser window
 """
 from request.stock import *
+from request import connect_DWH_CoSo
+from news_collector import scrape_ticker_by_exchange
 
+def __getForceSell__(d):
+    return pd.read_sql(
+        f"""
+        WITH 
+        [t] AS (
+            SELECT
+                [sub_account].[account_code],
+                [vmr9004].[ticker],
+                SUM([vmr9004].[total_volume]) [volume]
+            FROM [vmr9004] LEFT JOIN [sub_account] 
+            ON [vmr9004].[sub_account] = [sub_account].[sub_account] AND [vmr9004].[date] = '{d}'
+            WHERE 
+                EXISTS (
+                    SELECT [vmr0003].[sub_account] FROM [vmr0003] 
+                    WHERE [vmr0003].[sub_account] = [vmr9004].[sub_account]
+                        AND [vmr0003].[date] = '{d}'
+                    ) 
+                -- loại các tk nợ xấu, tự doanh
+                AND [sub_account].[account_code] NOT IN (
+                    '022P002222',
+                    '022C006827',
+                    '022C012621',
+                    '022C012620',
+                    '022C012622',
+                    '022C089535',
+                    '022C050302',
+                    '022C089950',
+                    '022C089957'
+                )
+            GROUP BY [account_code], [ticker]
+        )
+        SELECT 
+            [t].*,
+            CONCAT([t].[account_code],' (',CAST([t].[volume] AS BIGINT),')') [combine]
+        FROM [t]
+        """,
+        connect_DWH_CoSo
+    )
 
 def __formatPrice__(x):
     if not x:  # x == ''
@@ -44,7 +84,7 @@ def __SendMailRetry__(func): # Decorator
                 continue
 
             # Khi có Warnings
-            WarningsHTML = Warnings.to_html(index=False,header=False)
+            WarningsHTML = Warnings.to_html(index=False,header=True).replace("\\n","<br>")
             WarningsHTML = WarningsHTML.replace(
                 'border="1"',
                 'style="border-collapse:collapse; border-spacing:0px;"',
@@ -93,7 +133,7 @@ def __SendMailRetry__(func): # Decorator
                 break
             if now.time()<dt.time(9,0,0):
                 break
-            time.sleep(8*60)  # nghỉ 8 phút
+            time.sleep(5*60)  # nghỉ 5 phút
 
     return wrapper
 
@@ -103,6 +143,16 @@ def run(
     exchange:str,
     hide_window=True  # nên set=True để ko bị pop up cửa sổ browser liên tục trong phiên
 ) -> pd.DataFrame:
+
+    today = dt.datetime.now().strftime('%Y-%m-%d')
+    # get Force Sell table
+    ForceSellFile = join(dirname(__file__),'TempFiles',f"ForceSell_{today.replace('-','.')}.pickle")
+    if not isfile(ForceSellFile):
+        ForceSellTable = __getForceSell__(today)
+        ForceSellTable.to_pickle(ForceSellFile)
+    else:
+        ForceSellTable = pd.read_pickle(ForceSellFile)
+    tickersForceSell = ForceSellTable['ticker'].unique()
 
     PATH = join(dirname(dirname(realpath(__file__))),'dependency','chromedriver')
     ignored_exceptions = (
@@ -116,25 +166,35 @@ def run(
 
     start = time.time()
 
+    # Lấy tickers
+    tickersFile = join(dirname(__file__),'TempFiles',f"TickerList_{today.replace('-','.')}.pickle")
+    if not isfile(tickersFile):
+        allTickers = scrape_ticker_by_exchange.run().reset_index()
+        allTickers.to_pickle(tickersFile)
+    else:
+        allTickers = pd.read_pickle(tickersFile)
+
+    allTickers = allTickers.loc[allTickers['ticker'].map(len)==3]
     if exchange == 'HOSE':
         url = 'https://iboard.ssi.com.vn/bang-gia/hose'
+        fullTickers = allTickers.loc[allTickers['exchange']=='HOSE','ticker']
         mlist = internal.mlist(['HOSE'])
     elif exchange == 'HNX':
         url = 'https://iboard.ssi.com.vn/bang-gia/hnx'
+        fullTickers = allTickers.loc[allTickers['exchange']=='HNX','ticker']
         mlist = internal.mlist(['HNX'])
     else:
         raise ValueError('Currently monitor HOSE and HNX only')
 
-    lastWarningFile = f"{dt.datetime.now().strftime('%Y.%m.%d')}.pickle"
+    tickerPool = set(fullTickers) & (set(mlist) | set(tickersForceSell)) # các cp phải quyét
 
     # produce/get avgVolume File
-    todate = dt.datetime.now().strftime('%Y-%m-%d')
-    avgVolumeFile = join(dirname(__file__),'TempFiles',f"{exchange}_AvgPrice_{todate.replace('-','.')}")
+    avgVolumeFile = join(dirname(__file__),'TempFiles',f"{exchange}_AvgPrice_{today.replace('-','.')}.pickle")
     if not isfile(avgVolumeFile):
-        fromdate = bdate(todate,-22)
-        avgVolume = pd.Series(index=mlist,dtype=object)
-        for ticker in mlist:
-            avgVolume.loc[ticker] = ta.hist(ticker,fromdate,todate)['total_volume'].mean()
+        fromdate = bdate(today,-22)
+        avgVolume = pd.Series(index=tickerPool,dtype=object)
+        for ticker in tickerPool:
+            avgVolume.loc[ticker] = ta.hist(ticker,fromdate,today)['total_volume'].mean()
         avgVolume.to_pickle(avgVolumeFile)
     else:
         avgVolume = pd.read_pickle(avgVolumeFile)
@@ -146,7 +206,7 @@ def run(
     wait = WebDriverWait(driver,60,ignored_exceptions=ignored_exceptions)
     driver.get(url)
 
-    warnings = pd.DataFrame(columns=['Message'],index=pd.Index(mlist,name='Ticker'))
+    warnings = pd.DataFrame(columns=['Marginable','Message'],index=pd.Index(tickerPool,name='Ticker'))
     for ticker in warnings.index:
         tickerElement = wait.until(EC.presence_of_element_located((By.XPATH,f'//tbody/*[@id="{ticker}"]')))
         sub_wait = WebDriverWait(tickerElement,60,ignored_exceptions=ignored_exceptions)
@@ -157,16 +217,27 @@ def run(
         SellVolume3 = __formatVolume__(sub_wait.until(EC.presence_of_element_located((By.CLASS_NAME,'best3OfferVol'))).text)
         FrgBuy = __formatVolume__(sub_wait.until(EC.presence_of_element_located((By.CLASS_NAME,'buyForeignQtty'))).text)
         FrgSell = __formatVolume__(sub_wait.until(EC.presence_of_element_located((By.CLASS_NAME,'sellForeignQtty'))).text)
-        if MatchPrice==Floor:
+        if MatchPrice == Floor:
+            message = ''
+            # Điều kiện 0:
+            if ticker in mlist:
+                warnings.loc[ticker,'Marginable'] = ': Yes'
+            else:
+                warnings.loc[ticker,'Marginable'] = ': No'
             # Điều kiện 1:
             if SellVolume1 + SellVolume2 + SellVolume3 >= 0.2 * avgVolume.loc[ticker]:
-                warnings.loc[ticker,'Message'] = ': Giảm sàn, Dư bán hơn 20% KLTB'
+                message += '-- Giảm sàn, Dư bán hơn 20% KLTB'
             # Điều kiện 2:
             if FrgSell - FrgBuy >= 0.2 * avgVolume.loc[ticker]:
-                warnings.loc[ticker,'Message'] = ': Giảm sàn, NN bán hơn 20% KLTB'
+                message += '\n-- Giảm sàn, NN bán hơn 20% KLTB'
+            # Điều kiện 3:
+            if ticker in tickersForceSell:
+                result = ForceSellTable.loc[ForceSellTable['ticker']==ticker,'combine']
+                message += f"\n-- Tài khoản force sell đang nắm giữ: {', '.join(result)}"
+            warnings.loc[ticker,'Message'] = message
 
+    warnings = warnings.loc[warnings['Message']!='']
     warnings = warnings.dropna().reset_index()
-
     driver.quit()
 
     if __name__=='__main__':
@@ -176,3 +247,4 @@ def run(
     print(f'Total Run Time ::: {np.round(time.time()-start,1)}s')
 
     return warnings
+

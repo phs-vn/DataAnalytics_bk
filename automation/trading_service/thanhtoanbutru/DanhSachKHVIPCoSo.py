@@ -16,7 +16,6 @@ def run(
     t0_date = info['end_date']
     period = info['period']
     folder_name = info['folder_name']
-    run_time = dt.datetime.now()
 
     # create folder
     if not os.path.isdir(join(dept_folder,folder_name,period)):
@@ -43,38 +42,60 @@ def run(
             FROM
                 [account_type]
         )
+        , [eod_change] AS (
+            SELECT 
+                [t].[account_code],
+                [t].[date_of_change],
+                [t].[contract_type],
+                [t].[date_of_approval]
+            FROM (
+                SELECT 
+                    [customer_information_change].[account_code],
+                    [customer_information_change].[date_of_change],
+                    [customer_information_change].[time_of_change],
+                    [customer_information_change].[date_of_approval],
+                    MAX(
+                        CASE 
+                            WHEN [customer_information_change].[change_content] = 'Loai hinh hop dong'
+                                AND [contract_code].[contract_type] <> N'Tiểu khoản thường'
+                            THEN [customer_information_change].[time_of_change] 
+                        END
+                    ) OVER (PARTITION BY [account_code], [date_of_change]) [eof_time_of_change],
+                    [contract_code].[type],
+                    [contract_code].[contract_type]
+                FROM
+                    [customer_information_change]
+                LEFT JOIN [contract_code] ON [customer_information_change].[after] = [contract_code].[type]
+                WHERE [customer_information_change].[date_of_change] <= '{t0_date}'
+                    AND [customer_information_change].[change_content] = 'Loai hinh hop dong'
+                    AND [contract_code].[contract_type] <> N'Tiểu khoản thường'
+            ) [t]
+            WHERE [t].[time_of_change] = [t].[eof_time_of_change]
+        )
         , [full] AS (
             SELECT 
                 [t].*
             FROM (
                 SELECT 
-                    [customer_information_change].[account_code],
-                    [customer_information_change].[date_of_change],
-                    [customer_information_change].[date_of_approval],
-                    [contract_code].[type],
-                    [contract_code].[contract_type],
-                    [contract_code].[type_name],
-                    MAX(CASE WHEN [contract_type] = 'NORM' THEN [customer_information_change].[date_of_change] END) 
-                        OVER (PARTITION BY [customer_information_change].[account_code]) [norm_end], -- ngày cuối cùng là normal
-                    [customer_information_change].[time_of_change],
-                    MAX([date_of_change])
-                        OVER (PARTITION BY [customer_information_change].[account_code]) [last_change_date] -- ngày thay đổi cuối cùng
-                FROM [customer_information_change]
-                LEFT JOIN [contract_code] ON [customer_information_change].[after] = [contract_code].[type]
-                WHERE
-                    [customer_information_change].[date_of_change] <= '{t0_date}'
-                    AND [customer_information_change].[change_content] = 'Loai hinh hop dong'
-                    AND [contract_code].[contract_type] <> N'Tiểu khoản thường' -- Bỏ qua thay đổi loại hình tiểu khoản thường
+                    [eod_change].[account_code],
+                    [eod_change].[date_of_change],
+                    [eod_change].[date_of_approval],
+                    [eod_change].[contract_type],
+                    MAX(CASE WHEN [eod_change].[contract_type] = 'NORM' THEN [eod_change].[date_of_change] END)
+                        OVER (PARTITION BY [eod_change].[account_code]) [norm_end], -- ngày cuối cùng là normal
+                    MAX([eod_change].[date_of_change])
+                        OVER (PARTITION BY [eod_change].[account_code]) [last_change_date] -- ngày thay đổi cuối cùng
+                FROM [eod_change]
             ) [t]
-            WHERE [t].[date_of_change] >= [t].[norm_end] OR [t].[norm_end] IS NULL -- Bỏ qua các thay đổi trước ngày cuối cùng là normal
+            WHERE ([t].[date_of_change] > [t].[norm_end] OR [t].[norm_end] IS NULL) -- Bỏ qua các thay đổi trước ngày cuối cùng là normal
         )
         , [processing] AS (
-            SELECT
+            SELECT 
                 [full].*,
                 MIN([date_of_change]) OVER (PARTITION BY [full].[account_code]) [effective_date], -- Ngày hiệu lực đầu tiên
                 MAX(CASE WHEN [full].[date_of_change] = [full].[last_change_date] THEN [full].[contract_type] END)
                     OVER (PARTITION BY [full].[account_code]) [last_type], -- loại hình hợp đồng tại thời điểm gần nhất
-                LAG(contract_type) OVER (PARTITION BY [full].[account_code] ORDER BY [full].[date_of_change]) [previous_type] -- loại hình hợp đồng trước đó
+                LAG([full].[contract_type]) OVER (PARTITION BY [full].[account_code] ORDER BY [full].[date_of_change]) [previous_type] -- loại hình hợp đồng trước đó
             FROM 
                 [full]
         )
@@ -88,19 +109,19 @@ def run(
             [processing]
         WHERE ([processing].[contract_type] <> [processing].[previous_type] OR [processing].[previous_type] IS NULL) -- Chỉ lấy ngày thay đổi đầu tiên trong cùng một loại hình
         )
-
+        
         SELECT DISTINCT -- do một số KH thay đổi 2 tiểu khoản cùng lúc. VD: '022C002768' ngày 29/10/2021
             CONCAT(N'Tháng ',FORMAT(MONTH([account].[date_of_birth]),'00')) [birth_month],
-            [account].[account_code],
-            [account].[customer_name],
-            [branch].[branch_name],
-            [account].[date_of_birth],
-            CASE
+            [account].[account_code], 
+            [account].[customer_name], 
+            [branch].[branch_name], 
+            [account].[date_of_birth], 
+            CASE 
                 WHEN [account].[gender] = '001' THEN 'Male'
                 WHEN [account].[gender] = '002' THEN 'Female'
                 ELSE ''
             END [gender],
-            CASE
+            CASE 
                 WHEN [vcf0051].[contract_type] LIKE N'%GOLD%' THEN 'GOLD PHS'
                 WHEN [vcf0051].[contract_type] LIKE N'%SILV%' THEN 'SILV PHS'
                 WHEN [vcf0051].[contract_type] LIKE N'%VIP%' THEN 'VIP Branch'
@@ -153,6 +174,7 @@ def run(
         AND [vcf0051].[status] IN ('A','B')
         AND [vcf0051].[date] = '{t0_date}'
         ORDER BY [birth_month], [date_of_birth]
+
         """,
         connect_DWH_CoSo,
     )
@@ -398,7 +420,7 @@ def run(
     ##############################################
     ##############################################
 
-    #  Viết Sheet TONG THEO CN
+    # Viết Sheet TONG THEO CN
     sum_format = workbook.add_format(
         {
             'border':1,

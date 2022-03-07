@@ -495,7 +495,7 @@ def run(
         '(7a)','(7b)','(7c)','(7d)',
         '(8)','(9)=(6a)+(7a)-(6b)-(6c)-(6d)-(7b)-(7c)-(7d)',
         '(10a)','(10b)','(10c)','(10d)','(10e)','(10f)',
-        '(11)','(12)',
+        '(11)=(9)-(10c)-(10e)','(12)',
     ]
     worksheet.write_row('A12',stt_headers,headers_format)
     worksheet.write_column('A13',np.arange(table.shape[0])+1,text_center_format)

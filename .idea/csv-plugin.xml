@@ -122,6 +122,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\breakeven_price\result_table\2.3.2022.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\breakeven_price\result_table\20.10.2021.csv">
           <value>
             <Attribute>
@@ -144,6 +151,13 @@
           </value>
         </entry>
         <entry key="\breakeven_price\result_table\22.9.2021.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\breakeven_price\result_table\23.2.2022.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

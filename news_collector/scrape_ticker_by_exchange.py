@@ -12,7 +12,7 @@ ignored_exceptions = (
 )
 
 def run(
-    hide_window=True  # rất dễ lỗi khi hide_window = True
+    hide_window=True
 ) -> pd.DataFrame:
 
     options = Options()
