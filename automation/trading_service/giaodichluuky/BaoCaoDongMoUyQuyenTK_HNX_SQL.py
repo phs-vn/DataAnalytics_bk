@@ -10,9 +10,6 @@ def run(
     start_date = info['start_date']
     end_date = info['end_date']
     period = info['period']
-    # start_date = '2022-01-01'
-    # end_date = '2022-01-31'
-    # period = '01.2022'
     folder_name = info['folder_name']
 
     month = int(period.split('.')[0])

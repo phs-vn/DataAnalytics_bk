@@ -41,7 +41,7 @@ def FilterNewsByKeywords(
         else:
             return False
 
-    with open('Keywords',encoding='utf8',) as file:
+    with open(join(dirname(__file__),'Keywords'),encoding='utf8',) as file:
         badWords = file.read().split('\n')
 
     def badNewsIdentifier(content):

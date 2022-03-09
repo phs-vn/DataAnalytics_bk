@@ -47,7 +47,7 @@ def _get_outlook_files(
         # print which account is being logged
         print(f"Account {account.DeliveryStore.DisplayName} is being logged")
 
-    inbox = outlook.Folders.Item(1).Folders['Inbox']
+    inbox = outlook.Folders.Item(1).Folders['Inbox'].Folders['FilesFromEIB']
     messages = inbox.Items
     # Lọc ngày (chỉ xét các emails nhận tại ngày chạy)
     run_date = dt.datetime.strptime(t0_date,'%Y/%m/%d').date()

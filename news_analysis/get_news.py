@@ -1,7 +1,6 @@
-import time
-
 from request.stock import *
 from request import *
+
 
 def PotentialRequestRefused(hours):
 
@@ -108,17 +107,24 @@ class cafef(__Base__):
                     'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
                 }
                 url = u.replace('trang-1',f'trang-{i}')
-                html = requests.get(url,headers=headers,timeout=30).text
+                session = requests.Session()
+                retry = requests.packages.urllib3.util.retry.Retry(connect=5,backoff_factor=1)
+                adapter = requests.adapters.HTTPAdapter(max_retries=retry)
+                session.mount('https://',adapter)
+                html = session.get(url,headers=headers,timeout=30).text
                 bs = BeautifulSoup(html,'html5lib')
                 h3_tags = bs.find_all(name='h3')
                 URLs = ['https://www.cafef.vn' + tag.find(name='a').get('href') for tag in h3_tags]
 
                 for articleURL in URLs:
-
                     try:
-                        time.sleep(1) # cafef hay chặn trafic --> cần sleep sau mỗi vòng lặp
                         print(articleURL)
-                        articleHTML = requests.get(articleURL,headers=headers,timeout=30).text
+                        session = requests.Session()
+                        retry = requests.packages.urllib3.util.retry.Retry(connect=5,backoff_factor=1)
+                        adapter = requests.adapters.HTTPAdapter(max_retries=retry)
+                        session.mount('https://',adapter)
+                        print(articleURL)
+                        articleHTML = session.get(articleURL,headers=headers,timeout=30).text
                         articleBS = BeautifulSoup(articleHTML,'html5lib')
                         # Title
                         articleTitle = articleBS.find(class_='title').get_text(strip=True)
@@ -145,7 +151,7 @@ class cafef(__Base__):
                         saved_urls.append(articleURL)
 
                     except AttributeError:
-                        print(f'{articleURL} đã bị gỡ')
+                        print(f'{articleURL} đã bị gỡ hoặc là một Landing Page')
 
                 i += 1
 
@@ -232,11 +238,14 @@ class ndh(__Base__):
         # Làm việc trên HTML bằng BeautifulSoup
         for URL in URLs:
             try:
-                time.sleep(1) # tránh bị block trafic -> cần sleep sau mỗi vòng lặp
                 headers = {
                     'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
                 }
-                articleHTML = requests.get(URL,headers=headers,timeout=30).text
+                session = requests.Session()
+                retry = requests.packages.urllib3.util.retry.Retry(connect=5,backoff_factor=1)
+                adapter = requests.adapters.HTTPAdapter(max_retries=retry)
+                session.mount('https://',adapter)
+                articleHTML = session.get(URL,headers=headers,timeout=30).text
                 articleBS = BeautifulSoup(articleHTML,'html5lib')
                 # Title
                 articleTitle = articleBS.find(class_='title-detail').get_text(strip=True)
@@ -351,11 +360,14 @@ class vietstock(__Base__):
         saved_bodies = []
 
         for url in URLs:
-            time.sleep(1)  # tránh bị block trafic -> cần sleep sau mỗi vòng lặp
             headers = {
                 'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
             }
-            articleHTML = requests.get(url,headers=headers,timeout=30).text
+            session = requests.Session()
+            retry = requests.packages.urllib3.util.retry.Retry(connect=5,backoff_factor=1)
+            adapter = requests.adapters.HTTPAdapter(max_retries=retry)
+            session.mount('https://',adapter)
+            articleHTML = session.get(url,headers=headers,timeout=30).text
             articleBS = BeautifulSoup(articleHTML,'html5lib')
             # Title
             articleTitle = articleBS.find(class_='pTitle').get_text(strip=True)
@@ -379,7 +391,6 @@ class vietstock(__Base__):
             saved_titles.append(articleTitle)
             saved_descriptions.append(articleDescription)
             saved_bodies.append(articleBody)
-            time.sleep(1)
 
         saved_urls = URLs
 
@@ -464,11 +475,14 @@ class tinnhanhchungkhoan(__Base__):
 
         for url in URLs:
             try:
-                time.sleep(1) # tránh bị block trafic -> cần sleep sau mỗi vòng lặp
                 headers = {
                     'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
                 }
-                articleHTML = requests.get(url,headers=headers,timeout=30).text
+                session = requests.Session()
+                retry = requests.packages.urllib3.util.retry.Retry(connect=5,backoff_factor=1)
+                adapter = requests.adapters.HTTPAdapter(max_retries=retry)
+                session.mount('https://',adapter)
+                articleHTML = session.get(url,headers=headers,timeout=30).text
                 articleBS = BeautifulSoup(articleHTML,'html5lib')
                 # Title
                 articleTitle = articleBS.find(class_='article__header').get_text(strip=True)
@@ -493,7 +507,6 @@ class tinnhanhchungkhoan(__Base__):
                 saved_descriptions.append(articleDescription)
                 saved_bodies.append(articleBody)
                 saved_urls.append(url)
-                time.sleep(1)
 
             except AttributeError:
                 print(f'{url} là một interactive article --> bỏ qua')

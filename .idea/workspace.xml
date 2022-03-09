@@ -5,948 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07134f6c-0f30-4cd5-a7e5-a4ec5d1d98bf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220221/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220222/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220222/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220223/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220223/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220224/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220224/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220301/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220301/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220302/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220302/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220303/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220303/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220304/EIB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220304/OCB.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220222.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220223.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220224.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220301.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220302.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220303.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220304.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20230224.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/breakeven_price/result_table/2.3.2022.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/breakeven_price/result_table/23.2.2022.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/breakeven_price/result_table/3.3.2022_0.02.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/breakeven_price/result_table/4.3.2022.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/breakeven_price/result_table/4.3.2022_0.02.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/CheckDate.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/DWH_CoSo/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/DWH_CoSo/de083.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/DWH_PhaiSinh/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/DWH_ThiTruong/DanhSachMa.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/DWH_ThiTruong/DuLieuGiaoDichNgay.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/DWH_ThiTruong/TinChungKhoan.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datawarehouse/DWH_ThiTruong/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/implementation/AUTO_DWHThiTruongUpdate_DanhSachMa.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/implementation/AUTO_DWHThiTruongUpdate_TinChungKhoan.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/implementation/AUTO_TinChungKhoan.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/implementation/DWHUpdate.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/implementation/ReportRMD.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/implementation/task_scheduler/BaoCaoGiaHoaVonDanhMuc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/implementation/task_scheduler/UpdateDWHThiTruong_DanhSachMa.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/implementation/task_scheduler/UpdateDWHThiTruong_TinChungKhoan.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/news_analysis/Keywords" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/news_analysis/ReviewThuAnh.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/news_analysis/classify.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/news_analysis/get_news.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text-2020.1.16.dist-info/AUTHORS.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text-2020.1.16.dist-info/COPYING" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text-2020.1.16.dist-info/INSTALLER" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text-2020.1.16.dist-info/METADATA" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text-2020.1.16.dist-info/RECORD" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text-2020.1.16.dist-info/REQUESTED" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text-2020.1.16.dist-info/WHEEL" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text-2020.1.16.dist-info/entry_points.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text-2020.1.16.dist-info/top_level.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text/__main__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text/cli.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text/config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text/elements.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text/py.typed" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text/typing.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/html2text/utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/venv/Scripts/html2text.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/warning/TempFiles/ForceSell_2022.03.04.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/warning/TempFiles/ForceSell_2022.03.07.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/warning/TempFiles/HNX_AvgPrice_2022.03.04.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/warning/TempFiles/HNX_AvgPrice_2022.03.07.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/warning/TempFiles/HOSE_AvgPrice_2022.03.04.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/warning/TempFiles/HOSE_AvgPrice_2022.03.07.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/warning/TempFiles/TickerList_2022.03.04.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/warning/TempFiles/TickerList_2022.03.07.pickle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/csv-plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/csv-plugin.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoTamTinhPhiGiaoDich_old.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220307/EIB.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/fileimportsodunganhang/20220307/OCB.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/sodutientaikhoankhachhang/20220307.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/request/SGB.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/automation/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/automation/risk/BaoCaoGiaHoaVonDanhMuc.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/risk_management/BaoCaoGiaHoaVonDanhMuc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/automation/risk/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/risk_management/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/automation/risk/img/ocb_logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/automation/risk_management/img/ocb_logo.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/automation/risk/img/phs_logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/automation/risk_management/img/phs_logo.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/automation/risk/rating.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/automation/risk_management/rating.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/automation/risk/vmr9004_20220217.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/automation/risk_management/vmr9004_20220217.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoHoatDongLuuKyNDTNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoHoatDongLuuKyNDTNN.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoTamTinhPhiChuyenKhoan.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoTamTinhPhiChuyenKhoan.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HNX_SQL.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoDongMoUyQuyenTK_HNX_SQL.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoTamTinhPhiGiaoDich.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoTamTinhPhiGiaoDich.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuSoDuTaiKhoanKhachHang.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuSoDuTaiKhoanKhachHang.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuTTBTTienMuaBanChungKhoan.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuTTBTTienMuaBanChungKhoan.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoKHNNCoSoDuNho.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoKHNNCoSoDuNho.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoSoLieuThongKeDVTC.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoSoLieuThongKeDVTC.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/DanhSachKHVIPCoSo.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/DanhSachKHVIPCoSo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AAA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AAA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AAM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AAM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AAT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AAT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AAV.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AAV.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ABS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ABS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ABT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ABT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ACB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ACB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ACC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ACC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ACL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ACL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ACM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ACM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ADC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ADC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ADG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ADG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ADS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ADS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AGG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AGG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AGM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AGM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AGR.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AGR.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ALT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ALT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AMC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AMC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AMD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AMD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AME.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AME.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AMV.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AMV.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ANV.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ANV.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/APC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/APC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/APG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/APG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/APH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/APH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/API.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/API.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/APP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/APP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/APS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/APS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ARM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ARM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ART.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ART.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ASG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ASG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ASM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ASM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ASP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ASP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/AST.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/AST.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ATS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ATS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BAB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BAB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BAX.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BAX.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BBC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BBC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BBS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BBS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BCC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BCC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BCE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BCE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BCF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BCF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BCG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BCG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BCM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BCM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BDB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BDB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BED.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BED.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BFC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BFC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BHN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BHN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BIC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BIC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BID.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BID.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BII.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BII.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BKC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BKC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BKG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BKG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BLF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BLF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BMC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BMC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BMI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BMI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BMP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BMP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BNA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BNA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BPC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BPC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BRC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BRC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BSC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BSC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BSI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BSI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BST.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BST.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BTP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BTP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BTS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BTS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BTT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BTT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BTW.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BTW.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BVH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BVH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BVS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BVS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BWE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BWE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/BXH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/BXH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/C32.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/C32.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/C47.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/C47.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/C69.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/C69.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/C92.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/C92.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CAG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CAG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CAN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CAN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CAP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CAP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CAV.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CAV.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CCI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CCI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CCL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CCL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CDC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CDC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CDN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CDN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CEE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CEE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CEO.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CEO.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CET.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CET.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CHP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CHP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CIA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CIA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CIG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CIG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CII.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CII.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CJC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CJC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CKG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CKG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CKV.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CKV.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CLC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CLC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CLH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CLH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CLL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CLL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CLM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CLM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CLW.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CLW.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CMC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CMC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CMG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CMG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CMS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CMS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CMV.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CMV.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CMX.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CMX.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CNG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CNG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/COM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/COM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CPC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CPC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CRC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CRC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CRE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CRE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CSC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CSC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CSM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CSM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CSV.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CSV.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CTB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CTB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CTC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CTC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CTD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CTD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CTF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CTF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CTG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CTG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CTI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CTI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CTP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CTP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CTS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CTS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CTT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CTT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CTX.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CTX.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CVN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CVN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CVT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CVT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/CX8.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/CX8.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/D11.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/D11.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/D2D.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/D2D.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DAD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DAD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DAE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DAE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DAG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DAG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DAH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DAH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DAT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DAT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DBC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DBC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DBD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DBD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DBT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DBT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DC2.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DC2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DC4.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DC4.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DCL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DCL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DCM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DCM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DDG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DDG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DGC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DGC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DGW.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DGW.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DHA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DHA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DHC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DHC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DHG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DHG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DHM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DHM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DHP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DHP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DHT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DHT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DIG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DIG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DIH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DIH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DL1.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DL1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DLG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DLG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DMC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DMC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DNC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DNC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DNM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DNM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DNP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DNP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DP3.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DP3.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DPC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DPC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DPG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DPG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DPM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DPM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DPR.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DPR.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DQC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DQC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DRC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DRC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DRH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DRH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DRL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DRL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DS3.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DS3.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DSN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DSN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DST.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DST.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DTA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DTA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DTD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DTD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DTK.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DTK.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DTL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DTL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DTT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DTT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DVG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DVG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DVP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DVP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DXG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DXG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DXP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DXP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DXS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DXS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DXV.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DXV.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/DZM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/DZM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/E1VFVN30.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/E1VFVN30.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/EBS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/EBS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ECI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ECI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/EIB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/EIB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/EID.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/EID.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ELC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ELC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/EMC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/EMC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/EVE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/EVE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/EVG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/EVG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/EVS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/EVS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FCM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FCM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FCN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FCN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FDC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FDC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FID.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FID.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FIR.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FIR.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FIT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FIT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FLC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FLC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FMC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FMC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FPT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FPT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FRT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FRT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FTM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FTM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FTS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FTS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FUCTVGF2.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FUCTVGF2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FUCVREIT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FUCVREIT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FUEMAV30.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FUEMAV30.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FUESSV30.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FUESSV30.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FUESSV50.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FUESSV50.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FUESSVFL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FUESSVFL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FUEVFVND.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FUEVFVND.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/FUEVN100.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/FUEVN100.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GAB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GAB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GAS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GAS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GDT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GDT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GDW.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GDW.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GEG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GEG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GEX.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GEX.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GIC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GIC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GIL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GIL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GKM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GKM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GLT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GLT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GMA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GMA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GMC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GMC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GMD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GMD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GMX.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GMX.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GSP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GSP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GTA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GTA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GTN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GTN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/GVR.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/GVR.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HAD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HAD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HAG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HAG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HAH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HAH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HAI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HAI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HAP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HAP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HAR.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HAR.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HAS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HAS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HAT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HAT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HAX.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HAX.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HBC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HBC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HBS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HBS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HCC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HCC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HCD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HCD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HCM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HCM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HCT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HCT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HDA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HDA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HDB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HDB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HDC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HDC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HDG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HDG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HEV.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HEV.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HGM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HGM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HHC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HHC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HHG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HHG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HHP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HHP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HHS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HHS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HID.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HID.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HII.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HII.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HJS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HJS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HKT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HKT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HLC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HLC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HLD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HLD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HMC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HMC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HMH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HMH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HNG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HNG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HOM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HOM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HOT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HOT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HPG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HPG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HPM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HPM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HPX.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HPX.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HQC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HQC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HRC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HRC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HSG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HSG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HSL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HSL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HT1.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HT1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HTC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HTC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HTI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HTI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HTL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HTL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HTN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HTN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HTP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HTP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HTV.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HTV.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HU1.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HU1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HU3.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HU3.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HUB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HUB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HUT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HUT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HVH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HVH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HVN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HVN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HVT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HVT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/HVX.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/HVX.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/IBC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/IBC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ICG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ICG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ICT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ICT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/IDC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/IDC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/IDI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/IDI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/IDJ.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/IDJ.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/IDV.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/IDV.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/IJC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/IJC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ILB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ILB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/IMP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/IMP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/INC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/INC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/INN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/INN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ITA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ITA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ITC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ITC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ITD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ITD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ITQ.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ITQ.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/IVS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/IVS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/JVC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/JVC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KBC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KBC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KDC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KDC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KDH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KDH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KDM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KDM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KHG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KHG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KHP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KHP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KHS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KHS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KKC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KKC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KLF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KLF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KMR.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KMR.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KMT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KMT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KOS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KOS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KPF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KPF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KSB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KSB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KSD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KSD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KSF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KSF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KSQ.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KSQ.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KST.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KST.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KTS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KTS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KTT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KTT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/KVC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/KVC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/L10.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/L10.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/L14.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/L14.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/L18.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/L18.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/L35.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/L35.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/L40.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/L40.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/L43.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/L43.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/L61.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/L61.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/L62.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/L62.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LAF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LAF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LAS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LAS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LBE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LBE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LBM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LBM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LCD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LCD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LCG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LCG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LCM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LCM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LCS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LCS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LDG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LDG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LDP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LDP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LEC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LEC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LGC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LGC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LGL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LGL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LHC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LHC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LHG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LHG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LIG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LIG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LIX.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LIX.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LM7.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LM7.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LM8.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LM8.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LPB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LPB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LSS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LSS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/LUT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/LUT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MAC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MAC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MAS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MAS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MBB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MBB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MBG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MBG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MBS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MBS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MCC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MCC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MCF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MCF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MCG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MCG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MCO.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MCO.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MCP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MCP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MDC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MDC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MDG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MDG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MED.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MED.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MEL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MEL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MHC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MHC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MHL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MHL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MIG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MIG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MIM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MIM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MKV.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MKV.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MSB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MSB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MSH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MSH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MSN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MSN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MST.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MST.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MVB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MVB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/MWG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/MWG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NAF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NAF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NAG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NAG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NAP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NAP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NAV.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NAV.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NBB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NBB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NBC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NBC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NBP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NBP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NBW.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NBW.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NCT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NCT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NDN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NDN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NDX.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NDX.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NET.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NET.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NFC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NFC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NHA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NHA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NHC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NHC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NHH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NHH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NKG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NKG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NLG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NLG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NNC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NNC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NRC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NRC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NSC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NSC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NSH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NSH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NST.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NST.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NT2.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NT2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NTH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NTH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NTL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NTL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NTP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NTP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NVB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NVB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NVL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NVL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NVT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NVT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/NXT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/NXT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/OCB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/OCB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/OCH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/OCH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/OGC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/OGC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ONE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ONE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/OPC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/OPC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PAC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PAC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PAN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PAN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PBP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PBP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PC1.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PC1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PCE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PCE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PCG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PCG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PCT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PCT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PDB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PDB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PDC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PDC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PDN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PDN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PDR.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PDR.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PEN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PEN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PET.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PET.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PGC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PGC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PGD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PGD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PGI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PGI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PGN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PGN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PGS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PGS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PGT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PGT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PHC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PHC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PHN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PHN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PHP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PHP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PHR.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PHR.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PIA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PIA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PIC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PIC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PIT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PIT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PJC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PJC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PJT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PJT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PLC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PLC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PLP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PLP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PLX.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PLX.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PMB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PMB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PMC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PMC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PME.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PME.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PMG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PMG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PMP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PMP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PMS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PMS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PNC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PNC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PNJ.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PNJ.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/POM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/POM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/POT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/POT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/POW.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/POW.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PPC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PPC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PPE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PPE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PPP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PPP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PPS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PPS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PPY.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PPY.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PRC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PRC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PRE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PRE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PSC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PSC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PSD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PSD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PSE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PSE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PSH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PSH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PSI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PSI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PSW.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PSW.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PTB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PTB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PTC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PTC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PTD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PTD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PTI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PTI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PTL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PTL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PTS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PTS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PV2.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PV2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PVB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PVB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PVC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PVC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PVD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PVD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PVG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PVG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PVI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PVI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PVL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PVL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PVS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PVS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PVT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PVT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PXI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PXI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/PXS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/PXS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/QBS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/QBS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/QCG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/QCG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/QHD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/QHD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/QST.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/QST.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/QTC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/QTC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/RAL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/RAL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/RCL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/RCL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/RDP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/RDP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/REE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/REE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/RIC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/RIC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ROS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ROS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/S4A.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/S4A.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/S55.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/S55.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/S99.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/S99.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SAB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SAB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SAF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SAF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SAM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SAM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SAV.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SAV.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SBA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SBA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SBT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SBT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SBV.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SBV.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SC5.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SC5.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SCD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SCD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SCI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SCI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SCR.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SCR.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SCS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SCS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SD2.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SD2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SD4.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SD4.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SD5.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SD5.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SD6.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SD6.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SD9.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SD9.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SDA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SDA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SDC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SDC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SDG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SDG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SDN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SDN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SDT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SDT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SDU.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SDU.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SEB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SEB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SED.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SED.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SFC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SFC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SFG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SFG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SFI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SFI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SFN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SFN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SGC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SGC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SGD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SGD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SGH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SGH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SGN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SGN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SGR.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SGR.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SGT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SGT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SHA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SHA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SHB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SHB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SHE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SHE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SHI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SHI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SHN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SHN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SHP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SHP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SHS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SHS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SIC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SIC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SII.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SII.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SJ1.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SJ1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SJD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SJD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SJE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SJE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SJF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SJF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SJS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SJS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SKG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SKG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SLS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SLS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SMA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SMA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SMB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SMB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SMC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SMC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SMN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SMN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SMT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SMT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SPI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SPI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SPM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SPM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SRA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SRA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SRC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SRC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SRF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SRF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SSB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SSB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SSC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SSC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SSI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SSI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SSM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SSM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/ST8.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/ST8.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/STB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/STB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/STC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/STC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/STG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/STG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/STK.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/STK.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/STP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/STP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SVC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SVC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SVD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SVD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SVI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SVI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SVN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SVN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SVT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SVT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SZB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SZB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SZC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SZC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/SZL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/SZL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TA9.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TA9.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TAC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TAC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TAR.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TAR.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TBC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TBC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TC6.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TC6.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TCB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TCB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TCD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TCD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TCH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TCH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TCL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TCL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TCM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TCM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TCO.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TCO.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TCR.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TCR.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TCT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TCT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TDC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TDC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TDG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TDG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TDH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TDH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TDM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TDM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TDN.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TDN.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TDP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TDP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TDT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TDT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TDW.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TDW.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TEG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TEG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TET.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TET.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TFC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TFC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TGG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TGG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/THB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/THB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/THD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/THD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/THG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/THG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/THI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/THI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/THS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/THS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/THT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/THT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TIG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TIG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TIP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TIP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TIX.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TIX.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TJC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TJC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TKC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TKC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TKU.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TKU.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TLD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TLD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TLG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TLG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TLH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TLH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TMB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TMB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TMC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TMC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TMP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TMP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TMS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TMS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TMT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TMT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TMX.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TMX.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TN1.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TN1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TNA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TNA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TNC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TNC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TNG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TNG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TNH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TNH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TNI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TNI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TNT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TNT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TPB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TPB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TPC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TPC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TPH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TPH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TPP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TPP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TRA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TRA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TRC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TRC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TS4.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TS4.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TSB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TSB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TSC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TSC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TST.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TST.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TTA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TTA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TTB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TTB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TTC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TTC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TTE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TTE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TTF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TTF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TTH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TTH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TTL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TTL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TTT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TTT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TTZ.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TTZ.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TV2.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TV2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TV3.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TV3.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TV4.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TV4.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TVB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TVB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TVC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TVC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TVD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TVD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TVS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TVS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TVT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TVT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TXM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TXM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/TYA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/TYA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/UDC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/UDC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/UIC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/UIC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/UNI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/UNI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/V12.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/V12.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/V21.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/V21.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VAF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VAF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VAT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VAT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VBC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VBC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VC1.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VC1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VC2.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VC2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VC3.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VC3.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VC6.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VC6.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VC7.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VC7.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VC9.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VC9.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VCA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VCA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VCB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VCB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VCC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VCC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VCF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VCF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VCG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VCG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VCI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VCI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VCM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VCM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VCS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VCS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VDL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VDL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VDP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VDP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VDS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VDS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VE1.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VE1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VE2.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VE2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VE3.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VE3.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VE4.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VE4.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VE8.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VE8.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VFG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VFG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VGC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VGC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VGP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VGP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VGS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VGS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VHC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VHC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VHE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VHE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VHL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VHL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VHM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VHM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VIB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VIB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VIC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VIC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VID.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VID.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VIE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VIE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VIF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VIF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VIG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VIG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VIP.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VIP.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VIS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VIS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VIT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VIT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VIX.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VIX.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VJC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VJC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VKC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VKC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VLA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VLA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VMC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VMC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VMD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VMD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VMS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VMS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VNC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VNC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VND.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VND.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VNE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VNE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VNF.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VNF.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VNG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VNG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VNL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VNL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VNM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VNM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VNR.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VNR.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VNS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VNS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VNT.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VNT.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VOS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VOS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VPB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VPB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VPD.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VPD.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VPG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VPG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VPH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VPH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VPI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VPI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VPS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VPS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VRC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VRC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VRE.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VRE.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VSA.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VSA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VSC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VSC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VSH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VSH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VSI.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VSI.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VSM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VSM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VTB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VTB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VTC.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VTC.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VTH.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VTH.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VTJ.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VTJ.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VTL.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VTL.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VTO.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VTO.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VTV.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VTV.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/VXB.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/VXB.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/WCS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/WCS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/WSS.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/WSS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/X20.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/X20.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/YBM.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/YBM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breakeven_price/result_chart/YEG.png" beforeDir="false" afterPath="$PROJECT_DIR$/breakeven_price/result_chart/YEG.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/covered_warrant/blackscholes.py" beforeDir="false" afterPath="$PROJECT_DIR$/covered_warrant/blackscholes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/datawarehouse/CheckSync.py" beforeDir="false" afterPath="$PROJECT_DIR$/datawarehouse/CheckSyncUpdate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/datawarehouse/DE083.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datawarehouse/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/datawarehouse/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dependency/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/dependency/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_CheckSyncDWHCoSo.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_CheckSyncDWHCoSo.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/AUTO_CheckSyncDWHPhaiSinh.bat" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/AUTO_CheckSyncDWHPhaiSinh.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/BreakevenPrice.py" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/BreakevenPrice.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/DWHControl.py" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/DWHControl.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/NewsRMD.py" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/NewsRMD.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/NewsSS.py" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/NewsSS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/task_scheduler/BaoCaoDanhSachChungKhoanSSI.xml" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/task_scheduler/BaoCaoDanhSachChungKhoanSSI.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/task_scheduler/BaoCaoDoiChieuLaiTienGuiPhatSinh_p2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/task_scheduler/BaoCaoDoiChieuLaiTienGuiPhatSinh_p2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/task_scheduler/BaoCaoTamTinhPhiChuyenKhoan.xml" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/task_scheduler/BaoCaoTamTinhPhiChuyenKhoan.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/task_scheduler/BaoCaoTamTinhPhiGiaoDich.xml" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/task_scheduler/BaoCaoTamTinhPhiGiaoDich.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/task_scheduler/BaoCaoTamTinhPhiLuuKy.xml" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/task_scheduler/BaoCaoTamTinhPhiLuuKy.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/task_scheduler/CheckSyncDWH-CoSo.xml" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/task_scheduler/CheckSyncDWH-CoSo.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation/task_scheduler/CheckSyncDWH-PhaiSinh.xml" beforeDir="false" afterPath="$PROJECT_DIR$/implementation/task_scheduler/CheckSyncDWH-PhaiSinh.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_analysis/get_stock_news.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_collector/newsts.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_collector/newsts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/news_collector/scrape_ticker_by_exchange.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_collector/scrape_ticker_by_exchange.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/request/stock.py" beforeDir="false" afterPath="$PROJECT_DIR$/request/stock.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/IPython/terminal/pt_inputhooks/asyncio.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/IPython/terminal/pt_inputhooks/asyncio.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/IPython/utils/process.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/IPython/utils/process.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PyInstaller/building/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/PyInstaller/building/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/black/trans.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/black/trans.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/debugpy/_vendored/pydevd/_pydev_imps/_pydev_SocketServer.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/debugpy/_vendored/pydevd/_pydev_imps/_pydev_SocketServer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/debugpy/_vendored/pydevd/pydevd_attach_to_process/winappdbg/crash.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/debugpy/_vendored/pydevd/pydevd_attach_to_process/winappdbg/crash.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/debugpy/_vendored/pydevd/pydevd_attach_to_process/winappdbg/debug.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/debugpy/_vendored/pydevd/pydevd_attach_to_process/winappdbg/debug.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/future/backports/email/_policybase.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/future/backports/email/_policybase.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/future/backports/http/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/future/backports/http/client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/future/backports/socketserver.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/future/backports/socketserver.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/h2/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/h2/utilities.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/h2/windows.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/h2/windows.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/jedi/third_party/django-stubs/django-stubs/conf/global_settings.pyi" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/jedi/third_party/django-stubs/django-stubs/conf/global_settings.pyi" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/jmespath/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/jmespath/parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/joblib/executor.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/joblib/executor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/joblib/externals/loky/backend/resource_tracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/joblib/externals/loky/backend/resource_tracker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/joblib/externals/loky/process_executor.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/joblib/externals/loky/process_executor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/joblib/numpy_pickle_compat.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/joblib/numpy_pickle_compat.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/joblib/test/test_memmapping.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/joblib/test/test_memmapping.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/ElementInclude.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/ElementInclude.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/isoschematron/resources/xsl/iso-schematron-xslt1/iso_dsdl_include.xsl" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/isoschematron/resources/xsl/iso-schematron-xslt1/iso_dsdl_include.xsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/matplotlib/backend_bases.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/matplotlib/backend_bases.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/lib/shape_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/lib/shape_base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/ma/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/ma/core.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/core/arrays/_ranges.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/core/arrays/_ranges.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/core/dtypes/cast.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/core/dtypes/cast.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/core/indexes/numeric.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/core/indexes/numeric.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/core/internals/array_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/core/internals/array_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/core/internals/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/core/internals/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pip/_vendor/distlib/_backport/tarfile.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pip/_vendor/distlib/_backport/tarfile.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pip/_vendor/pkg_resources/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pip/_vendor/pkg_resources/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pip/_vendor/urllib3/util/ssl_.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pip/_vendor/urllib3/util/ssl_.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/prompt_toolkit/key_binding/bindings/vi.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/prompt_toolkit/key_binding/bindings/vi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pycparser/ply/yacc.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pycparser/ply/yacc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pythonwin/pywin/docking/DockingBar.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/pythonwin/pywin/docking/DockingBar.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/scipy/constants/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/scipy/constants/constants.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/scipy/optimize/_differentialevolution.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/scipy/optimize/_differentialevolution.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/scipy/optimize/_linprog_doc.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/scipy/optimize/_linprog_doc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/scipy/optimize/_linprog_rs.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/scipy/optimize/_linprog_rs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sklearn/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/sklearn/base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sklearn/inspection/_plot/partial_dependence.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/sklearn/inspection/_plot/partial_dependence.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sklearn/tests/test_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/sklearn/tests/test_base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/sql/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/sql/base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/statsmodels/duration/hazard_regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/statsmodels/duration/hazard_regression.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/statsmodels/duration/survfunc.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/statsmodels/duration/survfunc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/statsmodels/stats/contingency_tables.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/statsmodels/stats/contingency_tables.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/statsmodels/stats/meta_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/statsmodels/stats/meta_analysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/statsmodels/stats/proportion.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/statsmodels/stats/proportion.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/statsmodels/stats/tests/test_contingency_tables.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/statsmodels/stats/tests/test_contingency_tables.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/runtests.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/test/runtests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/web.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/tornado/web.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/twisted/internet/interfaces.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/twisted/internet/interfaces.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/twisted/internet/ssl.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/twisted/internet/ssl.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/twisted/web/_http2.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/twisted/web/_http2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/twisted/web/tap.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/twisted/web/tap.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/urllib3/util/ssl_.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/urllib3/util/ssl_.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/win32/lib/win32pdhquery.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/win32/lib/win32pdhquery.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/win32comext/axscript/client/pyscript_rexec.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/win32comext/axscript/client/pyscript_rexec.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/win32comext/~xscript/client/pyscript_rexec.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/win32comext/~xscript/client/pyscript_rexec.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/xlwings/mac_dict.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/xlwings/mac_dict.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/~in32/lib/win32pdhquery.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/~in32/lib/win32pdhquery.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HNX_AvgPrice_2022.02.14" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HNX_AvgPrice_2022.02.15" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HNX_AvgPrice_2022.02.16" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HNX_AvgPrice_2022.02.17" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HNX_AvgPrice_2022.02.18" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HNX_AvgPrice_2022.02.21" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HOSE_AvgPrice_2022.02.14" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HOSE_AvgPrice_2022.02.15" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HOSE_AvgPrice_2022.02.16" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HOSE_AvgPrice_2022.02.17" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HOSE_AvgPrice_2022.02.18" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HOSE_AvgPrice_2022.02.21" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/warning/warning_RMD_RT.py" beforeDir="false" afterPath="$PROJECT_DIR$/warning/warning_RMD_RT.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportEIB.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportEIB.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportOCB.py" beforeDir="false" afterPath="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuVaImportOCB.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/datawarehouse/DWH_ThiTruong/TinChungKhoan.py" beforeDir="false" afterPath="$PROJECT_DIR$/datawarehouse/DWH_ThiTruong/TinChungKhoan.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/classify.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_analysis/classify.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/news_analysis/get_news.py" beforeDir="false" afterPath="$PROJECT_DIR$/news_analysis/get_news.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/warning/TempFiles/ForceSell_2022.03.04.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/warning/TempFiles/ForceSell_2022.03.07.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HNX_AvgPrice_2022.03.04.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HNX_AvgPrice_2022.03.07.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HOSE_AvgPrice_2022.03.04.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/warning/TempFiles/HOSE_AvgPrice_2022.03.07.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/warning/TempFiles/TickerList_2022.03.04.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/warning/TempFiles/TickerList_2022.03.07.pickle" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1025,8 +106,62 @@
       <recent name="C:\Users\hiepdang\PycharmProjects\DataAnalytics\reporting_tool\trading_service\thanhtoanbutru" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.TinChungKhoan">
-    <configuration name="DWHControl" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.BaoCaoDoiChieuUTTB">
+    <configuration name="BaoCaoDoiChieuTTBTTienMuaBanChungKhoan" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DataAnalytics" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuTTBTTienMuaBanChungKhoan.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="BaoCaoDoiChieuUTTB" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DataAnalytics" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/automation/trading_service/thanhtoanbutru/BaoCaoDoiChieuUTTB.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="BaoCaoTamTinhPhiGiaoDich_SQL" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DataAnalytics" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/automation/trading_service/giaodichluuky" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/automation/trading_service/giaodichluuky/BaoCaoTamTinhPhiGiaoDich_SQL.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ReportRMD" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -1035,7 +170,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/implementation/DWHControl.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/implementation/ReportRMD.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -1044,73 +179,16 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="TinChungKhoan" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="DataAnalytics" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/datawarehouse/DWH_ThiTruong" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/datawarehouse/DWH_ThiTruong/TinChungKhoan.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="classify" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="stock" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DataAnalytics" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/news_analysis" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/request" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/news_analysis/classify.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="get_news" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="DataAnalytics" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/news_analysis" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/news_analysis/get_news.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="warning_RMD_RT" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="DataAnalytics" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/warning" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/warning/warning_RMD_RT.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/request/stock.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -1120,19 +198,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.classify" />
-      <item itemvalue="Python.DWHControl" />
-      <item itemvalue="Python.warning_RMD_RT" />
-      <item itemvalue="Python.get_news" />
-      <item itemvalue="Python.TinChungKhoan" />
+      <item itemvalue="Python.BaoCaoTamTinhPhiGiaoDich_SQL" />
+      <item itemvalue="Python.ReportRMD" />
+      <item itemvalue="Python.stock" />
+      <item itemvalue="Python.BaoCaoDoiChieuTTBTTienMuaBanChungKhoan" />
+      <item itemvalue="Python.BaoCaoDoiChieuUTTB" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.TinChungKhoan" />
-        <item itemvalue="Python.get_news" />
-        <item itemvalue="Python.classify" />
-        <item itemvalue="Python.warning_RMD_RT" />
-        <item itemvalue="Python.DWHControl" />
+        <item itemvalue="Python.BaoCaoDoiChieuUTTB" />
+        <item itemvalue="Python.BaoCaoDoiChieuTTBTTienMuaBanChungKhoan" />
+        <item itemvalue="Python.stock" />
+        <item itemvalue="Python.BaoCaoTamTinhPhiGiaoDich_SQL" />
+        <item itemvalue="Python.ReportRMD" />
       </list>
     </recent_temporary>
   </component>
@@ -1407,7 +485,14 @@
       <option name="project" value="LOCAL" />
       <updated>1645210324285</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="Push 2022-03-07">
+      <created>1646635641732</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1646635641734</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -1483,6 +568,7 @@
     <MESSAGE value="Push 2022-01-14" />
     <MESSAGE value="Push 2022-01-18" />
     <MESSAGE value="Push 2022-02-18" />
-    <option name="LAST_COMMIT_MESSAGE" value="Push 2022-02-18" />
+    <MESSAGE value="Push 2022-03-07" />
+    <option name="LAST_COMMIT_MESSAGE" value="Push 2022-03-07" />
   </component>
 </project>

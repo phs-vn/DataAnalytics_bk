@@ -247,13 +247,13 @@ def run(
     able_to_advance_t0 = table['value_t0'] - table['fee_t0'] - table['sell_tax_t0'] - table['dividend_tax_t0']
     table['available_to_advance'] = able_to_advance_t1 + able_to_advance_t0
 
-    # advanced_amount = table['advanced_amount_t1'] + table['advanced_fee_t1'] + table['advanced_amount_t0'] + table[
-    #     'advanced_fee_t0']
+    # advanced_amount = table['advanced_amount_t1'] + table['advanced_fee_t1'] + table['advanced_amount_t0'] + table['advanced_fee_t0']
     advanced_amount = table['advanced_amount_t1'] + table['advanced_amount_t0']
     table['remaining_advance'] = table['available_to_advance'] - advanced_amount
 
     able_to_advance_t2 = table['value_t2'] - table['fee_t2'] - table['sell_tax_t2'] - table['dividend_tax_t2']
-    check_1 = table['payback_uttb_t0'] > able_to_advance_t2
+    able_to_advance_t1 = table['value_t1'] - table['fee_t1'] - table['sell_tax_t1'] - table['dividend_tax_t1']
+    check_1 = table['payback_uttb_t0'] > able_to_advance_t2 + able_to_advance_t1
     check_2 = advanced_amount > table['available_to_advance']
     check_3 = table['remaining_advance'] < 0
     check_4 = (table.select_dtypes(include=np.number)<0).values.any()

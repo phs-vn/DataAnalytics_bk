@@ -21,4 +21,4 @@ def update(hours):
     DROP_DUPLICATES(connect_DWH_ThiTruong,'TinChungKhoan','URL') # xóa dòng có URL trùng nhau
 
 if __name__ == '__main__':
-    update(48)
+    update(24)
