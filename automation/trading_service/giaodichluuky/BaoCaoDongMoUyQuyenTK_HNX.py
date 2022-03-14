@@ -161,8 +161,7 @@ def run(
         index_col='account_code'
     )
     authorization['scope_of_authorization'] = 'I,II,IV,V,VII,IX,X'
-    authorization.loc[authorization[
-                          'authorized_person_name']=='CTY CP CHỨNG KHOÁN PHÚ HƯNG','authorized_person_address'] = CompanyAddress
+    authorization.loc[authorization['authorized_person_name']=='CTY CP CHỨNG KHOÁN PHÚ HƯNG','authorized_person_address'] = CompanyAddress
     mapper = lambda x:'Thường' if x.startswith('Thường') else 'Ký Quỹ'
     contract_type['contract_type'] = contract_type['contract_type'].map(mapper)
 
@@ -961,20 +960,15 @@ def run(
             fmt2 = text_left_format
             fmt3 = date_format
         sheet_uyquyen.write(row+3,0,row+1,fmt1)
-        sheet_uyquyen.write(row+3,1,authorization.iloc[row,authorization.columns.get_loc('authorizing_person_name')],
-                            fmt2)
+        sheet_uyquyen.write(row+3,1,authorization.iloc[row,authorization.columns.get_loc('authorizing_person_name')],fmt2)
         sheet_uyquyen.write(row+3,2,authorization.index[row],fmt1)
         sheet_uyquyen.write(row+3,3,authorization.iloc[row,authorization.columns.get_loc('authorizing_person_id')],fmt1)
-        sheet_uyquyen.write(row+3,4,authorization.iloc[row,authorization.columns.get_loc('authorizing_person_address')],
-                            fmt2)
+        sheet_uyquyen.write(row+3,4,authorization.iloc[row,authorization.columns.get_loc('authorizing_person_address')],fmt2)
         sheet_uyquyen.write(row+3,5,authorization.iloc[row,authorization.columns.get_loc('date_of_authorization')],fmt3)
-        sheet_uyquyen.write(row+3,6,authorization.iloc[row,authorization.columns.get_loc('authorized_person_name')],
-                            fmt1)
+        sheet_uyquyen.write(row+3,6,authorization.iloc[row,authorization.columns.get_loc('authorized_person_name')],fmt1)
         sheet_uyquyen.write(row+3,7,authorization.iloc[row,authorization.columns.get_loc('authorized_person_id')],fmt1)
-        sheet_uyquyen.write(row+3,8,authorization.iloc[row,authorization.columns.get_loc('authorized_person_address')],
-                            fmt2)
-        sheet_uyquyen.write(row+3,9,authorization.iloc[row,authorization.columns.get_loc('scope_of_authorization')],
-                            fmt1)
+        sheet_uyquyen.write(row+3,8,authorization.iloc[row,authorization.columns.get_loc('authorized_person_address')],fmt2)
+        sheet_uyquyen.write(row+3,9,authorization.iloc[row,authorization.columns.get_loc('scope_of_authorization')],fmt1)
         sheet_uyquyen.write(row+3,10,'',fmt2)
 
     ###########################################################################
@@ -1089,23 +1083,18 @@ def run(
     sheet_thaydoiuyquyen.write_column('B5',authorization_change['authorizing_person_name'],text_left_format)
     sheet_thaydoiuyquyen.write_column('C5',authorization_change.index,text_center_format)
     sheet_thaydoiuyquyen.write_column('D5',authorization_change['authorizing_person_id'],text_left_format)
-    sheet_thaydoiuyquyen.write_column('E5',authorization_change['date_of_authorization'].map(convertNaTtoSpaceString),
-                                      date_format)
+    sheet_thaydoiuyquyen.write_column('E5',authorization_change['date_of_authorization'].map(convertNaTtoSpaceString),date_format)
     sheet_thaydoiuyquyen.write_column('F5',authorization_change['authorized_person_name'],text_center_format)
-    sheet_thaydoiuyquyen.write_column('G5',authorization_change['date_of_termination'].map(convertNaTtoSpaceString),
-                                      date_format)
-    sheet_thaydoiuyquyen.write_column('H5',authorization_change['date_of_change'].map(convertNaTtoSpaceString),
-                                      date_format)
+    sheet_thaydoiuyquyen.write_column('G5',authorization_change['date_of_termination'].map(convertNaTtoSpaceString),date_format)
+    sheet_thaydoiuyquyen.write_column('H5',authorization_change['date_of_change'].map(convertNaTtoSpaceString),date_format)
     sheet_thaydoiuyquyen.write_column('I5',authorization_change['old_authorized_person_id'],text_center_format)
     sheet_thaydoiuyquyen.write_column('J5',authorization_change['new_authorized_person_id'],text_center_format)
     sheet_thaydoiuyquyen.write_column('K5',authorization_change['old_authorized_person_address'],text_center_format)
     sheet_thaydoiuyquyen.write_column('L5',authorization_change['new_authorized_person_address'],text_center_format)
     sheet_thaydoiuyquyen.write_column('M5',authorization_change['old_scope_of_authorization'],text_center_format)
     sheet_thaydoiuyquyen.write_column('N5',authorization_change['new_scope_of_authorization'],text_center_format)
-    sheet_thaydoiuyquyen.write_column('O5',authorization_change['old_end_date'].map(convertNaTtoSpaceString),
-                                      date_format)
-    sheet_thaydoiuyquyen.write_column('P5',authorization_change['new_end_date'].map(convertNaTtoSpaceString),
-                                      date_format)
+    sheet_thaydoiuyquyen.write_column('O5',authorization_change['old_end_date'].map(convertNaTtoSpaceString),date_format)
+    sheet_thaydoiuyquyen.write_column('P5',authorization_change['new_end_date'].map(convertNaTtoSpaceString),date_format)
 
     row_of_signature = 3+authorization_change.shape[0]+2
     sheet_thaydoiuyquyen.set_row(row_of_signature-1,55)

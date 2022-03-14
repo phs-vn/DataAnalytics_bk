@@ -2,6 +2,18 @@ from implementation import TaskMonitor
 
 
 @TaskMonitor
+def DWH_CoSo_Update_All():
+    from datawarehouse.DWH_CoSo import UPDATE
+    UPDATE()
+
+
+@TaskMonitor
+def DWH_PhaiSinh_Update_All():
+    from datawarehouse.DWH_PhaiSinh import UPDATE
+    UPDATE()
+
+
+@TaskMonitor
 def DWH_ThiTruong_Update_DanhSachMa():
     from datawarehouse.DWH_ThiTruong.DanhSachMa import update as Update_DanhSachMa
     Update_DanhSachMa()

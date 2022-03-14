@@ -107,35 +107,3 @@ def EXEC(
     cursor.close()
 
 
-def UPDATE(db,*tables):
-
-    """
-    This function EXEC the corresponding stored procedures to update
-    the specified tables
-
-    :param db: name of database (DWH-CoSo or DWH-PhaiSinh)
-    :param tables: names of tables
-    """
-
-    if db == 'DWH-CoSo':
-        conn = connect_DWH_CoSo
-        sqlAllStatement = 'EXEC spRunCoso'
-    elif db == 'DWH-PhaiSinh':
-        conn = connect_DWH_PhaiSinh
-        sqlAllStatement = 'EXEC spRunPhaiSinh'
-    else:
-        raise ValueError("db must be either 'DWH-CoSo' or 'DWH-PhaiSinh'")
-
-    cursor = conn.cursor()
-    cursor.fast_executemany = True
-    if tables != ('all',):
-        today = dt.datetime.now().strftime('%Y-%m-%d')
-        for table in tables:
-            sqlStatement = f"EXEC sp{table} @FrDate = '{today}', @ToDate = '{today}'"
-            cursor.execute(sqlStatement)
-            cursor.commit()
-    else:
-        cursor.execute(sqlAllStatement)
-        cursor.commit()
-
-    cursor.close()

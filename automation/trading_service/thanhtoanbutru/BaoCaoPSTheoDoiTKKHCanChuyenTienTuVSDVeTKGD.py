@@ -27,7 +27,7 @@ def run(
             ISNULL([c].[cash_balance_at_phs],0) [cash_at_phs],
             ISNULL([c].[cash_balance_at_vsd],0) [cash_at_vsd],
             ISNULL([t].[total_fee_tax],0) [total_fee_tax],
-            ISNULL([d].[deferred_payment_amount_closing]+[d].[deferred_payment_fee_closing],0) [deferred_amount],
+            ISNULL([d].[deferred_payment_amount_closing],0) + ISNULL([d].[deferred_payment_fee_closing],0) [deferred_amount],
             ISNULL([t].[nav],0) [nav]
         FROM
             [320200_tradingaccount] [t]

@@ -1,3 +1,5 @@
+import requests
+
 from request.stock import *
 from request import *
 
@@ -97,63 +99,63 @@ class cafef(__Base__):
         saved_urls = []
 
         print('Getting News from https://www.cafef.vn/')
-        for u in self.urls:
-            print(u)
-            i = 1
-            articleTimestamp = run_time
-            while articleTimestamp > bmk_time:
-                print(articleTimestamp)
-                headers = {
-                    'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
-                }
-                url = u.replace('trang-1',f'trang-{i}')
-                session = requests.Session()
-                retry = requests.packages.urllib3.util.retry.Retry(connect=5,backoff_factor=1)
-                adapter = requests.adapters.HTTPAdapter(max_retries=retry)
-                session.mount('https://',adapter)
-                html = session.get(url,headers=headers,timeout=30).text
-                bs = BeautifulSoup(html,'html5lib')
-                h3_tags = bs.find_all(name='h3')
-                URLs = ['https://www.cafef.vn' + tag.find(name='a').get('href') for tag in h3_tags]
 
-                for articleURL in URLs:
-                    try:
-                        print(articleURL)
-                        session = requests.Session()
-                        retry = requests.packages.urllib3.util.retry.Retry(connect=5,backoff_factor=1)
-                        adapter = requests.adapters.HTTPAdapter(max_retries=retry)
-                        session.mount('https://',adapter)
-                        print(articleURL)
-                        articleHTML = session.get(articleURL,headers=headers,timeout=30).text
-                        articleBS = BeautifulSoup(articleHTML,'html5lib')
-                        # Title
-                        articleTitle = articleBS.find(class_='title').get_text(strip=True)
-                        print(articleTitle)
-                        # Timestamp
-                        articleTimestamp = dt.datetime.strptime(articleBS.find(class_='pdate').get_text(strip=True)[:-3],'%d-%m-%Y - %H:%M')
-                        print(articleTimestamp)
-                        # Description
-                        articleDescription = articleBS.find(class_='sapo').get_text(strip=True)
-                        print(articleDescription)
-                        # Body
-                        articleBody = '\n'.join(tag.get_text(strip=True) for tag in articleBS.find(id='mainContent').find_all(name='p'))
-                        print(articleBody)
-                        # Tickers
-                        pattern = r'\b[A-Z]{1}[A-Z0-9]{2}\b'
-                        articleTickers = set(re.findall(pattern,f'{articleTitle}\n{articleDescription}\n{articleBody}'))
-                        print(articleTickers)
+        with requests.Session() as session:
+            retry = requests.packages.urllib3.util.retry.Retry(connect=5,backoff_factor=1)
+            adapter = requests.adapters.HTTPAdapter(max_retries=retry)
+            session.mount('https://',adapter)
+            headers = {
+                'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
+            }
+            for u in self.urls:
+                print(u)
+                i = 1
+                articleTimestamp = run_time
+                while articleTimestamp > bmk_time:
+                    print(articleTimestamp)
+                    url = u.replace('trang-1',f'trang-{i}')
+                    html = session.get(url,headers=headers,timeout=30).text
+                    bs = BeautifulSoup(html,'html5lib')
+                    h3_tags = bs.find_all(name='h3')
+                    URLs = ['https://www.cafef.vn' + tag.find(name='a').get('href') for tag in h3_tags]
+                    for articleURL in URLs:
+                        try:
+                            print(articleURL)
+                            session = requests.Session()
+                            retry = requests.packages.urllib3.util.retry.Retry(connect=5,backoff_factor=1)
+                            adapter = requests.adapters.HTTPAdapter(max_retries=retry)
+                            session.mount('https://',adapter)
+                            print(articleURL)
+                            articleHTML = session.get(articleURL,headers=headers,timeout=30).text
+                            articleBS = BeautifulSoup(articleHTML,'html5lib')
+                            # Title
+                            articleTitle = articleBS.find(class_='title').get_text(strip=True)
+                            print(articleTitle)
+                            # Timestamp
+                            articleTimestamp = dt.datetime.strptime(articleBS.find(class_='pdate').get_text(strip=True)[:-3],'%d-%m-%Y - %H:%M')
+                            print(articleTimestamp)
+                            # Description
+                            articleDescription = articleBS.find(class_='sapo').get_text(strip=True)
+                            print(articleDescription)
+                            # Body
+                            articleBody = '\n'.join(tag.get_text(strip=True) for tag in articleBS.find(id='mainContent').find_all(name='p'))
+                            print(articleBody)
+                            # Tickers
+                            pattern = r'\b[A-Z]{1}[A-Z0-9]{2}\b'
+                            articleTickers = set(re.findall(pattern,f'{articleTitle}\n{articleDescription}\n{articleBody}'))
+                            print(articleTickers)
 
-                        saved_timestamps.append(articleTimestamp)
-                        saved_tickers.append(','.join(articleTickers))
-                        saved_titles.append(articleTitle)
-                        saved_descriptions.append(articleDescription)
-                        saved_bodies.append(articleBody)
-                        saved_urls.append(articleURL)
+                            saved_timestamps.append(articleTimestamp)
+                            saved_tickers.append(','.join(articleTickers))
+                            saved_titles.append(articleTitle)
+                            saved_descriptions.append(articleDescription)
+                            saved_bodies.append(articleBody)
+                            saved_urls.append(articleURL)
 
-                    except AttributeError:
-                        print(f'{articleURL} đã bị gỡ hoặc là một Landing Page')
+                        except AttributeError:
+                            print(f'{articleURL} đã bị gỡ hoặc là một Landing Page')
 
-                i += 1
+                    i += 1
 
         result_dict = {
             'Time': saved_timestamps,
@@ -236,49 +238,49 @@ class ndh(__Base__):
         saved_urls = []
 
         # Làm việc trên HTML bằng BeautifulSoup
-        for URL in URLs:
-            try:
-                headers = {
-                    'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
-                }
-                session = requests.Session()
-                retry = requests.packages.urllib3.util.retry.Retry(connect=5,backoff_factor=1)
-                adapter = requests.adapters.HTTPAdapter(max_retries=retry)
-                session.mount('https://',adapter)
-                articleHTML = session.get(URL,headers=headers,timeout=30).text
-                articleBS = BeautifulSoup(articleHTML,'html5lib')
-                # Title
-                articleTitle = articleBS.find(class_='title-detail').get_text(strip=True)
-                print(articleTitle)
-                # Timmestamp
-                rawTimestamp = articleBS.find(class_='date').get_text(strip=True)
-                splitTimestamp = rawTimestamp.replace(' (GMT+7)','').split(', ')
-                _, dateString, timeString = tuple(splitTimestamp)
-                splitdateString = dateString.split('/') ; splitdateString = [int(x) for x in splitdateString]
-                splittimeString = timeString.split(':') ; splittimeString = [int(x) for x in splittimeString]
-                articleTimestamp = dt.datetime(splitdateString[2],splitdateString[1],splitdateString[0],splittimeString[0],splittimeString[1])
-                print(articleTimestamp)
-                # Description
-                articleDescriptionTags = articleBS.find(class_='related-news').find_all(name='a')
-                articleDescription = '\n'.join(tag.get_text(strip=True) for tag in articleDescriptionTags)
-                print(articleDescription)
-                # Body
-                articleBody = '\n'.join(paragraph.get_text(strip=True) for paragraph in articleBS.find(class_='fck_detail').find_all(name='p'))
-                print(articleDescription)
-                # Tickers
-                pattern = r'\b[A-Z]{1}[A-Z0-9]{2}\b'
-                articleTickers = set(re.findall(pattern,f'{articleTitle}\n{articleDescription}\n{articleBody}'))
-                print(articleTickers)
+        with requests.Session() as session:
+            retry = requests.packages.urllib3.util.retry.Retry(connect=5,backoff_factor=1)
+            adapter = requests.adapters.HTTPAdapter(max_retries=retry)
+            session.mount('https://',adapter)
+            headers = {
+                'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
+            }
+            for URL in URLs:
+                try:
+                    articleHTML = session.get(URL,headers=headers,timeout=30).text
+                    articleBS = BeautifulSoup(articleHTML,'html5lib')
+                    # Title
+                    articleTitle = articleBS.find(class_='title-detail').get_text(strip=True)
+                    print(articleTitle)
+                    # Timmestamp
+                    rawTimestamp = articleBS.find(class_='date').get_text(strip=True)
+                    splitTimestamp = rawTimestamp.replace(' (GMT+7)','').split(', ')
+                    _, dateString, timeString = tuple(splitTimestamp)
+                    splitdateString = dateString.split('/') ; splitdateString = [int(x) for x in splitdateString]
+                    splittimeString = timeString.split(':') ; splittimeString = [int(x) for x in splittimeString]
+                    articleTimestamp = dt.datetime(splitdateString[2],splitdateString[1],splitdateString[0],splittimeString[0],splittimeString[1])
+                    print(articleTimestamp)
+                    # Description
+                    articleDescriptionTags = articleBS.find(class_='related-news').find_all(name='a')
+                    articleDescription = '\n'.join(tag.get_text(strip=True) for tag in articleDescriptionTags)
+                    print(articleDescription)
+                    # Body
+                    articleBody = '\n'.join(paragraph.get_text(strip=True) for paragraph in articleBS.find(class_='fck_detail').find_all(name='p'))
+                    print(articleDescription)
+                    # Tickers
+                    pattern = r'\b[A-Z]{1}[A-Z0-9]{2}\b'
+                    articleTickers = set(re.findall(pattern,f'{articleTitle}\n{articleDescription}\n{articleBody}'))
+                    print(articleTickers)
 
-                saved_timestamps.append(articleTimestamp)
-                saved_tickers.append(','.join(articleTickers))
-                saved_titles.append(articleTitle)
-                saved_descriptions.append(articleDescription)
-                saved_bodies.append(articleBody)
-                saved_urls.append(URL)
+                    saved_timestamps.append(articleTimestamp)
+                    saved_tickers.append(','.join(articleTickers))
+                    saved_titles.append(articleTitle)
+                    saved_descriptions.append(articleDescription)
+                    saved_bodies.append(articleBody)
+                    saved_urls.append(URL)
 
-            except AttributeError:
-                print(f'{URL} không phải là bài báo') # loại topic
+                except AttributeError:
+                    print(f'{URL} không phải là bài báo') # loại topic
 
         result_dict = {
             'Time': saved_timestamps,
@@ -359,38 +361,38 @@ class vietstock(__Base__):
         saved_descriptions = []
         saved_bodies = []
 
-        for url in URLs:
-            headers = {
-                'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
-            }
-            session = requests.Session()
+        with requests.Session() as session:
             retry = requests.packages.urllib3.util.retry.Retry(connect=5,backoff_factor=1)
             adapter = requests.adapters.HTTPAdapter(max_retries=retry)
             session.mount('https://',adapter)
-            articleHTML = session.get(url,headers=headers,timeout=30).text
-            articleBS = BeautifulSoup(articleHTML,'html5lib')
-            # Title
-            articleTitle = articleBS.find(class_='pTitle').get_text(strip=True)
-            print(articleTitle)
-            # Time
-            articleTime = self.__processTime__(articleBS.find(class_='date').get_text(strip=True))
-            print(articleTime)
-            # Description
-            articleDescription = articleBS.find(class_='pHead',name='p').get_text(strip=True)
-            print(articleDescription)
-            # Body
-            articleBody = '\n'.join(tag.get_text() for tag in articleBS.find_all(class_='pBody'))
-            print(articleBody)
-            # Tickers
-            pattern = r'\b[A-Z]{1}[A-Z0-9]{2}\b'
-            articleTickers = set(re.findall(pattern,f'{articleTitle}\n{articleDescription}\n{articleBody}'))
-            print(articleTickers)
+            headers = {
+                'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
+            }
+            for url in URLs:
+                articleHTML = session.get(url,headers=headers,timeout=30).text
+                articleBS = BeautifulSoup(articleHTML,'html5lib')
+                # Title
+                articleTitle = articleBS.find(class_='pTitle').get_text(strip=True)
+                print(articleTitle)
+                # Time
+                articleTime = self.__processTime__(articleBS.find(class_='date').get_text(strip=True))
+                print(articleTime)
+                # Description
+                articleDescription = articleBS.find(class_='pHead',name='p').get_text(strip=True)
+                print(articleDescription)
+                # Body
+                articleBody = '\n'.join(tag.get_text() for tag in articleBS.find_all(class_='pBody'))
+                print(articleBody)
+                # Tickers
+                pattern = r'\b[A-Z]{1}[A-Z0-9]{2}\b'
+                articleTickers = set(re.findall(pattern,f'{articleTitle}\n{articleDescription}\n{articleBody}'))
+                print(articleTickers)
 
-            saved_timestamps.append(articleTime)
-            saved_tickers.append(','.join(articleTickers))
-            saved_titles.append(articleTitle)
-            saved_descriptions.append(articleDescription)
-            saved_bodies.append(articleBody)
+                saved_timestamps.append(articleTime)
+                saved_tickers.append(','.join(articleTickers))
+                saved_titles.append(articleTitle)
+                saved_descriptions.append(articleDescription)
+                saved_bodies.append(articleBody)
 
         saved_urls = URLs
 
@@ -473,43 +475,43 @@ class tinnhanhchungkhoan(__Base__):
         saved_bodies = []
         saved_urls = []
 
-        for url in URLs:
-            try:
-                headers = {
-                    'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
-                }
-                session = requests.Session()
-                retry = requests.packages.urllib3.util.retry.Retry(connect=5,backoff_factor=1)
-                adapter = requests.adapters.HTTPAdapter(max_retries=retry)
-                session.mount('https://',adapter)
-                articleHTML = session.get(url,headers=headers,timeout=30).text
-                articleBS = BeautifulSoup(articleHTML,'html5lib')
-                # Title
-                articleTitle = articleBS.find(class_='article__header').get_text(strip=True)
-                print(articleTitle)
-                # Time
-                articleTime = self.__processTime__(articleBS.find(name='time').get_text(strip=True))
-                print(articleTime)
-                # Description
-                articleDescription = articleBS.find(class_='article__sapo').get_text(strip=True)
-                print(articleDescription)
-                # Body
-                articleBody = '\n'.join(tag.get_text(strip=True) for tag in articleBS.find(class_='article__body').find_all('p'))
-                print(articleBody)
-                # Tickers
-                pattern = r'\b[A-Z]{1}[A-Z0-9]{2}\b'
-                articleTickers = set(re.findall(pattern,f'{articleTitle}\n{articleDescription}\n{articleBody}'))
-                print(articleTickers)
+        with requests.Session() as session:
+            retry = requests.packages.urllib3.util.retry.Retry(connect=5,backoff_factor=1)
+            adapter = requests.adapters.HTTPAdapter(max_retries=retry)
+            session.mount('https://',adapter)
+            headers = {
+                'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
+            }
+            for url in URLs:
+                try:
+                    articleHTML = session.get(url,headers=headers,timeout=30).text
+                    articleBS = BeautifulSoup(articleHTML,'html5lib')
+                    # Title
+                    articleTitle = articleBS.find(class_='article__header').get_text(strip=True)
+                    print(articleTitle)
+                    # Time
+                    articleTime = self.__processTime__(articleBS.find(name='time').get_text(strip=True))
+                    print(articleTime)
+                    # Description
+                    articleDescription = articleBS.find(class_='article__sapo').get_text(strip=True)
+                    print(articleDescription)
+                    # Body
+                    articleBody = '\n'.join(tag.get_text(strip=True) for tag in articleBS.find(class_='article__body').find_all('p'))
+                    print(articleBody)
+                    # Tickers
+                    pattern = r'\b[A-Z]{1}[A-Z0-9]{2}\b'
+                    articleTickers = set(re.findall(pattern,f'{articleTitle}\n{articleDescription}\n{articleBody}'))
+                    print(articleTickers)
 
-                saved_timestamps.append(articleTime)
-                saved_tickers.append(','.join(articleTickers))
-                saved_titles.append(articleTitle)
-                saved_descriptions.append(articleDescription)
-                saved_bodies.append(articleBody)
-                saved_urls.append(url)
+                    saved_timestamps.append(articleTime)
+                    saved_tickers.append(','.join(articleTickers))
+                    saved_titles.append(articleTitle)
+                    saved_descriptions.append(articleDescription)
+                    saved_bodies.append(articleBody)
+                    saved_urls.append(url)
 
-            except AttributeError:
-                print(f'{url} là một interactive article --> bỏ qua')
+                except AttributeError:
+                    print(f'{url} là một interactive article --> bỏ qua')
 
         result_dict = {
             'Time':saved_timestamps,

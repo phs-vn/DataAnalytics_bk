@@ -36,7 +36,8 @@ def BreakevenPrice_5pct(  # run on Wed and Fri weekly
     github_file_name = f'{now.day}.{now.month}.{now.year}.csv'
     github_table_path = join(destination_dir_github,github_file_name)
     table = pd.DataFrame(
-        columns=['Ticker','0% at Risk','1% at Risk','3% at Risk','5% at Risk','Group','Breakeven Price'])
+        columns=['Ticker','0% at Risk','1% at Risk','3% at Risk','5% at Risk','Group','Breakeven Price']
+    )
     table.set_index(keys=['Ticker'],inplace=True)
     table.to_csv(github_table_path)
 

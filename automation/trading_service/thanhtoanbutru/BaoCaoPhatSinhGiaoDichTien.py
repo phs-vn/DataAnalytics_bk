@@ -56,12 +56,9 @@ def run(
     # Lấy tổng số dư đầu kỳ
     opening_balance = pd.read_sql(
         f"""
-        SELECT 
-            SUM(opening_balance) AS [value] 
-        FROM 
-            [sub_account_deposit] 
-        WHERE 
-            [sub_account_deposit].[date] = '{start_date}'
+        SELECT SUM(opening_balance) AS [value] 
+        FROM [sub_account_deposit] 
+        WHERE [sub_account_deposit].[date] = '{start_date}'
         """,
         connect_DWH_CoSo
     ).squeeze()

@@ -43,10 +43,7 @@ def run(
         f"""
         (
         SELECT
-            CASE
-                WHEN [trading_record].[date] = '{t2_date}' THEN '{t0_date}'
-            ELSE [trading_record].[date]
-            END [date],
+            '{t0_date}' [date],
             [trading_record].[sub_account],
             CASE
                 WHEN [trading_record].[type_of_order] = 'S' THEN N'Bán'
@@ -55,9 +52,9 @@ def run(
             SUM([trading_record].[fee]) [fee],
             SUM([trading_record].[tax_of_selling] + [trading_record].[tax_of_share_dividend]) [tax]
         FROM [trading_record]
-        WHERE [trading_record].[date] = '{t2_date}' 
+        WHERE (([trading_record].[date] = '{t2_date}' AND [trading_record].[settlement_period] = 2)
+                OR ([trading_record].[date] = '{t1_date}' AND [trading_record].[settlement_period] = 1))
             AND [trading_record].[type_of_order] = 'S'
-            AND [trading_record].[settlement_period] = 2
         GROUP BY
             [trading_record].[date],
             [trading_record].[sub_account],
@@ -66,49 +63,6 @@ def run(
         UNION ALL
         (
         SELECT
-            CASE
-                WHEN [trading_record].[date] = '{t1_date}' THEN '{t0_date}'
-            ELSE [trading_record].[date]
-            END [date],
-            [trading_record].[sub_account],
-            CASE
-                WHEN [trading_record].[type_of_order] = 'S' THEN N'Bán'
-            END [type_of_order],
-            SUM([trading_record].[value]) [value],
-            SUM([trading_record].[fee]) [fee],
-            SUM([trading_record].[tax_of_selling] + [trading_record].[tax_of_share_dividend]) [tax]
-        FROM [trading_record]
-        WHERE [trading_record].[date] = '{t1_date}' 
-            AND [trading_record].[type_of_order] = 'S'
-            AND [trading_record].[settlement_period] = 1
-        GROUP BY
-            [trading_record].[date],
-            [trading_record].[sub_account],
-            [trading_record].[type_of_order]
-        )
-                UNION ALL
-        (
-        SELECT
-            [trading_record].[date],
-            [trading_record].[sub_account],
-            CASE
-                WHEN [trading_record].[type_of_order] = 'S' THEN N'Bán'
-            END [type_of_order],
-            SUM([trading_record].[value]) [value],
-            SUM([trading_record].[fee]) [fee],
-            SUM([trading_record].[tax_of_selling] + [trading_record].[tax_of_share_dividend]) [tax]
-        FROM [trading_record]
-        WHERE [trading_record].[date] = '{t0_date}' 
-            AND [trading_record].[type_of_order] = 'S'
-            AND [trading_record].[settlement_period] = 0
-        GROUP BY
-            [trading_record].[date],
-            [trading_record].[sub_account],
-            [trading_record].[type_of_order]
-        )
-        UNION ALL
-        (
-            SELECT
             [trading_record].[date],
             [trading_record].[sub_account],
             CASE
