@@ -26,16 +26,29 @@ chrome_options = Options()
 driver = webdriver.Chrome(options=chrome_options, service=Service(PATH))
 wait = WebDriverWait(driver, 5, ignored_exceptions=ignored_exceptions)
 
-error_word = ['A', 'C', 'G', 'J', 'T', 'Z', 'a', 'c', 'g', 'i', 'j', 'q', 'z']
-error_num = [1, 4, 5, 7, 8, 9]
-error_char = ['[', ']', '.', ',', ' ', '/', '|']
-
 
 def read_image(path):
     try:
         return pytesseract.image_to_string(path).replace('\n', '')
     except:
         return "[ERROR] Unable to process file: {0}".format(path)
+
+
+def tool_ocr(img_path):
+    error_word = ['A', 'C', 'G', 'J', 'T', 'Z', 'a', 'c', 'g', 'i', 'j', 'q', 'z']
+    error_num = [1, 4, 5, 7, 8, 9]
+    error_char = ['[', ']', '.', ',', ' ', '/', '|']
+
+    res = read_image(img_path)
+
+    check_1 = any(word in res for word in error_word)
+    check_2 = any(str(num) in res for num in error_num)
+    check_3 = any(char in res for char in error_char)
+    check_4 = len(res) != 6
+    if check_1 | check_2 | check_3 | check_4:
+        return True
+    else:
+        return False
 
 
 # img = r'D:\DataAnalytics\news_analysis\captcha_data\training_dataset_2\captcha_38.png'
@@ -52,12 +65,8 @@ def run():
         time.sleep(0.5)
         img_path = fr'D:\DataAnalytics\news_analysis\captcha_data\test_dataset\captcha_{i}.png'
         captcha.screenshot(img_path)
-        tool_ocr_result = read_image(img_path)
-        check_1 = any(word in tool_ocr_result for word in error_word)
-        check_2 = any(str(num) in tool_ocr_result for num in error_num)
-        check_3 = any(char in tool_ocr_result for char in error_char)
-        check_4 = len(tool_ocr_result) != 6
-        if check_1 | check_2 | check_3 | check_4:
+
+        if tool_ocr(img_path):
             refr_btn = driver.find_element(
                 By.XPATH, '//*[@id="authform"]/div[2]/div[3]/div/button'
             )
@@ -65,10 +74,10 @@ def run():
             i += 1
             time.sleep(0.5)
         else:
-            print('Captcha: ', tool_ocr_result)
+            print('Captcha: ', read_image(img_path))
             captcha_box = driver.find_element(By.XPATH, '//*[@id="captcha"]')
             captcha_box.clear()
-            captcha_box.send_keys(tool_ocr_result)
+            captcha_box.send_keys(read_image(img_path))
             break
 
 
