@@ -3,8 +3,8 @@ from automation.trading_service import *
 driver = '{SQL Server}'
 server = 'SRV-RPT'
 database = 'RiskDb'
-user_id = 'hiep'
-user_password = '5B7Cv6huj2FcGEM4'
+user_id = 'namtran'
+user_password = open(r'C:\Users\namtran\Desktop\pass_word.txt').readline()
 
 connect = pyodbc.connect(
     f'Driver={driver};'

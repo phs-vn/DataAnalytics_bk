@@ -8,7 +8,7 @@ from automation.trading_service.thanhtoanbutru import *
 
 # DONE
 def run(
-    run_time=None,
+    run_time=None
 ):
     start = time.time()
     info = get_info('monthly',run_time)

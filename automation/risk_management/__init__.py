@@ -1,6 +1,6 @@
 from automation import *
 
-dept_folder = r'C:\Users\hiepdang\Shared Folder\Risk Management\Report'
+dept_folder = r'C:\Users\namtran\Share Folder\Risk\Report'
 
 def get_info(
     periodicity: str,

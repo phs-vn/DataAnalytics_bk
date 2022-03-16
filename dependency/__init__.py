@@ -8,12 +8,9 @@ CompanyCode = '022'
 
 import numpy as np
 import pandas as pd
-
 pd.set_option('display.max_rows',None,'display.max_columns',None,'display.width',None)
 
-import bottleneck as bn
 import numexpr as ne
-import openpyxl
 import os
 import sys
 from os import listdir
@@ -25,7 +22,6 @@ import datetime as dt
 import requests
 import json
 import holidays
-import calendar
 from typing import Union,Callable
 import itertools
 import pyodbc
@@ -41,7 +37,6 @@ import re
 import unidecode
 import zeep
 from zeep import Client
-import threading
 
 ###############################################################################
 
@@ -99,3 +94,11 @@ import multiprocessing
 ###############################################################################
 
 import tkinter as tk
+
+###############################################################################
+
+import yfinance as yf
+import mplfinance as mpf
+from pandas.plotting import scatter_matrix
+from openpyxl.chart import BarChart, BarChart3D, AreaChart, AreaChart3D, LineChart, LineChart3D, Reference
+

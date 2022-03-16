@@ -3,7 +3,7 @@ BC này không thể chạy lùi ngày
 (tuy nhiên có thể viết lại để chạy lùi ngày do đã bắt đầu lưu VCF0051)
 """
 
-from reporting.trading_service.thanhtoanbutru import *
+from automation.trading_service.thanhtoanbutru import *
 
 
 # DONE

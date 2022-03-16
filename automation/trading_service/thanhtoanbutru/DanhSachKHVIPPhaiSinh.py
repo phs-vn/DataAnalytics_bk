@@ -71,27 +71,27 @@ def run(
                 [rdc0003].[approved_date]
             FROM [rdc0003] 
             WHERE [rdc0003].[field_name] = N'Loại hình'
-				AND [rdc0003].[date] <= '{t0_date}'
+                AND [rdc0003].[date] <= '{t0_date}'
         ) [rdc0003]
         ON
             [relationship].[account_code] = [rdc0003].[account_code]
-		LEFT JOIN (
-			SELECT
-				[320100_information].[sub_account],
-				[320100_information].[status_of_sub_account]
-			FROM
-				[320100_information]
-			WHERE
-				[320100_information].[date] = '{t0_date}'
-		) [i]
-		ON [t].[sub_account] = [i].[sub_account]
+        LEFT JOIN (
+            SELECT
+                [320100_information].[sub_account],
+                [320100_information].[status_of_sub_account]
+            FROM
+                [320100_information]
+            WHERE
+                [320100_information].[date] = '{t0_date}'
+        ) [i]
+        ON [t].[sub_account] = [i].[sub_account]
         WHERE (
             [t].[type] LIKE N'%GOLD%' 
             OR [t].[type] LIKE N'%SILV%' 
             OR [t].[type] LIKE N'%VIP%'
         )
-		AND [i].[status_of_sub_account] IN (N'Đang giao dịch',N'Phong tỏa tài khoản')
-		AND
+        AND [i].[status_of_sub_account] IN (N'Đang giao dịch',N'Phong tỏa tài khoản')
+        AND
             [t].[date] = '{t0_date}'
         ORDER BY
             [birth_month], [date_of_birth]

@@ -1,0 +1,43 @@
+Các trường hợp lỗi thường gặp:
+1. Tool Tesseract OCR đọc được chính xác toàn bộ số từ trong captcha image, 
+nhưng 1 vài từ trong đó sẽ bị lỗi chữ thường trong hình nhưng lại cho ra kết quả chữ in hoa, 
+hoặc ngược lại chữ in hoa trong hình nhưng kết quả trả ra chữ thường.
+	- img 18: f - kết quả trả ra: F
+	- img 23, 36: S - kết quả trả ra: s
+	- img 61: J - kết quả trả ra: j
+2. Tool Tesseract OCR đọc được chính xác toàn bộ số từ trong captcha image,
+nhưng trong chuỗi sẽ xuất hiện các kí tự dư ra như '.', ']', ... hoặc bị dư ra phần khoảng trắng.
+	- img 3: 31nWct - kết quả trả ra: 3 1nWct
+	- img 6: 7SgjGV - kết quả trả ra: 7SgjGV.
+	- img 33: 6j9q43 - kết quả trả ra: 6j9q43.
+	- img 49: f9HaBr - kết quả trả ra: f9H aBr
+	- img 53: EShfM9 - kết quả trả ra: EShfM9.
+	- img 58: dGcZAJ - kết quả trả ra: dGcZA]J
+	- img 69: Sb7RtD - kết quả trả ra: Sb7RtD.
+3. chữ C in hoa - 5 lần
+	- img 12, 35, 39, 82: C - kết quả trả ra: G
+	- img 81: C - kết quả trả ra: ¢
+4. chữ q thường - 4 lần
+	- img 1, 73: q - kết quả trả ra: a
+	- img 47: q - kết quả trả ra: aq
+	- img 99: q - kết quả trả ra: qQ
+5. chữ c thường - 2 lần
+	- img 11: c - kết quả trả ra: ce
+	- img 16: c - kết quả trả ra: e
+6. số 8 - 3 lần
+	- img 19, 60, 100: 8 - kết quả ra: s
+7. chữ J in hoa - 3 lần
+	- img 23: J - kết quả trả ra: Jj
+	- img 85, 91: J - kết quả trả ra: jJ
+8. số 4 - 2 lần
+	- img 9, 60: 4 - kết quả trả ra: A
+9. chữ b thường - 1 lần
+	- img 37: b - kết quả trả ra: h
+10. chữ V in hoa - 1 lần
+	- img 46: V - kết quả trả ra: N
+11. số 9 - 1 lần
+	- img 74: 9 - kết quả trả ra: 9S
+12. số 1 - 1 lần
+	- img 79: 1 - kết quả trả ra: i
+13. chữ Y in hoa - 1 lần
+	- img 38:  Y - kết quả trả ra: Y¥
