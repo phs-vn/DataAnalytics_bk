@@ -16,7 +16,7 @@ def TaskMonitor(func):
             """
         outlook = Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
-        mail.To = 'hiepdang@phs.vn'
+        mail.To = 'namtran@phs.vn'
         try:
             func(*args,**kwargs)
             mail.Subject = f"{func.__name__} Run Successfully"

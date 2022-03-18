@@ -1,5 +1,3 @@
-import requests
-
 from request.stock import *
 from request import *
 

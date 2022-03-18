@@ -19,8 +19,9 @@ def __CheckAbnormal__(func):
             (fullTable['account_type'].str.contains('nước ngoài') & fullTable['diff'] != 0)
         ]
         if not abnormalTable.empty:
-            abnormalTable = abnormalTable.rename({
+            abnormalTable = abnormalTable.rename(columns={
                 'account_code': 'Số tài khoản',
+                'account_type': 'Loại tài khoản',
                 'sub_account': 'Số tiểu khoản',
                 'customer_name': 'Tên khách hàng',
                 'interest_actu': 'Lãi tiền gửi cộng dồn trên TKKH',

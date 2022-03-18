@@ -1,4 +1,4 @@
-from request import *
+from automation import *
 
 
 class NoNewsFound(Exception):
@@ -102,3 +102,5 @@ def crawl_captcha():
             break
 
     driver.close()
+
+

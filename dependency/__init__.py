@@ -9,7 +9,10 @@ CompanyCode = '022'
 import numpy as np
 import pandas as pd
 pd.set_option('display.max_rows',None,'display.max_columns',None,'display.width',None)
+import pytesseract
+pytesseract.pytesseract.tesseract_cmd = r'C:\Users\namtran\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
 
+import cv2
 import numexpr as ne
 import os
 import sys
@@ -31,12 +34,12 @@ import docx
 import openpyxl
 import unidecode
 import shutil
-from PIL import Image
 import csv
 import re
 import unidecode
 import zeep
 from zeep import Client
+import warnings
 
 ###############################################################################
 
@@ -77,9 +80,13 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import ElementNotInteractableException
+from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import ElementClickInterceptedException
+from selenium.common.exceptions import NoSuchWindowException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait,Select
+from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 
 import scrapy
@@ -94,6 +101,8 @@ import multiprocessing
 ###############################################################################
 
 import tkinter as tk
+from tkinter import *
+from PIL import Image
 
 ###############################################################################
 
