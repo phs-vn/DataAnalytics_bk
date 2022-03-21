@@ -1,4 +1,4 @@
-from automation import *
+from automation.get_captcha import *
 
 
 class NoNewsFound(Exception):
