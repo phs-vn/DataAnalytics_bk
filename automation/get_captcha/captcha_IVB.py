@@ -24,9 +24,12 @@ def ivb_mr_hiep():
 # Nam's code
 
 def ivb_captcha(i):
-    imagePATH = cv2.imread(fr'C:\Users\namtran\Share Folder\Get Captcha\ivb_dataset\dataset\captcha_{i}.png')
+    input_path = r'C:\Users\namtran\Share Folder\Get Captcha\ivb_dataset\dataset'
+    output_path = r'C:\Users\namtran\Share Folder\Get Captcha\ivb_dataset\fixed dataset'
+
+    imagePATH = cv2.imread(join(input_path, fr'captcha_{i}.png'))
     gray = cv2.cvtColor(imagePATH, cv2.COLOR_BGR2GRAY)
-    thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_OTSU | cv2.THRESH_BINARY_INV)[1]
+    thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_OTSU + cv2.THRESH_BINARY_INV)[1]
 
     horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (20, 1))
     detected_lines = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, horizontal_kernel)
@@ -40,13 +43,27 @@ def ivb_captcha(i):
     repair_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 5))
     result = 255 - cv2.morphologyEx(255 - imagePATH, cv2.MORPH_CLOSE, repair_kernel, iterations=1)
 
-    img = Image.fromarray(result)
-    img = img.resize((400, 100))
-    img.save(join(fr'C:\Users\namtran\Share Folder\Get Captcha\ivb_dataset\fixed dataset\captcha_{i}.png'))
+    img = cv2.resize(result, (400,100))
+    cv2.imwrite(join(output_path, fr'captcha_{i}.png'), img)
 
     predictedCAPTCHA = pytesseract.image_to_string(
-        fr'C:\Users\namtran\Share Folder\Get Captcha\ivb_dataset\fixed dataset\captcha_{i}.png'
+        join(output_path, fr'captcha_{i}.png')
     )
     return predictedCAPTCHA
+
+
+########################################################################################################
+
+# Converting an image to black and white
+def ivb_bw(i):
+    original_path = r'C:\Users\namtran\Share Folder\Get Captcha\ivb_dataset\dataset'
+    black_white_path = r'C:\Users\namtran\Share Folder\Get Captcha\ivb_dataset\black white dataset'
+
+    originalImage = cv2.imread(join(original_path, fr'captcha_{i}.png'))
+    grayImage = cv2.cvtColor(originalImage, cv2.COLOR_BGR2GRAY)
+
+    (thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
+
+    cv2.imwrite(join(black_white_path, fr'captcha_{i}.png'), blackAndWhiteImage)
 
 ########################################################################################################
