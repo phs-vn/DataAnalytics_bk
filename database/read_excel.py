@@ -1,16 +1,8 @@
 from request import *
 
 path_bank_bs = r'D:\DataAnalytics\database\fs_bank\bs_2018q2.xlsm'
-txt_bs_col_name = r'D:\DataAnalytics\database\txt_col_name\fs_bank\fs_bank_bs.txt'
+txt_bs = r'D:\DataAnalytics\database\txt_col_name\fs_bank\fs_bank_bs.txt'
 
-path_bank_cfd = r'D:\DataAnalytics\database\fs_bank\cfd_2019q4.xlsm'
-txt_cfd_col_name = r'D:\DataAnalytics\database\txt_col_name\fs_bank\fs_bank_cfd.txt'
-
-path_bank_cfi = r'D:\DataAnalytics\database\fs_bank\cfi_2018q1.xlsm'
-txt_cfi_col_name = r'D:\DataAnalytics\database\txt_col_name\fs_bank\fs_bank_cfi.txt'
-
-path_sec_fn3 = r'D:\DataAnalytics\database\fs_sec\fn3_2021q1.xlsm'
-txt_fn3_col_name = r'D:\DataAnalytics\database\txt_col_name\fs_sec\fs_sec_fn3.txt'
 
 ########################################################################################################################
 ########################################################################################################################
@@ -23,6 +15,7 @@ def read_excel(excel_path: str, col_name_path: str) -> pd.DataFrame():
         skiprows=7,
     )
     df = df.iloc[1:, 1:]
+    # loại những dòng nào mà giá trị ở cả 3 cột đều là NaN
     df = df.dropna(how='all', subset=['Ticker', 'Name', 'Exchange'])
     df = df.fillna(0)
     if len((excel_path.split('\\')[-1]).split('_')[0]) == 2:
@@ -43,7 +36,11 @@ def read_excel(excel_path: str, col_name_path: str) -> pd.DataFrame():
         else:
             col = ''.join(col.split()[1:])
             col = re.sub("[^a-zA-Z]", '', col).lower()
-            old_name.append(col)
+            if col in old_name:
+                col = col + '_'
+                old_name.append(col)
+            else:
+                old_name.append(col)
     df.columns = old_name
 
     # read file txt has new col name from SQL script

@@ -1,11 +1,9 @@
-import time
-
-import pandas as pd
-
 from request.stock import *
+
 
 class NoNewsFound(Exception):
     pass
+
 
 class vsd:
 
@@ -21,7 +19,7 @@ class vsd:
             ElementNotInteractableException
         )
 
-    def tinTCPH(self,num_hours: int = 48) -> pd.DataFrame:
+    def tinTCPH(self,num_hours: int) -> pd.DataFrame:
 
         """
         This function returns a DataFrame and export an excel file containing
@@ -37,7 +35,7 @@ class vsd:
         now = dt.datetime.now()
         fromtime = now
         url = 'https://vsd.vn/vi/alo/-f-_bsBS4BBXga52z2eexg'
-        driver = webdriver.Chrome(executable_path=self.PATH)
+        driver = webdriver.Chrome(service=Service(self.PATH))
         driver.get(url)
         driver.maximize_window()
         keywords = [
@@ -55,7 +53,7 @@ class vsd:
             time.sleep(1)
             driver_wait = WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions)
             list_news_elem = driver_wait.until(EC.presence_of_element_located((By.CLASS_NAME,'list-news')))
-            tags = list_news_elem.find_elements_by_tag_name('li')
+            tags = list_news_elem.find_elements(By.TAG_NAME, 'li')
             for tag_ in tags:
                 tag_wait = WebDriverWait(tag_,5,ignored_exceptions=self.ignored_exceptions)
                 h3_tag = tag_wait.until(EC.presence_of_element_located((By.TAG_NAME,'h3')))
@@ -66,10 +64,10 @@ class vsd:
                     tag_wait = WebDriverWait(h3_tag,5,ignored_exceptions=self.ignored_exceptions)
                     sub_url = tag_wait.until(EC.presence_of_element_located((By.TAG_NAME,'a'))).get_attribute('href')
                     news_urls += [f'=HYPERLINK("{sub_url}","Link")']
-                    news_time_ = tag_.find_element_by_tag_name('div').text
+                    news_time_ = tag_.find_element(By.TAG_NAME,'div').text
                     news_time_ = dt.datetime.strptime(news_time_[-21:],'%d/%m/%Y - %H:%M:%S')
                     news_time += [news_time_]
-                    sub_driver = webdriver.Chrome(executable_path=self.PATH)
+                    sub_driver = webdriver.Chrome(service=Service(self.PATH))
                     sub_driver.get(sub_url)
                     sub_driver_wait = WebDriverWait(sub_driver,5,ignored_exceptions=self.ignored_exceptions)
                     noidung_elem = sub_driver_wait.until(EC.presence_of_element_located((By.CLASS_NAME,'col-md-12')))
@@ -88,13 +86,13 @@ class vsd:
             # Turn Page
             time.sleep(1)
             button_row = driver_wait.until(EC.presence_of_element_located((By.ID,'d_number_of_page')))
-            button_elems = button_row.find_elements_by_xpath(".//*")
-            nextpage_button =button_elems[-3]
+            button_elems = button_row.find_elements(By.XPATH,".//*")
+            nextpage_button = button_elems[-3]
             nextpage_button.click()
 
             # Check time
             last_tag = driver_wait.until(EC.presence_of_all_elements_located((By.XPATH,'//*[@id="d_list_news"]/ul/li')))[-1]
-            fromtime = last_tag.find_element_by_tag_name('div').text
+            fromtime = last_tag.find_element(By.TAG_NAME,'div').text
             fromtime = dt.datetime.strptime(fromtime[-21:],'%d/%m/%Y - %H:%M:%S')
 
         output_table = pd.concat(frames,ignore_index=True)
@@ -117,12 +115,11 @@ class vsd:
             'Nội dung',
             'Link'
         ]]
-        print(f'Finished ::: Total execution time: {int(time.time()-start_time)}s\n')
+        print(f'Finished vsd-tinTCPH ::: Total execution time: {int(time.time()-start_time)}s\n')
 
         return output_table
 
-
-    def tinTVLK(self,num_hours: int = 48) -> pd.DataFrame:
+    def tinTVLK(self,num_hours: int) -> pd.DataFrame:
 
         """
         This function returns a DataFrame and export an excel file containing
@@ -139,7 +136,7 @@ class vsd:
         fromtime = now
 
         url = 'https://www.vsd.vn/vi/alc/4'
-        driver = webdriver.Chrome(executable_path=self.PATH)
+        driver = webdriver.Chrome(service=Service(self.PATH))
         driver.get(url)
         driver.maximize_window()
 
@@ -170,12 +167,12 @@ class vsd:
                 check_2 = [word in txt for word in keywords]
                 if all(check_1) and any(check_2):
                     news_headlines.append(txt)
-                    sub_url = h3_tag.find_element_by_tag_name('a').get_attribute('href')
+                    sub_url = h3_tag.find_element(By.TAG_NAME,'a').get_attribute('href')
                     news_urls.append(f'=HYPERLINK("{sub_url}","Link")')
-                    news_time_ = tag_.find_element_by_tag_name('div').text
+                    news_time_ = tag_.find_element(By.TAG_NAME,'div').text
                     news_time_ = dt.datetime.strptime(news_time_[-21:],'%d/%m/%Y - %H:%M:%S')
                     news_time.append(news_time_)
-                    sub_driver = webdriver.Chrome(executable_path=self.PATH)
+                    sub_driver = webdriver.Chrome(service=Service(self.PATH))
                     sub_driver.get(sub_url)
                     sub_driver_wait = WebDriverWait(sub_driver,5,ignored_exceptions=self.ignored_exceptions)
                     content = sub_driver_wait.until(EC.presence_of_element_located((By.CLASS_NAME,'col-md-12'))).text
@@ -200,7 +197,7 @@ class vsd:
             last_tag = driver_wait.until(EC.presence_of_all_elements_located(
                 (By.XPATH,'//*[@id="d_list_news"]/ul/li')
             ))[-1]
-            fromtime = last_tag.find_element_by_tag_name('div').text
+            fromtime = last_tag.find_element(By.TAG_NAME,'div').text
             fromtime = dt.datetime.strptime(fromtime[-21:],'%d/%m/%Y - %H:%M:%S')
 
         output_table = pd.concat(frames,ignore_index=True)
@@ -225,9 +222,10 @@ class vsd:
             'Nội dung',
             'Link'
         ]]
-        print(f'Finished ::: Total execution time: {int(time.time()-start_time)}s\n')
+        print(f'Finished vsd-tinTVLK ::: Total execution time: {int(time.time()-start_time)}s\n')
 
         return output_table
+
 
 class hnx:
 
@@ -243,7 +241,7 @@ class hnx:
             ElementNotInteractableException
         )
 
-    def tintuso(self,num_hours: int = 48):
+    def tintuso(self,num_hours: int):
 
         """
         This function returns a DataFrame and export an excel file containing
@@ -260,7 +258,7 @@ class hnx:
         now = dt.datetime.now()
         from_time = now
 
-        driver = webdriver.Chrome(executable_path=self.PATH)
+        driver = webdriver.Chrome(service=Service(self.PATH))
 
         url = 'https://www.hnx.vn/thong-tin-cong-bo-ny-hnx.html'
         driver.get(url)
@@ -314,9 +312,9 @@ class hnx:
                     continue
 
                 title_no = ticker_title_inpage.index(ticker_title)+1
-                titles.append(driver.find_element_by_xpath(f"//*[@id='_tableDatas']/tbody/tr[{title_no}]/td[4]").text)
-                times.append(driver.find_element_by_xpath(f"//*[@id='_tableDatas']/tbody/tr[{title_no}]/td[2]").text)
-                tickers.append(driver.find_element_by_xpath(f"//*[@id='_tableDatas']/tbody/tr[{title_no}]/td[3]").text)
+                titles.append(driver.find_element(By.XPATH,f"//*[@id='_tableDatas']/tbody/tr[{title_no}]/td[4]").text)
+                times.append(driver.find_element(By.XPATH,f"//*[@id='_tableDatas']/tbody/tr[{title_no}]/td[2]").text)
+                tickers.append(driver.find_element(By.XPATH,f"//*[@id='_tableDatas']/tbody/tr[{title_no}]/td[3]").text)
                 # open popup window:
                 click_obj = title_elems[title_no-1]
                 click_obj.click()
@@ -325,19 +323,19 @@ class hnx:
                 popup_content = wait.until(EC.presence_of_element_located((By.XPATH,"//div[@class='Box-Noidung']")))
                 content = popup_content.text
                 box_text.append(content)
-                link_elems = driver.find_elements_by_xpath("//div[@class='divLstFileAttach']/p/a")
+                link_elems = driver.find_elements(By.XPATH,"//div[@class='divLstFileAttach']/p/a")
                 links.append([link.get_attribute('href') for link in link_elems])
 
                 # close popup windows
                 wait.until(EC.element_to_be_clickable((By.XPATH,'//*[@id="divViewDetailArticles"]/*/input'))).click()
                 time.sleep(1)
                 # check time
-                from_time = driver.find_element_by_xpath("//*[@id='_tableDatas']/tbody/tr[10]/td[2]").text
+                from_time = driver.find_element(By.XPATH,"//*[@id='_tableDatas']/tbody/tr[10]/td[2]").text
                 from_time = dt.datetime.strptime(from_time,'%d/%m/%Y %H:%M')
 
             # next page
             wait.until(EC.element_to_be_clickable((By.XPATH,"//*[@id='next']"))).click()
-            time.sleep(1)
+            time.sleep(2)
 
         url = 'https://www.hnx.vn/vi-vn/thong-tin-cong-bo-up-hnx.html'
         driver.get(url)
@@ -349,9 +347,8 @@ class hnx:
             ticker_elems = wait.until(EC.presence_of_all_elements_located(
                 (By.XPATH,"//*[@id='_tableDatas']/tbody/*/td[3]/a")
             ))
-            title_elems \
-                = wait.until(EC.presence_of_all_elements_located(
-                    (By.XPATH,"//*[@id='_tableDatas']/tbody/*/td[4]/a")
+            title_elems = wait.until(EC.presence_of_all_elements_located(
+                (By.XPATH,"//*[@id='_tableDatas']/tbody/*/td[4]/a")
             ))
             tickers_inpage = [t.text for t in ticker_elems if t.text != '']
             titles_inpage = [t.text for t in title_elems if t.text != '']
@@ -365,9 +362,9 @@ class hnx:
                 else:
                     continue
                 title_no = ticker_title_inpage.index(ticker_title)+1
-                titles.append(driver.find_element_by_xpath(f"//*[@id='_tableDatas']/tbody/tr[{title_no}]/td[4]").text)
-                times.append(driver.find_element_by_xpath(f"//*[@id='_tableDatas']/tbody/tr[{title_no}]/td[2]").text)
-                tickers.append(driver.find_element_by_xpath(f"//*[@id='_tableDatas']/tbody/tr[{title_no}]/td[3]").text)
+                titles.append(driver.find_element(By.XPATH,f"//*[@id='_tableDatas']/tbody/tr[{title_no}]/td[4]").text)
+                times.append(driver.find_element(By.XPATH,f"//*[@id='_tableDatas']/tbody/tr[{title_no}]/td[2]").text)
+                tickers.append(driver.find_element(By.XPATH,f"//*[@id='_tableDatas']/tbody/tr[{title_no}]/td[3]").text)
 
                 # open popup window:
                 click_obj = title_elems[title_no-1]
@@ -379,7 +376,7 @@ class hnx:
                 content = popup_content.text
                 if content in ['.','',' ']:  # nếu có link, ko có nội dung
                     box_text.append('')
-                    link_elems = driver.find_elements_by_xpath("//div[@class='divLstFileAttach']/p/a")
+                    link_elems = driver.find_elements(By.XPATH,"//div[@class='divLstFileAttach']/p/a")
                     links.append([link.get_attribute('href') for link in link_elems])
                 else:  # nếu có nội dung, ko có link
                     links.append('')
@@ -387,11 +384,11 @@ class hnx:
                 wait.until(EC.element_to_be_clickable((By.XPATH,"//*[@id='divViewDetailArticles']/*/input"))).click()
                 time.sleep(1)
                 # check time
-                fromtime = driver.find_element_by_xpath("//*[@id='_tableDatas']/tbody/tr[10]/td[2]").text
+                fromtime = driver.find_element(By.XPATH,"//*[@id='_tableDatas']/tbody/tr[10]/td[2]").text
                 fromtime = dt.datetime.strptime(fromtime,'%d/%m/%Y %H:%M')
 
             wait.until(EC.element_to_be_clickable((By.XPATH,"//*[@id='next']"))).click()
-            time.sleep(1)
+            time.sleep(2)
 
         driver.quit()
 
@@ -425,9 +422,10 @@ class hnx:
             return result
 
         df['File đính kèm'] = df['File đính kèm'].map(f)
-        print(f'Finished ::: Total execution time: {int(time.time()-start_time)}s\n')
+        print(f'Finished hnx-tintuso ::: Total execution time: {int(time.time()-start_time)}s\n')
 
         return df
+
 
 class hose:
 
@@ -444,7 +442,7 @@ class hose:
             ElementNotInteractableException
         )
 
-    def tinTCNY(self,num_hours: int = 48):
+    def tinTCNY(self,num_hours: int):
 
         """
         This function returns a DataFrame and export an excel file containing
@@ -459,7 +457,7 @@ class hose:
 
         start_time = time.time()
         url = 'https://www.hsx.vn/Modules/Cms/Web/NewsByCat/dca0933e-a578-4eaf-8b29-beb4575052c5?fid=6d1f1d5e9e6c4fb593077d461e5155e7'
-        driver = webdriver.Chrome(executable_path=self.PATH)
+        driver = webdriver.Chrome(service=Service(self.PATH))
         driver.get(url)
         driver.maximize_window()
         wait = WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions)
@@ -514,6 +512,7 @@ class hose:
                         (By.PARTIAL_LINK_TEXT,year_text)
                     ))
                     pdf_files = [t.get_attribute('href') for t in pdf_elements]
+
                     def f1(full_list):
                         if len(full_list)==1:
                             result = f'=HYPERLINK("{full_list[0]}","Link")'
@@ -555,12 +554,11 @@ class hose:
             'Mã cổ phiếu',
             output_table['Tiêu đề'].str.split(': ').str.get(0)
         )
-        print(f'Finished ::: Total execution time: {int(time.time()-start_time)}s\n')
+        print(f'Finished hose-tinTCNY ::: Total execution time: {int(time.time()-start_time)}s\n')
 
         return output_table
 
-
-    def tinCW(self,num_hours: int = 48):
+    def tinCW(self,num_hours: int):
 
         """
         This function returns a DataFrame and export an excel file containing
@@ -577,7 +575,7 @@ class hose:
         now = dt.datetime.now()
         from_time = now
         url = 'https://www.hsx.vn/Modules/Cms/Web/NewsByCat/95cd3266-e6d1-42a3-beb5-20ed010aea4a?fid=f91940eef3384bcdbe96ee9aa3eefa04'
-        driver = webdriver.Chrome(executable_path=self.PATH)
+        driver = webdriver.Chrome(service=Service(self.PATH))
         driver.get(url)
         driver_wait =  WebDriverWait(driver,5,ignored_exceptions=self.ignored_exceptions)
         driver.maximize_window()
@@ -596,6 +594,7 @@ class hose:
                 headline_url += [t.get_attribute('href')]
             time_tags = driver_wait.until(EC.presence_of_all_elements_located((By.XPATH,'*//td[2]')))[2:]
             time_text = [t.text for t in time_tags]
+
             def f(s):
                 if s.endswith('SA'):
                     s = s.rstrip(' SA')
@@ -612,7 +611,7 @@ class hose:
                 sub_pdfs = []
                 check = [word in sub_title for word in keywords]
                 if any(check):
-                    sub_driver = webdriver.Chrome(executable_path=self.PATH)
+                    sub_driver = webdriver.Chrome(service=Service(self.PATH))
                     sub_driver.get(sub_url)
                     sub_driver_wait = WebDriverWait(sub_driver,5,ignored_exceptions=self.ignored_exceptions)
                     time.sleep(1)
@@ -662,9 +661,10 @@ class hose:
         if output_table.empty is True:
             raise NoNewsFound(f'Không có tin trong {num_hours} giờ vừa qua')
 
-        print(f'Finished ::: Total execution time: {int(time.time()-start_time)}s\n')
+        print(f'Finished hose-tinCW ::: Total execution time: {int(time.time()-start_time)}s\n')
 
         return output_table
+
 
 vsd = vsd()
 hnx = hnx()
