@@ -4,8 +4,8 @@ from function import *
 driver_RMD = '{SQL Server}'
 server_RMD = 'SRV-RPT'
 db_RMD = 'RiskDb'
-user_id = 'hiep'
-password = open(r'C:\Users\hiepdang\Desktop\db_pwd.txt').readline()
+user_id = 'namtran'
+password = open(r'C:\Users\namtran\Desktop\pass_word.txt').readline()
 
 connect_RMD = pyodbc.connect(
     f'Driver={driver_RMD};'
@@ -31,7 +31,7 @@ connect_DWH_ThiTruong = pyodbc.connect(
     f'uid={user_id};'
     f'pwd={password}'
 )
-TableNames_DWH_CoSo = pd.read_sql(
+TableNames_DWH_ThiTruong = pd.read_sql(
     'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES',
     connect_DWH_ThiTruong
 )

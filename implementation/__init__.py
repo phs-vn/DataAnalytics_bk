@@ -16,13 +16,23 @@ def TaskMonitor(func):
             """
         outlook = Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
-        mail.To = 'hiepdang@phs.vn'
+        mail.To = 'namtran@phs.vn'
         try:
             func(*args,**kwargs)
             mail.Subject = f"{func.__name__} Run Successfully"
         except (Exception,):
             mail.Subject = f"{func.__name__} Got Error"
-        mail.HTMLBody = signature
-        mail.Send()
+        From = None
+        for myEmailAddress in outlook.Session.Accounts:
+            if "@gmail.com" in str(myEmailAddress):
+                From = myEmailAddress
+                break
+
+        if From is not None:
+            # This line basically calls the "mail.SendUsingAccount = xyz@email.com" outlook VBA command
+            mail._oleobj_.Invoke(*(64209, 0, 8, 0, From))
+
+            mail.HTMLBody = signature
+            mail.Send()
 
     return wrapper

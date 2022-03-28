@@ -22,10 +22,11 @@ def NewsRMD():
     if dt.time(hour=12,minute=0,second=0)<=now.time()<=dt.time(hour=23,minute=59,second=59):
         time_point = now.replace(hour=10,minute=0,second=0,microsecond=0)
 
-    path = r'\\192.168.10.101\phs-storge-2018' \
-           r'\RiskManagementDept\RMD_Data' \
-           r'\Luu tru van ban\RMC Meeting 2018' \
-           r'\00. Meeting minutes\Data\News Update'
+    # path = r'\\192.168.10.101\phs-storge-2018' \
+    #        r'\RiskManagementDept\RMD_Data' \
+    #        r'\Luu tru van ban\RMC Meeting 2018' \
+    #        r'\00. Meeting minutes\Data\News Update'
+    path = r'C:\Users\namtran\Share Folder\Trading Service\News Update\NewsRMD'
     file_name = f'{time_string}.xlsx'
     file_path = fr'{path}\{file_name}'
 

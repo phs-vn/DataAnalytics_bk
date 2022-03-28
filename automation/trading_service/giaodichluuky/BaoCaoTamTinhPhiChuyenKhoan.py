@@ -4,7 +4,6 @@ from automation.trading_service.giaodichluuky import *
 def run(
     run_time=None,
 ):
-
     start = time.time()
     info = get_info('monthly',run_time)
     start_date = info['start_date']
@@ -47,7 +46,9 @@ def run(
     Tháng nào lấy ngày sai thì hardcode ngày đúng tại dòng ngay dưới
     """
 
-    adj_start_date,adj_end_date = '2022-01-27','2022-02-24' # adjust_time(start_date),adjust_time(end_date) # thay đổi tại đây
+    # adjust_time(start_date),adjust_time(end_date) # thay đổi tại đây
+    adj_start_date,adj_end_date = '2022-01-27','2022-02-24'
+
     transfer_fee_TTBT = pd.read_sql(
         f"""
         SELECT 

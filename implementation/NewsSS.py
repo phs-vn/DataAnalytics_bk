@@ -4,7 +4,7 @@ from news_collector import newsts
 
 
 @TaskMonitor
-def NewsSS(num_hours:int=48):
+def NewsSS(num_hours: int):
     """
     This method runs all functions in module news_collector.newsts (try till success)
     and exports all resulted DataFrames to a single excel file in the specified folder
@@ -19,7 +19,7 @@ def NewsSS(num_hours:int=48):
     now = dt.date.today()
     date_string = now.strftime('%Y%m%d')
 
-    path = r'C:\Users\hiepdang\Shared Folder\Trading Service\News Update'
+    path = r'C:\Users\namtran\Share Folder\Trading Service\News Update'
     file_name = f'{date_string}_news.xlsx'
     file_path = fr'{path}\{file_name}'
 

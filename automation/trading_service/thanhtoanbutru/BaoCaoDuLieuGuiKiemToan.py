@@ -21,7 +21,7 @@ from automation.trading_service.thanhtoanbutru import *
 # DONE
 def run(
     run_time=None
-):  # BC quý, chạy vào ngày đầu quý sau
+) -> pd.DataFrame():  # BC quý, chạy vào ngày đầu quý sau
 
     start = time.time()
     info = get_info('quarterly',run_time)
@@ -46,7 +46,9 @@ def run(
                 [branch].[branch_name],
                 [relationship].[sub_account],
                 [relationship].[account_code],
-                [account].[customer_name]
+                [account].[customer_name],
+                [vcf0051].[contract_type],
+                [vcf0051].[status]
             FROM [relationship]
             RIGHT JOIN
                 [vcf0051]
@@ -150,7 +152,6 @@ def run(
             OR [all].[buying_power] <> 0
             OR [all].[total_outstanding] <> 0
             OR [all].[total_asset] <> 0)
-            
     """,
         connect_DWH_CoSo
     )
@@ -321,3 +322,5 @@ def run(
     else:
         print(f"{__name__.split('.')[-1]} ::: Finished")
     print(f'Total Run Time ::: {np.round(time.time()-start,1)}s')
+
+    return table

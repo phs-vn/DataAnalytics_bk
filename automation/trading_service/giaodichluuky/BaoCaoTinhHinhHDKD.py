@@ -7,9 +7,9 @@ def run(
     start = time.time()
     info = get_info('monthly',run_time)
     start_date = info['start_date']
-    begin_of_year = f'{start_date[:4]}/01/01'
     end_date = info['end_date']
     period = info['period']
+    begin_of_year = f'{start_date[:4]}/01/01'
     folder_name = info['folder_name']
 
     # create folder
@@ -27,11 +27,11 @@ def run(
         [trading_record].[value]
         FROM [trading_record]
         LEFT JOIN [relationship]
-	    ON [relationship].[sub_account] = [trading_record].[sub_account]
+        ON [relationship].[sub_account] = [trading_record].[sub_account]
         LEFT JOIN [account]
-	    ON [account].[account_code] = [relationship].[account_code]
-	    where
-	    [relationship].[date] = '{end_date}'
+        ON [account].[account_code] = [relationship].[account_code]
+        WHERE
+        [relationship].[date] = '{end_date}'
         AND
         [trading_record].[date] BETWEEN '{begin_of_year}' AND '{end_date}'
         AND [trading_record].[settlement_period] IN (1,2);
