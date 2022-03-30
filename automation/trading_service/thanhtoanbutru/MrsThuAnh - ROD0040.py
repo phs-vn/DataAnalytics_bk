@@ -30,8 +30,8 @@ def run(
             LEFT JOIN [relationship]
             ON [relationship].[sub_account] = [trading_record].[sub_account]
             WHERE
-                [trading_record].[date] BETWEEN '2022-03-01' AND '2022-03-09'
-                AND [relationship].[date] = '2022-03-09'
+                [trading_record].[date] BETWEEN '2022-01-01' AND '2022-03-29'
+                AND [relationship].[date] = '2022-03-29'
             ORDER BY
                 [date]
         """,
@@ -44,7 +44,7 @@ def run(
 
     # --------------------- Viet File Excel ---------------------
     # Write file ROD0040
-    f_name = f'ROD0040 (01032022-09032022).xlsx'
+    f_name = f'ROD0040 (01012022-29032022).xlsx'
     writer = pd.ExcelWriter(
         join(dept_folder, folder_name, period, f_name),
         engine='xlsxwriter',

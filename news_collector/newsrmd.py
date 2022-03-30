@@ -21,7 +21,7 @@ ignored_exceptions = (
 )
 n_max_try = 100
 max_wait_time = 10
-num_hours = 480
+num_hours = 120
 bmk_time = btime(dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), -num_hours)
 fixedmp_list = internal.fixedmp_list
 margin_list = internal.mlist()
@@ -619,15 +619,14 @@ class hose:
             from_time = time_text[-1]
             # Next Page:
             scroll_pause_time = 1
-            screen_height = driver.execute_script("return window.screen.height;")
             n_try = 1
-            i = 1
             while n_try < n_max_try:
                 try:
-                    # scroll one screen height each time
-                    driver.execute_script(
-                        "window.scrollTo(0, {screen_height}*{i});".format(screen_height=screen_height, i=i))
+                    # Scroll down to bottom
+                    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    # Wait to load page
                     time.sleep(scroll_pause_time)
+                    # click to next page
                     driver.find_elements(By.XPATH, '//*[@id="DbGridPager_2"]/a')[-2].click()
                     break
                 except ignored_exceptions:
@@ -718,7 +717,7 @@ class hose:
                     time.sleep(1)
                     # close popup windows
                     wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@title="Close"]'))).click()
-                    time.sleep(1)
+                    # time.sleep(1)
                     frame = pd.DataFrame(
                         {
                             'Thời gian': [sub_time],
@@ -731,15 +730,14 @@ class hose:
             from_time = time_text[-1]
             # Next Page:
             scroll_pause_time = 1
-            screen_height = driver.execute_script("return window.screen.height;")
             n_try = 1
-            i = 1
             while n_try < n_max_try:
                 try:
-                    # scroll one screen height each time
-                    driver.execute_script(
-                        "window.scrollTo(0, {screen_height}*{i});".format(screen_height=screen_height, i=i))
+                    # Scroll down to bottom
+                    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    # Wait to load page
                     time.sleep(scroll_pause_time)
+                    # click to next page
                     driver.find_elements(By.XPATH, '//*[@id="DbGridPager_2"]/a')[-2].click()
                     break
                 except ignored_exceptions:

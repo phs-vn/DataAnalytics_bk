@@ -829,3 +829,10 @@ def month_mapper(x):
         raise ValueError('Invalid Input')
 
     return result
+
+
+def getDateRangeFromWeek(p_year,p_week):
+
+    firstdayofweek = dt.datetime.strptime(f'{p_year}-W{int(p_week)}-1', "%Y-W%W-%w").date()
+    lastdayofweek = firstdayofweek + dt.timedelta(days=6.9)
+    return firstdayofweek, lastdayofweek
