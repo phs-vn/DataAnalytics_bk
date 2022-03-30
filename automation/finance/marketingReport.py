@@ -23,9 +23,24 @@ def run(
     # Xuất ra thông tin theo chiều ngang
     mtk_info = pd.read_sql(
         f"""
-        SELECT DISTINCT
+        WITH [b] AS (
+            SELECT
+                [vcf0051].[date],
+                [relationship].[account_code],
+                CASE
+                    WHEN [relationship].[branch_id] IN ('0001','0101','0102','0104','0105','0106','0111','0113','0114','0116','0117','0118','0119','0999') THEN 'HoChiMinhCity'
+                    WHEN [relationship].[branch_id] IN ('0201','0202','0203') THEN 'HaNoi'
+                    WHEN [relationship].[branch_id] IN ('0301') THEN 'HaiPhong'
+                    ELSE 'Unidentified'
+                END [Location]
+            FROM [vcf0051]
+            LEFT JOIN [relationship] ON [vcf0051].[sub_account] = [relationship].[sub_account]
+            AND [relationship].[date] = [vcf0051].[date]
+            WHERE [vcf0051].[date] BETWEEN '2022-02-14' AND GETDATE()
+            AND [vcf0051].[contract_type] LIKE N'Thường%'
+        )
+        SELECT
             [customer_change].[account_code],
-            [customer_change].[open_date],
             FORMAT([customer_change].[open_date], 'HH:mm - dd/MM/yyyy') [open_date_time],
             CONCAT(
                 FORMAT(DATEADD(DAY, 2 - DATEPART(WEEKDAY, [customer_change].[open_date]), CAST([customer_change].[open_date] AS DATE)),'dd/MM')
@@ -46,12 +61,7 @@ def run(
                 WHEN [account].[gender] = '002' THEN 'Female'
                 ELSE 'Unidentified'
             END [Gender],
-            CASE
-                WHEN [relationship].[branch_id] IN ('0001','0101','0102','0104','0105','0106','0111','0113','0114','0116','0117','0118','0119','0999') THEN 'HoChiMinhCity'
-                WHEN [relationship].[branch_id] IN ('0201','0202','0203') THEN 'HaNoi'
-                WHEN [relationship].[branch_id] IN ('0301') THEN 'HaiPhong'
-                ELSE 'Unidentified'
-            END [Location],
+            [b].[Location],
             CASE
                 WHEN RIGHT([account].[contract_number_normal],1) = 'I' THEN N'KH tự mở tài khoản'
                 WHEN RIGHT([account].[contract_number_normal],1) = 'O' THEN N'KH mở tài khoản qua môi giới'
@@ -59,8 +69,8 @@ def run(
             END [Type]
         FROM [customer_change]
         LEFT JOIN [account] ON [customer_change].[account_code] = [account].[account_code]
-        LEFT JOIN [relationship] ON [customer_change].[account_code] = [relationship].[account_code]
-                AND [customer_change].[open_date] = [relationship].[date]
+        LEFT JOIN [b] ON [b].[account_code] = [customer_change].[account_code]
+            AND [b].[date] = [customer_change].[open_date]
         WHERE [customer_change].[open_or_close] = 'Mo'
             AND [customer_change].[open_date] BETWEEN '{start_date}' AND '{end_date}'
             AND [account].[account_type] LIKE N'Cá nhân%'
@@ -175,6 +185,9 @@ def run(
     year = dt.datetime.strptime(start_date,'%Y/%m/%d').date().year
     # Lùi về 4 tuần liên tục trước đó tính từ ngày 14/2/2022
     predate = bdate(start_date, -20).replace('-', '/')  # 'Tuần từ 31/1 tới 6/2 ko có data vì là tuần nghỉ Tết dương lịch'
+    # ngày đầu tiên của tuần thuộc ngày lùi về 4 tuần liên tục
+    sdate = getDateRangeFromWeek(year, dt.datetime.strptime(predate,'%Y/%m/%d').date().isocalendar()[1])[0]
+    sdate = sdate.strftime('%Y/%m/%d')
     # ngày cuối cùng của tuần 14/02/2022
     edate = getDateRangeFromWeek(year, dt.datetime.strptime(start_date,'%Y/%m/%d').date().isocalendar()[1])[1]
     edate = edate.strftime('%Y/%m/%d')
@@ -193,7 +206,7 @@ def run(
         FROM [customer_change] [t]
         WHERE 
             [t].[open_or_close] = 'Mo'
-            AND [t].[open_date] BETWEEN '{predate}' AND '{edate}'
+            AND [t].[open_date] BETWEEN '{sdate}' AND '{edate}'
             AND EXISTS (SELECT [account].[account_code] FROM [account] WHERE [account].[account_code] = [t].[account_code] AND [account].[account_type] LIKE N'Cá nhân%')
         GROUP BY CONCAT(
             FORMAT(DATEADD(DAY, 2 - DATEPART(WEEKDAY, [t].[open_date]), CAST([t].[open_date] AS DATE)),'dd/MM')
@@ -228,7 +241,7 @@ def run(
             FROM [customer_change]
             LEFT JOIN [account] ON [customer_change].[account_code] = [account].[account_code]
             WHERE [customer_change].[open_or_close] = 'Mo'
-                AND [customer_change].[open_date] BETWEEN '{predate}' AND '{edate}'
+                AND [customer_change].[open_date] BETWEEN '{sdate}' AND '{edate}'
                 AND [account].[account_type] LIKE N'Cá nhân%'
         )
         SELECT
@@ -261,7 +274,7 @@ def run(
             FROM [customer_change]
             LEFT JOIN [account] ON [account].[account_code] = [customer_change].[account_code]
             WHERE [customer_change].[open_or_close] = 'Mo'
-                AND [customer_change].[open_date] BETWEEN '{predate}' AND '{edate}'
+                AND [customer_change].[open_date] BETWEEN '{sdate}' AND '{edate}'
                 AND [account].[account_type] LIKE N'Cá nhân%'
         )
         SELECT
@@ -276,11 +289,16 @@ def run(
     )
     # Tổng số lượng mở tài khoản mới các tuần cùng kỳ năm trước
     year_prev = dt.datetime.strptime(start_date, '%Y/%m/%d').date().year - 1
-    # Lùi về 4 tuần liên tục trước đó tính từ ngày 14/2
+
     date_prev_year = dt.datetime.strptime(start_date, '%Y/%m/%d').date()
+    # đổi 2022 thành 2021
     date_prev_year = date_prev_year.replace(year=date_prev_year.year - 1).strftime('%Y/%m/%d')
+    # Lùi về 4 tuần liên tục trước đó tính từ ngày 14/2/2021
     predate_prev_year = bdate(date_prev_year, -20).replace('-', '/')
-    # ngày cuối cùng của tuần 14/02/2022
+    # ngày đầu tiên của tuần thuộc ngày sau khi lùi về liên tục 4 tuần
+    sdate_prev_year = getDateRangeFromWeek(year_prev, dt.datetime.strptime(predate_prev_year, '%Y/%m/%d').date().isocalendar()[1])[0]
+    sdate_prev_year = sdate_prev_year.strftime('%Y/%m/%d')
+    # ngày cuối cùng của tuần 14/02/2021
     edate_prev_year = getDateRangeFromWeek(year_prev, dt.datetime.strptime(date_prev_year, '%Y/%m/%d').date().isocalendar()[1])[1]
     edate_prev_year = edate_prev_year.strftime('%Y/%m/%d')
 
@@ -297,7 +315,7 @@ def run(
         FROM [customer_change] [t]
         WHERE 
            [t].[open_or_close] = 'Mo'
-           AND [t].[open_date] BETWEEN '{predate_prev_year}' AND '{edate_prev_year}'
+           AND [t].[open_date] BETWEEN '{sdate_prev_year}' AND '{edate_prev_year}'
            AND EXISTS (SELECT [account].[account_code] FROM [account] WHERE [account].[account_code] = [t].[account_code] AND [account].[account_type] LIKE N'Cá nhân%')
         GROUP BY CONCAT(
            FORMAT(DATEADD(DAY, 2 - DATEPART(WEEKDAY, [t].[open_date]), CAST([t].[open_date] AS DATE)),'dd/MM')
@@ -332,7 +350,7 @@ def run(
             FROM [customer_change]
             LEFT JOIN [account] ON [customer_change].[account_code] = [account].[account_code]
             WHERE [customer_change].[open_or_close] = 'Mo'
-                AND [customer_change].[open_date] BETWEEN '{predate_prev_year}' AND '{edate_prev_year}'
+                AND [customer_change].[open_date] BETWEEN '{sdate_prev_year}' AND '{edate_prev_year}'
                 AND [account].[account_type] LIKE N'Cá nhân%'
         )
         SELECT
@@ -365,7 +383,7 @@ def run(
            FROM [customer_change]
            LEFT JOIN [account] ON [account].[account_code] = [customer_change].[account_code]
            WHERE [customer_change].[open_or_close] = 'Mo'
-               AND [customer_change].[open_date] BETWEEN '{predate_prev_year}' AND '{edate_prev_year}'
+               AND [customer_change].[open_date] BETWEEN '{sdate_prev_year}' AND '{edate_prev_year}'
                AND [account].[account_type] LIKE N'Cá nhân%'
         )
         SELECT
